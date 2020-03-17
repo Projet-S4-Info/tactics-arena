@@ -24,5 +24,3 @@ ab[3] = {Fury,2,2,0,{0,0},0,NULL,0,NULL,{0,0,0,0},NULL,{"Fury","Remove all debuf
 ab[4] = {Frenzied_Dash,3,4,9,{0.8,atk},31,ult,0,NULL,{0,0,0,0},NULL,{"Frenzied Dash","Jump to a tile, dealing aoe damage when landing."},"../inc/sprites/berserker/sprite_sheet/A4/"};
 
 Class class = {Berserker,"Berserker",{13,8,10,10,0,10,10},{"Bloodlust","Killing two ennemies in the same turn refills action points and doubles mp and atk stats for one turn."},ab,"../inc/sprites/berserker/sprite_sheet/"};
-
-//test
