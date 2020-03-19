@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 #include "../SDL2/include/SDL2/SDL.h"
+#include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "../SDL2/include/SDL2/SDL_image.h"
 #include "../SDL2/include/SDL2/SDL_ttf.h"
-#include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "audio.h"
-#include "map.h"
 #include "struct.h"
+#include "map.h"
 #include "menu.h"
 
 void setRendererDriver(SDL_Renderer *renderer)

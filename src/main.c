@@ -11,7 +11,6 @@
 #include <stdlib.h>
 #include "grid.h"
 #include "Socket_Server.h"
-#include "struct.h"
 #include "terrain.h"
 #include "graphics.h"
 #include "audio.h"

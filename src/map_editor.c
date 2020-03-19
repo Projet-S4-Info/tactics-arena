@@ -6,8 +6,6 @@
 #include "../SDL2/include/SDL2/SDL_ttf.h"
 #include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "graphics.h"
-#include "struct.h"
-#include "audio.h"
 #include "map.h"
 #include "characters.h"
 

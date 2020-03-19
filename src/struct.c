@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "struct.h"
+#include "errt.h"
 
 //err_t get_ability()
 
