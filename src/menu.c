@@ -39,7 +39,7 @@ SDL_Texture *background = NULL,
 // La musique est activée de base
 int music_playing = 1;
 int isMultiMenu = 0;
-int isHostbutton = 0;
+int isHostButton = 0;
 int isJoinButton = 0;
 
 
@@ -83,24 +83,6 @@ static void * fn_client (void * p_data)
     return NULL;
 }
 
-void dispHostMenu(SDL_Renderer *renderer)
-{
-	SDL_Rect console;
-			console.x = 40;
-			console.y = 350;
-			console.w = 600;
-			console.h = 300;
-		/* initialise la couleur sur noir */
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
-		/*remplis le rectange*/
-		SDL_RenderFillRect(renderer, &console);
-		/* Petit text de confirmation */
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255 );
-		displayText(renderer, 50, 400, 15, "Host est séléctioné", "../inc/font/PixelOperator.ttf", 255, 255, 255);
-		displayText(renderer, 50, 422, 15, consoleLog, "../inc/font/PixelOperator.ttf", 255, 255, 255);
-
-		
-}
 
 
 void loadMenuTextures(SDL_Renderer *renderer)
@@ -148,68 +130,74 @@ void freeMenuTextures()
 	SDL_DestroyTexture(map_editor_button);
 }
 
+void dispHostMenu(SDL_Renderer *renderer, int x, int y)
+{
+
+	SDL_Rect console;
+			console.x = 40;
+			console.y = 350;
+			console.w = 600;
+			console.h = 300;
+		/* initialise la couleur sur noir */
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
+		/*remplis le rectange*/
+		SDL_RenderFillRect(renderer, &console);
+		/* Petit text de confirmation */
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255 );
+		displayText(renderer, 50, 400, 15, "Host est séléctioné", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		displayText(renderer, 50, 422, 15, consoleLog, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+
+		displaySprite(renderer, quit_button, x-300, y-190);
+		
+}
+
+void dispMultiMenu(SDL_Renderer *renderer, int x, int y)
+{
+	displaySprite(renderer, background, 0, 0);
+	/* Host button */
+	displaySprite(renderer, host_button, 75, 300);
+
+	/* Join bouton */
+	displaySprite(renderer, join_button, 75, 375);
+
+	/* Quit button */
+	displaySprite(renderer, quit_button, 515, 525);
+
+		/* Affiche en gros Tactics Arena */
+	displayText(renderer, 300, 200, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
+
+	/* Mentions de bas de menu */
+	displayText(renderer, 5, y-20, 15, "Projet L2 Informatique - BUTEL CHAUVIN DOUCET LAFAY", "../inc/font/Pixels.ttf", 255, 255, 255);
+}
+
+void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
+{
+	/* Petit text de confirmation */
+	displayText(renderer, 80, 450, 15, "Join est séléctioné", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	
+	/* Quit button */
+	displaySprite(renderer, quit_button, 515, 525);
+
+}
+
 void updateMenu(SDL_Renderer *renderer, int x, int y)
 // Update the menu display
 {
-	/* Background image */
+	if(isMultiMenu != 1 && isHostButton != 1 && isJoinButton != 1){
+		/* Background image */
 	displaySprite(renderer, background, 0, 0);
 
-	if(!isMultiMenu){
-		/* Start button */
-		displaySprite(renderer, start_button, 500, 300);
+	/* Start button */
+	displaySprite(renderer, start_button, 500, 300);
 
-		/* Editor button */
-		displaySprite(renderer, map_editor_button, 515, 375);
+	/* Editor button */
+	displaySprite(renderer, map_editor_button, 515, 375);
 
-		/* Multi button */
-		displaySprite(renderer, multi_button, 500, 450);
+	/* Multi button */
+	displaySprite(renderer, multi_button, 500, 450);
 
-		/* Quit button */
-		displaySprite(renderer, quit_button, 515, 525);
-	}	
-	else if(isHostbutton){
-
-		// SDL_Rect console;
-		// 	console.x = 40;
-		// 	console.y = 350;
-		// 	console.w = 600;
-		// 	console.h = 300;
-		// /* initialise la couleur sur noir */
-		// SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
-		
-		// /*remplis le rectange*/
-		// SDL_RenderFillRect(renderer, &console);
-		
-		// /* Petit text de confirmation */
-		// displayText(renderer, 50, 400, 15, "Host est séléctioné", "../inc/font/PixelOperator.ttf", 255, 255, 255);
-
-		// displayText(renderer, 50, 422, 15, consoleLog, "../inc/font/PixelOperator.ttf", 255, 255, 255);
-
-		/* Quit button */
-		displaySprite(renderer, quit_button, x-300, y-190);
-
-	}
-	else if(isJoinButton){
-		/* Petit text de confirmation */
-		displayText(renderer, 80, 450, 15, "Join est séléctioné", "../inc/font/PixelOperator.ttf", 255, 255, 255);
-		
-		/* Quit button */
-		displaySprite(renderer, quit_button, 515, 525);
-	}
-	else{
-		
-		/* Host button */
-		displaySprite(renderer, host_button, 75, 300);
-
-		/* Join bouton */
-		displaySprite(renderer, join_button, 75, 375);
-
-		/* Quit button */
-		displaySprite(renderer, quit_button, 515, 525);
-	}
-	
-
-	
+	/* Quit button */
+	displaySprite(renderer, quit_button, 515, 525);
 
 	/* Bouton musique ON/OFF */
 	if (music_playing){
@@ -223,6 +211,9 @@ void updateMenu(SDL_Renderer *renderer, int x, int y)
 
 	/* Mentions de bas de menu */
 	displayText(renderer, 5, y-20, 15, "Projet L2 Informatique - BUTEL CHAUVIN DOUCET LAFAY", "../inc/font/Pixels.ttf", 255, 255, 255);
+	}
+
+	
 }
 
 int displayMenu(int x, int y)
@@ -318,25 +309,26 @@ int displayMenu(int x, int y)
 						}
 
 						// Bouton "Multiplayer"
-						else if ((e.motion.x >= 585 && e.motion.x <= 710 && e.motion.y >= 540 && e.motion.y <= 600) && (isHostbutton == 0 || isJoinButton == 0))
+						else if ((e.motion.x >= 585 && e.motion.x <= 710 && e.motion.y >= 540 && e.motion.y <= 600) && (isHostButton == 0 || isJoinButton == 0))
 						{
 							isMultiMenu = 1;
-							updateMenu(renderer, x, y);
+							dispMultiMenu(renderer, x, y);
 							// SDL_RenderPresent(renderer);
 						}
 
 						// Bouton "Host"
-						else if ((e.motion.x >= 160 && e.motion.x <= 305 && e.motion.y >= 390 && e.motion.y <= 450) && isMultiMenu == 1 && isHostbutton == 0)
+						else if ((e.motion.x >= 160 && e.motion.x <= 305 && e.motion.y >= 390 && e.motion.y <= 450) && isMultiMenu == 1 && isHostButton == 0)
 						{
-							isHostbutton = 1;
-							updateMenu(renderer, x, y);
+							isHostButton = 1;
+							dispHostMenu(renderer, x, y);
 							// SDL_RenderPresent(renderer);
-							pthread_create (& otherThread.thread_server, NULL, fn_server, NULL);
+							// pthread_create (& otherThread.thread_server, NULL, fn_server, NULL);
+							
 							
 						}
-
+						
 						// Nouveau boutton "QUIT" 
-						if (e.motion.x >= 1000 && e.motion.x <= 1190 && e.motion.y >= 627 && e.motion.y <= 680 && isHostbutton == 1){
+						else if (e.motion.x >= 1000 && e.motion.x <= 1190 && e.motion.y >= 627 && e.motion.y <= 680 && isHostButton == 1){
 							closeWindow(pWindow);
 							freeMenuTextures();
 						}
@@ -345,7 +337,7 @@ int displayMenu(int x, int y)
 						else if ((e.motion.x >= 160 && e.motion.x <= 305 && e.motion.y >= 465 && e.motion.y <= 525) && isMultiMenu == 1) 
 						{
 							isJoinButton = 1;
-							updateMenu(renderer, x, y);
+							dispJoinMenu(renderer, x, y);
 							// SDL_RenderPresent(renderer);
 							pthread_create (& otherThread.thread_client, NULL, fn_client, NULL);
 						}
@@ -370,7 +362,7 @@ int displayMenu(int x, int y)
 						}
 						
 						// Bouton "Quit"
-						else if (e.motion.x >= 569 && e.motion.x <= 730 && e.motion.y >= 613 && e.motion.y <= 673 && isHostbutton == 0)
+						else if (e.motion.x >= 569 && e.motion.x <= 730 && e.motion.y >= 613 && e.motion.y <= 673 && isHostButton == 0)
 						{
 							closeWindow(pWindow);
 							freeMenuTextures();
@@ -381,27 +373,27 @@ int displayMenu(int x, int y)
 							{
 								if (strlen(consoleLog) > 9){
 									consoleLog[strlen(consoleLog)-1] = '\0';
-									dispHostMenu(renderer);
+									dispHostMenu(renderer, x, y);
 								}
 							}
 					case SDL_TEXTINPUT:
-						if (isHostbutton == 1)
+						if (isHostButton == 1)
 						{
 							strcat(consoleLog, e.text.text);
 							printf("%s\n",e.text.text);
-							printf("Host : %d \nMulti : %d \n",isHostbutton,isMultiMenu);
-							dispHostMenu(renderer);
+							// printf("Host : %d \nMulti : %d \n",isHostButton,isMultiMenu);
+							dispHostMenu(renderer, x, y);
 							// SDL_RenderPresent(renderer);
 
 						}
 					break;
 					case SDL_TEXTEDITING:
-						if ( isHostbutton == 1)
+						if ( isHostButton == 1)
 						{
 							compo = e.edit.text;
 							cursor = e.edit.start;
 							selection_len = e.edit.length;
-							dispHostMenu(renderer);
+							dispHostMenu(renderer, x, y);
 							// SDL_RenderPresent(renderer);
 						}
 				}
