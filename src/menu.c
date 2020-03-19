@@ -183,37 +183,34 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 void updateMenu(SDL_Renderer *renderer, int x, int y)
 // Update the menu display
 {
-	if(isMultiMenu != 1 && isHostButton != 1 && isJoinButton != 1){
+	if((isMultiMenu != 1 && isHostButton != 1) && isJoinButton != 1){
 		/* Background image */
-	displaySprite(renderer, background, 0, 0);
+		displaySprite(renderer, background, 0, 0);
 
-	/* Start button */
-	displaySprite(renderer, start_button, 500, 300);
+		/* Start button */
+		displaySprite(renderer, start_button, 500, 300);
 
-	/* Editor button */
-	displaySprite(renderer, map_editor_button, 515, 375);
+		/* Editor button */
+		displaySprite(renderer, map_editor_button, 515, 375);
 
-	/* Multi button */
-	displaySprite(renderer, multi_button, 500, 450);
+		/* Multi button */
+		displaySprite(renderer, multi_button, 500, 450);
 
-	/* Quit button */
-	displaySprite(renderer, quit_button, 515, 525);
+		/* Quit button */
+		displaySprite(renderer, quit_button, 515, 525);
 
-	/* Bouton musique ON/OFF */
-	if (music_playing){
-	displaySprite(renderer, music_on, x-175, y-200);
-	} else {
-		displaySprite(renderer, music_off, x-175, y-200);
+		/* Bouton musique ON/OFF */
+		if (music_playing){
+		displaySprite(renderer, music_on, x-175, y-200);
+		} else {
+			displaySprite(renderer, music_off, x-175, y-200);
+		}
+		/* Affiche en gros Tactics Arena */
+		displayText(renderer, 300, 200, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
+
+		/* Mentions de bas de menu */
+		displayText(renderer, 5, y-20, 15, "Projet L2 Informatique - BUTEL CHAUVIN DOUCET LAFAY", "../inc/font/Pixels.ttf", 255, 255, 255);
 	}
-
-	/* Affiche en gros Tactics Arena */
-	displayText(renderer, 300, 200, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
-
-	/* Mentions de bas de menu */
-	displayText(renderer, 5, y-20, 15, "Projet L2 Informatique - BUTEL CHAUVIN DOUCET LAFAY", "../inc/font/Pixels.ttf", 255, 255, 255);
-	}
-
-	
 }
 
 int displayMenu(int x, int y)
@@ -318,7 +315,8 @@ int displayMenu(int x, int y)
 
 						// Bouton "Host"
 						else if ((e.motion.x >= 160 && e.motion.x <= 305 && e.motion.y >= 390 && e.motion.y <= 450) && isMultiMenu == 1 && isHostButton == 0)
-						{
+						{	
+							isMultiMenu = 1;
 							isHostButton = 1;
 							dispHostMenu(renderer, x, y);
 							// SDL_RenderPresent(renderer);
