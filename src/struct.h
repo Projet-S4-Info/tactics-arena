@@ -37,7 +37,7 @@ typedef struct
     Coord * coord;
     int nb_mods;
     Modifier * mods;
-    err_t (*function)(int, Coord *, StateList *); //Takes caster ID, Coordinates, and pointer to state chain
+    err_t (*function)(int, Coord *, StateList *, StateList *); //Takes caster ID, Coordinates, and pointer to state chain
     lang eng;
     char sprite_folder[STR_LONG];
 } Ability;
