@@ -1,20 +1,21 @@
 #ifndef state_h
 #define state_h
+#include "substruct.h"
 
 typedef struct {
-  int nb_tours;
-  int id_buff;
-  char * buff_name;
+  flagId flag;
+  union eff_u mod;
 } State;
 
-typedef struct {
+typedef struct listelem{
   State * value;
-  struct StateList * suiv;
-} StateList;
+  struct listelem * suiv;
+  struct listelem * prec;
+} List_Elem;
 
 typedef struct {
-  StateList * first;
-} List;
-
+  List_Elem * drapeau;
+  List_Elem * ec;
+} StateList;
 
 #endif
