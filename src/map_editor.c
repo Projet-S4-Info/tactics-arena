@@ -17,6 +17,9 @@
 int isInSaveMenu = 0;
 int isInLoadMenu = 0;
 
+int flagClick = 0;
+Coord moveInit;
+
 // Textures table
 TabTexture textures[_NB_MAX_TEXTURES_];
 TabTexture cSprites[_NB_MAX_TEXTURES_];
@@ -422,6 +425,9 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 	int XPOS = 400;
 	int YPOS = 170;
 
+	moveInit.x = XPOS;
+	moveInit.y = YPOS;
+
 	// x and y sizes of the window
 	int xWinSize;
 	int yWinSize;
@@ -518,6 +524,12 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 						}
 					break;
 					case SDL_MOUSEBUTTONDOWN:
+						if (e.button.button == SDL_BUTTON_MIDDLE)
+						{
+							flagClick = 1;
+							moveInit.x = e.motion.x;
+							moveInit.y = e.motion.y;
+						}
 
 						//printf("X: %d | Y: %d\n", e.motion.x, e.motion.y);		// Debug console pos x & y on term
 						if (e.motion.x <= 200 && isInSaveMenu == 0 && isInLoadMenu == 0)
@@ -551,6 +563,12 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 
 						displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
 
+					break;
+					case SDL_MOUSEBUTTONUP:
+						if (e.button.button == SDL_BUTTON_MIDDLE)
+						{
+							flagClick = 0;
+						}
 					break;
 					case SDL_MOUSEWHEEL:
 						if (e.wheel.y > 0)		// Scroll UP
@@ -676,12 +694,12 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 							displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
 						}
 					case SDL_MOUSEMOTION:
-
-						if (e.motion.x >= 10 && e.motion.y >= 10)
+						if (flagClick)
 						{
-
+							/*XPOS -= moveInit.x-e.motion.x;
+							YPOS -= moveInit.y-e.motion.y;
+							displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);*/
 						}
-
 					break;
 				}
 			}
