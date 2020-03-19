@@ -2,6 +2,11 @@
 #define substruct_h
 #include "common.h"
 
+#define NUM_STATS 7
+#define NUM_CLASS 6
+#define NUM_AB 4
+#define NUM_STATUS 8
+
 /* ENUMERATIONS */
 typedef enum {pv, mv, vis, atk, magic, res_physic, res_magic} statId;
 
@@ -12,8 +17,6 @@ typedef enum {Slash, Killing_Blow, Fury, Frenzied_Dash} abilityId;
 typedef enum {Dead, Alive, Summoned} lifeId;
 
 typedef enum {Cripple, Detained, Provoked, Burning, Freezing, Paralyzed, Blessed, Deadeye} statusId;
-
-typedef enum {Stat_Mod, Status_Eff} flagId;
 
 /*Entity Sub Structures*/
 
@@ -31,27 +34,14 @@ typedef struct
 
 typedef struct
 {
-    int value;
-    statId stat;
-    int duration;
-} Effect;
-
-typedef struct
-{
-    statusId Status;
+    int value;  //IF value is equal to 0 then it is a status effect, otherwise it is a stat modifier
+    int stat;
     int duration;
 } Status;
 
-union eff_u
-{
-    Status status;
-    Effect effect;
-};
-
 typedef struct
 {
-    flagId flag;
-    union eff_u mod;
+    Status effect;
     float chance;
 }Modifier;
 

@@ -2,13 +2,8 @@
 #define state_h
 #include "substruct.h"
 
-typedef struct {
-  flagId flag;
-  union eff_u mod;
-} State;
-
 typedef struct listelem{
-  State * value;
+  Status * value;
   struct listelem * suiv;
   struct listelem * prec;
 } List_Elem;

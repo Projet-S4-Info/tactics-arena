@@ -4,8 +4,11 @@
 err_t init_berserker(Class * c)
 {
     Coord * one_c = malloc(sizeof(Coord));
+    if(one_c==NULL) return POINTER_NULL;
     Damage * one = malloc(sizeof(Damage));
+    if(one==NULL) return POINTER_NULL;
     Damage * FD = malloc(sizeof(Damage));
+    if(FD==NULL) return POINTER_NULL;
     Coord ctemp = {0,0};
     Damage dtmp1 = {1,atk};
     Damage dtmp2 = {0.8,atk};
@@ -14,6 +17,7 @@ err_t init_berserker(Class * c)
     *FD = dtmp2;
 
     Coord * ult=malloc(sizeof(Coord)*31);
+    if(ult==NULL) return POINTER_NULL;
     int i,x,y;
     for(i=0,x=-2,y=-4;x<=2;)
     {
@@ -32,6 +36,7 @@ err_t init_berserker(Class * c)
     }
 
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
+    if(ab==NULL) return POINTER_NULL;
 
     Ability abtemp1 = {Slash,1,0,1,one,1,one_c,0,NULL,NULL,{"Slash", "Slash at an ennemy."},"../inc/sprites/berserker/sprite_sheet/A1/"};
     *ab = abtemp1;
@@ -41,10 +46,6 @@ err_t init_berserker(Class * c)
     *(ab+2) = abtemp3;
     Ability abtemp4 = {Frenzied_Dash,3,4,9,FD,31,ult,0,NULL,NULL,{"Frenzied Dash","Jump to a tile, dealing aoe damage when landing."},"../inc/sprites/berserker/sprite_sheet/A4/"};
     *(ab+3) = abtemp4;
-    
-   
-    
-    
     
 
     Class temp = {Berserker,"Berserker",{13,8,10,10,0,10,10},{"Bloodlust","Killing two ennemies in the same turn refills action points and doubles mp and atk stats for one turn."},ab,"../inc/sprites/berserker/sprite_sheet/"};

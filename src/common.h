@@ -6,5 +6,6 @@
 
 typedef enum error_type {OK, POINTER_NULL, SDL_ERROR, COORD_OUT_OF_BOUND} err_t;
 
+typedef enum {FALSE, TRUE} bool;
 
 #endif

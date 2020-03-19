@@ -7,10 +7,7 @@
 #include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "state.h"
 
-#define NUM_STATS 7
-#define NUM_CLASS 6
-#define NUM_AB 4
-#define NUM_STATUS 8
+
 
 
 /* BASIC STRUCTURES*/
@@ -66,9 +63,11 @@ typedef struct
 typedef struct
 {
     Character * character;
+    lifeId active;
     int act_points;
     int base_stats[NUM_STATS];
     int stat_mods[NUM_STATS];
+    int status_effect[NUM_STATUS];
 } Entity;
 
 /* TERRAIN STRUCTURES */
