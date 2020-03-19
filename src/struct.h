@@ -6,9 +6,8 @@
 #include "../SDL2/include/SDL2/SDL_ttf.h"
 #include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "state.h"
+#include "common.h"
 
-#define STR_SHORT 50
-#define STR_LONG 256
 #define NUM_STATS 7
 #define NUM_CLASS 6
 #define NUM_AB 4
@@ -72,12 +71,12 @@ typedef struct
     int ab_cost;
     int ab_cooldown;
     int range;
-    Damage damage;
+    Damage * damage;
     int nb_coords; //0 is self cast
     Coord * coord;
     int nb_effects;
     Effect * effect;
-    Status status;
+    Status * status;
     int (*function)(int, Coord *, StateList *); //Takes caster ID, Coordinates, and pointer to state chain
     lang eng;
     char sprite_folder[STR_LONG];
