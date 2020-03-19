@@ -1,60 +1,100 @@
-#include <stdio.h>
-#include <math.h>
-#include "../SDL2/include/SDL2/SDL.h"
-#include "../SDL2/include/SDL2/SDL_image.h"
-#include "../SDL2/include/SDL2/SDL_ttf.h"
-#include "../SDL2/include/SDL2/SDL_mixer.h"
-#include "graphics.h"
-#include "struct.h"
-#include "audio.h"
+#include <stdlib.h>
+#include "state.h"
 
-List * initStateList()
+err_t init_list(StateList * list)
 {
-  List *list = malloc(sizeof(*list));
-  StateList *state_list = malloc(sizeof(*state_list));
-
-  if (list == NULL || state_list == NULL) exit(EXIT_FAILURE);
-
-  state_list->value->id_buff = -1;
-  state_list->value->nb_tours = -1;
-  state_list->value->buff_name = "";
-  state_list->suiv = NULL;
-  list->first = state_list;
-
-  return list;
+    list->drapeau = malloc(sizeof(List_Elem));
+    if(list->drapeau == NULL) return POINTER_NULL;
+    list->drapeau->value = NULL;
+    list->drapeau->prec = list->drapeau;
+    list->drapeau->suiv = list->drapeau;
+    list->ec = list->drapeau;
+    return OK;
 }
 
-// void insertIntoStateList(List *list, State newState)
-// {
-//   StateList *new = malloc(sizeof(*new));
-//   if (list == NULL || new == NULL) exit(EXIT_FAILURE);
-//   new->value = newState;
-
-//   new->suiv = list->first;
-//   list->first = new;
-// }
-
-void removeFirstState(List *list)
+int out_of_list(StateList * list)
 {
-  if (list == NULL) exit(EXIT_FAILURE);
-
-  if (list->first != NULL)
-  {
-    StateList *toRemove = list->first;
-    list->first = list->first->suiv;
-    free(toRemove);
-  }
+    return list->ec == list->drapeau;
 }
 
-void printStateList(List *list)
+int list_empty(StateList * list)
 {
-  if (list == NULL) exit(EXIT_FAILURE);
+    return list->drapeau->suiv == list->drapeau;
+}
 
-  StateList *current = list->first;
+err_t start_list(StateList * list)
+{
+    list->ec=list->drapeau->suiv;
+    return OK;
+}
 
-  while (current != NULL)
-  {
-    printf("ID : %d - Buff : %s - Turns : %d\n", current->value->id_buff, current->value->buff_name, current->value->nb_tours);
-    current = current->suiv;
-  }
+err_t end_list(StateList * list)
+{
+    list->ec=list->drapeau->prec;
+    return OK;
+}
+
+err_t list_next(StateList * list)
+{
+    list->ec=list->ec->suiv;
+    return OK;
+}
+
+Status * list_decrease(StateList * list)
+{
+    list->ec->value->duration--;
+
+    if(list->ec->value->duration==0)
+        return list->ec->value;
+
+    return NULL;
+}
+
+err_t list_remove(StateList * list)
+{
+    List_Elem * temp = list->ec;
+    temp->prec->suiv=temp->suiv;
+    temp->suiv->prec=temp->prec;
+    list->ec=temp->prec;
+    free(temp->value);
+    free(temp);
+    return OK;
+}
+
+err_t list_add(StateList * list, Status * v)
+{
+    end_list(list);
+    
+    Status * newstat = malloc(sizeof(Status));
+    if(newstat == NULL) return POINTER_NULL;
+    *newstat = *v;
+
+    List_Elem * newelem = malloc(sizeof(List_Elem));
+    if(newelem == NULL) return POINTER_NULL;
+    newelem->value = newstat;
+    newelem->prec = list->ec;
+    newelem->suiv = list->drapeau;
+
+    list->ec->suiv = newelem;
+    list->drapeau->prec = newelem;
+
+    list->ec = newelem;
+    return OK;
+}
+
+err_t list_destroy(StateList * list)
+{
+    if(!(list_empty(list)))
+    {
+        start_list(list);
+        while(!(out_of_list(list)))
+        {
+            list_remove(list);
+            list_next(list);
+        }
+    }
+
+    free(list->drapeau);
+    free(list);
+    return OK;
 }

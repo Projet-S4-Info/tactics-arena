@@ -4,6 +4,7 @@
 #include "../SDL2/include/SDL2/SDL_image.h"
 #include "../SDL2/include/SDL2/SDL_ttf.h"
 #include "../SDL2/include/SDL2/SDL_mixer.h"
+#include "audio.h"
 #include "graphics.h"
 
 #define _NB_MAX_TEXTURES_ 50

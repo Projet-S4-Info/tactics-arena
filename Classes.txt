@@ -42,7 +42,7 @@ ANGEL
 
 
 Cripple : Can't move and takes increased damage from all sources
-Detained : Captured by an ennemy, unbale to do anything, can be freed by killing the ennemy.
+Detained : Captured by an ennemy, unable to do anything, can be freed by killing the ennemy.
 Provoked : Can only apply spells on to a specific target.
 Burning : Take damage over time, a burning target is unable to be frozen.
 Freezing : Become unable to do anything, increases resistances, setting a frozen target ablaze thaws them out.

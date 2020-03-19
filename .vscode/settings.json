@@ -5,6 +5,7 @@
         "sdl.h": "c",
         "sdl_ttf.h": "c",
         "struct.h": "c",
-        "common.h": "c"
+        "common.h": "c",
+        "sdl_mixer.h": "c"
     }
 }
