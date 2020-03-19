@@ -6,6 +6,7 @@
 #include "Socket_Server.h"
 
 
+
 /*
 * If program run on Windows
 */
@@ -117,7 +118,7 @@ const char * realStr(){
 
   printf("\n votre message : %s \n", monStr);
 
-return monStr;
+  return monStr;
 }
 
 void sendMsg(int socket, char pseudo[128], t_msgChat monMsg){

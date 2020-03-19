@@ -45,13 +45,28 @@ int socketCli = 0;
 
 int sendmvt(int sock){
 
-comm sendSrv;
-sendSrv.flag = 1;
-  
+  int userch = 0;
+  int stopF = 0;
   int test;
-  test = send(sock, (void *)&sendSrv, sizeof(sendSrv), 0);
-  if(test != SOCKET_ERROR){
-    printf("Message envoyé \n");
+
+  comm sendSrv;
+  sendSrv.flag = 1;
+
+  while(stopF != -1){
+    printf("Press (1) to attack : \n");
+    printf("Press (2) to moove : \n");
+    printf("Press (3) to stop all : \n");
+    scanf("%d",&userch);
+    switch (userch){
+    case 1 : sendSrv.flag = 1;break;
+    case 2 : sendSrv.flag = 2;break;
+    case 3 : sendSrv.flag = -1;stopF = -1;break;
+    }
+  
+    test = send(sock, (void *)&sendSrv, sizeof(sendSrv), 0);
+    if(test != SOCKET_ERROR){
+      printf("Message envoyé \n");
+    }
   }
   return 0;
 }
@@ -138,6 +153,7 @@ int startTCPSocketCli(int socketCli){
         
         printf("Press (1) start chat :\n");
         printf("Pess (2) send structure : \n");
+        printf("Press (3) send mvt : \n");
         scanf("%d",&choixCli);
         switch(choixCli){
           case 1: startChat(sock,pseudoCli,(t_msgChat)monMsg);break;

@@ -61,11 +61,8 @@ static void * fn_listenChanges ()
 int stopTcpSocketServ(int socketConnected){
   printf("Shutdown socketConnected ...\n");
   shutdown(socketConnected, 2);
-  
   printf("Close socket : socketConnected...\n");
-
   closesocket(socketConnected);
-
   return 0;
 }
 
@@ -82,24 +79,30 @@ int attack(){
 int listenChanges(int socketConnected){
 
   int sockEr = 0;
+  int stopFlags = 1;
 
   comm recvCli;
   recvCli.flag = 0;
-  while(1){
+  while(stopFlags == 1){
 
 
    sockEr = recv(socketConnected,(void *)&recvCli, sizeof(recvCli), 0);
    if(sockEr != SOCKET_ERROR){
      printf("Le flag est : %d", recvCli.flag);
-     sockEr = SOCKET_ERROR;
+     switch(recvCli.flag){
+       case 1: attack();sockEr = SOCKET_ERROR;break;
+       case 2: mouvement();sockEr = SOCKET_ERROR;break;
+    }
+     
    }
-   switch(recvCli.flag){
-     case 1: attack();break;
-     case 2: mouvement();break;
-   }
+    printf("Le flag est : %d", recvCli.flag);
+    if(recvCli.flag == -1 ){
+      stopFlags = 0;
+    }
   }
-   printf("Saisir un truc \n");
-   getchar();
+  printf("Test print socketError : %d \n", sockEr);
+  printf("Saisir un truc \n");
+  getchar();
   return 0;
 }
 
@@ -228,27 +231,27 @@ int startTCPSocketServ(){
           }
 
          // system("netsh advfirewall firewall delete rule name=\"Tactics\"");
+        }
+        else{
+          printf("\nUn problème est survenu lors de la connexion du client :( \n");
+          return 4;
+        }
       }
       else{
-        printf("\nUn problème est survenu lors de la connexion du client :( \n");
-        return 4;
+        printf("\nUn problème est survenu lors de la liaison avec le client :( \n");
+        return 3;
       }
     }
     else{
-      printf("\nUn problème est survenu lors de la liaison avec le client :( \n");
-      return 3;
+      printf("\nUn problème est survenu lors de la création de la socket :( \n");
+      return 2;
     }
   }
   else{
-    printf("\nUn problème est survenu lors de la création de la socket :( \n");
-    return 2;
+    printf("Un problème est survenu avec Windows :( \n");
+    return 1;
   }
-}
-else{
-  printf("Un problème est survenu avec Windows :( \n");
-  return 1;
-}
-fclose(log);
-getchar();
-return 0;
+  fclose(log);
+  getchar();
+  return 0;
 }
