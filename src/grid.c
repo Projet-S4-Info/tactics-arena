@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "grid.h"
+#include "characters.h"
 
 /**
  * \fn void createGrid(Entity * grid, int x, int y)
@@ -28,11 +29,10 @@ void createGrid(Tile * grid, int seed, int x, int y)
         grid[i].selected = 0;
         grid[i].entity = NULL;
     }
-
-    Entity * test = malloc(sizeof(Entity));
-    test->act_points = 6;
-    test->stat_mods[0] = 50;
-    grid[23].entity = test;
+    Coord testpos = {3,3};
+    Coord toPos = {5,5};
+    createCharacters(grid, testpos, 30, 30, 56);
+    moveEntity(grid, testpos, toPos, 30, 30);
 }
 
 /**
