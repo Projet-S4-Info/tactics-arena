@@ -64,9 +64,12 @@ void moveEntity(Tile * grid, Coord from, Coord to, int xSize, int ySize)
     exit(EXIT_SUCCESS);
 }
 
-int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Tile * grid, int x, int y)
+int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Entity * entity, int x, int y, int pxBase)
 // Display the characters on the map
 {
     displaySprite(renderer, (*(cSprites)).texture, x, y);
+    char temp[20];
+    sprintf(temp, "%d", entity->stat_mods[0]);
+    displayText(renderer, x+(pxBase/4), y-(pxBase/4), 15, temp, "../inc/font/Pixels.ttf", 255, 0, 0);
     return 0;
 }

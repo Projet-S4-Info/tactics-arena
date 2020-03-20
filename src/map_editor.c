@@ -357,7 +357,7 @@ int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * gr
 				else 				displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].big_texture, blockPos.x, blockPos.y);
 			}
 
-			if ((*(grid+i*xSize+j)).entity != NULL)	displayCharacters(renderer, cSprites, grid, blockPos.x, blockPos.y-pxBase/1.6);
+			if ((*(grid+i*xSize+j)).entity != NULL)	displayCharacters(renderer, cSprites, (*(grid+i*xSize+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
 
 			/*/ -- DEBUG Affichage des indices des tuiles --
 			char pos[6];

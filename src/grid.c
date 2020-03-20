@@ -22,15 +22,17 @@ void createGrid(Tile * grid, int seed, int x, int y)
 // create the grid with x*y size
 {
     srand(time(NULL));
-    Entity * test = malloc(sizeof(Entity));
-    test->act_points = 6;
     for (int i = 0; i < x*y; i++){
         grid[i].tile_id = rand()%seed;
         int t = rand()%5;
         grid[i].selected = 0;
-        if (t == 1) grid[i].entity = test;
-        else grid[i].entity = NULL;
+        grid[i].entity = NULL;
     }
+
+    Entity * test = malloc(sizeof(Entity));
+    test->act_points = 6;
+    test->stat_mods[0] = 50;
+    grid[23].entity = test;
 }
 
 /**
