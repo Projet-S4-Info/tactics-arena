@@ -1,20 +1,27 @@
 #ifndef state_h
 #define state_h
+#include "substruct.h"
+
+typedef struct listelem{
+  Status * value;
+  struct listelem * suiv;
+  struct listelem * prec;
+} List_Elem;
 
 typedef struct {
-  int nb_tours;
-  int id_buff;
-  char * buff_name;
-} State;
-
-typedef struct {
-  State * value;
-  struct StateList * suiv;
+  List_Elem * drapeau;
+  List_Elem * ec;
 } StateList;
 
-typedef struct {
-  StateList * first;
-} List;
-
+err_t init_list(StateList * list);
+int out_of_list(StateList * list);
+int list_empty(StateList * list);
+err_t start_list(StateList * list);
+err_t end_list(StateList * list);
+err_t list_next(StateList * list);
+Status * list_decrease(StateList * list);
+err_t list_remove(StateList * list);
+err_t list_add(StateList * list, Status * v);
+err_t list_destroy(StateList * list);
 
 #endif
