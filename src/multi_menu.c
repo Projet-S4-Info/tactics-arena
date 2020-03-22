@@ -35,6 +35,13 @@ char *compo;
 extern Sint32 cursor;
 extern Sint32 selection_len;
 
+char *tabLog[] = {
+		"Création du serveur",
+		"Le serveur est initialisé !",
+		"En attente du client ...",
+		"un client s'est connecté !",
+};
+
 // Initialisation du thread 
 typedef struct
 {
@@ -91,18 +98,13 @@ void freeMultiMenuTextures()
 	SDL_DestroyTexture(music_off_Multi);
 }
 
-void dispHostLog(SDL_Renderer *renderer, int consoleX, int consoleY){
-	switch (logFlag)
-    {
-		case 1 : displayText(renderer, consoleX + 20, consoleY + 25 , 22, "Création du serveur", "../inc/font/PixelOperator.ttf", 255, 255, 255);
-		break;
-		case 2 : displayText(renderer, consoleX + 20, consoleY + 25 , 22, "Le serveur est initialisé !", "../inc/font/PixelOperator.ttf", 255, 255, 255);
-		break;
-		case 3: displayText(renderer, consoleX + 20, consoleY + 25 , 22, "En attente du client ... ", "../inc/font/PixelOperator.ttf", 255, 255, 255);
-		break;
-		case 4: displayText(renderer, consoleX + 20, consoleY + 25 , 22, "Un client s'est connecté ! ", "../inc/font/PixelOperator.ttf", 255, 255, 255);
-    }
+void dispLog(SDL_Renderer *renderer, int consoleX, int consoleY){
+	
+	for(int i = 0; i < logFlag; i++ ){
+		displayText(renderer, consoleX + 20, consoleY + (25 * i) , 22, tabLog[i], "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	}
 }
+
 
 void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 
@@ -117,6 +119,8 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 			infoSrv.y = 350;
 			infoSrv.w = 250;
 			infoSrv.h = 75;
+
+	
 
 	
     /* Background image */
@@ -136,7 +140,17 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
     // displayText(renderer, 50, 400, 15, "Host est séléctioné", "../inc/font/PixelOperator.ttf", 255, 255, 255);
     
-    //if (consoleLog != NULL) displayText(renderer, console.x + 20, console.y + 50, 15, consoleLog, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	/*-------------------input box Host menu -------------------------*/
+
+
+
+
+
+	/*-------------------input box Host menu -------------------------*/
+	
+
+	
+
 	if(logFlag >= 3) {
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(renderer, 85, 34, 0, 185);
@@ -144,7 +158,8 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 		displayText(renderer, infoSrv.x + 10, infoSrv.y + 15 , 22, "L'ip du serveur est :", "../inc/font/Pixels.ttf", 255, 255, 255);
 		displayText(renderer, infoSrv.x + 15, infoSrv.y + 50, 22, monIP, "../inc/font/PixelOperator.ttf", 255, 255, 255);
 	}
-	dispHostLog(renderer, console.x , console.y);
+	dispLog(renderer, console.x, console.y);
+
 }
 
 

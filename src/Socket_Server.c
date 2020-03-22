@@ -43,7 +43,7 @@
 int socketConnected = 0;
 
 unsigned int logFlag = 0;
-char pseudoCli[128];
+char pseudoCli[128] = "PasDeCli";
 
 
 
@@ -153,6 +153,10 @@ int startTCPSocketServ(){
   SOCKADDR_IN sockConnectedAddr;
   socklen_t sizeofSocketConnected;
 
+  t_user infoClient;
+  infoClient.id = 0;
+  sprintf(infoClient.pseudo ,"PasDeCli");
+
   if(!windWSAError){
    
     /*
@@ -171,7 +175,7 @@ int startTCPSocketServ(){
     if((sock = socket(AF_INET, SOCK_STREAM, 0)) != INVALID_SOCKET){
   
       printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
-      sleep(2);
+      sleep(1);
       logFlag = 2;
       
       /*
@@ -202,6 +206,13 @@ int startTCPSocketServ(){
             int choixServ = 0;
             
             printf("\nConnexion établie avec le client !\n");
+            sleep(1);
+            if(recv(socketConnected,(void *)&infoClient, sizeof(infoClient), 0) != SOCKET_ERROR){
+              logFlag = 4;
+              printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
+            }
+
+            
             printf("\nChargement de la partie... \n");
 
             t_msgChat monMsg;
@@ -213,7 +224,7 @@ int startTCPSocketServ(){
             printf("Saisir votre pseudo : ");
             scanf("%s",pseudoCli);
             printf("\nVous vous appelez : %s", pseudoCli);
-            sprintf(monMsg.pseudo,"%s",pseudoCli);
+            sprintf(monMsg.pseudoChat,"%s",pseudoCli);
             
 
             printf("\nPress (1) start chat :");

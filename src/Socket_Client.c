@@ -52,6 +52,8 @@ int sendmvt(int sock){
   comm sendSrv;
   sendSrv.flag = 1;
 
+  
+
   while(stopF != -1){
     printf("Press (1) to attack : \n");
     printf("Press (2) to moove : \n");
@@ -130,9 +132,9 @@ int startTCPSocketCli(int socketCli){
       if(connect(sock, (SOCKADDR*)&sockIn, sizeof(sockIn)) != SOCKET_ERROR){
         printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
 
-        t_personnage monpersoCli;
-        monpersoCli.id = 1;
-        sprintf(monpersoCli.nom, "Lucien");
+        t_user infoMoi;
+        infoMoi.id = 111;
+        sprintf(infoMoi.pseudo,"LucienChauvin2425");
         
         t_msgChat monMsg;
         monMsg.ident = 2;
@@ -143,7 +145,7 @@ int startTCPSocketCli(int socketCli){
         printf("Saisir votre pseudo : ");
         scanf("%s",pseudoCli);
         printf("\nVous vous appelez : %s", pseudoCli);
-        sprintf(monMsg.pseudo,"%s",pseudoCli);
+        sprintf(monMsg.pseudoChat,"%s",pseudoCli);
         
         
         // printf("L'id du perso est : %d \n", monpersoCli.id);
@@ -157,7 +159,7 @@ int startTCPSocketCli(int socketCli){
         scanf("%d",&choixCli);
         switch(choixCli){
           case 1: startChat(sock,pseudoCli,(t_msgChat)monMsg);break;
-          case 2: sendStruct(sock, (t_personnage)monpersoCli);break;
+          case 2: sendStruct(sock, (t_user)infoMoi);break;
           case 3: sendmvt(sock);
           
         }
