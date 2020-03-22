@@ -230,6 +230,10 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 	int XPOS = 50;
 	int YPOS = 50;
 
+	// x and y sizes of the window
+	int xWinSize;
+	int yWinSize;
+
     /* Initialisation simple */
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0 ) {
         fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
@@ -270,6 +274,8 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 
 		loadMapTextures(renderer);
 
+		SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
+
 		/* Le fond de la fenêtre sera blanc */
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
@@ -294,6 +300,8 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 							case SDL_WINDOWEVENT_RESIZED:
 							case SDL_WINDOWEVENT_HIDDEN:
 							case SDL_WINDOWEVENT_SHOWN:
+
+								SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 
 								/* Le fond de la fenêtre sera blanc */
                 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -386,7 +394,26 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 					break;
 				}
 			}
+
+			// Déplacement de la caméra grâce aux bords de l'écran
+			if (e.motion.x <= xWinSize && e.motion.x >= xWinSize-20){
+				XPOS -= (10*(PX/64));
+				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+			}
+			if (e.motion.x >= 0 && e.motion.x <= 20){
+				XPOS += (10*(PX/64));
+				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+			}
+			if (e.motion.y <= yWinSize && e.motion.y >= yWinSize-20){
+				YPOS -= (10*(PX/64));
+				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+			}
+			if (e.motion.y >= 0 && e.motion.y <= 10){
+				YPOS += (10*(PX/64));
+				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+			}
 			SDL_Delay(16);
+
 		}
 		closeWindow(pWindow);
 	} else {

@@ -702,7 +702,26 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 					break;
 				}
 			}
+
+			// Déplacement de la caméra grâce aux bords de l'écran
+			if (e.motion.x <= xWinSize && e.motion.x >= xWinSize-20){
+				XPOS -= (10*(PX/64));
+				displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+			}
+			else if (e.motion.x >= 200 && e.motion.x <= 220){
+				XPOS += (10*(PX/64));
+				displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+			}
+			else if (e.motion.y <= yWinSize && e.motion.y >= yWinSize-20){
+				YPOS -= (10*(PX/64));
+				displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+			}
+			else if (e.motion.y >= 0 && e.motion.y <= 10){
+				YPOS += (10*(PX/64));
+				displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+			}
 			SDL_Delay(16);
+
 		}
 		closeWindow(pWindow);
 		freeTextures(textures);

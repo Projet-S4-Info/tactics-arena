@@ -29,10 +29,6 @@ void createGrid(Tile * grid, int seed, int x, int y)
         grid[i].selected = 0;
         grid[i].entity = NULL;
     }
-    Coord testpos = {3,3};
-    Coord toPos = {5,5};
-    createCharacters(grid, testpos, 30, 30, 56);
-    moveEntity(grid, testpos, toPos, 30, 30);
 }
 
 /**

@@ -39,7 +39,7 @@ void setEntityToTile(Tile * grid, Entity * entity, Coord tile, int xSize, int yS
 
     if (entity == NULL || grid == NULL)
     {
-        printf("\033[34;01mERROR\033[00m : Pointer null on tile or entity\n");
+        printf("\033[31;01mERROR\033[00m : Pointer null on tile or entity\n");
         exit(EXIT_FAILURE);
     }
 
@@ -57,7 +57,7 @@ void moveEntity(Tile * grid, Coord from, Coord to, int xSize, int ySize)
 
     if (grid[from.x*xSize+from.y].entity == NULL || grid == NULL)
     {
-        printf("\033[34;01mERROR\033[00m : Pointer null on tile or entity\n");
+        printf("\033[31;01mERROR\033[00m : Pointer null on tile or entity\n");
         exit(EXIT_FAILURE);
     }
 
