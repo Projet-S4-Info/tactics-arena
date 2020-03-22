@@ -43,6 +43,7 @@
 int socketConnected = 0;
 
 unsigned int logFlag = 0;
+char pseudoCli[128];
 
 
 
@@ -142,7 +143,7 @@ int startTCPSocketServ(){
 
 
   printf("\nLancement de la créatoin du serveur...\n");
-  logFlag += 1;
+  logFlag = 1;
   /*
   * Setting up the socket for all systems
   */
@@ -170,6 +171,8 @@ int startTCPSocketServ(){
     if((sock = socket(AF_INET, SOCK_STREAM, 0)) != INVALID_SOCKET){
   
       printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
+      sleep(2);
+      logFlag = 2;
       
       /*
       *bind info to the socket
@@ -185,9 +188,12 @@ int startTCPSocketServ(){
         * (max number of connection 5)
         */
         getLocalIP();
+        printf("LIP DU SERV EST %s", monIP);
         sockError = listen(sock,5);
         if(sockError != SOCKET_ERROR){
           printf("\nEn attente de la connexion d'un client...\n");
+          sleep(1);
+          logFlag = 3;
           getLocalIP();
           sizeofSocketConnected = sizeof(sockConnectedAddr);
           socketConnected = accept(sock, (struct  sockaddr  *)&sockConnectedAddr, &sizeofSocketConnected);

@@ -45,12 +45,12 @@
 
 
 char monStr[80];
+char monIP[85];
 
 
 
 
 void getLocalIP(){
-  char monIP[81];
   char s[81];
 
   FILE *fic;

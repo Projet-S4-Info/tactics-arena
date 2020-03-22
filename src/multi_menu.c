@@ -91,39 +91,60 @@ void freeMultiMenuTextures()
 	SDL_DestroyTexture(music_off_Multi);
 }
 
-void dispHostLog(SDL_Renderer *renderer){
+void dispHostLog(SDL_Renderer *renderer, int consoleX, int consoleY){
 	switch (logFlag)
     {
-		case 1 : displayText(renderer, 50, 400, 15, "Création du serveur", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		case 1 : displayText(renderer, consoleX + 20, consoleY + 25 , 22, "Création du serveur", "../inc/font/PixelOperator.ttf", 255, 255, 255);
 		break;
+		case 2 : displayText(renderer, consoleX + 20, consoleY + 25 , 22, "Le serveur est initialisé !", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		break;
+		case 3: displayText(renderer, consoleX + 20, consoleY + 25 , 22, "En attente du client ... ", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		break;
+		case 4: displayText(renderer, consoleX + 20, consoleY + 25 , 22, "Un client s'est connecté ! ", "../inc/font/PixelOperator.ttf", 255, 255, 255);
     }
 }
 
 void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 
 	SDL_Rect console;
-			console.x = 40;
+			console.x = x-(40+450);
 			console.y = 350;
-			console.w = 600;
-			console.h = 300;
+			console.w = 450;
+			console.h = 250;
+	
+	SDL_Rect infoSrv;
+			infoSrv.x = 500;
+			infoSrv.y = 350;
+			infoSrv.w = 250;
+			infoSrv.h = 75;
+
 	
     /* Background image */
 	displaySprite(renderer, background_Multi, 0, 0);
     /* Affiche en gros Tactics Arena */
-	displayText(renderer, 300, 200, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
+	displayText(renderer, 300, 100, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
     /* Quit button */
     displaySprite(renderer, quit_button_Multi, x-300, y-190);
-    
+    /* initialisation de l'opacitée */
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
     /* initialise la couleur sur noir */
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 150);
     /*remplis le rectange*/
     SDL_RenderFillRect(renderer, &console);
-    /* Petit text de confirmation */
+	/* ré atribution des valeurs par défault */
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255 );
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
     // displayText(renderer, 50, 400, 15, "Host est séléctioné", "../inc/font/PixelOperator.ttf", 255, 255, 255);
     
-    if (consoleLog != NULL) displayText(renderer, 50, 422, 15, consoleLog, "../inc/font/PixelOperator.ttf", 255, 255, 255);
-	dispHostLog(renderer);
+    //if (consoleLog != NULL) displayText(renderer, console.x + 20, console.y + 50, 15, consoleLog, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	if(logFlag >= 3) {
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawColor(renderer, 85, 34, 0, 185);
+		SDL_RenderFillRect(renderer, &infoSrv);
+		displayText(renderer, infoSrv.x + 10, infoSrv.y + 15 , 22, "L'ip du serveur est :", "../inc/font/Pixels.ttf", 255, 255, 255);
+		displayText(renderer, infoSrv.x + 15, infoSrv.y + 50, 22, monIP, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	}
+	dispHostLog(renderer, console.x , console.y);
 }
 
 
@@ -237,7 +258,7 @@ int displayMenuMulti(int x, int y)
 					break;
 					case SDL_MOUSEBUTTONDOWN:
 
-						printf("X: %d | Y: %d\n", u.motion.x, u.motion.y);	// Debug console pos x & y on term
+						printf("\nX: %d | Y: %d\n", u.motion.x, u.motion.y);	// Debug console pos x & y on term
 
 						// Bouton "Host"
 						if (u.motion.x >= 576 && u.motion.x <= 723 && u.motion.y >= 449 && u.motion.y <= 488 && isJoinMenu == 0)
