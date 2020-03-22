@@ -17,7 +17,7 @@ typedef struct msgChat{
 }t_msgChat;
 
 extern unsigned int logFlag;
-extern char PseudoCLi[128];
+extern char pseudoCli[128];
 extern char monIP[85];
 
 int startTCPSocketServ();

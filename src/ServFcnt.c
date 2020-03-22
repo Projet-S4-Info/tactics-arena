@@ -105,9 +105,9 @@ int sendStruct(int socket, t_user monperso){
     printf("Impossible d'envoyer la structure... \n");
   }
   else{
-    printf("Structure envoyée ! ");
+    printf("Structure envoyée ! \n");
   }
-  printf("Press key to continue...");
+  printf("Press key to continue...\n");
   getchar();
   return 0;
 }

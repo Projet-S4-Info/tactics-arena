@@ -101,6 +101,15 @@ int startTCPSocketCli(int socketCli){
   */
   SOCKADDR_IN sockIn;
   SOCKET sock;
+
+  t_user infoMoi;
+    infoMoi.id = 111;
+    sprintf(infoMoi.pseudo,"LucienCh2424");
+
+  t_msgChat monMsg;
+        monMsg.ident = 2;
+        sprintf(monMsg.msg,"Client");
+      
   if(!windWSAError){
     /*
     * Creating socket :
@@ -125,6 +134,7 @@ int startTCPSocketCli(int socketCli){
       sockIn.sin_family = AF_INET;
       sockIn.sin_port = htons(PORT);
       int choixCli = 0;
+      
       /*
       *
       *If client achieve connection
@@ -132,34 +142,24 @@ int startTCPSocketCli(int socketCli){
       if(connect(sock, (SOCKADDR*)&sockIn, sizeof(sockIn)) != SOCKET_ERROR){
         printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
 
-        t_user infoMoi;
-        infoMoi.id = 111;
-        sprintf(infoMoi.pseudo,"LucienChauvin2425");
-        
-        t_msgChat monMsg;
-        monMsg.ident = 2;
-        sprintf(monMsg.msg,"Client");
-      
-        char pseudoCli[128];
-        flushMsg(pseudoCli);
+        char pseudo[128];
+        flushMsg(pseudo);
         printf("Saisir votre pseudo : ");
-        scanf("%s",pseudoCli);
-        printf("\nVous vous appelez : %s", pseudoCli);
-        sprintf(monMsg.pseudoChat,"%s",pseudoCli);
-        
-        
-        // printf("L'id du perso est : %d \n", monpersoCli.id);
-        // printf("Le nom du perso est : %s \n", monpersoCli.nom);
+        scanf("%s",pseudo);
+        printf("\nVous vous appelez : %s", pseudo);
+        sprintf(monMsg.pseudoChat,"%s",pseudo);
+        sprintf(infoMoi.pseudo, "%s", pseudo);
 
         printf("\nDébut de la communication : \n");
+        sendStruct(sock, (t_user)infoMoi);
         
         printf("Press (1) start chat :\n");
-        printf("Pess (2) send structure : \n");
+        //printf("Pess (2) send structure : \n");
         printf("Press (3) send mvt : \n");
         scanf("%d",&choixCli);
         switch(choixCli){
-          case 1: startChat(sock,pseudoCli,(t_msgChat)monMsg);break;
-          case 2: sendStruct(sock, (t_user)infoMoi);break;
+          case 1: startChat(sock,pseudo,(t_msgChat)monMsg);break;
+          //case 2: sendStruct(sock, (t_user)infoMoi);break;
           case 3: sendmvt(sock);
           
         }

@@ -26,20 +26,26 @@ SDL_Texture *background_Multi = NULL,
 
 int isHostMenu = 0;
 int isJoinMenu = 0;
+int inputPseudoBtn = 0;
+int inputIpBtn = 0;
 int music_Multi_playing = 1;
 
-char consoleLog[50] = "Host : ";
-
+char pseudoSrv[50] = "Pseudo : ";
+char pseudoJoin[50] = "Pseudo : ";
+char ipJoin[90] = "IP : ";
 char *compo;
 
 extern Sint32 cursor;
 extern Sint32 selection_len;
 
+
+
 char *tabLog[] = {
 		"Création du serveur",
 		"Le serveur est initialisé !",
 		"En attente du client ...",
-		"un client s'est connecté !",
+		"Une connexion à été établie !",
+		" ",
 };
 
 // Initialisation du thread 
@@ -99,9 +105,13 @@ void freeMultiMenuTextures()
 }
 
 void dispLog(SDL_Renderer *renderer, int consoleX, int consoleY){
+
 	
 	for(int i = 0; i < logFlag; i++ ){
 		displayText(renderer, consoleX + 20, consoleY + (25 * i) , 22, tabLog[i], "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		if(i == 4){
+			displayText(renderer, consoleX + 20, consoleY + (25 * i) , 22, pseudoCli, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		}
 	}
 }
 
@@ -114,12 +124,23 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 			console.w = 450;
 			console.h = 250;
 	
-	SDL_Rect infoSrv;
-			infoSrv.x = 500;
-			infoSrv.y = 350;
-			infoSrv.w = 250;
-			infoSrv.h = 75;
-
+	SDL_Rect infoHost;
+			infoHost.x = 500;
+			infoHost.y = 350;
+			infoHost.w = 250;
+			infoHost.h = 75;
+	
+	SDL_Rect inputSrv;
+			inputSrv.x = 40;
+			inputSrv.y = 350;
+			inputSrv.w = 300;
+			inputSrv.h = 150;
+	
+	SDL_Rect pseudoHostBox;
+			pseudoHostBox.x = 150;
+			pseudoHostBox.y = 400;
+			pseudoHostBox.w = 150;
+			pseudoHostBox.h = 28;
 	
 
 	
@@ -141,8 +162,14 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
     // displayText(renderer, 50, 400, 15, "Host est séléctioné", "../inc/font/PixelOperator.ttf", 255, 255, 255);
     
 	/*-------------------input box Host menu -------------------------*/
-
-
+	
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, 85, 34, 0, 185);
+	SDL_RenderFillRect(renderer, &inputSrv);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 185);
+	SDL_RenderFillRect(renderer, &pseudoHostBox);
+	displayText(renderer, inputSrv.x + 10, inputSrv.y + 15 , 22, "Saisir votre Pseudo : ", "../inc/font/Pixels.ttf", 255, 255, 255);
+	displayText(renderer, inputSrv.x + 15, inputSrv.y + 50, 22, pseudoSrv, "../inc/font/PixelOperator.ttf", 255, 255, 255);
 
 
 
@@ -154,9 +181,9 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 	if(logFlag >= 3) {
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(renderer, 85, 34, 0, 185);
-		SDL_RenderFillRect(renderer, &infoSrv);
-		displayText(renderer, infoSrv.x + 10, infoSrv.y + 15 , 22, "L'ip du serveur est :", "../inc/font/Pixels.ttf", 255, 255, 255);
-		displayText(renderer, infoSrv.x + 15, infoSrv.y + 50, 22, monIP, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		SDL_RenderFillRect(renderer, &infoHost);
+		displayText(renderer, infoHost.x + 10, infoHost.y + 15 , 22, "L'ip du serveur est :", "../inc/font/Pixels.ttf", 255, 255, 255);
+		displayText(renderer, infoHost.x + 15, infoHost.y + 50, 22, monIP, "../inc/font/PixelOperator.ttf", 255, 255, 255);
 	}
 	dispLog(renderer, console.x, console.y);
 
@@ -168,11 +195,57 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 
 void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 {
-	/* Petit text de confirmation */
-	displayText(renderer, 80, 450, 15, "Join est séléctioné", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	SDL_Rect infoJoin;
+			infoJoin.x = 450;
+			infoJoin.y = 350;
+			infoJoin.w = 475;
+			infoJoin.h = 90;
 	
-	/* Quit button */
-	displaySprite(renderer, quit_button_Multi, 515, 525);
+	SDL_Rect ipJoinBox;
+			ipJoinBox.x = 515;
+			ipJoinBox.y = 397;
+			ipJoinBox.w = 350;
+			ipJoinBox.h = 28;
+
+	SDL_Rect inputJoin;
+			inputJoin.x = 40;
+			inputJoin.y = 350;
+			inputJoin.w = 300;
+			inputJoin.h = 150;
+	
+	SDL_Rect pseudoJoinBox;
+			pseudoJoinBox.x = 150;
+			pseudoJoinBox.y = 400;
+			pseudoJoinBox.w = 150;
+			pseudoJoinBox.h = 28;
+
+	 /* Background image */
+	displaySprite(renderer, background_Multi, 0, 0);
+    /* Affiche en gros Tactics Arena */
+	displayText(renderer, 300, 100, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
+    /* Quit button */
+    displaySprite(renderer, quit_button_Multi, x-300, y-190);
+
+	/*-----------input box for JoinMenu--------*/
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, 85, 34, 0, 185);
+	SDL_RenderFillRect(renderer, &inputJoin);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 185);
+	SDL_RenderFillRect(renderer, &pseudoJoinBox);
+	displayText(renderer, inputJoin.x + 10, inputJoin.y + 15 , 22, "Saisir votre Pseudo : ", "../inc/font/Pixels.ttf", 255, 255, 255);
+	displayText(renderer, inputJoin.x + 15, inputJoin.y + 50, 22, pseudoJoin, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	/*-----------------------------------------*/
+
+	/*-----------info box for JoinMenu---------*/
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, 85, 34, 0, 185);
+	SDL_RenderFillRect(renderer, &infoJoin);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 185);
+	SDL_RenderFillRect(renderer, &ipJoinBox);
+	displayText(renderer, infoJoin.x + 10, infoJoin.y + 15 , 22, "Saisir l'ip du serveur : ", "../inc/font/Pixels.ttf", 255, 255, 255);
+	displayText(renderer, infoJoin.x + 15, infoJoin.y + 50, 22, ipJoin, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	/*-----------------------------------------*/
+	
 
 }
 
@@ -276,7 +349,7 @@ int displayMenuMulti(int x, int y)
 						printf("\nX: %d | Y: %d\n", u.motion.x, u.motion.y);	// Debug console pos x & y on term
 
 						// Bouton "Host"
-						if (u.motion.x >= 576 && u.motion.x <= 723 && u.motion.y >= 449 && u.motion.y <= 488 && isJoinMenu == 0)
+						if (u.motion.x >= 576 && u.motion.x <= 723 && u.motion.y >= 449 && u.motion.y <= 488 && isJoinMenu == 0 && isJoinMenu == 0)
 						{
 							isHostMenu = 1;
                             printf("Host cliqué :) \n");
@@ -288,25 +361,24 @@ int displayMenuMulti(int x, int y)
 						}
 
 						// Bouton "Join"
-						else if (u.motion.x >= 575 && u.motion.x <= 724 && u.motion.y >= 513 && u.motion.y <= 554 && isHostMenu == 0)
+						else if (u.motion.x >= 575 && u.motion.x <= 724 && u.motion.y >= 513 && u.motion.y <= 554 && isHostMenu == 0 && isJoinMenu == 0)
 						{
 							isJoinMenu = 1;
                             printf("Join cliqué :) \n");
 						}
 
-						// Bouton "Host"
-						else if (u.motion.x >= 160 && u.motion.x <= 305 && u.motion.y >= 390 && u.motion.y <= 450)
+						// PseudoBox
+						else if (u.motion.x >= 150 && u.motion.x <= 305 && u.motion.y >= 399 && u.motion.y <= 432 && (isJoinMenu == 1 || isHostMenu == 1))
 						{	
-
-							// dispHostMenu(renderer, x, y);
-							// printf("Host button touch : \n");
-							// printf("multi : %d |", isMultiMenu);
-							// printf("host : %d |", isHostButton);
-							// printf("join : %d |", isJoinButton);
-							//SDL_RenderPresent(renderer);
-							// pthread_create (& otherThread.thread_server, NULL, fn_server, NULL);
-							
-							
+							inputPseudoBtn = 1;
+							inputIpBtn = 0;
+						}
+						
+						// IPBox
+						else if (u.motion.x >= 520 && u.motion.x <= 868 && u.motion.y >= 399 && u.motion.y <= 429 && isJoinMenu == 1)
+						{
+							inputIpBtn = 1;
+							inputPseudoBtn = 0;
 						}
 						
 						// Nouveau boutton "QUIT" 
@@ -347,26 +419,51 @@ int displayMenuMulti(int x, int y)
 							closeWindow(pWindow);
 							freeMultiMenuTextures();
 						}
+						
+						//
+						else{
+							inputIpBtn = 0;
+							inputPseudoBtn = 0;
+
+						}	
 					break;
 					case SDL_KEYDOWN:
 						if (u.key.keysym.sym == SDLK_BACKSPACE)
 							{
-								if (strlen(consoleLog) > 6){
-									consoleLog[strlen(consoleLog)-1] = '\0';
-									dispHostMenu(renderer, x, y);
+								if(inputPseudoBtn == 1 && isHostMenu == 1){
+									if (strlen(pseudoSrv) > 6){
+										pseudoSrv[strlen(pseudoSrv)-1] = '\0';
+										dispHostMenu(renderer, x, y);
+									}
+								}else if(inputPseudoBtn == 1 && isJoinMenu == 1){
+									if (strlen(pseudoJoin) > 6){
+										pseudoJoin[strlen(pseudoJoin)-1] = '\0';
+										dispJoinMenu(renderer, x, y);
+									}
+								}else if(inputIpBtn == 1 && isJoinMenu == 1){
+									if(strlen(ipJoin) > 5){
+										ipJoin[strlen(ipJoin) - 1] = '\0';
+										dispJoinMenu(renderer, x, y);
+									}
 								}
+								
 							}
                     break;
 					case SDL_TEXTINPUT:
-						if (isHostMenu == 1)
+						if ((isHostMenu == 1) && (inputPseudoBtn == 1))
 						{
-							strcat(consoleLog,u.text.text);
-							printf("%s\n",u.text.text);
-                            printf("hostmenu = %d", isHostMenu);
+							strcat(pseudoSrv,u.text.text);
+							// printf("%s\n",u.text.text);
+                            // printf("hostmenu = %d", isHostMenu);
 							// printf("Host : %d \nMulti : %d \n",isHostButton,isMultiMenu);
 							dispHostMenu(renderer, x, y);
 							// SDL_RenderPresent(renderer);
-
+						}else if((isJoinMenu == 1) && (inputPseudoBtn == 1)){
+							strcat(pseudoJoin, u.text.text);
+							dispJoinMenu(renderer, x, y);
+						}else if ((isJoinMenu == 1) && (inputIpBtn == 1)){
+							strcat(ipJoin,u.text.text);
+							dispJoinMenu(renderer, x, y);
 						}
 					break;
 					case SDL_TEXTEDITING:
@@ -375,6 +472,12 @@ int displayMenuMulti(int x, int y)
 							cursor = u.edit.start;
 							selection_len = u.edit.length;
 							dispHostMenu(renderer, x, y);
+							// SDL_RenderPresent(renderer);
+					    }else if ( isJoinMenu == 1){
+							compo = u.edit.text;
+							cursor = u.edit.start;
+							selection_len = u.edit.length;
+							dispJoinMenu(renderer, x, y);
 							// SDL_RenderPresent(renderer);
 					    }
                     break;

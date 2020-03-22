@@ -43,7 +43,7 @@
 int socketConnected = 0;
 
 unsigned int logFlag = 0;
-char pseudoCli[128] = "PasDeCli";
+char pseudoCli[128];
 
 
 
@@ -207,9 +207,12 @@ int startTCPSocketServ(){
             
             printf("\nConnexion établie avec le client !\n");
             sleep(1);
+            logFlag = 4;
             if(recv(socketConnected,(void *)&infoClient, sizeof(infoClient), 0) != SOCKET_ERROR){
-              logFlag = 4;
               printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
+              sprintf(pseudoCli, "%s s'est connecté !", infoClient.pseudo);
+              printf("SocketServer pseudoCli : %s\n", pseudoCli);
+              logFlag = 5; 
             }
 
             
@@ -219,22 +222,22 @@ int startTCPSocketServ(){
             monMsg.ident = 2;
             sprintf(monMsg.msg,"Client");
           
-            char pseudoCli[128];
-            flushMsg(pseudoCli);
+            char pseudoServ[128];
+            flushMsg(pseudoServ);
             printf("Saisir votre pseudo : ");
-            scanf("%s",pseudoCli);
-            printf("\nVous vous appelez : %s", pseudoCli);
-            sprintf(monMsg.pseudoChat,"%s",pseudoCli);
+            scanf("%s",pseudoServ);
+            printf("\nVous vous appelez : %s", pseudoServ);
+            sprintf(monMsg.pseudoChat,"%s",pseudoServ);
             
 
             printf("\nPress (1) start chat :");
             printf("\nPress (2) send structure : ");
-            printf("\nPress (3) start silent chat: ");
+            printf("\nPress (3) start silent chat : \n");
             scanf("%d",&choixServ);
             switch(choixServ){
               // case 1: startChat(socketConnected);break;
              // case 2 : sendStruct(socketConnected, (t_personnage)monpersoServ);break;
-              case 3 : silentChat(socketConnected, pseudoCli,(t_msgChat)monMsg);break;
+              case 3 : silentChat(socketConnected, pseudoServ,(t_msgChat)monMsg);break;
               case 4 : stopTcpSocketServ(socketConnected);break;
               case 5 : pthread_create (&threadChanges.thread_changes, NULL, fn_listenChanges, NULL);
             }
