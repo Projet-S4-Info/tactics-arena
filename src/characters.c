@@ -14,12 +14,17 @@ int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
 
     printf("Chargement des textures des personnages...\n");
 
+    addTextureToTable(  cSprites,
+                        loadTexture(renderer, loadImage("../inc/img/heart_16.png")),
+                        loadTexture(renderer, loadImage("../inc/img/heart_32.png")),
+                        "heart_icon");
+
     nbSprites = addTextureToTable(  cSprites,
                                     loadTexture(renderer, loadImage("../inc/sprites/base/sprite_sheet/64_64/Sprite_frontview_64.png")),
-                                    NULL,
+                                    loadTexture(renderer, loadImage("../inc/sprites/base/sprite_sheet/128_128/Sprite_frontview_128.png")),
                                     "base_model");
 
-    printf("[CHARACTERS] %d texture(s) de personnage(s) chargée(s) !\n", nbSprites+1);
+    printf("[CHARACTERS] %d texture(s) de personnage(s) et icone(s) chargée(s) !\n", nbSprites+1);
     return nbSprites;
 }
 
@@ -38,9 +43,7 @@ void setEntityToTile(Tile * grid, Entity * entity, Coord tile, int xSize, int yS
         exit(EXIT_FAILURE);
     }
 
-    (*(grid+tile.x*xSize+tile.y)).entity = entity;
-
-    exit(EXIT_SUCCESS);
+    grid[tile.x*xSize+tile.y].entity = entity;
 }
 
 void moveEntity(Tile * grid, Coord from, Coord to, int xSize, int ySize)
@@ -52,21 +55,37 @@ void moveEntity(Tile * grid, Coord from, Coord to, int xSize, int ySize)
         exit(EXIT_FAILURE);
     };
 
-    if ((*(grid+from.x*xSize+from.y)).entity == NULL || grid == NULL)
+    if (grid[from.x*xSize+from.y].entity == NULL || grid == NULL)
     {
         printf("\033[34;01mERROR\033[00m : Pointer null on tile or entity\n");
         exit(EXIT_FAILURE);
     }
 
-    (*(grid+to.x*xSize+to.y)).entity = (*(grid+from.x*xSize+from.y)).entity;
-    (*(grid+from.x*xSize+from.y)).entity = NULL;
-
-    exit(EXIT_SUCCESS);
+    grid[to.x*xSize+to.y].entity = grid[from.x*xSize+from.y].entity;
+    grid[from.x*xSize+from.y].entity = NULL;
 }
 
-int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Tile * grid, int x, int y)
+void createCharacters(Tile * grid, Coord pos, int xSize, int ySize, int pdv)
+// Create a new character at (x,y) pos
+{
+    Entity * entity = malloc(sizeof(Entity));
+    entity->stat_mods[0] = pdv;
+    grid[pos.x*xSize+pos.y].entity = entity;
+}
+
+int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Entity * entity, int x, int y, int pxBase)
 // Display the characters on the map
 {
-    displaySprite(renderer, (*(cSprites)).texture, x, y);
+    // Display the character
+    if (pxBase == 64)   displaySprite(renderer, getTexture(cSprites, "base_model"), x, y);
+    else                displaySprite(renderer, getBigTexture(cSprites, "base_model"), x, y);
+
+    // Display character's life points
+    char temp[20];
+    sprintf(temp, "%d", entity->stat_mods[0]);
+    if (pxBase == 64)   displaySprite(renderer, getTexture(cSprites, "heart_icon"), x+(pxBase/4), y-(pxBase/4));
+    else                displaySprite(renderer, getBigTexture(cSprites, "heart_icon"), x+(pxBase/4), y-(pxBase/4));
+    displayText(renderer, x+(pxBase/2), y-(pxBase/4), (pxBase/64)*15, temp, "../inc/font/Pixels.ttf", 255, 0, 0);
+    
     return 0;
 }

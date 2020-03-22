@@ -213,13 +213,13 @@ int displaySaveMenu(SDL_Renderer * renderer, Tile * grid, int xWinSize, int yWin
 int saveMap(Tile * grid, const char * name)
 // Save a map
 {
-	char mapName[20];
+	char mapName[40];
 
 	sprintf(mapName, "../maps/%s", name);
 
 	FILE * map;
 	map = fopen(mapName, "wb");
-	fwrite(grid, sizeof(Tile)*10*10, 1, map);
+	fwrite(grid, sizeof(Tile)*30*30, 1, map);
 
 	fclose(map);
 
@@ -236,7 +236,7 @@ int loadMap(Tile * grid, const char * name)
 
 	FILE * map;
 	map = fopen(mapName, "rb");
-	fread(grid, sizeof(Tile)*10*10, 1, map);
+	fread(grid, sizeof(Tile)*30*30, 1, map);
 
 	fclose(map);
 
@@ -358,7 +358,7 @@ int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * gr
 				else 				displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].big_texture, blockPos.x, blockPos.y);
 			}
 
-			if ((*(grid+i*xSize+j)).entity != NULL)	displayCharacters(renderer, cSprites, grid, blockPos.x, blockPos.y-pxBase/1.6);
+			if ((*(grid+i*xSize+j)).entity != NULL)	displayCharacters(renderer, cSprites, (*(grid+i*xSize+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
 
 			/*/ -- DEBUG Affichage des indices des tuiles --
 			char pos[6];
