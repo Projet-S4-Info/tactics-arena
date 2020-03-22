@@ -54,10 +54,16 @@ int loadMapTextures(SDL_Renderer * renderer)
 						"water");
 
 	// Loading sand block textures
-	index = addTextureToTable(	textures,
+	addTextureToTable(	textures,
 								loadTexture(renderer, loadImage("../inc/img/sand_64.png")),
 								loadTexture(renderer, loadImage("../inc/img/sand_128.png")),
 								"sand");
+
+	// Loading sand block textures
+	index = addTextureToTable(	textures,
+								loadTexture(renderer, loadImage("../inc/img/selection_64.png")),
+								loadTexture(renderer, loadImage("../inc/img/selection_128.png")),
+								"selection");
 
 	printf("[GRAPHICS] %d texture(s) chargée(s) !\n", index+1);
 
@@ -160,21 +166,22 @@ int displayMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, in
 
 			if ((*(grid+i*xSize+j)).tile_id == 1)
 			{
-				if ((*(grid+i*xSize+j)).selected)
-				{
-					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
-					else				displaySprite(renderer, getBigTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
-				} 
-				else
-				{
-					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "block"), blockPos.x, blockPos.y);
-					else				displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
-				}
+				if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
+				else				displaySprite(renderer, getBigTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
+				if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "block"), blockPos.x, blockPos.y);
+				else				displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
 			}
 			else if ((*(grid+i*xSize+j)).tile_id <= 5)
 			{
 				if (pxBase == 64)	displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].texture, blockPos.x, blockPos.y);
 				else 				displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].big_texture, blockPos.x, blockPos.y);
+			}
+
+			// Affichage tuile de sélection
+			if ((*(grid+i*xSize+j)).selected == 1)
+			{
+				if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "selection"), blockPos.x, blockPos.y);
+				else				displaySprite(renderer, getBigTexture(textures, "selection"), blockPos.x, blockPos.y);
 			}
 
 			/*/ -- DEBUG Affichage des indices des tuiles --
