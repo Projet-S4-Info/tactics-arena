@@ -7,6 +7,7 @@
 #include "struct.h"
 
 
+
 /*
 * If program run on Windows
 */
@@ -41,6 +42,13 @@
 
 int socketConnected = 0;
 
+unsigned int logFlag = 0;
+char pseudoCli[128];
+
+
+
+
+
 typedef struct
 {
    int stockListen;
@@ -52,8 +60,7 @@ listenThread_t;
 listenThread_t threadChanges;
 
 
-static void * fn_listenChanges ()
-{
+static void * fn_listenChanges (){
     listenChanges(socketConnected);
     return NULL;
 }
@@ -107,7 +114,6 @@ int listenChanges(int socketConnected){
 }
 
 
-
 int startTCPSocketServ(){
   #ifdef _WIN32
     /*
@@ -134,15 +140,10 @@ int startTCPSocketServ(){
     system("ifconfig | grep \"inet 1[97]2.*\" | sed \"s/netmask.*//g\" | sed \"s/inet//g\" > .test.txt");
     int windWSAError= 0;
   #endif
-  
-  
 
-  FILE *log;
-  log = fopen(".logConsole.txt", "w+");
-
-  fprintf(log, "Lancement de la création du serveur ... \n");
 
   printf("\nLancement de la créatoin du serveur...\n");
+  logFlag = 1;
   /*
   * Setting up the socket for all systems
   */
@@ -168,7 +169,11 @@ int startTCPSocketServ(){
     * param 3 : Protocole parameter (useless) -> 0
     */
     if((sock = socket(AF_INET, SOCK_STREAM, 0)) != INVALID_SOCKET){
-       printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
+  
+      printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
+      sleep(2);
+      logFlag = 2;
+      
       /*
       *bind info to the socket
       */
@@ -183,9 +188,12 @@ int startTCPSocketServ(){
         * (max number of connection 5)
         */
         getLocalIP();
+        printf("LIP DU SERV EST %s", monIP);
         sockError = listen(sock,5);
         if(sockError != SOCKET_ERROR){
           printf("\nEn attente de la connexion d'un client...\n");
+          sleep(1);
+          logFlag = 3;
           getLocalIP();
           sizeofSocketConnected = sizeof(sockConnectedAddr);
           socketConnected = accept(sock, (struct  sockaddr  *)&sockConnectedAddr, &sizeofSocketConnected);
@@ -251,7 +259,6 @@ int startTCPSocketServ(){
     printf("Un problème est survenu avec Windows :( \n");
     return 1;
   }
-  fclose(log);
   getchar();
   return 0;
 }

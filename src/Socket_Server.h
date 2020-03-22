@@ -14,6 +14,9 @@ typedef struct msgChat{
   char msg[MAX_BUFF_SIZE];
 }t_msgChat;
 
+extern unsigned int logFlag;
+extern char PseudoCLi[128];
+extern char monIP[85];
 
 int startTCPSocketServ();
 int startTCPSocketCli();
@@ -27,5 +30,6 @@ void startChat(int sock, char pseudo[128], t_msgChat monMsg);
 const char * setServIP();
 void silentChat(int sock, char pseudo[128], t_msgChat monMsg);
 char * flushMsg(char * monMsg);
+
 
 #endif
