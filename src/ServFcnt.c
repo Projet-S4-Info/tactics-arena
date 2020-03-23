@@ -45,12 +45,12 @@
 
 
 char monStr[80];
+char monIP[85];
 
 
 
 
 void getLocalIP(){
-  char monIP[81];
   char s[81];
 
   FILE *fic;
@@ -97,7 +97,7 @@ char * flushMsg(char monMsg[MAX_BUFF_SIZE]){
   return monMsg;
 }
 
-int sendStruct(int socket, t_personnage monperso){
+int sendStruct(int socket, t_user monperso){
   int sockSendError;
 
   sockSendError = send(socket, (void *)&monperso, sizeof(monperso), 0);
@@ -105,9 +105,9 @@ int sendStruct(int socket, t_personnage monperso){
     printf("Impossible d'envoyer la structure... \n");
   }
   else{
-    printf("Structure envoyée ! ");
+    printf("Structure envoyée ! \n");
   }
-  printf("Press key to continue...");
+  printf("Press key to continue...\n");
   getchar();
   return 0;
 }
@@ -133,7 +133,7 @@ void sendMsg(int socket, char pseudo[128], t_msgChat monMsg){
   printf("\nVotre message : %s \n", buffer);
   //printf("Buffer size sendMSG: %lu (%lu)", strlen(buffer), sizeof(buffer));
   sprintf(monMsg.msg,"%s",buffer);
-  sprintf(monMsg.pseudo,"%s",pseudo);
+  sprintf(monMsg.pseudoChat,"%s",pseudo);
 
   //printf("\nDEBUG SENDMSG : monMsg.msg:  %s", monMsg.msg);
   sockCli = send(socket,(void *)&monMsg, sizeof(monMsg), 0);
@@ -168,7 +168,7 @@ void silentChat(int sock, char pseudo[128], t_msgChat monMsg){
     if(msgRcv != SOCKET_ERROR){
       printf("\nVous avez un nouveau message ! \n");
       printf("\nTest pseudo : %s\n", pseudo);
-      printf("%s : %s\n",monMsg.pseudo, monMsg.msg);
+      printf("%s : %s\n",monMsg.pseudoChat, monMsg.msg);
       // printf("\nSize of msgSlilentCHat.msg : %lu (%lu) \n", strlen(msgSilentChat.msg), sizeof(msgSilentChat.msg));
       time(&seconds);
       sleep(1);

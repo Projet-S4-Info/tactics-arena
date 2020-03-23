@@ -15,6 +15,7 @@
 #include "graphics.h"
 #include "audio.h"
 #include "menu.h"
+#include "menu_multi.h"
 #include "map_editor.h"
 #include "characters.h"
 
@@ -78,6 +79,12 @@ int main()
                 {
                     stopMenuMusic();
                     createMapEditorWindow(1920, 1080, blankMatrix, X, Y);
+                }
+                
+                // Multiplayer
+                else if (selection == 4){
+                    
+                    displayMenuMulti(1280,720);
                 }
 
                 debugGrid(matrix, X, Y);

@@ -230,6 +230,10 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 	int XPOS = 50;
 	int YPOS = 50;
 
+	// x and y sizes of the window
+	int xWinSize;
+	int yWinSize;
+
     /* Initialisation simple */
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0 ) {
         fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
@@ -267,8 +271,26 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 
 	if( pWindow )
 	{
+		SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 
+		// Chargement des textures
 		loadMapTextures(renderer);
+		int start_seconds = SDL_GetTicks()/1000;
+		int load_index = 0;
+		while((SDL_GetTicks()/1000)-start_seconds < 3)
+		{
+			load_index++;
+			SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
+			SDL_RenderClear(renderer);
+			displayText(renderer, 200, yWinSize/2+120, 40, "Chargement des textures du jeu...", "../inc/font/Pixels.ttf", 255, 255, 255);
+			displayText(renderer, 200, yWinSize/2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
+			if (load_index == 1)		displayText(renderer, xWinSize/2, yWinSize/3*2, 60, "Ooo", "../inc/font/Aqua.ttf", 255, 255, 255);
+			else if (load_index == 2)	displayText(renderer, xWinSize/2, yWinSize/3*2, 60, "oOo", "../inc/font/Aqua.ttf", 255, 255, 255);
+			else if (load_index == 3)	displayText(renderer, xWinSize/2, yWinSize/3*2, 60, "ooO", "../inc/font/Aqua.ttf", 255, 255, 255);
+			SDL_Delay(100);
+			SDL_RenderPresent(renderer);
+			SDL_Delay(900);
+		}
 
 		/* Le fond de la fenêtre sera blanc */
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -294,6 +316,8 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 							case SDL_WINDOWEVENT_RESIZED:
 							case SDL_WINDOWEVENT_HIDDEN:
 							case SDL_WINDOWEVENT_SHOWN:
+
+								SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 
 								/* Le fond de la fenêtre sera blanc */
                 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -386,7 +410,26 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 					break;
 				}
 			}
+
+			// Déplacement de la caméra grâce aux bords de l'écran
+			if (e.motion.x <= xWinSize && e.motion.x >= xWinSize-20){
+				XPOS -= (10*(PX/64));
+				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+			}
+			if (e.motion.x >= 0 && e.motion.x <= 20){
+				XPOS += (10*(PX/64));
+				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+			}
+			if (e.motion.y <= yWinSize && e.motion.y >= yWinSize-20){
+				YPOS -= (10*(PX/64));
+				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+			}
+			if (e.motion.y >= 0 && e.motion.y <= 10){
+				YPOS += (10*(PX/64));
+				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+			}
 			SDL_Delay(16);
+
 		}
 		closeWindow(pWindow);
 	} else {

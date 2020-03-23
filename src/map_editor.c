@@ -213,13 +213,13 @@ int displaySaveMenu(SDL_Renderer * renderer, Tile * grid, int xWinSize, int yWin
 int saveMap(Tile * grid, const char * name)
 // Save a map
 {
-	char mapName[20];
+	char mapName[40];
 
 	sprintf(mapName, "../maps/%s", name);
 
 	FILE * map;
 	map = fopen(mapName, "wb");
-	fwrite(grid, sizeof(Tile)*10*10, 1, map);
+	fwrite(grid, sizeof(Tile)*30*30, 1, map);
 
 	fclose(map);
 
@@ -236,7 +236,7 @@ int loadMap(Tile * grid, const char * name)
 
 	FILE * map;
 	map = fopen(mapName, "rb");
-	fread(grid, sizeof(Tile)*10*10, 1, map);
+	fread(grid, sizeof(Tile)*30*30, 1, map);
 
 	fclose(map);
 
@@ -358,7 +358,7 @@ int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * gr
 				else 				displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].big_texture, blockPos.x, blockPos.y);
 			}
 
-			if ((*(grid+i*xSize+j)).entity != NULL)	displayCharacters(renderer, cSprites, grid, blockPos.x, blockPos.y-pxBase/1.6);
+			if ((*(grid+i*xSize+j)).entity != NULL)	displayCharacters(renderer, cSprites, (*(grid+i*xSize+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
 
 			/*/ -- DEBUG Affichage des indices des tuiles --
 			char pos[6];
@@ -480,6 +480,25 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 		loadSprites(renderer, cSprites);
 
 		SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
+
+		// Chargement des textures
+		loadMapTextures(renderer);
+		int start_seconds = SDL_GetTicks()/1000;
+		int load_index = 0;
+		while((SDL_GetTicks()/1000)-start_seconds < 3)
+		{
+			load_index++;
+			SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
+			SDL_RenderClear(renderer);
+			displayText(renderer, 200, yWinSize/2+120, 40, "Chargement des textures de l'éditeur...", "../inc/font/Pixels.ttf", 255, 255, 255);
+			displayText(renderer, 200, yWinSize/2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
+			if (load_index == 1)		displayText(renderer, xWinSize/2, yWinSize/3*2, 60, "Ooo", "../inc/font/Aqua.ttf", 255, 255, 255);
+			else if (load_index == 2)	displayText(renderer, xWinSize/2, yWinSize/3*2, 60, "oOo", "../inc/font/Aqua.ttf", 255, 255, 255);
+			else if (load_index == 3)	displayText(renderer, xWinSize/2, yWinSize/3*2, 60, "ooO", "../inc/font/Aqua.ttf", 255, 255, 255);
+			SDL_Delay(100);
+			SDL_RenderPresent(renderer);
+			SDL_Delay(900);
+		}
 
 		/* Le fond de la fenêtre sera blanc */
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -702,7 +721,26 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 					break;
 				}
 			}
+
+			// Déplacement de la caméra grâce aux bords de l'écran
+			if (e.motion.x <= xWinSize && e.motion.x >= xWinSize-20){
+				XPOS -= (10*(PX/64));
+				displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+			}
+			else if (e.motion.x >= 200 && e.motion.x <= 220){
+				XPOS += (10*(PX/64));
+				displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+			}
+			else if (e.motion.y <= yWinSize && e.motion.y >= yWinSize-20){
+				YPOS -= (10*(PX/64));
+				displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+			}
+			else if (e.motion.y >= 0 && e.motion.y <= 10){
+				YPOS += (10*(PX/64));
+				displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+			}
 			SDL_Delay(16);
+
 		}
 		closeWindow(pWindow);
 		freeTextures(textures);

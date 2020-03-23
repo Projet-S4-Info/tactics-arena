@@ -7,6 +7,7 @@
 #include "struct.h"
 
 
+
 /*
 * If program run on Windows
 */
@@ -41,6 +42,13 @@
 
 int socketConnected = 0;
 
+unsigned int logFlag = 0;
+char pseudoCli[128];
+
+
+
+
+
 typedef struct
 {
    int stockListen;
@@ -52,8 +60,7 @@ listenThread_t;
 listenThread_t threadChanges;
 
 
-static void * fn_listenChanges ()
-{
+static void * fn_listenChanges (){
     listenChanges(socketConnected);
     return NULL;
 }
@@ -107,7 +114,6 @@ int listenChanges(int socketConnected){
 }
 
 
-
 int startTCPSocketServ(){
   #ifdef _WIN32
     /*
@@ -134,15 +140,10 @@ int startTCPSocketServ(){
     system("ifconfig | grep \"inet 1[97]2.*\" | sed \"s/netmask.*//g\" | sed \"s/inet//g\" > .test.txt");
     int windWSAError= 0;
   #endif
-  
-  
 
-  FILE *log;
-  log = fopen(".logConsole.txt", "w+");
-
-  fprintf(log, "Lancement de la création du serveur ... \n");
 
   printf("\nLancement de la créatoin du serveur...\n");
+  logFlag = 1;
   /*
   * Setting up the socket for all systems
   */
@@ -151,6 +152,10 @@ int startTCPSocketServ(){
   int sockError;
   SOCKADDR_IN sockConnectedAddr;
   socklen_t sizeofSocketConnected;
+
+  t_user infoClient;
+  infoClient.id = 0;
+  sprintf(infoClient.pseudo ,"PasDeCli");
 
   if(!windWSAError){
    
@@ -168,7 +173,11 @@ int startTCPSocketServ(){
     * param 3 : Protocole parameter (useless) -> 0
     */
     if((sock = socket(AF_INET, SOCK_STREAM, 0)) != INVALID_SOCKET){
-       printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
+  
+      printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
+      sleep(1);
+      logFlag = 2;
+      
       /*
       *bind info to the socket
       */
@@ -183,9 +192,12 @@ int startTCPSocketServ(){
         * (max number of connection 5)
         */
         getLocalIP();
+        printf("LIP DU SERV EST %s", monIP);
         sockError = listen(sock,5);
         if(sockError != SOCKET_ERROR){
           printf("\nEn attente de la connexion d'un client...\n");
+          sleep(1);
+          logFlag = 3;
           getLocalIP();
           sizeofSocketConnected = sizeof(sockConnectedAddr);
           socketConnected = accept(sock, (struct  sockaddr  *)&sockConnectedAddr, &sizeofSocketConnected);
@@ -194,28 +206,38 @@ int startTCPSocketServ(){
             int choixServ = 0;
             
             printf("\nConnexion établie avec le client !\n");
+            sleep(1);
+            logFlag = 4;
+            if(recv(socketConnected,(void *)&infoClient, sizeof(infoClient), 0) != SOCKET_ERROR){
+              printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
+              sprintf(pseudoCli, "%s s'est connecté !", infoClient.pseudo);
+              printf("SocketServer pseudoCli : %s\n", pseudoCli);
+              logFlag = 5; 
+            }
+
+            
             printf("\nChargement de la partie... \n");
 
             t_msgChat monMsg;
             monMsg.ident = 2;
             sprintf(monMsg.msg,"Client");
           
-            char pseudoCli[128];
-            flushMsg(pseudoCli);
+            char pseudoServ[128];
+            flushMsg(pseudoServ);
             printf("Saisir votre pseudo : ");
-            scanf("%s",pseudoCli);
-            printf("\nVous vous appelez : %s", pseudoCli);
-            sprintf(monMsg.pseudo,"%s",pseudoCli);
+            scanf("%s",pseudoServ);
+            printf("\nVous vous appelez : %s", pseudoServ);
+            sprintf(monMsg.pseudoChat,"%s",pseudoServ);
             
 
             printf("\nPress (1) start chat :");
             printf("\nPress (2) send structure : ");
-            printf("\nPress (3) start silent chat: ");
+            printf("\nPress (3) start silent chat : \n");
             scanf("%d",&choixServ);
             switch(choixServ){
               // case 1: startChat(socketConnected);break;
              // case 2 : sendStruct(socketConnected, (t_personnage)monpersoServ);break;
-              case 3 : silentChat(socketConnected, pseudoCli,(t_msgChat)monMsg);break;
+              case 3 : silentChat(socketConnected, pseudoServ,(t_msgChat)monMsg);break;
               case 4 : stopTcpSocketServ(socketConnected);break;
               case 5 : pthread_create (&threadChanges.thread_changes, NULL, fn_listenChanges, NULL);
             }
@@ -251,7 +273,6 @@ int startTCPSocketServ(){
     printf("Un problème est survenu avec Windows :( \n");
     return 1;
   }
-  fclose(log);
   getchar();
   return 0;
 }
