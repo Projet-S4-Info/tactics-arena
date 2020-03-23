@@ -54,3 +54,8 @@ err_t init_berserker(Class * c)
 
     return OK;
 }
+
+err_t init_game(Class *c, Ability *mage)
+{
+    return OK;
+}
