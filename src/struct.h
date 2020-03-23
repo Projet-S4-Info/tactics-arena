@@ -101,6 +101,11 @@ typedef struct {
     comm_union action;
 }comm;
 
+typedef struct {
+    int char_id;
+    Coord c;
+    abilityId act;
+}action;
 
 
 #endif

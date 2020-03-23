@@ -12,7 +12,7 @@ typedef enum {pv, mv, vis, atk, magic, res_physic, res_magic} statId;
 
 typedef enum {Berserker, Ranger, Goliath, Mage, Valkyrie, Angel} classId;
 
-typedef enum {Slash, Killing_Blow, Fury, Frenzied_Dash} abilityId;
+typedef enum {Movement, Slash, Killing_Blow, Fury, Frenzied_Dash} abilityId;
 
 typedef enum {Dead, Alive, Summoned} lifeId;
 
