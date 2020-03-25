@@ -157,7 +157,7 @@ void startTCPSocketServ(){
   infoClient.id = 0;
   sprintf(infoClient.pseudo ,"PasDeCli");
 
-  if(!windWSAError){
+  if(!windWSAError ){
    
     /*
     * Initialising struct

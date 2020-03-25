@@ -83,8 +83,13 @@ int main()
                 
                 // Multiplayer
                 else if (selection == 4){
-                    
-                    displayMenuMulti(1280,720);
+                    int res = 0;
+                    res = displayMenuMulti(1280,720);
+                    if(res == 1){
+                        createGameWindow(1920,1080,matrix, X, Y);
+                    }else if(res == 2){
+                        createGameWindow(1920,1080,matrix, X, Y);
+                    }
                 }
 
                 debugGrid(matrix, X, Y);

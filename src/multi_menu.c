@@ -30,6 +30,7 @@ int inputIpBtn = 0;
 int isPseudoValid = 0;
 int isIPValid = 0;
 int isInfoJoinSet = 0;
+int isClientCo = 0;
 int music_Multi_playing = 1;
 
 char pseudoSrv[50] = "Pseudo : ";
@@ -123,8 +124,11 @@ void dispLog(SDL_Renderer *renderer, int consoleX, int consoleY){
 	
 	for(int i = 0; i < logFlag; i++ ){
 		displayText(renderer, consoleX + 20, consoleY + (25 * i) , 22, tabLog[i], "../inc/font/PixelOperator.ttf", 255, 255, 255);
-		if(i == 4){
+		if(i == 4 ){
 			displayText(renderer, consoleX + 20, consoleY + (25 * i) , 22, pseudoCli, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+			displaySprite(renderer, ok_button_Multi, 530, 450);
+			displayText(renderer, 605, 540, 45, "Start", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+			isClientCo = 1;
 		}
 	}
 }
@@ -175,6 +179,7 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
     // displayText(renderer, 50, 400, 15, "Host est séléctioné", "../inc/font/PixelOperator.ttf", 255, 255, 255);
     
+	
 	/*-------------------input box Host menu -------------------------*/
 	
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -186,7 +191,6 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 	displayText(renderer, inputSrv.x + 15, inputSrv.y + 50, 22, pseudoSrv, "../inc/font/PixelOperator.ttf", 255, 255, 255);
 	displaySprite(renderer, ok_button_Multi, 50, 340);
 	displayText(renderer, 150, 430, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255);
-
 
 
 	/*-------------------input box Host menu -------------------------*/
@@ -201,7 +205,7 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 		displayText(renderer, infoHost.x + 10, infoHost.y + 15 , 22, "L'ip du serveur est :", "../inc/font/Pixels.ttf", 255, 255, 255);
 		displayText(renderer, infoHost.x + 15, infoHost.y + 50, 22, monIP, "../inc/font/PixelOperator.ttf", 255, 255, 255);
 	}
-	
+
 	dispLog(renderer, console.x, console.y);
 	
 
@@ -374,7 +378,7 @@ int displayMenuMulti(int x, int y)
 						{
 							isHostMenu = 1;
                             printf("Host cliqué :) \n");
-                            pthread_create (& threadServ.thread_server, NULL, fn_server, NULL);
+                            
                             dispHostMenu(renderer, x, y);
 						}
 
@@ -409,6 +413,7 @@ int displayMenuMulti(int x, int y)
 								//printf("\nps | i : %d | char %c \n", i, pseuTemp[i]);
 							}
 							printf("\nTest User pseudo : %s\n",pseudoUser);
+							pthread_create (& threadServ.thread_server, NULL, fn_server, NULL);
 						}
 						
 						// IPBox
@@ -434,6 +439,13 @@ int displayMenuMulti(int x, int y)
 						else if (u.motion.x >= 608 && u.motion.x <= 721 && u.motion.y >= 550 && u.motion.y <= 590 && isJoinMenu == 1 && isIPValid == 1 && isPseudoValid == 1){
 							printf("JOIN cliqué ! \n");
 							pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);
+							isInfoJoinSet = 1;
+						}
+						else if (u.motion.x >= 606 && u.motion.x <= 722 && u.motion.y >= 550 && u.motion.y <= 594 && isHostMenu == 1 && isClientCo == 1){
+							printf("Starting game ... \n");
+							closeWindow(pWindow);
+							freeMultiMenuTextures();
+							return 1;
 						}
 						
 						// Nouveau boutton "QUIT" 
