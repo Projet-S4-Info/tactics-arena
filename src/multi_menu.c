@@ -28,11 +28,14 @@ int isJoinMenu = 0;
 int inputPseudoBtn = 0;
 int inputIpBtn = 0;
 int isPseudoValid = 0;
+int isIPValid = 0;
+int isInfoJoinSet = 0;
 int music_Multi_playing = 1;
 
 char pseudoSrv[50] = "Pseudo : ";
 char pseudoJoin[50] = "Pseudo : ";
 char pseudoUser[50];
+char ipSrv[85];
 char ipJoin[90] = "IP : ";
 char *compo;
 
@@ -211,7 +214,7 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 			infoJoin.x = 450;
 			infoJoin.y = 350;
 			infoJoin.w = 475;
-			infoJoin.h = 90;
+			infoJoin.h = 170;
 	
 	SDL_Rect ipJoinBox;
 			ipJoinBox.x = 515;
@@ -247,7 +250,7 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 	displayText(renderer, inputJoin.x + 10, inputJoin.y + 15 , 22, "Saisir votre Pseudo : ", "../inc/font/Pixels.ttf", 255, 255, 255);
 	displayText(renderer, inputJoin.x + 15, inputJoin.y + 50, 22, pseudoJoin, "../inc/font/PixelOperator.ttf", 255, 255, 255);
 	displaySprite(renderer, ok_button_Multi, 50, 340);
-	displayText(renderer, 150, 430, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	displayText(renderer, 140, 430, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255);
 	/*-----------------------------------------*/
 
 	/*-----------info box for JoinMenu---------*/
@@ -258,6 +261,12 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 	SDL_RenderFillRect(renderer, &ipJoinBox);
 	displayText(renderer, infoJoin.x + 10, infoJoin.y + 15 , 22, "Saisir l'ip du serveur : ", "../inc/font/Pixels.ttf", 255, 255, 255);
 	displayText(renderer, infoJoin.x + 15, infoJoin.y + 50, 22, ipJoin, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	displaySprite(renderer, ok_button_Multi, 480, 360);
+	displayText(renderer, 590, 450, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	if((isPseudoValid == 1) && (isIPValid == 1)){
+		displaySprite(renderer, ok_button_Multi, 530, 450);
+		displayText(renderer, 605, 540, 55, "JOIN", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	}
 	/*-----------------------------------------*/
 
 }
@@ -374,7 +383,7 @@ int displayMenuMulti(int x, int y)
 						{
 							isJoinMenu = 1;
                             printf("Join cliqué :) \n");
-							pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);
+							
 							dispJoinMenu(renderer, x, y);
 						}
 
@@ -394,10 +403,10 @@ int displayMenuMulti(int x, int y)
 							}else if(isJoinMenu == 1){
 								strcpy(pseuTemp,pseudoJoin);
 							}	
-							printf("\npseudo temp : %s\n",pseuTemp);
-							for(int i = 9; i < (strlen(pseuTemp)); i++){
+							//printf("\npseudo temp : %s\n",pseuTemp);
+							for(int i = 0; i < (strlen(pseuTemp)); i++){
 								pseudoUser[i-9] = pseuTemp[i];
-								printf("\nps | i : %d | char %c \n", i, pseuTemp[i]);
+								//printf("\nps | i : %d | char %c \n", i, pseuTemp[i]);
 							}
 							printf("\nTest User pseudo : %s\n",pseudoUser);
 						}
@@ -407,6 +416,24 @@ int displayMenuMulti(int x, int y)
 						{
 							inputIpBtn = 1;
 							inputPseudoBtn = 0;
+						}
+						else if (u.motion.x >= 556 && u.motion.x <= 668 && u.motion.y >= 461 && u.motion.y <= 500 && isJoinMenu == 1 && isIPValid == 0){
+							
+							isIPValid = 1;
+							char ipTemp[85];
+							
+							strcpy(ipTemp,ipJoin);
+							
+							//printf("\nip temp : %s\n",ipTemp);
+							for(int i = 5; i < (strlen(ipTemp)); i++){
+								ipSrv[i-5] = ipTemp[i];
+								//printf("\nipTemp[%d] | char %c \n", i, ipTemp[i]);
+							}
+							printf("\nTest IP Join : %s\n",ipSrv);
+						}
+						else if (u.motion.x >= 608 && u.motion.x <= 721 && u.motion.y >= 550 && u.motion.y <= 590 && isJoinMenu == 1 && isIPValid == 1 && isPseudoValid == 1){
+							printf("JOIN cliqué ! \n");
+							pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);
 						}
 						
 						// Nouveau boutton "QUIT" 

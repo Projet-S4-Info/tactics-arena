@@ -98,20 +98,9 @@ int startTCPSocketCli(int socketCli){
 
   int choixCli = 0;
   
-  const char * servIP = malloc(sizeof(char) * MAX_BUFF_SIZE);
-
-  servIP = setServIP();
-  // printf("\n%s\n", servIP);
+  const char * servIP = malloc(sizeof(char) * 85);
   
-  /*---------- Initialisation des structures pour les sockets ----*/
   
-  SOCKADDR_IN sockIn;
-  SOCKET sock;
-  sockIn.sin_addr.s_addr= inet_addr((char *)servIP);
-  sockIn.sin_family = AF_INET;
-  sockIn.sin_port = htons(PORT);
-
-  /*-------------------------------------------------------------*/
 
   t_user infoMoi;
     infoMoi.id = 111;
@@ -122,6 +111,18 @@ int startTCPSocketCli(int socketCli){
         sprintf(monMsg.msg,"Client");
       
   if(!windWSAError){
+  servIP = ipSrv;
+  printf("\n%s\n", servIP);
+  
+  /*---------- Initialisation des structures pour les sockets ----*/
+  
+  SOCKADDR_IN sockIn;
+  SOCKET sock;
+  sockIn.sin_addr.s_addr= inet_addr((char *)servIP);
+  sockIn.sin_family = AF_INET;
+  sockIn.sin_port = htons(PORT);
+
+  /*-------------------------------------------------------------*/
     printf("\nLancement de la créatoin du client...\n");
     
     //-- Création de la socket (IPv4, TCP, 0)

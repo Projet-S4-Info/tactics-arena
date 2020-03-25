@@ -7,22 +7,24 @@
 
 typedef struct User{
   int id;
-  char pseudo[128];
+  char pseudo[64];
 } t_user;
 
 typedef struct msgChat{
   int ident;
-  char pseudoChat[128];
+  char pseudoChat[64];
   char msg[MAX_BUFF_SIZE];
 }t_msgChat;
 
 extern unsigned int logFlag;
 extern int isPseudoValid;
+extern int isInfoJoinSet;
 extern char pseudoCli[128];
 extern char monIP[85];
+extern char ipSrv[85];
 extern char pseudoUser[50];
 
-int startTCPSocketServ();
+void startTCPSocketServ();
 int startTCPSocketCli();
 int stopTCPSocketServ(int socketConnected);
 int listenChanges(int socketConnected);

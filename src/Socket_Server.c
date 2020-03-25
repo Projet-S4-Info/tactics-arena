@@ -114,8 +114,8 @@ int listenChanges(int socketConnected){
 }
 
 
-int startTCPSocketServ(){
-  #ifdef _WIN32
+void startTCPSocketServ(){
+  #ifdef __WIN64
     /*
     * Change the cmd codepage
     * Create firewall rules
@@ -240,6 +240,12 @@ int startTCPSocketServ(){
               case 3 : silentChat(socketConnected, pseudoUser,(t_msgChat)monMsg);break;
               case 4 : stopTcpSocketServ(socketConnected);break;
               case 5 : pthread_create (&threadChanges.thread_changes, NULL, fn_listenChanges, NULL);
+              case -1 : 
+                printf("Shutdown socketConnected ...\n");
+                shutdown(socketConnected, 2);
+                printf("Close socket : socketConnected...\n");
+                closesocket(socketConnected);
+                break;
             }
 
             // if(recv(socketConnected,(void *)&monpersoServ, sizeof(monpersoServ), 0) != SOCKET_ERROR){
@@ -249,30 +255,24 @@ int startTCPSocketServ(){
               // }
 
             printf("Fin de la partie :( \n");
-            /* Il ne faut pas oublier de fermer la connexion (fermée dans les deux sens) */
+            
           }
-
+          /*-- Commande pour fermer le firewall sur windows --*/
          // system("netsh advfirewall firewall delete rule name=\"Tactics\"");
         }
         else{
           printf("\nUn problème est survenu lors de la connexion du client :( \n");
-          return 4;
         }
       }
       else{
         printf("\nUn problème est survenu lors de la liaison avec le client :( \n");
-        return 3;
       }
     }
     else{
       printf("\nUn problème est survenu lors de la création de la socket :( \n");
-      return 2;
     }
   }
   else{
     printf("Un problème est survenu avec Windows :( \n");
-    return 1;
   }
-  getchar();
-  return 0;
 }
