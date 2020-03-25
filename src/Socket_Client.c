@@ -95,12 +95,23 @@ int startTCPSocketCli(int socketCli){
   #else
     int windWSAError= 0;
   #endif
-  printf("\nLancement de la créatoin du client...\n");
-  /*
-  * Setting up the socket for all systems
-  */
+
+  int choixCli = 0;
+  
+  const char * servIP = malloc(sizeof(char) * MAX_BUFF_SIZE);
+
+  servIP = setServIP();
+  // printf("\n%s\n", servIP);
+  
+  /*---------- Initialisation des structures pour les sockets ----*/
+  
   SOCKADDR_IN sockIn;
   SOCKET sock;
+  sockIn.sin_addr.s_addr= inet_addr((char *)servIP);
+  sockIn.sin_family = AF_INET;
+  sockIn.sin_port = htons(PORT);
+
+  /*-------------------------------------------------------------*/
 
   t_user infoMoi;
     infoMoi.id = 111;
@@ -111,44 +122,21 @@ int startTCPSocketCli(int socketCli){
         sprintf(monMsg.msg,"Client");
       
   if(!windWSAError){
-    /*
-    * Creating socket :
-    * param 1 : Use TCP/IP
-    * param 2 : Use with TCP/IP
-    * param 3 : Protocole parameter (useless) -> 0
-    */
+    printf("\nLancement de la créatoin du client...\n");
+    
+    //-- Création de la socket (IPv4, TCP, 0)
     sock = socket(AF_INET, SOCK_STREAM, 0);
-    /*
-    * Check if the socket is correct
-    */
     if(sock != INVALID_SOCKET){
-      const char * servIP = malloc(sizeof(char) * MAX_BUFF_SIZE);
       printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
-      /*
-      * Initialising struct
-      * Can change s_addr with given ip inet_addr("192.168.0.0")
-      */
-      servIP = setServIP();
-      // printf("\n%s\n", servIP);
-      sockIn.sin_addr.s_addr= inet_addr((char *)servIP);
-      sockIn.sin_family = AF_INET;
-      sockIn.sin_port = htons(PORT);
-      int choixCli = 0;
-      
-      /*
-      *
-      *If client achieve connection
-      */
+
+      // -- Tentative de connection vers le serveur
       if(connect(sock, (SOCKADDR*)&sockIn, sizeof(sockIn)) != SOCKET_ERROR){
         printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
 
-        char pseudo[128];
-        flushMsg(pseudo);
-        printf("Saisir votre pseudo : ");
-        scanf("%s",pseudo);
-        printf("\nVous vous appelez : %s", pseudo);
-        sprintf(monMsg.pseudoChat,"%s",pseudo);
-        sprintf(infoMoi.pseudo, "%s", pseudo);
+        
+        printf("\nVous vous appelez : %s", pseudoUser);
+        sprintf(monMsg.pseudoChat,"%s",pseudoUser);
+        sprintf(infoMoi.pseudo, "%s", pseudoUser);
 
         printf("\nDébut de la communication : \n");
         sendStruct(sock, (t_user)infoMoi);
@@ -158,18 +146,18 @@ int startTCPSocketCli(int socketCli){
         printf("Press (3) send mvt : \n");
         scanf("%d",&choixCli);
         switch(choixCli){
-          case 1: startChat(sock,pseudo,(t_msgChat)monMsg);break;
+          case 1: startChat(sock,pseudoUser,(t_msgChat)monMsg);break;
           //case 2: sendStruct(sock, (t_user)infoMoi);break;
           case 3: sendmvt(sock);
           
         }
-
         
         printf("Fin de la communication \n");
       }
       else{
         printf("Impossble de se connecter au serveur... :( \n");
       }
+      printf("\nFermeture de la socket... \n");
       shutdown(sock, 2);
       closesocket(sock);
     }

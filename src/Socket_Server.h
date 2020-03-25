@@ -1,7 +1,7 @@
 #ifndef socket_server_h
 #define socket_server_h
 #define MAX_BUFF_SIZE 1024
-#define PORT 80
+#define PORT 3555
 
 
 
@@ -17,8 +17,10 @@ typedef struct msgChat{
 }t_msgChat;
 
 extern unsigned int logFlag;
+extern int isPseudoValid;
 extern char pseudoCli[128];
 extern char monIP[85];
+extern char pseudoUser[50];
 
 int startTCPSocketServ();
 int startTCPSocketCli();

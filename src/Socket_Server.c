@@ -147,10 +147,10 @@ int startTCPSocketServ(){
   /*
   * Setting up the socket for all systems
   */
-  SOCKADDR_IN sockServIn = { 0 };
+  SOCKADDR_IN serveurAddr = { 0 };
   int sock;
   int sockError;
-  SOCKADDR_IN sockConnectedAddr;
+  SOCKADDR_IN clientAddr;
   socklen_t sizeofSocketConnected;
 
   t_user infoClient;
@@ -163,9 +163,9 @@ int startTCPSocketServ(){
     * Initialising struct
     * Can change s_addr with given ip inet_addr("192.168.0.0") or INADDR_ANY
     */
-    sockServIn.sin_addr.s_addr=htonl(INADDR_ANY) ;
-    sockServIn.sin_family = AF_INET;
-    sockServIn.sin_port = htons (PORT);
+    serveurAddr.sin_addr.s_addr=htonl(INADDR_ANY) ;
+    serveurAddr.sin_family = AF_INET;
+    serveurAddr.sin_port = htons (PORT);
     /*
     * Creating socket :
     * param 1 : Use TCP/IP
@@ -181,7 +181,7 @@ int startTCPSocketServ(){
       /*
       *bind info to the socket
       */
-      sockError = bind(sock, (SOCKADDR*)&sockServIn, sizeof(sockServIn));
+      sockError = bind(sock, (SOCKADDR*)&serveurAddr, sizeof(serveurAddr));
       /*
       * Check if the socket is correct
       */
@@ -199,8 +199,8 @@ int startTCPSocketServ(){
           sleep(1);
           logFlag = 3;
           getLocalIP();
-          sizeofSocketConnected = sizeof(sockConnectedAddr);
-          socketConnected = accept(sock, (struct  sockaddr  *)&sockConnectedAddr, &sizeofSocketConnected);
+          sizeofSocketConnected = sizeof(clientAddr);
+          socketConnected = accept(sock, (struct  sockaddr  *)&clientAddr, &sizeofSocketConnected);
           if(socketConnected != SOCKET_ERROR){
             
             int choixServ = 0;
@@ -221,13 +221,13 @@ int startTCPSocketServ(){
             t_msgChat monMsg;
             monMsg.ident = 2;
             sprintf(monMsg.msg,"Client");
-          
-            char pseudoServ[128];
-            flushMsg(pseudoServ);
-            printf("Saisir votre pseudo : ");
-            scanf("%s",pseudoServ);
-            printf("\nVous vous appelez : %s", pseudoServ);
-            sprintf(monMsg.pseudoChat,"%s",pseudoServ);
+            if(isPseudoValid == 1){
+              printf("\nVous vous appelez : %s", pseudoUser);
+              sprintf(monMsg.pseudoChat,"%s",pseudoUser);
+            }else{
+              printf("\nLe pseudo n'est pas mis \n");
+            }
+
             
 
             printf("\nPress (1) start chat :");
@@ -237,7 +237,7 @@ int startTCPSocketServ(){
             switch(choixServ){
               // case 1: startChat(socketConnected);break;
              // case 2 : sendStruct(socketConnected, (t_personnage)monpersoServ);break;
-              case 3 : silentChat(socketConnected, pseudoServ,(t_msgChat)monMsg);break;
+              case 3 : silentChat(socketConnected, pseudoUser,(t_msgChat)monMsg);break;
               case 4 : stopTcpSocketServ(socketConnected);break;
               case 5 : pthread_create (&threadChanges.thread_changes, NULL, fn_listenChanges, NULL);
             }

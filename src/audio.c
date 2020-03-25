@@ -7,14 +7,29 @@ Mix_Music* myMus;
 int playMenuMusic()
 // Play the menu music
 {
+
+
     /* Initialisation */
     if (SDL_Init(SDL_INIT_AUDIO) != 0 ) {
         fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
         return -1;
     }
 
+    printf("[SDL] Audio driver: %s\n", SDL_GetCurrentAudioDriver());
+    
+    int i, count = SDL_GetNumAudioDevices(0);
+    
+    /* -- Boucle debug audio --*/
+    // for (i = 0; i < count; ++i) {
+    //     printf("Audio device %d: %s\n", i, SDL_GetAudioDeviceName(i, 0));
+    // }
+
+
     /* On ouvre le device audio */
-    Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024);
+    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) 
+    {
+        printf("%s", Mix_GetError());
+    }
 
     /* On charge la musique */
     myMus = Mix_LoadMUS("../inc/music/cascade.wav");

@@ -15,23 +15,24 @@
 #include <pthread.h>
 
 
-
-
 SDL_Texture *background_Multi = NULL,
 			*quit_button_Multi = NULL,
 			*music_on_Multi = NULL,
 			*music_off_Multi = NULL,
 			*join_button = NULL,
-			*host_button = NULL;
+			*host_button = NULL,
+			*ok_button_Multi = NULL;
 
 int isHostMenu = 0;
 int isJoinMenu = 0;
 int inputPseudoBtn = 0;
 int inputIpBtn = 0;
+int isPseudoValid = 0;
 int music_Multi_playing = 1;
 
 char pseudoSrv[50] = "Pseudo : ";
 char pseudoJoin[50] = "Pseudo : ";
+char pseudoUser[50];
 char ipJoin[90] = "IP : ";
 char *compo;
 
@@ -39,34 +40,37 @@ extern Sint32 cursor;
 extern Sint32 selection_len;
 
 
-
 char *tabLog[] = {
 		"Création du serveur",
 		"Le serveur est initialisé !",
 		"En attente du client ...",
-		"Une connexion à été établie !",
+		"Une connexion a été établie !",
 		" ",
 };
 
 // Initialisation du thread 
-typedef struct
+typedef struct                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 {
-   int stock;
- 
    pthread_t thread_server;
    pthread_t thread_client;
 }
 multiThread_t;
 
-static multiThread_t otherThread =
-{
-   .stock = 0,
-};
+multiThread_t threadServ;
+multiThread_t threadCli;
+
  
-/* Fonction pour le thread du magasin. */
+/*-- Fonction pour le thread du serveur. --*/
 static void * fn_server (void * p_data)
 {
     startTCPSocketServ();
+    return NULL;
+}
+
+/*-- Fonction pour le thread du client --*/
+static void * fn_client (void * p_data)
+{
+    startTCPSocketCli();
     return NULL;
 }
 
@@ -93,6 +97,10 @@ void loadMultiMenuTextures(SDL_Renderer *renderer)
 	// == Loading Join switch ==
 	join_button = loadTexture(renderer, loadImage("../inc/img/start_button_256.png"));
 
+
+	// == ok switch ==
+	ok_button_Multi = loadTexture(renderer, loadImage("../inc/img/Okey_button.png"));
+
 }
 
 void freeMultiMenuTextures()
@@ -102,6 +110,9 @@ void freeMultiMenuTextures()
 	SDL_DestroyTexture(quit_button_Multi);
 	SDL_DestroyTexture(music_on_Multi);
 	SDL_DestroyTexture(music_off_Multi);
+	SDL_DestroyTexture(host_button);
+	SDL_DestroyTexture(join_button);
+	SDL_DestroyTexture(ok_button_Multi);
 }
 
 void dispLog(SDL_Renderer *renderer, int consoleX, int consoleY){
@@ -170,6 +181,8 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 	SDL_RenderFillRect(renderer, &pseudoHostBox);
 	displayText(renderer, inputSrv.x + 10, inputSrv.y + 15 , 22, "Saisir votre Pseudo : ", "../inc/font/Pixels.ttf", 255, 255, 255);
 	displayText(renderer, inputSrv.x + 15, inputSrv.y + 50, 22, pseudoSrv, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	displaySprite(renderer, ok_button_Multi, 50, 340);
+	displayText(renderer, 150, 430, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255);
 
 
 
@@ -185,12 +198,11 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 		displayText(renderer, infoHost.x + 10, infoHost.y + 15 , 22, "L'ip du serveur est :", "../inc/font/Pixels.ttf", 255, 255, 255);
 		displayText(renderer, infoHost.x + 15, infoHost.y + 50, 22, monIP, "../inc/font/PixelOperator.ttf", 255, 255, 255);
 	}
+	
 	dispLog(renderer, console.x, console.y);
+	
 
 }
-
-
-
 
 
 void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
@@ -234,6 +246,8 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 	SDL_RenderFillRect(renderer, &pseudoJoinBox);
 	displayText(renderer, inputJoin.x + 10, inputJoin.y + 15 , 22, "Saisir votre Pseudo : ", "../inc/font/Pixels.ttf", 255, 255, 255);
 	displayText(renderer, inputJoin.x + 15, inputJoin.y + 50, 22, pseudoJoin, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	displaySprite(renderer, ok_button_Multi, 50, 340);
+	displayText(renderer, 150, 430, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255);
 	/*-----------------------------------------*/
 
 	/*-----------info box for JoinMenu---------*/
@@ -245,10 +259,8 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 	displayText(renderer, infoJoin.x + 10, infoJoin.y + 15 , 22, "Saisir l'ip du serveur : ", "../inc/font/Pixels.ttf", 255, 255, 255);
 	displayText(renderer, infoJoin.x + 15, infoJoin.y + 50, 22, ipJoin, "../inc/font/PixelOperator.ttf", 255, 255, 255);
 	/*-----------------------------------------*/
-	
 
 }
-
 
 int displayMenuMulti(int x, int y)
 // Create a window with with x*y size (in px)
@@ -349,15 +361,12 @@ int displayMenuMulti(int x, int y)
 						printf("\nX: %d | Y: %d\n", u.motion.x, u.motion.y);	// Debug console pos x & y on term
 
 						// Bouton "Host"
-						if (u.motion.x >= 576 && u.motion.x <= 723 && u.motion.y >= 449 && u.motion.y <= 488 && isJoinMenu == 0 && isJoinMenu == 0)
+						if (u.motion.x >= 576 && u.motion.x <= 723 && u.motion.y >= 449 && u.motion.y <= 488 && isHostMenu == 0 && isJoinMenu == 0)
 						{
 							isHostMenu = 1;
                             printf("Host cliqué :) \n");
-                            pthread_create (& otherThread.thread_server, NULL, fn_server, NULL);
+                            pthread_create (& threadServ.thread_server, NULL, fn_server, NULL);
                             dispHostMenu(renderer, x, y);
-							
-                            
-                            
 						}
 
 						// Bouton "Join"
@@ -365,6 +374,8 @@ int displayMenuMulti(int x, int y)
 						{
 							isJoinMenu = 1;
                             printf("Join cliqué :) \n");
+							pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);
+							dispJoinMenu(renderer, x, y);
 						}
 
 						// PseudoBox
@@ -372,6 +383,23 @@ int displayMenuMulti(int x, int y)
 						{	
 							inputPseudoBtn = 1;
 							inputIpBtn = 0;
+						}
+						else if (u.motion.x >= 127 && u.motion.x <= 241 && u.motion.y >= 441 && u.motion.y <= 479 && (isJoinMenu == 1 || isHostMenu == 1) && isPseudoValid == 0){
+							
+							isPseudoValid = 1;
+							
+							char pseuTemp[50];
+							if(isHostMenu == 1){
+								strcpy(pseuTemp,pseudoSrv);
+							}else if(isJoinMenu == 1){
+								strcpy(pseuTemp,pseudoJoin);
+							}	
+							printf("\npseudo temp : %s\n",pseuTemp);
+							for(int i = 9; i < (strlen(pseuTemp)); i++){
+								pseudoUser[i-9] = pseuTemp[i];
+								printf("\nps | i : %d | char %c \n", i, pseuTemp[i]);
+							}
+							printf("\nTest User pseudo : %s\n",pseudoUser);
 						}
 						
 						// IPBox
