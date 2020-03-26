@@ -97,19 +97,16 @@ char * flushMsg(char monMsg[MAX_BUFF_SIZE]){
   return monMsg;
 }
 
-int sendStruct(int socket, t_user monperso){
+void sendStruct(void * structure, int size, int socket){
   int sockSendError;
 
-  sockSendError = send(socket, (void *)&monperso, sizeof(monperso), 0);
+  sockSendError = send(socket,structure, size, 0);
   if(sockSendError == SOCKET_ERROR){
     printf("Impossible d'envoyer la structure... \n");
   }
   else{
     printf("Structure envoyée ! \n");
   }
-  printf("Press key to continue...\n");
-  getchar();
-  return 0;
 }
 
 const char * realStr(){
@@ -184,4 +181,5 @@ void silentChat(int sock, char pseudo[128], t_msgChat monMsg){
 
   }
 }
+
 

@@ -17,7 +17,7 @@ int playMenuMusic()
 
     printf("[SDL] Audio driver: %s\n", SDL_GetCurrentAudioDriver());
     
-    int i, count = SDL_GetNumAudioDevices(0);
+    //int i, count = SDL_GetNumAudioDevices(0);
     
     /* -- Boucle debug audio --*/
     // for (i = 0; i < count; ++i) {

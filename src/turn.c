@@ -21,24 +21,10 @@
     //Apply ab cooldown
 
 //Go Through Your Statelist
-err_t turn(Class * class, Entity * allies, Entity * foes, StateList * local, StateList * opponent)
-{
-    Entity * active_ent=allies;
-    while((active_ent=play_check(active_ent))!=NULL)
-    {
-        //while action selected is change character
-            //Select entity pointed to by active_ent
-            //Wait for action selection
-            //Wait for coordinate selection
 
-        //relay action information
-        //wait for confirmation
-        //animate the action
 
-    }
-}
 
-int play_check(Entity *E)
+Entity * play_check(Entity *E)
 {
     int current = E->character->cha_id-1;
     Entity * F = E - current;
@@ -54,3 +40,22 @@ int play_check(Entity *E)
     
     return NULL;
 }
+
+err_t turn(Class * class, Entity * allies, Entity * foes, StateList * local, StateList * opponent)
+{
+    Entity * active_ent=allies;
+    while((active_ent=play_check(active_ent))!=NULL)
+    {
+        //while action selected is change character
+            //Select entity pointed to by active_ent
+            //Wait for action selection
+            //Wait for coordinate selection
+
+        //relay action information
+        //wait for confirmation
+        //animate the action
+
+    }
+    return OK;
+}
+

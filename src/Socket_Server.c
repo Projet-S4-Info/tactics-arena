@@ -44,26 +44,8 @@ int socketConnected = 0;
 
 unsigned int logFlag = 0;
 char pseudoCli[128];
+int socketConnectedSrv = 0;
 
-
-
-
-
-typedef struct
-{
-   int stockListen;
- 
-   pthread_t thread_changes;
-}
-listenThread_t;
-
-listenThread_t threadChanges;
-
-
-static void * fn_listenChanges (){
-    listenChanges(socketConnected);
-    return NULL;
-}
 
 int stopTcpSocketServ(int socketConnected){
   printf("Shutdown socketConnected ...\n");
@@ -73,45 +55,7 @@ int stopTcpSocketServ(int socketConnected){
   return 0;
 }
 
-int mouvement(){
-  printf("Le perso bouge ! \n");
-  return 0;
-}
 
-int attack(){
-  printf("Le perso attaque ! \n");
-  return 0;
-}
-
-int listenChanges(int socketConnected){
-
-  int sockEr = 0;
-  int stopFlags = 1;
-
-  comm recvCli;
-  recvCli.flag = 0;
-  while(stopFlags == 1){
-
-
-   sockEr = recv(socketConnected,(void *)&recvCli, sizeof(recvCli), 0);
-   if(sockEr != SOCKET_ERROR){
-     printf("Le flag est : %d", recvCli.flag);
-     switch(recvCli.flag){
-       case 1: attack();sockEr = SOCKET_ERROR;break;
-       case 2: mouvement();sockEr = SOCKET_ERROR;break;
-    }
-     
-   }
-    printf("Le flag est : %d", recvCli.flag);
-    if(recvCli.flag == -1 ){
-      stopFlags = 0;
-    }
-  }
-  printf("Test print socketError : %d \n", sockEr);
-  printf("Saisir un truc \n");
-  getchar();
-  return 0;
-}
 
 
 void startTCPSocketServ(){
@@ -214,6 +158,7 @@ void startTCPSocketServ(){
               printf("SocketServer pseudoCli : %s\n", pseudoCli);
               logFlag = 5; 
             }
+            socketConnectedSrv = socketConnected;
 
             
             printf("\nChargement de la partie... \n");
@@ -239,7 +184,6 @@ void startTCPSocketServ(){
              // case 2 : sendStruct(socketConnected, (t_personnage)monpersoServ);break;
               case 3 : silentChat(socketConnected, pseudoUser,(t_msgChat)monMsg);break;
               case 4 : stopTcpSocketServ(socketConnected);break;
-              case 5 : pthread_create (&threadChanges.thread_changes, NULL, fn_listenChanges, NULL);
               case -1 : 
                 printf("Shutdown socketConnected ...\n");
                 shutdown(socketConnected, 2);
