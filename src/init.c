@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <time.h>
 #include "struct.h"
 
 err_t init_berserker(Class * c)
@@ -57,5 +58,6 @@ err_t init_berserker(Class * c)
 
 err_t init_game()
 {
+    srand(time(NULL));
     return OK;
 }

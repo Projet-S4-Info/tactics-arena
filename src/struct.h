@@ -37,7 +37,7 @@ typedef struct
     Coord * coord;
     int nb_mods;
     Modifier * mods;
-    err_t (*function)(int, Coord *, StateList *, StateList *); //Takes caster ID, Coordinates, and pointer to state chain
+    err_t (*function)(action);
     lang eng;
     char sprite_folder[STR_LONG];
 } Ability;
@@ -62,12 +62,15 @@ typedef struct
 
 typedef struct
 {
-    Character * character;
+    int cha_id;
+    char cha_name[STR_SHORT];
+    Class * cha_class;
     lifeId active;
     int act_points;
     int base_stats[NUM_STATS];
     int stat_mods[NUM_STATS];
     int status_effect[NUM_STATUS];
+    int ab_cooldown[NUM_AB];
 } Entity;
 
 /* TERRAIN STRUCTURES */
@@ -100,7 +103,7 @@ typedef struct User{
 typedef struct {
     int char_id;
     Coord c;
-    abilityId act;
+    abilityId act; //-1 if movement
 }action;
 
 typedef struct {

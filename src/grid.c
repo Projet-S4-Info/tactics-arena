@@ -49,3 +49,10 @@ void debugGrid(Tile * grid, int x, int y)
         printf("\n");
     }
 }
+
+Entity * getEntity(Tile * grid, Coord pos)
+// Returns entity at given coord, if not return NULL
+{
+    if ((*(grid+pos.x*30+pos.y)).entity == NULL) return NULL;
+    else return (*(grid+pos.x*30+pos.y)).entity;
+}

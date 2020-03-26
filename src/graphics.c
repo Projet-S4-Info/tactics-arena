@@ -8,6 +8,7 @@
 #include "struct.h"
 #include "map.h"
 #include "menu.h"
+#include "characters.h"
 
 TabTexture cSprites[50];
 
