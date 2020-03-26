@@ -152,14 +152,17 @@ void startTCPSocketServ(){
             printf("\nConnexion établie avec le client !\n");
             sleep(1);
             logFlag = 4;
-            if(recv(socketConnected,(void *)&infoClient, sizeof(infoClient), 0) != SOCKET_ERROR){
+
+            socketConnectedSrv = socketConnected;
+            printf("socketConnectedCli = %d\n", socketConnectedSrv);
+
+            if(recep(&infoClient, sizeof(infoClient), socketConnectedSrv) == 1){
               printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
               sprintf(pseudoCli, "%s s'est connecté !", infoClient.pseudo);
               printf("SocketServer pseudoCli : %s\n", pseudoCli);
               logFlag = 5; 
             }
-            socketConnectedSrv = socketConnected;
-            printf("socketConnectedCli = %d\n", socketConnectedSrv);
+            
             
             printf("\nChargement de la partie... \n");
 

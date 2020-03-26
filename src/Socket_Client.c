@@ -70,16 +70,10 @@ int startTCPSocketCli(int socketCli){
   int choixCli = 0;
   
   const char * servIP = malloc(sizeof(char) * 85);
-  
-  
 
   t_user infoMoi;
     infoMoi.id = 111;
     sprintf(infoMoi.pseudo,"LucienCh2424");
-
-  t_msgChat monMsg;
-        monMsg.ident = 2;
-        sprintf(monMsg.msg,"Client");
       
   if(!windWSAError){
   servIP = ipSrv;
@@ -104,28 +98,23 @@ int startTCPSocketCli(int socketCli){
       // -- Tentative de connection vers le serveur
       if(connect(sock, (SOCKADDR*)&sockIn, sizeof(sockIn)) != SOCKET_ERROR){
         printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
-
-        
-        printf("\nVous vous appelez : %s", pseudoUser);
-        sprintf(monMsg.pseudoChat,"%s",pseudoUser);
-        sprintf(infoMoi.pseudo, "%s", pseudoUser);
-
-        printf("\nDébut de la communication : \n");
-        
         socketConnectedCli = sock;
+        printf("\nVous vous appelez : %s", pseudoUser);
+        sprintf(infoMoi.pseudo, "%s", pseudoUser);
+        printf("\nDébut de la communication : \n");
         printf("socketConnectedCli = %d\n", socketConnectedCli);
-        sendPseudo(socketConnectedCli, (t_user)infoMoi);
+
+        sendStruct(&infoMoi, sizeof(infoMoi), socketConnectedCli);
         
-        printf("Press (1) start chat :\n");
+        //printf("Press (1) start chat :\n");
         //printf("Pess (2) send structure : \n");
-        printf("Press (3) send mvt : \n");
+        //printf("Press (3) send mvt : \n");
         scanf("%d",&choixCli);
         switch(choixCli){
-          case 1: startChat(sock,pseudoUser,(t_msgChat)monMsg);break;
+          //case 1: startChat(sock,pseudoUser,(t_msgChat)monMsg);break;
           //case 2: sendStruct(sock, (t_user)infoMoi);break;
           
         }
-        
         printf("Fin de la communication \n");
       }
       else{
@@ -142,7 +131,5 @@ int startTCPSocketCli(int socketCli){
   else{
     printf("\nImpossible de créer une socket :( \n");
   }
-
-  getchar();
   return 0;
 }

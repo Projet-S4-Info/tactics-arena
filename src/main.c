@@ -62,7 +62,7 @@ int main()
         case 2: startTCPSocketCli();
         break;
         case 3:
-                createGrid((Tile *)matrix, 7, X, Y);
+                createGrid((Tile *)matrix, 1, X, Y);
                 createGrid((Tile *)blankGrid, 1, X, Y);
                 Entity * entity = malloc(sizeof(Entity));
                 entity->base_stats[0] = 40;

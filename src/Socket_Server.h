@@ -37,6 +37,7 @@ void startChat(int sock, char pseudo[128], t_msgChat monMsg);
 const char * setServIP();
 void silentChat(int sock, char pseudo[128], t_msgChat monMsg);
 char * flushMsg(char * monMsg);
+int recep(void * container, int size, int socket);
 
 
 

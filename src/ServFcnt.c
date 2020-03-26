@@ -109,18 +109,6 @@ void sendStruct(void * structure, int size, int socket){
   }
 }
 
-void sendPseudo(int sock, t_user info){
-  int sockSendError;
-
-  sockSendError = send(sock, (void *)&info, sizeof(info), 0);
-  if(sockSendError == SOCKET_ERROR){
-    printf("Impossible d'envoyer la structure... \n");
-  }
-  else{
-    printf("Structure envoyée ! \n");
-  }
-}
-
 
 const char * realStr(){
 
@@ -195,4 +183,15 @@ void silentChat(int sock, char pseudo[128], t_msgChat monMsg){
   }
 }
 
-
+int recep(void * container, int size, int socket){
+  printf("bienvenue dans recep \n");
+  int flag = 0;
+  while(flag == 0){
+    printf("Dans le while \n");
+    if(recv(socket,container, size, 0) > -1){
+      printf("struct reçue");
+      flag = 1;
+    }
+  }
+  return 1;
+}
