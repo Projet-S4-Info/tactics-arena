@@ -1,28 +1,8 @@
 #include "struct.h"
 #include "init.h"
 #include "grid.h"
+#include <stdlib.h>
 
-// LOCAL TURN
-
-//Go Through Opponent Statelist
-
-//While characters can still play
-
-    //Select character
-    //Show Character Hud
-
-    //Select action
-    //Show action range
-
-    //Select action coord
-    //Relay information
-
-    //Show animation
-    //Apply stat changes
-    //Apply State changes
-    //Apply ab cooldown
-
-//Go Through Your Statelist
 Coord add_coords(Coord a, Coord b)
 {
     Coord c;
@@ -33,13 +13,95 @@ Coord add_coords(Coord a, Coord b)
     return c;
 }
 
-err_t apply_damage(Damage * d, Entity * target)
+bool apply_damage(Damage * d, Entity * caster, Entity * target)
 {
+    float crippled = target->status_effect[Cripple] == 1 ? 1.75 : 1;
+
+    if(caster->status_effect[Deadeye])
+    {
+        target->stat_mods[pv] -= caster->stat_mods[d->type] * d->multiplier * crippled;
+    }
+    else
+    {
+        target->stat_mods[pv] -= caster->stat_mods[d->type]/(1+(target->stat_mods[d->type+2]/15)) * d->multiplier * crippled;
+    }
+
+    //UPDATE HEALTH VISUALLY
+
+    if(target->stat_mods[pv]<=0)
+    {
+        target->active = Dead;
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
+{
+    if(m.chance*100>=(rand()%100+1))
+    {
+        if(m.effect.value==0)
+        {
+            if(m.effect.stat==Provoked)
+            {
+                target->status_effect[m.effect.stat] = caster_id;
+            }
+            else
+            {
+                target->status_effect[m.effect.stat] = 1;
+            }
+        }
+        else
+        {
+            target->stat_mods[m.effect.stat] += m.effect.value;
+            target->stat_mods[m.effect.stat] = target->stat_mods[m.effect.stat]<0 ? 0 : target->stat_mods[m.effect.stat];
+        }
+        
+    }
+
+    return list_add(list, &m.effect, target->cha_id);
+}
+
+err_t remove_mod(Status * stat, int cha_id)
+{
+    Entity * e = cha_id<0 ? &Foes[cha_id*-1-1] : &Allies[cha_id-1];
+
+    if(stat->value==0)
+    {
+        e->status_effect[stat->stat] = 0;
+    }
+    else
+    {
+        e->stat_mods[stat->stat] += stat->value *-1;
+    }
+
     return OK;
 }
 
-err_t apply_mod(Modifier m, Entity * target, StateList * list)
+err_t new_death(Entity * e)
 {
+    StateList * list = e->cha_id<0 ? stFoe : stAlly;
+
+    int i;
+    for(i=0; i<NUM_AB; i++)
+    {
+        e->ab_cooldown[i] = 0;
+    }
+
+    start_list(list);
+    while(!out_of_list(list))
+    {
+        if(list->ec->entity==e->cha_id)
+        {
+            remove_mod(list->ec->value, list->ec->entity);
+            list_remove(list);
+        }
+        list_next(list);
+    }
+
+    //PLAY DEATH ANIMATION
+
     return OK;
 }
 
@@ -48,12 +110,16 @@ err_t apply_action(action a)
     Entity * active_ent;
     Ability active_ab;
     Entity * e;
+    int death_count=0;
+    Entity * morts[6];
     if(a.char_id<0)
         active_ent = &Foes[a.char_id*-1-1];
     else
         active_ent = &Allies[a.char_id-1];
 
     active_ab = active_ent->cha_class->cla_abilities[a.act%NUM_AB];
+
+    //ANIMATE THE ACTION
 
     int i,j;
     for(i=0; i<active_ab.nb_coords; i++)
@@ -62,22 +128,30 @@ err_t apply_action(action a)
         if(e!=NULL)
             if(e->cha_id<0)
                 if(active_ab.damage!=NULL)
-                    apply_damage(active_ab.damage, e);
+                    if(apply_damage(active_ab.damage, active_ent, e))
+                    {
+                        morts[death_count++] = e;
+                    }
 
-            if(active_ab.mods!=NULL)
+            if(active_ab.mods!=NULL&&e->active!=Dead)
                 for(j=0; j<active_ab.nb_mods; j++)
                 {
                     if(e->cha_id<0&&active_ab.mods[j].t!=Allies)
-                        apply_mod(active_ab.mods[j],e, &stFoe);
+                        apply_mod(active_ab.mods[j],e, stFoe, a.char_id);
+
                     else if((e->cha_id>0&&active_ab.mods[j].t!=Foes))
-                        apply_mod(active_ab.mods[j],e, &stAlly);
+                        apply_mod(active_ab.mods[j],e, stAlly, a.char_id);
                 }
     }
     
     if(active_ab.function!=NULL)
         active_ab.function(a);
     
-    active_ent->ab_cooldown[a.act%NUM_AB] = active_ab.ab_cooldown;
+    if(!active_ent->status_effect[Blessed])
+        active_ent->ab_cooldown[a.act%NUM_AB] = active_ab.ab_cooldown;
+
+    for(i=0; i<death_count; i++)
+        new_death(morts[i]);
 
     return OK;
 }
@@ -99,9 +173,11 @@ Entity * play_check(Entity *E)
     return NULL;
 }
 
-err_t turn(Class * class, Entity * allies, Entity * foes, StateList * local, StateList * opponent)
+err_t turn()
 {
-    Entity * active_ent=allies;
+    //check ennemy statelist
+
+    Entity * active_ent=Allies;
     action a;
     while((active_ent=play_check(active_ent))!=NULL)
     {
@@ -112,13 +188,15 @@ err_t turn(Class * class, Entity * allies, Entity * foes, StateList * local, Sta
 
         //relay action information
         //wait for confirmation
-        //animate the action
         if(a.act<0);
             //call mvt function (dont forget to remove semicolon after if)
         else
             apply_action(a);
         
     }
+
+    //check local statelist
+
     return OK;
 }
 

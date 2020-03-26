@@ -3,6 +3,7 @@
 
 err_t init_list(StateList * list)
 {
+    list = malloc(sizeof(StateList));
     list->drapeau = malloc(sizeof(List_Elem));
     if(list->drapeau == NULL) return POINTER_NULL;
     list->drapeau->value = NULL;
@@ -40,12 +41,12 @@ err_t list_next(StateList * list)
     return OK;
 }
 
-Status * list_decrease(StateList * list)
+List_Elem * list_decrease(StateList * list)
 {
     list->ec->value->duration--;
 
     if(list->ec->value->duration==0)
-        return list->ec->value;
+        return list->ec;
 
     return NULL;
 }
@@ -61,7 +62,7 @@ err_t list_remove(StateList * list)
     return OK;
 }
 
-err_t list_add(StateList * list, Status * v)
+err_t list_add(StateList * list, Status * v, int entity)
 {
     end_list(list);
     
@@ -69,9 +70,11 @@ err_t list_add(StateList * list, Status * v)
     if(newstat == NULL) return POINTER_NULL;
     *newstat = *v;
 
+
     List_Elem * newelem = malloc(sizeof(List_Elem));
     if(newelem == NULL) return POINTER_NULL;
     newelem->value = newstat;
+    newelem->entity = entity;
     newelem->prec = list->ec;
     newelem->suiv = list->drapeau;
 
