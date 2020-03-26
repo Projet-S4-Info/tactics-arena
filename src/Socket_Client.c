@@ -42,36 +42,7 @@
 #endif
 
 int socketCli = 0;
-
-int sendmvt(int sock){
-
-  int userch = 0;
-  int stopF = 0;
-  int test;
-
-  comm sendSrv;
-  sendSrv.flag = 1;
-
-  
-
-  while(stopF != -1){
-    printf("Press (1) to attack : \n");
-    printf("Press (2) to moove : \n");
-    printf("Press (3) to stop all : \n");
-    scanf("%d",&userch);
-    switch (userch){
-    case 1 : sendSrv.flag = 1;break;
-    case 2 : sendSrv.flag = 2;break;
-    case 3 : sendSrv.flag = -1;stopF = -1;break;
-    }
-  
-    test = send(sock, (void *)&sendSrv, sizeof(sendSrv), 0);
-    if(test != SOCKET_ERROR){
-      printf("Message envoyé \n");
-    }
-  }
-  return 0;
-}
+int socketConnectedCli = 0;
 
 
 int startTCPSocketCli(int socketCli){
@@ -140,7 +111,8 @@ int startTCPSocketCli(int socketCli){
         sprintf(infoMoi.pseudo, "%s", pseudoUser);
 
         printf("\nDébut de la communication : \n");
-        sendStruct(sock, (t_user)infoMoi);
+        //sendStruct(sock, (t_user)infoMoi);
+        socketConnectedSrv = sock;
         
         printf("Press (1) start chat :\n");
         //printf("Pess (2) send structure : \n");
@@ -149,7 +121,6 @@ int startTCPSocketCli(int socketCli){
         switch(choixCli){
           case 1: startChat(sock,pseudoUser,(t_msgChat)monMsg);break;
           //case 2: sendStruct(sock, (t_user)infoMoi);break;
-          case 3: sendmvt(sock);
           
         }
         
