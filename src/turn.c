@@ -22,7 +22,11 @@
 
 //Go Through Your Statelist
 
-
+err_t apply_action(action act)
+{
+    
+    return OK;
+}
 
 Entity * play_check(Entity *E)
 {

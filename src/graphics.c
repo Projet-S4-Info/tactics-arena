@@ -9,6 +9,8 @@
 #include "map.h"
 #include "menu.h"
 
+TabTexture cSprites[50];
+
 void setRendererDriver(SDL_Renderer *renderer)
 // Set the default renderer driver to OpenGL for MacOS compatibility
 {
@@ -216,7 +218,7 @@ int closeWindow(SDL_Window *pWindow)
     return 0;
 }
 
-int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
+int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize, int pxBase)
 // Create a window with with x*y size (in px)
 {
     // Le pointeur vers la fenetre
@@ -275,6 +277,7 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 
 		// Chargement des textures
 		loadMapTextures(renderer);
+		loadSprites(renderer, cSprites);
 		int start_seconds = SDL_GetTicks()/1000;
 		int load_index = 0;
 		while((SDL_GetTicks()/1000)-start_seconds < 3)
@@ -298,7 +301,7 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 
 		SDL_Delay(1);
 
-		displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+		displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 
 		SDL_RenderPresent(renderer);
 
@@ -325,7 +328,7 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 
 								SDL_Delay(1);
 
-								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 
 								SDL_RenderPresent(renderer);
 
@@ -337,7 +340,7 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 						printf("X: %d | Y: %d\n", e.motion.x, e.motion.y);		// Debug console pos x & y on term
 						//if (e.motion.x <= 10*64+XPOS && e.motion.y <= 10*64+YPOS && e.motion.x >= XPOS && e.motion.y >= YPOS){
 							selectTile(grid, XPOS, YPOS, e.motion.x, e.motion.y, PX, xSize, ySize);
-							displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+							displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 						//}
 
 					break;
@@ -349,7 +352,7 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 								printf("[GRAPHICS] Zoom In\n");
 								XPOS *= 2;
 								YPOS *= 2;
-								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 							}
 						} else {				// Scroll DOWN
 							if (PX == 128){
@@ -357,7 +360,7 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 								printf("[GRAPHICS] Zoom Out\n");
 								XPOS /= 2;
 								YPOS /= 2;
-								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 							}
 						}
 					break;
@@ -370,7 +373,7 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 									printf("[GRAPHICS] Zoom In\n");
 									XPOS *= 2;
 									YPOS *= 2;
-									displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+									displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 								}
 								break;
 							case SDLK_KP_MINUS:	// "-" key
@@ -379,24 +382,24 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 									printf("[GRAPHICS] Zoom Out\n");
 									XPOS /= 2;
 									YPOS /= 2;
-									displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+									displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 								}
 								break;
 							case SDLK_z:		// "z" key
 								YPOS += (10*(PX/64));
-								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 								break;
 							case SDLK_q:		// "q" key
 								XPOS += (10*(PX/64));
-								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 								break;
 							case SDLK_s:		// "s" key
 								YPOS -= (10*(PX/64));
-								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 								break;
 							case SDLK_d:		// "d" key
 								XPOS -= (10*(PX/64));
-								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 								break;
 						}
 					break;
@@ -414,20 +417,26 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize)
 			// Déplacement de la caméra grâce aux bords de l'écran
 			if (e.motion.x <= xWinSize && e.motion.x >= xWinSize-20){
 				XPOS -= (10*(PX/64));
-				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 			}
 			if (e.motion.x >= 0 && e.motion.x <= 20){
 				XPOS += (10*(PX/64));
-				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 			}
 			if (e.motion.y <= yWinSize && e.motion.y >= yWinSize-20){
 				YPOS -= (10*(PX/64));
-				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 			}
 			if (e.motion.y >= 0 && e.motion.y <= 10){
 				YPOS += (10*(PX/64));
-				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize);
+				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
 			}
+
+			// Vérification pour ne pas dépasser des "border" avec la caméra
+			if (XPOS > 500*(PX/64)) 	XPOS = 500*(PX/64);
+			if (XPOS < -1000*(PX/64)) 	XPOS = -1000*(PX/64);
+			if (YPOS > 300*(PX/64))		YPOS = 300*(PX/64);
+			if (YPOS < -500*(PX/64)) 	YPOS = -500*(PX/64);
 			SDL_Delay(16);
 
 		}
