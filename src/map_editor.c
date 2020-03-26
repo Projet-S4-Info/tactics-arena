@@ -81,6 +81,12 @@ int loadEditorTextures(SDL_Renderer * renderer, TabTexture * textures)
 						loadTexture(renderer, loadImage("../inc/img/sand_128.png")),
 						"sand");
 
+	// Loading ice block textures
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/ice_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/ice_128.png")),
+						"ice");
+
 	// Loading interface texture
 	addTextureToTable(	textures,
 						loadTexture(renderer, loadImage("../inc/img/block_interface.png")),
@@ -352,7 +358,7 @@ int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * gr
 					else				displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
 				}
 			}
-			else if ((*(grid+i*xSize+j)).tile_id <= 5)
+			else if ((*(grid+i*xSize+j)).tile_id <= 6)
 			{
 				if (pxBase == 64)	displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].texture, blockPos.x, blockPos.y);
 				else 				displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].big_texture, blockPos.x, blockPos.y);
@@ -371,7 +377,7 @@ int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * gr
 	displaySprite(renderer, getTexture(textures, "interface"), 0, 0);
 	displaySprite(renderer, getTexture(textures, "eraser"), 10, 50);
 
-	for (int i = 1; i <= 5; i++)
+	for (int i = 1; i <= 6; i++)
 	{
 		if (i%2 == 0)		buttonPos.x = 10;
 		else				buttonPos.x = 126;
@@ -490,7 +496,7 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 			load_index++;
 			SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
 			SDL_RenderClear(renderer);
-			displayText(renderer, 200, yWinSize/2+120, 40, "Chargement des textures de l'éditeur...", "../inc/font/Pixels.ttf", 255, 255, 255);
+			displayText(renderer, 200, yWinSize/2+120, 40, "Chargement des textures de l'editeur...", "../inc/font/Pixels.ttf", 255, 255, 255);
 			displayText(renderer, 200, yWinSize/2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
 			if (load_index == 1)		displayText(renderer, xWinSize/2, yWinSize/3*2, 60, "Ooo", "../inc/font/Aqua.ttf", 255, 255, 255);
 			else if (load_index == 2)	displayText(renderer, xWinSize/2, yWinSize/3*2, 60, "oOo", "../inc/font/Aqua.ttf", 255, 255, 255);
@@ -552,12 +558,13 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 						//printf("X: %d | Y: %d\n", e.motion.x, e.motion.y);		// Debug console pos x & y on term
 						if (e.motion.x <= 200 && isInSaveMenu == 0 && isInLoadMenu == 0)
 						{
-							if (e.motion.x >= 10 && e.motion.x <= 74 && e.motion.y >= 50 && e.motion.y <= 114)							SELECT = 0;
-							else if (e.motion.x >= 126 && e.motion.x <= 190 && e.motion.y >= 50 && e.motion.y <= 114)					SELECT = 1;
-							else if (e.motion.x >= 10 && e.motion.x <= 74 && e.motion.y >= 124 && e.motion.y <= 188)					SELECT = 2;
-							else if (e.motion.x >= 126 && e.motion.x <= 190 && e.motion.y >= 124 && e.motion.y <= 188)					SELECT = 3;
-							else if (e.motion.y >= 10 && e.motion.x <= 74 && e.motion.y >= 198 && e.motion.y <= 262)					SELECT = 4;
-							else if (e.motion.y >= 126 && e.motion.x <= 190 && e.motion.y >= 198 && e.motion.y <= 262)					SELECT = 5;
+							if (e.motion.x >= 10 && e.motion.x <= 74 && e.motion.y >= 50 && e.motion.y <= 114)			SELECT = 0;
+							else if (e.motion.x >= 126 && e.motion.x <= 190 && e.motion.y >= 50 && e.motion.y <= 114)	SELECT = 1;
+							else if (e.motion.x >= 10 && e.motion.x <= 74 && e.motion.y >= 124 && e.motion.y <= 188)	SELECT = 2;
+							else if (e.motion.x >= 126 && e.motion.x <= 190 && e.motion.y >= 124 && e.motion.y <= 188)	SELECT = 3;
+							else if (e.motion.x >= 10 && e.motion.x <= 74 && e.motion.y >= 198 && e.motion.y <= 262)	SELECT = 4;
+							else if (e.motion.x >= 126 && e.motion.x <= 190 && e.motion.y >= 198 && e.motion.y <= 262)	SELECT = 5;
+							else if (e.motion.x >= 10 && e.motion.x <= 74 && e.motion.y >= 272 && e.motion.y <= 336)	SELECT = 6;
 							// Sauvegarder
 							else if (e.motion.y >= yWinSize-40 && e.motion.y <= yWinSize) isInSaveMenu = 1;
 							// Charger une map

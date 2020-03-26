@@ -77,6 +77,7 @@ typedef struct
     int tile_id;
     int selected;
     Entity * entity;
+    int walkable;
 } Tile;
 
 /* TEXTURE STRUCTURES */
