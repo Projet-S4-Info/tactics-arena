@@ -22,7 +22,7 @@
 
 //Go Through Your Statelist
 
-int play_check(Entity *E)
+Entity * play_check(Entity *E)
 {
     int current = E->character->cha_id-1;
     Entity * F = E - current;
