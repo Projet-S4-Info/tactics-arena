@@ -22,6 +22,8 @@
 
 //Go Through Your Statelist
 
+
+
 Entity * play_check(Entity *E)
 {
     int current = E->character->cha_id-1;

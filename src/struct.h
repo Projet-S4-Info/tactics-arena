@@ -91,21 +91,18 @@ typedef struct
 
 /* COMMUNICATION STRUCTURES */
 
-typedef union{
-    int mov;
-    char atk;
-}comm_union;
-
-typedef struct {
-    int flag;
-    comm_union action;
-}comm;
-
 typedef struct {
     int char_id;
     Coord c;
     abilityId act;
 }action;
 
+typedef struct {
+    int cha_id;
+    char cha_name[STR_SHORT];
+    classId cha_class;
+    int base_stats[NUM_STATS];
+    Coord starting_position;
+}init_ent;
 
 #endif
