@@ -2,13 +2,11 @@
 #define socket_server_h
 #define MAX_BUFF_SIZE 1024
 #define PORT 3555
+#include "struct.h"
 
 
 
-typedef struct User{
-  int id;
-  char pseudo[64];
-} t_user;
+
 
 typedef struct msgChat{
   int ident;

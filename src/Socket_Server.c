@@ -159,7 +159,7 @@ void startTCPSocketServ(){
               logFlag = 5; 
             }
             socketConnectedSrv = socketConnected;
-
+            printf("socketConnectedCli = %d\n", socketConnectedSrv);
             
             printf("\nChargement de la partie... \n");
 
