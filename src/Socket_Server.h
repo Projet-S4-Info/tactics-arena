@@ -31,6 +31,7 @@ int startTCPSocketCli();
 int stopTCPSocketServ(int socketConnected);
 int listenChanges(int socketConnected);
 void sendStruct(void * structure, int size,int socket);
+void sendPseudo(int sock,t_user info);
 void sendMsg(int socket, char pseudo[128], t_msgChat monMsg);
 const char * realStr();
 void getLocalIP();
