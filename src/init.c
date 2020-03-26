@@ -2,6 +2,13 @@
 #include <time.h>
 #include "struct.h"
 
+StateList *stAlly = NULL;
+StateList *stFoe = NULL;
+Class classes[NUM_CLASS] = {};
+Ability mage_ab[3][NUM_AB] = {};
+Entity Allies[NUM_CLASS] = {};
+Entity Foes[NUM_CLASS] = {};
+
 err_t init_berserker(Class * c)
 {
     Coord * one_c = malloc(sizeof(Coord));
