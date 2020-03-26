@@ -64,7 +64,7 @@ void loadMenuTextures(SDL_Renderer *renderer)
 	map_editor_button = loadTexture(renderer, loadImage("../inc/img/map_editor_button_256.png"));
 	
 	// == Loading Multi switch ==
-	multi_button = loadTexture(renderer, loadImage("../inc/img/start_button_256.png"));
+	multi_button = loadTexture(renderer, loadImage("../inc/img/multi_button_256.png"));
 }
 
 void freeMenuTextures()
@@ -91,7 +91,7 @@ void updateMenu(SDL_Renderer *renderer, int x, int y)
 	displaySprite(renderer, map_editor_button, 515, 375);
 
 	/* Multi button */
-	displaySprite(renderer, multi_button, 500, 450);
+	displaySprite(renderer, multi_button, 515, 425);
 
 	/* Quit button */
 	displaySprite(renderer, quit_button, 515, 525);

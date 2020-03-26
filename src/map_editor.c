@@ -86,6 +86,13 @@ int loadEditorTextures(SDL_Renderer * renderer, TabTexture * textures)
 						loadTexture(renderer, loadImage("../inc/img/ice_64.png")),
 						loadTexture(renderer, loadImage("../inc/img/ice_128.png")),
 						"ice");
+	
+	// Loading snow block textures
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/block_snow_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/block_snow_128.png")),
+						"snow");
+						
 
 	// Loading interface texture
 	addTextureToTable(	textures,
