@@ -25,6 +25,11 @@ typedef struct
 
 /* ENTITY STRUCTURES */
 
+typedef struct {
+    int char_id;
+    Coord c;
+    abilityId act; //-1 if movement
+}action;
 
 typedef struct
 {
@@ -99,12 +104,6 @@ typedef struct User{
   int id;
   char pseudo[64];
 } t_user;
-
-typedef struct {
-    int char_id;
-    Coord c;
-    abilityId act; //-1 if movement
-}action;
 
 typedef struct {
     int cha_id;

@@ -18,7 +18,7 @@ typedef enum {Dead, Alive, Summoned} lifeId;
 
 typedef enum {Cripple, Detained, Provoked, Burning, Freezing, Paralyzed, Blessed, Deadeye} statusId;
 
-typedef enum {Foes, Allies, Both} targetType;
+typedef enum {FOES, ALLIES, BOTH} targetType;
 
 /*Entity Sub Structures*/
 

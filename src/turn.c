@@ -126,6 +126,7 @@ err_t apply_action(action a)
     {
         //e=getEntity(add_coords(a.c, active_ab.coord[i]));
         if(e!=NULL)
+        {
             if(e->cha_id<0)
                 if(active_ab.damage!=NULL)
                     if(apply_damage(active_ab.damage, active_ent, e))
@@ -136,12 +137,13 @@ err_t apply_action(action a)
             if(active_ab.mods!=NULL&&e->active!=Dead)
                 for(j=0; j<active_ab.nb_mods; j++)
                 {
-                    if(e->cha_id<0&&active_ab.mods[j].t!=Allies)
+                    if(e->cha_id<0&&active_ab.mods[j].t!=ALLIES)
                         apply_mod(active_ab.mods[j],e, stFoe, a.char_id);
 
-                    else if((e->cha_id>0&&active_ab.mods[j].t!=Foes))
+                    else if((e->cha_id>0&&active_ab.mods[j].t!=FOES))
                         apply_mod(active_ab.mods[j],e, stAlly, a.char_id);
                 }
+        }
     }
     
     if(active_ab.function!=NULL)
