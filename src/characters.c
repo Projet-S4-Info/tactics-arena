@@ -4,6 +4,7 @@
 #include "../SDL2/include/SDL2/SDL_ttf.h"
 #include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "graphics.h"
+#include "substruct.h"
 
 int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
 // Load all the textures needed for the characters
@@ -82,7 +83,7 @@ int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Entity * e
 
     // Display character's life points
     char temp[20];
-    sprintf(temp, "%d", entity->stat_mods[0]);
+    sprintf(temp, "%d", entity->stat_mods[pv]);
     if (pxBase == 64)   displaySprite(renderer, getTexture(cSprites, "heart_icon"), x+(pxBase/4), y-(pxBase/4));
     else                displaySprite(renderer, getBigTexture(cSprites, "heart_icon"), x+(pxBase/4), y-(pxBase/4));
     displayText(renderer, x+(pxBase/2), y-(pxBase/4), (pxBase/64)*15, temp, "../inc/font/Pixels.ttf", 255, 0, 0);
