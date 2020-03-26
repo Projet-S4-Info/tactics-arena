@@ -111,8 +111,10 @@ int startTCPSocketCli(int socketCli){
         sprintf(infoMoi.pseudo, "%s", pseudoUser);
 
         printf("\nDébut de la communication : \n");
-        //sendStruct(sock, (t_user)infoMoi);
-        socketConnectedSrv = sock;
+        
+        socketConnectedCli = sock;
+        printf("socketConnectedCli = %d\n", socketConnectedCli);
+        sendPseudo(socketConnectedCli, (t_user)infoMoi);
         
         printf("Press (1) start chat :\n");
         //printf("Pess (2) send structure : \n");

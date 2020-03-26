@@ -6,6 +6,7 @@
 #include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "audio.h"
 #include "graphics.h"
+#include "characters.h"
 
 #define _NB_MAX_TEXTURES_ 50
 
@@ -58,6 +59,12 @@ int loadMapTextures(SDL_Renderer * renderer)
 								loadTexture(renderer, loadImage("../inc/img/sand_64.png")),
 								loadTexture(renderer, loadImage("../inc/img/sand_128.png")),
 								"sand");
+
+	// Loading ice block textures
+	addTextureToTable(	textures,
+								loadTexture(renderer, loadImage("../inc/img/ice_64.png")),
+								loadTexture(renderer, loadImage("../inc/img/ice_128.png")),
+								"ice");
 
 	// Loading sand block textures
 	index = addTextureToTable(	textures,
@@ -145,7 +152,7 @@ int selectTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 	return 1;
 }
 
-int displayMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, int xSize, int ySize)
+int displayMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, int xSize, int ySize, TabTexture * cSprites)
 // Display the map
 {
 	/* Le fond de la fenêtre sera blanc */
@@ -183,6 +190,8 @@ int displayMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, in
 				if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "selection"), blockPos.x, blockPos.y);
 				else				displaySprite(renderer, getBigTexture(textures, "selection"), blockPos.x, blockPos.y);
 			}
+
+			if ((*(grid+i*xSize+j)).entity != NULL)	displayCharacters(renderer, cSprites, (*(grid+i*xSize+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
 
 			/*/ -- DEBUG Affichage des indices des tuiles --
 			char pos[6];

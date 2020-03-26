@@ -80,6 +80,7 @@ typedef struct
     int tile_id;
     int selected;
     Entity * entity;
+    int walkable;
 } Tile;
 
 /* TEXTURE STRUCTURES */
@@ -93,6 +94,11 @@ typedef struct
 
 
 /* COMMUNICATION STRUCTURES */
+
+typedef struct User{
+  int id;
+  char pseudo[64];
+} t_user;
 
 typedef struct {
     int char_id;

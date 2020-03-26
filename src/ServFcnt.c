@@ -109,6 +109,19 @@ void sendStruct(void * structure, int size, int socket){
   }
 }
 
+void sendPseudo(int sock, t_user info){
+  int sockSendError;
+
+  sockSendError = send(sock, (void *)&info, sizeof(info), 0);
+  if(sockSendError == SOCKET_ERROR){
+    printf("Impossible d'envoyer la structure... \n");
+  }
+  else{
+    printf("Structure envoyée ! \n");
+  }
+}
+
+
 const char * realStr(){
 
   printf("Saisir votre message : ");

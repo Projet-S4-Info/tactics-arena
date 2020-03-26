@@ -64,6 +64,10 @@ int main()
         case 3:
                 createGrid((Tile *)matrix, 7, X, Y);
                 createGrid((Tile *)blankGrid, 1, X, Y);
+                Entity entity;
+                entity.stat_mods[0] = 40;
+                Coord test = {23,10};
+                setEntityToTile(matrix, &entity, test, X, Y);
                 playMenuMusic();
                 selection = displayMenu(1280, 720);
 
