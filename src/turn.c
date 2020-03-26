@@ -1,4 +1,6 @@
 #include "struct.h"
+#include "init.h"
+#include "grid.h"
 
 // LOCAL TURN
 
@@ -24,13 +26,28 @@
 
 err_t apply_action(action act)
 {
+    Entity active_ent;
+    Ability active_ab;
+    Entity * e;
+    if(act.char_id<0)
+        active_ent = Foes[act.char_id*-1-1];
+    else
+        active_ent = Allies[act.char_id-1];
+
+    active_ab = *(active_ent.cha_class->cla_abilities);
+
+    int i;
+    for(i=0; i<active_ab.nb_coords; i++)
+    {
+        
+    }
     
     return OK;
 }
 
 Entity * play_check(Entity *E)
 {
-    int current = E->character->cha_id-1;
+    int current = E->cha_id-1;
     Entity * F = E - current;
     int i = current;
     do

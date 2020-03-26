@@ -62,12 +62,15 @@ typedef struct
 
 typedef struct
 {
-    Character * character;
+    int cha_id;
+    char cha_name[STR_SHORT];
+    Class * cha_class;
     lifeId active;
     int act_points;
     int base_stats[NUM_STATS];
     int stat_mods[NUM_STATS];
     int status_effect[NUM_STATUS];
+    int ab_cooldown[NUM_AB];
 } Entity;
 
 /* TERRAIN STRUCTURES */
