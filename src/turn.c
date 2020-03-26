@@ -23,25 +23,62 @@
     //Apply ab cooldown
 
 //Go Through Your Statelist
-
-err_t apply_action(action act)
+Coord add_coords(Coord a, Coord b)
 {
-    Entity active_ent;
+    Coord c;
+
+    c.x = a.x + b.x;
+    c.y = a.y + b.y;
+
+    return c;
+}
+
+err_t apply_damage(Damage * d, Entity * target)
+{
+    return OK;
+}
+
+err_t apply_mod(Modifier m, Entity * target, StateList * list)
+{
+    return OK;
+}
+
+err_t apply_action(action a)
+{
+    Entity * active_ent;
     Ability active_ab;
     Entity * e;
-    if(act.char_id<0)
-        active_ent = Foes[act.char_id*-1-1];
+    if(a.char_id<0)
+        active_ent = &Foes[a.char_id*-1-1];
     else
-        active_ent = Allies[act.char_id-1];
+        active_ent = &Allies[a.char_id-1];
 
-    active_ab = *(active_ent.cha_class->cla_abilities);
+    active_ab = active_ent->cha_class->cla_abilities[a.act%NUM_AB];
 
-    int i;
+    int i,j;
     for(i=0; i<active_ab.nb_coords; i++)
     {
-        
+        //e=getEntity(add_coords(a.c, active_ab.coord[i]));
+        if(e!=NULL)
+            if(e->cha_id<0)
+                if(active_ab.damage!=NULL)
+                    apply_damage(active_ab.damage, e);
+
+            if(active_ab.mods!=NULL)
+                for(j=0; j<active_ab.nb_mods; j++)
+                {
+                    if(e->cha_id<0&&active_ab.mods[j].t!=Allies)
+                        apply_mod(active_ab.mods[j],e, &stFoe);
+                    else if((e->cha_id>0&&active_ab.mods[j].t!=Foes))
+                        apply_mod(active_ab.mods[j],e, &stAlly);
+                }
     }
     
+    if(active_ab.function!=NULL)
+        active_ab.function(a);
+    
+    active_ent->ab_cooldown[a.act%NUM_AB] = active_ab.ab_cooldown;
+
     return OK;
 }
 
@@ -65,6 +102,7 @@ Entity * play_check(Entity *E)
 err_t turn(Class * class, Entity * allies, Entity * foes, StateList * local, StateList * opponent)
 {
     Entity * active_ent=allies;
+    action a;
     while((active_ent=play_check(active_ent))!=NULL)
     {
         //while action selected is change character
@@ -75,7 +113,11 @@ err_t turn(Class * class, Entity * allies, Entity * foes, StateList * local, Sta
         //relay action information
         //wait for confirmation
         //animate the action
-
+        if(a.act<0);
+            //call mvt function (dont forget to remove semicolon after if)
+        else
+            apply_action(a);
+        
     }
     return OK;
 }

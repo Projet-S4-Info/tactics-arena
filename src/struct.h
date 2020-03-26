@@ -37,7 +37,7 @@ typedef struct
     Coord * coord;
     int nb_mods;
     Modifier * mods;
-    err_t (*function)(int, Coord *, StateList *, StateList *); //Takes caster ID, Coordinates, and pointer to state chain
+    err_t (*function)(action);
     lang eng;
     char sprite_folder[STR_LONG];
 } Ability;
@@ -103,7 +103,7 @@ typedef struct User{
 typedef struct {
     int char_id;
     Coord c;
-    abilityId act;
+    abilityId act; //-1 if movement
 }action;
 
 typedef struct {

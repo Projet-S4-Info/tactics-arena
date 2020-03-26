@@ -12,11 +12,13 @@ typedef enum {pv, mv, vis, atk, magic, res_physic, res_magic} statId;
 
 typedef enum {Berserker, Ranger, Goliath, Mage, Valkyrie, Angel} classId;
 
-typedef enum {Movement, Slash, Killing_Blow, Fury, Frenzied_Dash} abilityId;
+typedef enum {Slash, Killing_Blow, Fury, Frenzied_Dash} abilityId;
 
 typedef enum {Dead, Alive, Summoned} lifeId;
 
 typedef enum {Cripple, Detained, Provoked, Burning, Freezing, Paralyzed, Blessed, Deadeye} statusId;
+
+typedef enum {Foes, Allies, Both} targetType;
 
 /*Entity Sub Structures*/
 
@@ -43,6 +45,7 @@ typedef struct
 {
     Status effect;
     float chance;
+    targetType t;
 }Modifier;
 
 #endif
