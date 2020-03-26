@@ -2,13 +2,11 @@
 #define socket_server_h
 #define MAX_BUFF_SIZE 1024
 #define PORT 3555
+#include "struct.h"
 
 
 
-typedef struct User{
-  int id;
-  char pseudo[64];
-} t_user;
+
 
 typedef struct msgChat{
   int ident;
@@ -31,6 +29,7 @@ int startTCPSocketCli();
 int stopTCPSocketServ(int socketConnected);
 int listenChanges(int socketConnected);
 void sendStruct(void * structure, int size,int socket);
+void sendPseudo(int sock,t_user info);
 void sendMsg(int socket, char pseudo[128], t_msgChat monMsg);
 const char * realStr();
 void getLocalIP();
