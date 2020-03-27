@@ -1,8 +1,8 @@
 #ifndef audio_h
 #define audio_h
 
-int playMenuMusic(void);
-int stopMenuMusic(void);
+int playMenuMusic(int nb);
+int stopMenuMusic(int nb);
 int pauseMenuMusic(void);
 int resumeMenuMusic(void);
 

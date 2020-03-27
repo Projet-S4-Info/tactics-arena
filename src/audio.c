@@ -3,8 +3,9 @@
 #include "../SDL2/include/SDL2/SDL_mixer.h"
 
 Mix_Music* myMus;
+Mix_Music* multiMus;
 
-int playMenuMusic()
+int playMenuMusic(int nb)
 // Play the menu music
 {
 
@@ -31,20 +32,29 @@ int playMenuMusic()
         printf("%s", Mix_GetError());
     }
 
-    /* On charge la musique */
+     /* On charge la musique */
     myMus = Mix_LoadMUS("../inc/music/cascade.wav");
+    multiMus = Mix_LoadMUS("../inc/music/Battle-Chiptune.wav");
 
     /* On lance la musique */
-    Mix_PlayMusic(myMus, 1);
-
+    if(nb == 1){
+        Mix_PlayMusic(myMus, 1);
+    }else if(nb == 2){
+        Mix_PlayMusic(multiMus, -1);
+    }
     return 0;
 }
 
-int stopMenuMusic()
+int stopMenuMusic(int nb)
 // Stop the menu music
 {
      /* La musique est terminée, on la libère */
-    Mix_FreeMusic(myMus);
+    if(nb == 1){
+        Mix_FreeMusic(myMus);
+    }else if(nb == 2){
+        Mix_FreeMusic(multiMus);
+    }
+
 
     /* On libère le matériel */
     Mix_CloseAudio();

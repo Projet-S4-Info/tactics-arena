@@ -96,10 +96,10 @@ void loadMultiMenuTextures(SDL_Renderer *renderer)
 	music_off_Multi = loadTexture(renderer, loadImage("../inc/img/music_off.png"));
 
 	// == Loading Host switch ==
-	host_button = loadTexture(renderer, loadImage("../inc/img/start_button_256.png"));
+	host_button = loadTexture(renderer, loadImage("../inc/img/host_btn_256.png"));
 
 	// == Loading Join switch ==
-	join_button = loadTexture(renderer, loadImage("../inc/img/start_button_256.png"));
+	join_button = loadTexture(renderer, loadImage("../inc/img/join_btn_256.png"));
 
 
 	// == ok switch ==
@@ -207,6 +207,12 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 	}
 
 	dispLog(renderer, console.x, console.y);
+
+	if (music_Multi_playing){
+		displaySprite(renderer, music_on_Multi, x-175, y-200);
+	}else {
+		displaySprite(renderer, music_off_Multi, x-175, y-200);
+	}
 	
 
 }
@@ -273,6 +279,11 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 	}
 	/*-----------------------------------------*/
 
+	if (music_Multi_playing){
+		displaySprite(renderer, music_on_Multi, x-175, y-200);
+	}else {
+		displaySprite(renderer, music_off_Multi, x-175, y-200);
+	}
 }
 
 int displayMenuMulti(int x, int y)
@@ -326,6 +337,7 @@ int displayMenuMulti(int x, int y)
 	{
 		SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 		int running = 1;
+
 		while(running) {
 			SDL_Event u;
 			while(SDL_PollEvent(&u)) {
@@ -362,6 +374,11 @@ int displayMenuMulti(int x, int y)
 	                                displayText(renderer, 300, 200, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
 	                                /* Mentions de bas de menu */
 	                                displayText(renderer, 5, y-20, 15, "Projet L2 Informatique - BUTEL CHAUVIN DOUCET LAFAY", "../inc/font/Pixels.ttf", 255, 255, 255);
+									if (music_Multi_playing){
+										displaySprite(renderer, music_on_Multi, x-175, y-200);
+									}else {
+										displaySprite(renderer, music_off_Multi, x-175, y-200);
+									}				
                                 }
 								
 								// SDL_RenderPresent(renderer);
@@ -445,6 +462,7 @@ int displayMenuMulti(int x, int y)
 							printf("Starting game ... \n");
 							closeWindow(pWindow);
 							freeMultiMenuTextures();
+							stopMenuMusic(2);
 							return 1;
 						}
 						

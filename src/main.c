@@ -68,26 +68,28 @@ int main()
                 entity.stat_mods[0] = 40;
                 Coord test = {23,10};
                 setEntityToTile(matrix, &entity, test, X, Y);
-                playMenuMusic();
+                playMenuMusic(1);
                 selection = displayMenu(1280, 720);
 
                 // Lancement du jeu
                 if (selection == 2)
                 {
-                    stopMenuMusic();
+                    stopMenuMusic(1);
                     createGameWindow(1920,1080, matrix, X, Y);
                 }
 
                 // Editeur de map
                 else if (selection == 3)
                 {
-                    stopMenuMusic();
+                    stopMenuMusic(1);
                     createMapEditorWindow(1920, 1080, blankMatrix, X, Y);
                 }
                 
                 // Multiplayer
                 else if (selection == 4){
+                    stopMenuMusic(1);
                     int res = 0;
+                    playMenuMusic(2);
                     res = displayMenuMulti(1280,720);
                     if(res == 1){
                         createGameWindow(1920,1080,matrix, X, Y);
