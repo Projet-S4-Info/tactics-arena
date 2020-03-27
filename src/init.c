@@ -3,8 +3,8 @@
 #include "struct.h"
 #include "init_classes.h"
 
-StateList *stAlly = NULL;
-StateList *stFoe = NULL;
+StateList *stSent = NULL;
+StateList *stReceived = NULL;
 Class classes[NUM_CLASS] = {};
 Ability mage_ab[3][NUM_AB] = {};
 Entity Allies[NUM_CLASS] = {};

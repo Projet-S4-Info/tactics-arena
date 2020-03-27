@@ -20,3 +20,8 @@ err_t Trap_fn(action a)
     return OK;
 }
 
+err_t Banner_fn(action a)
+{
+    return OK;
+}
+

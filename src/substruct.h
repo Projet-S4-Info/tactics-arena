@@ -12,11 +12,11 @@ typedef enum {pv, mv, vis, atk, magic, res_physic, res_magic} statId;
 
 typedef enum {Berserker, Ranger, Goliath, Mage, Valkyrie, Angel} classId;
 
-typedef enum {Slash, Killing_Blow, Fury, Frenzied_Dash, Bolt, Focus, Trap, Deadeye} abilityId;
+typedef enum {Slash, Killing_Blow, Fury, Frenzied_Dash, Bolt, Focus, Trap, Deadeye, Bash, Shields_Up, Detain, Banner} abilityId;
 
 typedef enum {Dead, Alive, Summoned} lifeId;
 
-typedef enum {Cripple, Detained, Provoked, Burning, Freezing, Paralyzed, Blessed, Piercing} statusId;
+typedef enum {Cripple, Detained, Provoked, Burning, Freezing, Paralyzed, Blessed, Piercing, Guarding} statusId;
 
 typedef enum {FOES, ALLIES, BOTH} targetType;
 

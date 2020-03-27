@@ -107,7 +107,7 @@ typedef struct User{
 } t_user;
 
 typedef struct {
-    int cha_id;
+    int char_id;
     char cha_name[STR_SHORT];
     classId cha_class;
     int base_stats[NUM_STATS];

@@ -31,10 +31,10 @@ err_t init_berserker(Class * c)
 
     Coord * ult=malloc(sizeof(Coord)*31);
     if(ult==NULL) return POINTER_NULL;
-    int i,x,y;
-    for(i=0,x=-2,y=-4;x<=2;)
+    int i=0,x=-2,y=-3;
+    while(x<=2)
     {
-        if(!((x==-2&&y==-3)||(x==-2&&y==3)||(x==2&&y==-3)||(x==2&&y==3)))
+        if(!(abs(x)==2&&abs(y)==3))
         {
             ult[i].x=x;
             ult[i].y=y;
@@ -65,7 +65,7 @@ err_t init_berserker(Class * c)
     {
         Berserker,
         "Berserker",
-        {13,8,10,10,0,10,10},
+        {20,8,10,10,0,10,10},
         {"Bloodlust","Killing two ennemies in the same turn refills action points and doubles mp and atk stats for one turn."},
         ab,
         "../inc/sprites/berserker/sprite_sheet/"
@@ -102,10 +102,81 @@ err_t init_ranger(Class * c)
     {
         Ranger,
         "Ranger",
-        {10,12,10,12,0,8,8},
+        {20,12,10,12,0,8,8},
         {"Sentinel","The first ennemy that moves to a spot inside a ranger's range every turn, will get bolted."},
         ab,
         "../inc/sprites/ranger/sprite_sheet/"
+    };
+    
+    *c = temp;
+
+    return OK;
+}
+
+err_t init_goliath(Class * c)
+{
+
+    Modifier * m = malloc(sizeof(Modifier)*2);
+    if(m==NULL) return POINTER_NULL;
+    Modifier t[2]= {{{-5,res_physic,1},1,FOES},{{-5,res_magic,1},1,FOES}};
+    *m = t[0];
+    *(m+1) = t[1];
+
+    Modifier * n = malloc(sizeof(Modifier));
+    if(n==NULL) return POINTER_NULL;
+    Modifier f= {{0,Guarding,1},1,ALLIES};
+    *n = f;
+
+    Modifier * d = malloc(sizeof(Modifier));
+    if(d==NULL) return POINTER_NULL;
+    Modifier l= {{0,Detained,3},1,FOES};
+    *d = l;
+
+    Modifier * u = malloc(sizeof(Modifier));
+    if(d==NULL) return POINTER_NULL;
+    Modifier ut= {{0,Provoked,1},1,FOES};
+    *u= ut;
+
+    Coord * ult=malloc(sizeof(Coord)*31);
+    if(ult==NULL) return POINTER_NULL;
+    int i=0,x=-3,y=-4;
+    while(x<=3)
+    {
+        if(!(( abs(x)==3 && (abs(y)==4 || abs(y)==3) ) || (abs(x)==2 && abs(y)==4) ))
+        {
+            ult[i].x=x;
+            ult[i].y=y;
+            i++;
+        }
+        if((y=4))
+        {
+            y=-4;
+            x++;
+        }
+        else y++;
+    }
+
+    Ability * ab=malloc(sizeof(Ability)*NUM_AB);
+    if(ab==NULL) return POINTER_NULL;
+
+    Ability abtemp1 = {Bash,1,0,1,one_a,1,one_c,2,m,NULL,{"Bash","Damage and reduce the ennemy's resistances for a turn."},"../inc/sprites/goliath/sprite_sheet/A1/"};
+    *ab = abtemp1;
+    Ability abtemp2 = {Shields_Up,2,1,0,NULL,1,one_c,1,n,NULL,{"Shields Up","Increase passive block chance to 70% for one turn."},"../inc/sprites/goliath/sprite_sheet/A2/"};
+    *(ab+1) = abtemp2;
+    Ability abtemp3 = {Detain,2,4,2,NULL,1,one_c,1,d,NULL,{"Detain","Capture an Ennemy for three turns."},"../inc/sprites/goliath/sprite_sheet/A3/"};
+    *(ab+2) = abtemp3;
+    Ability abtemp4 = {Banner,3,5,0,NULL,51,ult,1,u,Banner_fn,{"Banner","Provoke all ennemies in a zone for one turn and reset all allies' cooldowns."},"../inc/sprites/goliath/sprite_sheet/A4/"};
+    *(ab+3) = abtemp4;
+
+
+    Class temp = 
+    {
+        Goliath,
+        "Goliath",
+        {20,6,10,8,0,14,14},
+        {"Guardian","Has a 30% chance to block incoming damage."},
+        ab,
+        "../inc/sprites/goliath/sprite_sheet/"
     };
     
     *c = temp;
