@@ -38,7 +38,7 @@ typedef struct
 {
     int value;  //IF value is equal to 0 then it is a status effect, otherwise it is a stat modifier
     int stat;
-    int duration;
+    int duration; //IF duration is equal to zero then it is a permanent change
 } Status;
 
 typedef struct
