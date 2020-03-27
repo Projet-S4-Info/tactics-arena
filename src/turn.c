@@ -59,8 +59,11 @@ err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
         }
         
     }
-
+    if(m.effect.duration!=0)
+    {
     return list_add(list, &m.effect, target->cha_id);
+    }
+    else return OK;
 }
 
 err_t remove_mod(Status * stat, int cha_id)
