@@ -36,9 +36,9 @@ typedef struct
     abilityId ab_id;
     int ab_cost;
     int ab_cooldown;
-    int range;
+    int range; //If zero then self cast
     Damage * damage;
-    int nb_coords; //0 is self cast
+    int nb_coords; 
     Coord * coord;
     int nb_mods;
     Modifier * mods;
@@ -71,6 +71,7 @@ typedef struct
     char cha_name[STR_SHORT];
     Class * cha_class;
     lifeId active;
+    Coord coords;
     int act_points;
     int base_stats[NUM_STATS];
     int stat_mods[NUM_STATS];
@@ -106,7 +107,7 @@ typedef struct User{
 } t_user;
 
 typedef struct {
-    int cha_id;
+    int char_id;
     char cha_name[STR_SHORT];
     classId cha_class;
     int base_stats[NUM_STATS];

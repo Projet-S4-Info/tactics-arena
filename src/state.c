@@ -41,11 +41,11 @@ err_t list_next(StateList * list)
     return OK;
 }
 
-List_Elem * list_decrease(StateList * list)
+List_Elem * list_change(StateList * list, int d)
 {
-    list->ec->value->duration--;
+    list->ec->value->duration += d;
 
-    if(list->ec->value->duration==0)
+    if(list->ec->value->duration<=0)
         return list->ec;
 
     return NULL;
@@ -83,6 +83,37 @@ err_t list_add(StateList * list, Status * v, int entity)
 
     list->ec = newelem;
     return OK;
+}
+
+bool list_search(StateList * list, int entity)
+{
+    while(!out_of_list(list))
+    {
+        if(list->ec->entity == entity)
+        {
+            return TRUE;
+        }
+        list_next(list);
+    }
+    return FALSE;
+}
+
+bool list_check(StateList * list)
+{
+    if(list->ec->value->value==0)
+    {
+        if(list->ec->value->stat<Blessed)
+            return FALSE;
+        else
+            return TRUE;
+    }
+    else
+    {
+        if(list->ec->value->value<0)
+            return FALSE;
+        else
+            return TRUE;
+    }
 }
 
 err_t list_destroy(StateList * list)

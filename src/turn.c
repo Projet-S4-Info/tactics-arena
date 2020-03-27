@@ -15,15 +15,27 @@ Coord add_coords(Coord a, Coord b)
 
 bool apply_damage(Damage * d, Entity * caster, Entity * target)
 {
+    if(target->cha_id==Goliath)
+    {
+        int block = target->status_effect[Guarding] == 1 ? 70 : 30;
+
+        if(block>=(rand()%100+1))
+        {
+            //PLAY ANIMATION
+            return FALSE;
+        }
+
+    }
+
     float crippled = target->status_effect[Cripple] == 1 ? 1.75 : 1;
 
-    if(caster->status_effect[Deadeye])
+    if(caster->status_effect[Piercing])
     {
-        target->stat_mods[pv] -= caster->stat_mods[d->type] * d->multiplier * crippled;
+        target->stat_mods[pv] -= (caster->stat_mods[d->type] * d->multiplier * crippled)+0.4;
     }
     else
     {
-        target->stat_mods[pv] -= caster->stat_mods[d->type]/(1+(target->stat_mods[d->type+2]/15)) * d->multiplier * crippled;
+        target->stat_mods[pv] -= (caster->stat_mods[d->type]/(1+(target->stat_mods[d->type+2]/15)) * d->multiplier * crippled)+0.4;
     }
 
     //UPDATE HEALTH VISUALLY
@@ -60,7 +72,12 @@ err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
         
     }
 
-    return list_add(list, &m.effect, target->cha_id);
+    if(m.effect.duration!=0)
+    {
+        return list_add(list, &m.effect, target->cha_id);
+    }
+    else 
+        return OK;
 }
 
 err_t remove_mod(Status * stat, int cha_id)
@@ -81,23 +98,22 @@ err_t remove_mod(Status * stat, int cha_id)
 
 err_t new_death(Entity * e)
 {
-    StateList * list = e->cha_id<0 ? stFoe : stAlly;
-
     int i;
     for(i=0; i<NUM_AB; i++)
     {
         e->ab_cooldown[i] = 0;
     }
 
-    start_list(list);
-    while(!out_of_list(list))
+    start_list(stSent);
+    while(list_search(stSent,e->cha_id))
     {
-        if(list->ec->entity==e->cha_id)
-        {
-            remove_mod(list->ec->value, list->ec->entity);
-            list_remove(list);
-        }
-        list_next(list);
+        list_remove(stSent);
+    }
+
+    start_list(stReceived);
+    while(list_search(stReceived,e->cha_id))
+    {
+        list_remove(stReceived);
     }
 
     //PLAY DEATH ANIMATION
@@ -112,11 +128,18 @@ err_t apply_action(action a)
     Entity * e;
     int death_count=0;
     Entity * morts[6];
-    if(a.char_id<0)
-        active_ent = &Foes[a.char_id*-1-1];
-    else
-        active_ent = &Allies[a.char_id-1];
+    StateList * list;
 
+    if(a.char_id<0)
+    {
+        active_ent = &Foes[a.char_id*-1-1];
+        list = stReceived;
+    }
+    else
+    {
+        active_ent = &Allies[a.char_id-1];
+        list = stSent;
+    }
     active_ab = active_ent->cha_class->cla_abilities[a.act%NUM_AB];
 
     //ANIMATE THE ACTION
@@ -125,7 +148,7 @@ err_t apply_action(action a)
     for(i=0; i<active_ab.nb_coords; i++)
     {
         //e=getEntity(add_coords(a.c, active_ab.coord[i]));
-        if(e!=NULL)
+        if(e!=NULL&&(e->cha_id!=Trap+1&&e->cha_id!=Trap*-1+1))
         {
             if(e->cha_id<0)
                 if(active_ab.damage!=NULL)
@@ -138,14 +161,13 @@ err_t apply_action(action a)
                 for(j=0; j<active_ab.nb_mods; j++)
                 {
                     if(e->cha_id<0&&active_ab.mods[j].t!=ALLIES)
-                        apply_mod(active_ab.mods[j],e, stFoe, a.char_id);
+                        apply_mod(active_ab.mods[j],e, list, a.char_id);
 
                     else if((e->cha_id>0&&active_ab.mods[j].t!=FOES))
-                        apply_mod(active_ab.mods[j],e, stAlly, a.char_id);
+                        apply_mod(active_ab.mods[j],e, list, a.char_id);
                 }
         }
     }
-    
     if(active_ab.function!=NULL)
         active_ab.function(a);
     
@@ -177,8 +199,8 @@ Entity * play_check(Entity *E)
 
 err_t turn()
 {
-    //check ennemy statelist
-
+    //check sent statelist
+    //decrease cooldowns
     Entity * active_ent=Allies;
     action a;
     while((active_ent=play_check(active_ent))!=NULL)
@@ -196,8 +218,7 @@ err_t turn()
             apply_action(a);
         
     }
-
-    //check local statelist
+    //check received statelist
 
     return OK;
 }

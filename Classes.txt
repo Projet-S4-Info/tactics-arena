@@ -14,10 +14,10 @@ RANGER
 
 GOLIATH
 0: Guardian : Has a 30% chance to block incoming damage.
-1: Bash: Damage and reduce the ennemy's defence.
-2: Shields Up : Increase passive block chance to 70%.
+1: Bash: Damage and reduce the ennemy's defences for a turn.
+2: Shields Up : Increase passive block chance to 70% for one turn.
 2: Detain : Capture an Ennemy for three turns.
-3: Battle Cry : Provoke all ennemies in a zone for one turn and reset all allies' cooldowns
+3: Banner : Provoke all ennemies in a zone for one turn and reset all allies' cooldowns.
 
 MAGE
 0: Elementalist : After every use of a basic attack, change element (Fire, Ice, Electricity).
@@ -51,4 +51,4 @@ Blessed : Under God's Blessing.
 Deadeye : Attacks ignore armor.
 
 damage = atk/(1+(def/15))
-range=range_modifier * (vision/10)
+range=range_modifier * (vision/10) if range = 0 then range = 1
