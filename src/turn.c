@@ -17,13 +17,13 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target)
 {
     float crippled = target->status_effect[Cripple] == 1 ? 1.75 : 1;
 
-    if(caster->status_effect[Deadeye])
+    if(caster->status_effect[Piercing])
     {
-        target->stat_mods[pv] -= caster->stat_mods[d->type] * d->multiplier * crippled;
+        target->stat_mods[pv] -= (caster->stat_mods[d->type] * d->multiplier * crippled)+0.4;
     }
     else
     {
-        target->stat_mods[pv] -= caster->stat_mods[d->type]/(1+(target->stat_mods[d->type+2]/15)) * d->multiplier * crippled;
+        target->stat_mods[pv] -= (caster->stat_mods[d->type]/(1+(target->stat_mods[d->type+2]/15)) * d->multiplier * crippled)+0.4;
     }
 
     //UPDATE HEALTH VISUALLY
@@ -93,14 +93,9 @@ err_t new_death(Entity * e)
     }
 
     start_list(list);
-    while(!out_of_list(list))
+    while(list_search(list,e->cha_id))
     {
-        if(list->ec->entity==e->cha_id)
-        {
-            remove_mod(list->ec->value, list->ec->entity);
-            list_remove(list);
-        }
-        list_next(list);
+        list_remove(list);
     }
 
     //PLAY DEATH ANIMATION
@@ -128,7 +123,7 @@ err_t apply_action(action a)
     for(i=0; i<active_ab.nb_coords; i++)
     {
         //e=getEntity(add_coords(a.c, active_ab.coord[i]));
-        if(e!=NULL)
+        if(e!=NULL&&(e->cha_id!=Trap+1&&e->cha_id!=Trap*-1+1))
         {
             if(e->cha_id<0)
                 if(active_ab.damage!=NULL)
@@ -148,6 +143,7 @@ err_t apply_action(action a)
                 }
         }
     }
+    
     
     if(active_ab.function!=NULL)
         active_ab.function(a);

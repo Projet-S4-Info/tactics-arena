@@ -20,9 +20,12 @@ int list_empty(StateList * list);
 err_t start_list(StateList * list);
 err_t end_list(StateList * list);
 err_t list_next(StateList * list);
-List_Elem * list_decrease(StateList * list);
+List_Elem * list_change(StateList * list, int d);
 err_t list_remove(StateList * list);
 err_t list_add(StateList * list, Status * v, int entity);
+bool list_search(StateList * list, int entity);
+bool list_check(StateList * list);
 err_t list_destroy(StateList * list);
+
 
 #endif
