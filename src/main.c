@@ -62,7 +62,7 @@ int main()
         case 2: startTCPSocketCli();
         break;
         case 3:
-                createGrid((Tile *)matrix, 1, X, Y);
+                loadMap(matrix, "map_iceRift");
                 createGrid((Tile *)blankGrid, 1, X, Y);
                 Entity entity;
                 entity.stat_mods[0] = 40;

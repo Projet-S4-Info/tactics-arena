@@ -365,7 +365,7 @@ int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * gr
 					else				displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
 				}
 			}
-			else if ((*(grid+i*xSize+j)).tile_id <= 6)
+			else if ((*(grid+i*xSize+j)).tile_id <= 7)
 			{
 				if (pxBase == 64)	displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].texture, blockPos.x, blockPos.y);
 				else 				displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].big_texture, blockPos.x, blockPos.y);
@@ -384,7 +384,7 @@ int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * gr
 	displaySprite(renderer, getTexture(textures, "interface"), 0, 0);
 	displaySprite(renderer, getTexture(textures, "eraser"), 10, 50);
 
-	for (int i = 1; i <= 6; i++)
+	for (int i = 1; i <= 7; i++)
 	{
 		if (i%2 == 0)		buttonPos.x = 10;
 		else				buttonPos.x = 126;
@@ -572,6 +572,7 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 							else if (e.motion.x >= 10 && e.motion.x <= 74 && e.motion.y >= 198 && e.motion.y <= 262)	SELECT = 4;
 							else if (e.motion.x >= 126 && e.motion.x <= 190 && e.motion.y >= 198 && e.motion.y <= 262)	SELECT = 5;
 							else if (e.motion.x >= 10 && e.motion.x <= 74 && e.motion.y >= 272 && e.motion.y <= 336)	SELECT = 6;
+							else if (e.motion.x >= 126 && e.motion.x <= 190 && e.motion.y >= 272 && e.motion.y <= 336)	SELECT = 7;
 							// Sauvegarder
 							else if (e.motion.y >= yWinSize-40 && e.motion.y <= yWinSize) isInSaveMenu = 1;
 							// Charger une map

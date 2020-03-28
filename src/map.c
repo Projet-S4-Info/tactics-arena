@@ -56,15 +56,21 @@ int loadMapTextures(SDL_Renderer * renderer)
 
 	// Loading sand block textures
 	addTextureToTable(	textures,
-								loadTexture(renderer, loadImage("../inc/img/sand_64.png")),
-								loadTexture(renderer, loadImage("../inc/img/sand_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/sand_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/sand_128.png")),
 								"sand");
 
 	// Loading ice block textures
 	addTextureToTable(	textures,
-								loadTexture(renderer, loadImage("../inc/img/ice_64.png")),
-								loadTexture(renderer, loadImage("../inc/img/ice_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/ice_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/ice_128.png")),
 								"ice");
+
+	// Loading snow block textures
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/block_snow_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/block_snow_128.png")),
+						"snow");
 
 	// Loading sand block textures
 	index = addTextureToTable(	textures,
@@ -178,7 +184,7 @@ int displayMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, in
 				if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "block"), blockPos.x, blockPos.y);
 				else				displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
 			}
-			else if ((*(grid+i*xSize+j)).tile_id <= 5)
+			else if ((*(grid+i*xSize+j)).tile_id <= 7)
 			{
 				if (pxBase == 64)	displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].texture, blockPos.x, blockPos.y);
 				else 				displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].big_texture, blockPos.x, blockPos.y);
