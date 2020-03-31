@@ -13,6 +13,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <pthread.h>
+#include <dirent.h>
+#define _NB_MAX_MAPS_ 20
 
 
 SDL_Texture *background_Multi = NULL,
@@ -32,6 +34,10 @@ int isIPValid = 0;
 int isInfoJoinSet = 0;
 int isClientCo = 0;
 int music_Multi_playing = 1;
+int mapListMultiIndex = 0;
+int isMapMultiValid = 0;
+int indexMapMulti = 0;
+
 
 char pseudoSrv[50] = "Pseudo : ";
 char pseudoJoin[50] = "Pseudo : ";
@@ -39,6 +45,9 @@ char pseudoUser[50];
 char ipSrv[85];
 char ipJoin[90] = "IP : ";
 char *compo;
+char *mapListMulti[_NB_MAX_MAPS_];
+char mapNameMulti[50] = "map_";
+char mapMultiSelected[50];
 
 extern Sint32 cursor;
 extern Sint32 selection_len;
@@ -119,6 +128,34 @@ void freeMultiMenuTextures()
 	SDL_DestroyTexture(ok_button_Multi);
 }
 
+int listMapsMulti(char *mapListMulti[])
+// List all the maps and save them in mapList
+{
+	int index = 0;
+	DIR * d;
+	struct dirent *dir;
+
+	d = opendir("../maps");
+	if (!d){
+		printf("Aucune map sauvegardée\n");
+		return -1;
+	}
+	else
+	{
+		while ((dir = readdir(d)) != NULL)
+		{
+			if (strcmp(dir->d_name, ".") && strcmp(dir->d_name, ".."))
+			{
+				mapListMulti[index] = dir->d_name;
+				index++;
+			}
+		}
+		closedir(d);
+	}
+
+	return index;
+}
+
 void dispLog(SDL_Renderer *renderer, int consoleX, int consoleY){
 
 	
@@ -134,7 +171,7 @@ void dispLog(SDL_Renderer *renderer, int consoleX, int consoleY){
 }
 
 
-void dispHostMenu(SDL_Renderer *renderer, int x, int y){
+void dispHostMenu(SDL_Renderer *renderer, int x, int y, int index){
 
 	SDL_Rect console;
 			console.x = x-(40+450);
@@ -151,15 +188,30 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 	SDL_Rect inputSrv;
 			inputSrv.x = 40;
 			inputSrv.y = 350;
-			inputSrv.w = 300;
-			inputSrv.h = 150;
+			inputSrv.w = 400;
+			inputSrv.h = 300;
 	
 	SDL_Rect pseudoHostBox;
 			pseudoHostBox.x = 150;
 			pseudoHostBox.y = 400;
-			pseudoHostBox.w = 150;
+			pseudoHostBox.w = 250;
 			pseudoHostBox.h = 28;
+
+	SDL_Rect mapListBox;
+			mapListBox.x = 75;
+			mapListBox.y = 490;
+			mapListBox.w = 325;
+			mapListBox.h = 30;
 	
+	
+	
+
+	int nbMaps = listMapsMulti(mapListMulti);
+
+	if (index <= 0) 		index = 0, 			indexMapMulti = 0;
+	if (index > nbMaps-1)	index = nbMaps-1,	indexMapMulti = nbMaps-1;
+
+	sprintf(mapNameMulti, "%s", mapListMulti[index]);
 
 	
     /* Background image */
@@ -185,13 +237,32 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y){
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, 85, 34, 0, 185);
 	SDL_RenderFillRect(renderer, &inputSrv);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 185);
-	SDL_RenderFillRect(renderer, &pseudoHostBox);
+	if(isPseudoValid == 1){
+		SDL_SetRenderDrawColor(renderer, 126, 190, 135, 185);
+		SDL_RenderFillRect(renderer, &pseudoHostBox);
+	}else{
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 185);
+		SDL_RenderFillRect(renderer, &pseudoHostBox);
+	}
 	displayText(renderer, inputSrv.x + 10, inputSrv.y + 15 , 22, "Saisir votre Pseudo : ", "../inc/font/Pixels.ttf", 255, 255, 255);
 	displayText(renderer, inputSrv.x + 15, inputSrv.y + 50, 22, pseudoSrv, "../inc/font/PixelOperator.ttf", 255, 255, 255);
-	displaySprite(renderer, ok_button_Multi, 50, 340);
-	displayText(renderer, 150, 430, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255);
 
+	displayText(renderer, mapListBox.x - 30, mapListBox.y - 30 , 22, "Chosir une map : ", "../inc/font/Pixels.ttf", 255, 255, 255);
+	displayText(renderer, mapListBox.x - 15, mapListBox.y + 3 , 22, "<", "../inc/font/Pixels.ttf", 255, 255, 255);
+	displayText(renderer, mapListBox.x + mapListBox.w + 5, mapListBox.y + 4, 22, ">", "../inc/font/Pixels.ttf", 255, 255, 255);
+	
+	if(isPseudoValid == 1){
+		SDL_SetRenderDrawColor(renderer, 126, 190, 135, 185);
+		SDL_RenderFillRect(renderer, &mapListBox);
+	}else{
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 185);
+		SDL_RenderFillRect(renderer, &mapListBox);
+	}
+	if (mapListMulti[index] != NULL) displayText(renderer, mapListBox.x + 10, mapListBox.y + 4, 20, mapNameMulti, "../inc/font/Pixels.ttf", 255, 255, 255);
+
+	displaySprite(renderer, ok_button_Multi, 50, mapListBox.y + mapListBox.h + 20);
+	displayText(renderer, 150, mapListBox.y + mapListBox.h + 110, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	
 
 	/*-------------------input box Host menu -------------------------*/
 	
@@ -255,8 +326,14 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, 85, 34, 0, 185);
 	SDL_RenderFillRect(renderer, &inputJoin);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 185);
-	SDL_RenderFillRect(renderer, &pseudoJoinBox);
+	if(isPseudoValid == 1){
+		SDL_SetRenderDrawColor(renderer, 126, 190, 135, 185);
+		SDL_RenderFillRect(renderer, &pseudoJoinBox);
+	}else{
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 185);
+		SDL_RenderFillRect(renderer, &pseudoJoinBox);
+	}
+
 	displayText(renderer, inputJoin.x + 10, inputJoin.y + 15 , 22, "Saisir votre Pseudo : ", "../inc/font/Pixels.ttf", 255, 255, 255);
 	displayText(renderer, inputJoin.x + 15, inputJoin.y + 50, 22, pseudoJoin, "../inc/font/PixelOperator.ttf", 255, 255, 255);
 	displaySprite(renderer, ok_button_Multi, 50, 340);
@@ -267,8 +344,14 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, 85, 34, 0, 185);
 	SDL_RenderFillRect(renderer, &infoJoin);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 185);
-	SDL_RenderFillRect(renderer, &ipJoinBox);
+	if(isIPValid == 1){
+		SDL_SetRenderDrawColor(renderer, 126, 190, 135, 185);
+		SDL_RenderFillRect(renderer, &ipJoinBox);
+	}else{
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 185);
+		SDL_RenderFillRect(renderer, &ipJoinBox);
+	}
+	
 	displayText(renderer, infoJoin.x + 10, infoJoin.y + 15 , 22, "Saisir l'ip du serveur : ", "../inc/font/Pixels.ttf", 255, 255, 255);
 	displayText(renderer, infoJoin.x + 15, infoJoin.y + 50, 22, ipJoin, "../inc/font/PixelOperator.ttf", 255, 255, 255);
 	displaySprite(renderer, ok_button_Multi, 480, 360);
@@ -295,6 +378,7 @@ int displayMenuMulti(int x, int y)
 
     int xWinSize;
 	int yWinSize;
+	
 
      /* Initialisation simple */
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0 ) {
@@ -345,7 +429,7 @@ int displayMenuMulti(int x, int y)
                     if(isJoinMenu == 1){
                         dispJoinMenu(renderer, x, y);
                     }else{
-                        dispHostMenu(renderer, x, y);
+                        dispHostMenu(renderer, x, y, indexMapMulti);
                     }
                 }
 				switch(u.type) {
@@ -396,7 +480,7 @@ int displayMenuMulti(int x, int y)
 							isHostMenu = 1;
                             printf("Host cliqué :) \n");
                             
-                            dispHostMenu(renderer, x, y);
+                            dispHostMenu(renderer, x, y, indexMapMulti);
 						}
 
 						// Bouton "Join"
@@ -414,8 +498,39 @@ int displayMenuMulti(int x, int y)
 							inputPseudoBtn = 1;
 							inputIpBtn = 0;
 						}
-						else if (u.motion.x >= 127 && u.motion.x <= 241 && u.motion.y >= 441 && u.motion.y <= 479 && (isJoinMenu == 1 || isHostMenu == 1) && isPseudoValid == 0){
+
+						//Input Host box
+						else if (u.motion.x >= 127 && u.motion.x <= 241 && u.motion.y >= 640 && u.motion.y <= 682 && isHostMenu == 1 && isPseudoValid == 0){
 							
+							isPseudoValid = 1;
+							char pseuTemp[50];
+							strcpy(pseuTemp,pseudoSrv);
+							//printf("\npseudo temp : %s\n",pseuTemp);
+							for(int i = 0; i < (strlen(pseuTemp)); i++){
+								pseudoUser[i-9] = pseuTemp[i];
+								//printf("\nps | i : %d | char %c \n", i, pseuTemp[i]);
+							}
+							sprintf(mapMultiSelected, "%s", mapNameMulti);
+							printf("\nTest User pseudo : %s\n",pseudoUser);
+							printf("\n Test mapMultiSelected : %s \n", mapMultiSelected);
+							
+							pthread_create (& threadServ.thread_server, NULL, fn_server, NULL);
+						}
+
+						// MapHost ++
+						else if(u.motion.x >= 404 && u.motion.x <= 422 && u.motion.y >= 496 && u.motion.y <= 518){
+							indexMapMulti ++;
+							dispHostMenu(renderer, x, y, indexMapMulti);
+						}
+						
+						// MapHost --
+						else if(u.motion.x >= 53 && u.motion.x <= 70 && u.motion.y >= 496 && u.motion.y <= 518){
+							indexMapMulti --;
+							dispHostMenu(renderer, x, y, indexMapMulti);
+						}
+
+						//Pseudo Box
+						else if (u.motion.x >= 127 && u.motion.x <= 241 && u.motion.y >= 441 && u.motion.y <= 479 && (isJoinMenu == 1 || isHostMenu == 1) && isPseudoValid == 0){
 							isPseudoValid = 1;
 							
 							char pseuTemp[50];
@@ -430,15 +545,15 @@ int displayMenuMulti(int x, int y)
 								//printf("\nps | i : %d | char %c \n", i, pseuTemp[i]);
 							}
 							printf("\nTest User pseudo : %s\n",pseudoUser);
-							pthread_create (& threadServ.thread_server, NULL, fn_server, NULL);
 						}
-						
+
 						// IPBox
 						else if (u.motion.x >= 520 && u.motion.x <= 868 && u.motion.y >= 399 && u.motion.y <= 429 && isJoinMenu == 1)
 						{
 							inputIpBtn = 1;
 							inputPseudoBtn = 0;
 						}
+						
 						else if (u.motion.x >= 556 && u.motion.x <= 668 && u.motion.y >= 461 && u.motion.y <= 500 && isJoinMenu == 1 && isIPValid == 0){
 							
 							isIPValid = 1;
@@ -453,10 +568,11 @@ int displayMenuMulti(int x, int y)
 							}
 							printf("\nTest IP Join : %s\n",ipSrv);
 						}
+						
+						// IpJoinSet
 						else if (u.motion.x >= 608 && u.motion.x <= 721 && u.motion.y >= 550 && u.motion.y <= 590 && isJoinMenu == 1 && isIPValid == 1 && isPseudoValid == 1){
-							printf("JOIN cliqué ! \n");
-							pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);
 							isInfoJoinSet = 1;
+							pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);				
 						}
 						else if (u.motion.x >= 606 && u.motion.x <= 722 && u.motion.y >= 550 && u.motion.y <= 594 && isHostMenu == 1 && isClientCo == 1){
 							printf("Starting game ... \n");
@@ -471,15 +587,6 @@ int displayMenuMulti(int x, int y)
 							closeWindow(pWindow);
 							freeMultiMenuTextures();
 						}
-
-						// // Bouton "Join"
-						// else if (u.motion.x >= 160 && u.motion.x <= 305 && u.motion.y >= 465 && u.motion.y <= 525)
-						// {
-
-						// 	// dispJoinMenu(renderer, x, y);
-						// 	// SDL_RenderPresent(renderer);
-						// 	// pthread_create (& otherThread.thread_client, NULL, fn_client, NULL);
-						// }
 
 						// Switch musique ON/OFF
 						else if (u.motion.x >= 1202 && u.motion.x <= 1250 && u.motion.y >= 627 && u.motion.y <= 680)
@@ -497,7 +604,7 @@ int displayMenuMulti(int x, int y)
 								displaySprite(renderer, music_on_Multi, x-175, y-200);
 							}
 						}
-						
+			
 						// Bouton "Quit"
 						else if (u.motion.x >= 569 && u.motion.x <= 730 && u.motion.y >= 613 && u.motion.y <= 673)
 						{
@@ -509,7 +616,6 @@ int displayMenuMulti(int x, int y)
 						else{
 							inputIpBtn = 0;
 							inputPseudoBtn = 0;
-
 						}	
 					break;
 					case SDL_KEYDOWN:
@@ -518,7 +624,7 @@ int displayMenuMulti(int x, int y)
 								if(inputPseudoBtn == 1 && isHostMenu == 1){
 									if (strlen(pseudoSrv) > 6){
 										pseudoSrv[strlen(pseudoSrv)-1] = '\0';
-										dispHostMenu(renderer, x, y);
+										dispHostMenu(renderer, x, y,indexMapMulti);
 									}
 								}else if(inputPseudoBtn == 1 && isJoinMenu == 1){
 									if (strlen(pseudoJoin) > 6){
@@ -538,15 +644,13 @@ int displayMenuMulti(int x, int y)
 						if ((isHostMenu == 1) && (inputPseudoBtn == 1))
 						{
 							strcat(pseudoSrv,u.text.text);
-							// printf("%s\n",u.text.text);
-                            // printf("hostmenu = %d", isHostMenu);
-							// printf("Host : %d \nMulti : %d \n",isHostButton,isMultiMenu);
-							dispHostMenu(renderer, x, y);
-							// SDL_RenderPresent(renderer);
-						}else if((isJoinMenu == 1) && (inputPseudoBtn == 1)){
+							dispHostMenu(renderer, x, y, indexMapMulti);
+						}
+						else if((isJoinMenu == 1) && (inputPseudoBtn == 1)){
 							strcat(pseudoJoin, u.text.text);
 							dispJoinMenu(renderer, x, y);
-						}else if ((isJoinMenu == 1) && (inputIpBtn == 1)){
+						}
+						else if ((isJoinMenu == 1) && (inputIpBtn == 1)){
 							strcat(ipJoin,u.text.text);
 							dispJoinMenu(renderer, x, y);
 						}
@@ -556,14 +660,13 @@ int displayMenuMulti(int x, int y)
 							compo = u.edit.text;
 							cursor = u.edit.start;
 							selection_len = u.edit.length;
-							dispHostMenu(renderer, x, y);
-							// SDL_RenderPresent(renderer);
-					    }else if ( isJoinMenu == 1){
+							dispHostMenu(renderer, x, y,indexMapMulti);
+					    }
+						else if ( isJoinMenu == 1){
 							compo = u.edit.text;
 							cursor = u.edit.start;
 							selection_len = u.edit.length;
 							dispJoinMenu(renderer, x, y);
-							// SDL_RenderPresent(renderer);
 					    }
                     break;
 				}
@@ -574,9 +677,9 @@ int displayMenuMulti(int x, int y)
 		closeWindow(pWindow);
 		freeMultiMenuTextures();
         SDL_StopTextInput();
-	} else {
+	}
+	else{
 		fprintf(stderr,"Erreur de création de la fenêtre: %s\n",SDL_GetError());
 	}
-
 	return 1;
 }

@@ -9,7 +9,7 @@
 int displayMenuMulti(int x, int y);
 void dispJoinMenu(SDL_Renderer *renderer, int x, int y);
 void dispMultiMenu(SDL_Renderer *renderer, int x, int y);
-void dispHostMenu(SDL_Renderer *renderer, int x, int y);
+void dispHostMenu(SDL_Renderer *renderer, int x, int y, int index);
 void freeMultiMenuTextures();
 void loadMultiMenuTextures(SDL_Renderer *renderer);
 

@@ -21,6 +21,7 @@ extern char pseudoCli[128];
 extern char monIP[85];
 extern char ipSrv[85];
 extern char pseudoUser[50];
+extern char MapMultiSelected[50];
 extern int socketConnectedSrv;
 extern int socketConnectedCli;
 
