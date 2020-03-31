@@ -492,15 +492,21 @@ int displayMenuMulti(int x, int y)
 							dispJoinMenu(renderer, x, y);
 						}
 
-						// PseudoBox
-						else if (u.motion.x >= 150 && u.motion.x <= 305 && u.motion.y >= 399 && u.motion.y <= 432 && (isJoinMenu == 1 || isHostMenu == 1))
+						// PseudoBox Join
+						else if (u.motion.x >= 150 && u.motion.x <= 305 && u.motion.y >= 399 && u.motion.y <= 432 && isJoinMenu == 1)
 						{	
 							inputPseudoBtn = 1;
 							inputIpBtn = 0;
 						}
 
+						// PseudoBox Host
+						else if (u.motion.x >= 150 && u.motion.x <= 401 && u.motion.y >= 404 && u.motion.y <= 432 && isHostMenu == 1 && isPseudoValid == 0)
+						{	
+							inputPseudoBtn = 1;
+						}
+
 						//Input Host box
-						else if (u.motion.x >= 127 && u.motion.x <= 241 && u.motion.y >= 640 && u.motion.y <= 682 && isHostMenu == 1 && isPseudoValid == 0){
+						else if (u.motion.x >= 126 && u.motion.x <= 242 && u.motion.y >= 640 && u.motion.y <= 683 && isHostMenu == 1){
 							
 							isPseudoValid = 1;
 							char pseuTemp[50];
@@ -513,8 +519,9 @@ int displayMenuMulti(int x, int y)
 							sprintf(mapMultiSelected, "%s", mapNameMulti);
 							printf("\nTest User pseudo : %s\n",pseudoUser);
 							printf("\n Test mapMultiSelected : %s \n", mapMultiSelected);
+
+							pthread_create(&threadServ.thread_server, NULL, fn_server, NULL);
 							
-							pthread_create (& threadServ.thread_server, NULL, fn_server, NULL);
 						}
 
 						// MapHost ++
@@ -529,16 +536,15 @@ int displayMenuMulti(int x, int y)
 							dispHostMenu(renderer, x, y, indexMapMulti);
 						}
 
-						//Pseudo Box
+						//Pseudo Box Join
 						else if (u.motion.x >= 127 && u.motion.x <= 241 && u.motion.y >= 441 && u.motion.y <= 479 && (isJoinMenu == 1 || isHostMenu == 1) && isPseudoValid == 0){
 							isPseudoValid = 1;
+							inputPseudoBtn = 1;
+							
 							
 							char pseuTemp[50];
-							if(isHostMenu == 1){
-								strcpy(pseuTemp,pseudoSrv);
-							}else if(isJoinMenu == 1){
-								strcpy(pseuTemp,pseudoJoin);
-							}	
+							strcpy(pseuTemp,pseudoJoin);
+								
 							//printf("\npseudo temp : %s\n",pseuTemp);
 							for(int i = 0; i < (strlen(pseuTemp)); i++){
 								pseudoUser[i-9] = pseuTemp[i];
@@ -574,6 +580,7 @@ int displayMenuMulti(int x, int y)
 							isInfoJoinSet = 1;
 							pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);				
 						}
+						
 						else if (u.motion.x >= 606 && u.motion.x <= 722 && u.motion.y >= 550 && u.motion.y <= 594 && isHostMenu == 1 && isClientCo == 1){
 							printf("Starting game ... \n");
 							closeWindow(pWindow);
