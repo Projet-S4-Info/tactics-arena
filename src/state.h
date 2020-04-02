@@ -15,8 +15,8 @@ typedef struct {
 } StateList;
 
 err_t init_list(StateList * list);
-int out_of_list(StateList * list);
-int list_empty(StateList * list);
+bool out_of_list(StateList * list);
+bool list_empty(StateList * list);
 err_t start_list(StateList * list);
 err_t end_list(StateList * list);
 err_t list_next(StateList * list);

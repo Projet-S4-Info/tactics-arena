@@ -13,12 +13,12 @@ err_t init_list(StateList * list)
     return OK;
 }
 
-int out_of_list(StateList * list)
+bool out_of_list(StateList * list)
 {
     return list->ec == list->drapeau;
 }
 
-int list_empty(StateList * list)
+bool list_empty(StateList * list)
 {
     return list->drapeau->suiv == list->drapeau;
 }
