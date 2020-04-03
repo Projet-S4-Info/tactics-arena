@@ -109,17 +109,6 @@ void sendStruct(void * structure, int size, int socket){
   }
 }
 
-
-const char * realStr(){
-
-  printf("Saisir votre message : ");
-  scanf(" %[^\n]", monStr);
-
-  printf("\n votre message : %s \n", monStr);
-
-  return monStr;
-}
-
 void sendMsg(int socket, char pseudo[128], t_msgChat monMsg){
   int sockCli;
   char buffer[MAX_BUFF_SIZE];
