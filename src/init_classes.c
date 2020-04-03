@@ -4,6 +4,58 @@
 Coord * one_c;
 Damage * one_a;
 Damage * one_m;
+Coord * aoe51;
+Coord * aoe103;
+
+err_t init_aoe()
+{
+    int i,x,y;
+
+    Coord * aoe51=malloc(sizeof(Coord)*51);
+    if(aoe51==NULL) return POINTER_NULL;
+    i=0,x=-3,y=-4;
+    while(x<=3)
+    {
+        if(!(( abs(x)==3 && abs(y)>=3) || (abs(x)==2 && abs(y)==4) ))
+        {
+            aoe51[i].x=x;
+            aoe51[i].y=y;
+            i++;
+        }
+        if((y=4))
+        {
+            y=-4;
+            x++;
+        }
+        else y++;
+    }
+    if(i!=51)
+        return INIT_COORD_ERR;
+
+    Coord * aoe103=malloc(sizeof(Coord)*103);
+    if(aoe103==NULL) return POINTER_NULL;
+    i=0,x=-5,y=-6;
+    while(x<=5)
+    {
+        if(!(( abs(x)==5 && abs(y)>=3 ) || (abs(y)==6 && abs(x)>=2) || (abs(x)==4 && abs(y)>=4) || (abs(x)==3 && abs(y)==5)))
+        {
+            aoe103[i].x=x;
+            aoe103[i].y=y;
+            i++;
+        }
+        if((y=6))
+        {
+            y=-6;
+            x++;
+        }
+        else y++;
+    }
+
+    if(i!=103)
+        return INIT_COORD_ERR;
+
+    return OK;
+}
 
 err_t init_repetitives()
 {
@@ -22,7 +74,7 @@ err_t init_repetitives()
     *one_a = dtmp1;
     *one_m = dtmp2;
 
-    return OK;
+    return init_aoe();
 }
 
 err_t init_berserker(Class * c)
@@ -34,28 +86,6 @@ err_t init_berserker(Class * c)
 
     *FD = dtmp;
 
-    Coord * ult=malloc(sizeof(Coord)*51);
-    if(ult==NULL) return POINTER_NULL;
-    int i=0,x=-3,y=-4;
-    while(x<=3)
-    {
-        if(!(( abs(x)==3 && abs(y)>=3) || (abs(x)==2 && abs(y)==4) ))
-        {
-            ult[i].x=x;
-            ult[i].y=y;
-            i++;
-        }
-        if((y=4))
-        {
-            y=-4;
-            x++;
-        }
-        else y++;
-    }
-
-    if(i!=51)
-        return INIT_COORD_ERR;
-
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
@@ -65,7 +95,7 @@ err_t init_berserker(Class * c)
     *(ab+1) = abtemp2;
     Ability abtemp3 = {Fury,2,2,0,NULL,1,one_c,0,NULL,TRUE,Fury_fn,{"Fury","Remove all debuffs and permanently increase attack by the number of turns removed."},"../inc/sprites/berserker/sprite_sheet/A3/"};
     *(ab+2) = abtemp3;
-    Ability abtemp4 = {Frenzied_Dash,3,4,9,FD,i,ult,0,NULL,FALSE,NULL,{"Frenzied Dash","Jump to a tile, dealing aoe damage when landing."},"../inc/sprites/berserker/sprite_sheet/A4/"};
+    Ability abtemp4 = {Frenzied_Dash,3,4,9,FD,51,aoe51,0,NULL,FALSE,NULL,{"Frenzied Dash","Jump to a tile, dealing aoe damage when landing."},"../inc/sprites/berserker/sprite_sheet/A4/"};
     *(ab+3) = abtemp4;
     
 
@@ -145,28 +175,6 @@ err_t init_goliath(Class * c)
     Modifier ut= {{0,Provoked,1},1,FOES};
     *u= ut;
 
-    Coord * ult=malloc(sizeof(Coord)*103);
-    if(ult==NULL) return POINTER_NULL;
-    int i=0,x=-5,y=-6;
-    while(x<=5)
-    {
-        if(!(( abs(x)==5 && abs(y)>=3 ) || (abs(y)==6 && abs(x)>=2) || (abs(x)==4 && abs(y)>=4) || (abs(x)==3 && abs(y)==5)))
-        {
-            ult[i].x=x;
-            ult[i].y=y;
-            i++;
-        }
-        if((y=6))
-        {
-            y=-6;
-            x++;
-        }
-        else y++;
-    }
-
-    if(i!=103)
-        return INIT_COORD_ERR;
-
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
@@ -176,7 +184,7 @@ err_t init_goliath(Class * c)
     *(ab+1) = abtemp2;
     Ability abtemp3 = {Detain,2,4,2,NULL,1,one_c,1,d,FALSE,NULL,{"Detain","Capture an Ennemy for three turns."},"../inc/sprites/goliath/sprite_sheet/A3/"};
     *(ab+2) = abtemp3;
-    Ability abtemp4 = {Banner,3,5,0,NULL,i,ult,1,u,FALSE,Banner_fn,{"Banner","Provoke all ennemies in a zone for one turn and reset all allies' cooldowns."},"../inc/sprites/goliath/sprite_sheet/A4/"};
+    Ability abtemp4 = {Banner,3,5,0,NULL,103,aoe103,1,u,FALSE,Banner_fn,{"Banner","Provoke all ennemies in a zone for one turn and reset all allies' cooldowns."},"../inc/sprites/goliath/sprite_sheet/A4/"};
     *(ab+3) = abtemp4;
 
 
@@ -250,39 +258,16 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
     *thera = py[0];
     *(thera+1) = py[1];
 
-    Coord * fla=malloc(sizeof(Coord)*103);
-    if(fla==NULL) return POINTER_NULL;
-    int i=0,x=-5,y=-6;
-    while(x<=5)
-    {
-        if(!(( abs(x)==5 && abs(y)>=3 ) || (abs(y)==6 && abs(x)>=2) || (abs(x)==4 && abs(y)>=4) || (abs(x)==3 && abs(y)==5)))
-        {
-            fla[i].x=x;
-            fla[i].y=y;
-            i++;
-        }
-        if((y=6))
-        {
-            y=-6;
-            x++;
-        }
-        else y++;
-    }
-
-    if(i!=103)
-        return INIT_COORD_ERR;
-
-    Coord * ult=malloc(sizeof(Coord)*71);
-    if(ult==NULL) return POINTER_NULL;
-    int i1=0;
-    x=-4,y=-5;
+    Coord * aoe71=malloc(sizeof(Coord)*71);
+    if(aoe71==NULL) return POINTER_NULL;
+    int i=0,x=-4,y=-5;
     while(x<=5)
     {
         if(!(( abs(x)==4 && abs(y)>=3 ) || (abs(y)==5 && abs(x)>=2)  || (abs(x)==3 && abs(y)==4)))
         {
-            ult[i1].x=x;
-            ult[i1].y=y;
-            i1++;
+            aoe71[i].x=x;
+            aoe71[i].y=y;
+            i++;
         }
         if((y=5))
         {
@@ -292,30 +277,7 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
         else y++;
     }
 
-    if(i1!=71)
-        return INIT_COORD_ERR;
-
-    Coord * vs=malloc(sizeof(Coord)*51);
-    if(vs==NULL) return POINTER_NULL;
-    int i2=0;
-    x=-3,y=-4;
-    while(x<=3)
-    {
-        if(!(( abs(x)==3 && abs(y)>=3) || (abs(x)==2 && abs(y)==4) ))
-        {
-            vs[i2].x=x;
-            vs[i2].y=y;
-            i2++;
-        }
-        if((y=4))
-        {
-            y=-4;
-            x++;
-        }
-        else y++;
-    }
-
-    if(i2!=51)
+    if(i!=71)
         return INIT_COORD_ERR;
 
 
@@ -323,9 +285,9 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
     movesets[0][0] = abtemp1;
     Ability abtemp2 = {FlameCharge,2,3,10,one_m,1,one_c,1,fire2,TRUE,FlameCharge_fn,{"FlameCharge","Engulf yourself in flames and dash, dealing damage and burning entities in your path."},"../inc/sprites/mage/sprite_sheet/A2/fire"};
     movesets[0][1] = abtemp2;
-    Ability abtemp3 = {Flare,2,3,5,NULL,i,fla,0,NULL,TRUE,Flare_fn,{"Flare","Increases all allies' vision and their mp for two turns, will spot traps in the chosen area."},"../inc/sprites/mage/sprite_sheet/A3/fire"};
+    Ability abtemp3 = {Flare,2,3,5,NULL,103,aoe103,0,NULL,TRUE,Flare_fn,{"Flare","Increases all allies' vision and their mp for two turns, will spot traps in the chosen area."},"../inc/sprites/mage/sprite_sheet/A3/fire"};
     movesets[0][2] = abtemp3;
-    Ability abtemp4 = {Eruption,3,5,12,u,i1,ult,1,fire2,FALSE,NULL,{"Eruption","Deal massive damage in a zone and burn all entities."},"../inc/sprites/mage/sprite_sheet/A4/fire"};
+    Ability abtemp4 = {Eruption,3,5,12,u,71,aoe71,1,fire2,FALSE,NULL,{"Eruption","Deal massive damage in a zone and burn all entities."},"../inc/sprites/mage/sprite_sheet/A4/fire"};
     movesets[0][3] = abtemp4;
 
     Ability abtemp11 = {Icy_Winds,1,0,8,one_m,1,one_c,1,ice1,FALSE,mage_switch,{"Icy Winds","Deals damage and has a chance to freeze target."},"../inc/sprites/mage/sprite_sheet/A1/ice"};
@@ -334,12 +296,12 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
     movesets[1][1] = abtemp12;
     Ability abtemp13 = {Frozen_Armor,2,3,6,NULL,1,one_c,2,armor,FALSE,NULL,{"Frozen Armor","Increase ally physical and magic resistances."},"../inc/sprites/mage/sprite_sheet/A3/ice"};
     movesets[1][2] = abtemp13;
-    Ability abtemp14 = {Blizzard,3,5,12,d,i1,ult,2,ice3,TRUE,Blizzard_fn,{"Blizzard","Deal damage in a zone and highly reduce ennemy vision for a turn, has a chance to freeze ennemies. Water tiles in the are will also freeze."},"../inc/sprites/mage/sprite_sheet/A4/ice"};
+    Ability abtemp14 = {Blizzard,3,5,12,d,71,aoe71,2,ice3,TRUE,Blizzard_fn,{"Blizzard","Deal damage in a zone and highly reduce ennemy vision for a turn, has a chance to freeze ennemies. Water tiles in the are will also freeze."},"../inc/sprites/mage/sprite_sheet/A4/ice"};
     movesets[1][3] = abtemp14;
 
     Ability abtemp21 = {Shock,1,0,8,d,1,one_c,0,NULL,FALSE,mage_switch,{"Shock","Zap an ennemy."},"../inc/sprites/mage/sprite_sheet/A1/lightning"};
     movesets[2][0] = abtemp21;
-    Ability abtemp22 = {Volt_Switch,2,3,10,one_m,i2,vs,0,NULL,TRUE,Volt_Switch_fn,{"Volt Switch","Switch spots with an ally and deal electric damage around caster."},"../inc/sprites/mage/sprite_sheet/A2/lightning"};
+    Ability abtemp22 = {Volt_Switch,2,3,10,one_m,51,aoe51,0,NULL,TRUE,Volt_Switch_fn,{"Volt Switch","Switch spots with an ally and deal electric damage around caster."},"../inc/sprites/mage/sprite_sheet/A2/lightning"};
     movesets[2][1] = abtemp22;
     Ability abtemp23 = {Shock_Therapy,2,3,6,NULL,1,one_c,2,thera,FALSE,NULL,{"Shock Therapy","Increase ally atk and magic."},"../inc/sprites/mage/sprite_sheet/A3/lightning"};
     movesets[2][2] = abtemp23;
@@ -368,33 +330,12 @@ err_t init_valkyrie(Class * c)
     Modifier p = {{0,Paralyzed,2},0.4,FOES};
     *para = p;
 
-    Coord * rav=malloc(sizeof(Coord)*51);
-    if(rav==NULL) return POINTER_NULL;
-    int i=0,x=-3,y=-4;
-    while(x<=3)
-    {
-        if(!(( abs(x)==3 && abs(y)>=3) || (abs(x)==2 && abs(y)==4) ))
-        {
-            rav[i].x=x;
-            rav[i].y=y;
-            i++;
-        }
-        if((y=4))
-        {
-            y=-4;
-            x++;
-        }
-        else y++;
-    }
-    if(i!=51)
-        return INIT_COORD_ERR;
-
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
     Ability abtemp1 = {Thrust,1,0,1,one_a,1,one_c,1,para,FALSE,Thrust_fn,{"Thrust","Thrust your spear forward."},"../inc/sprites/valkyrie/sprite_sheet/A1/"};
     *ab = abtemp1;
-    Ability abtemp2 = {Odins_Eyes,2,2,8,one_m,i,rav,1,para,FALSE,NULL,{"Odin's Eyes","Call forth a swarm of crows to deal magic damage to an area."},"../inc/sprites/valkyrie/sprite_sheet/A2/"};
+    Ability abtemp2 = {Odins_Eyes,2,2,8,one_m,51,aoe51,1,para,FALSE,NULL,{"Odin's Eyes","Call forth a swarm of crows to deal magic damage to an area."},"../inc/sprites/valkyrie/sprite_sheet/A2/"};
     *(ab+1) = abtemp2;
     Ability abtemp3 = {Life_Transfer,2,3,8,NULL,1,one_c,0,NULL,TRUE,Life_Transfer_fn,{"Life Transfer","Select an Ennemy and an Ally, heal the ally back to full and slow the ennemy by the amount healed."},"../inc/sprites/valkyrie/sprite_sheet/A3/"};
     *(ab+2) = abtemp3;
@@ -429,33 +370,12 @@ err_t init_angel(Class * c)
     Modifier pb = {{0,Blessed,1},1,ALLIES};
     *bless = pb;
 
-    Coord * sto=malloc(sizeof(Coord)*51);
-    if(sto==NULL) return POINTER_NULL;
-    int i=0,x=-3,y=-4;
-    while(x<=3)
-    {
-        if(!(( abs(x)==3 && abs(y)>=3) || (abs(x)==2 && abs(y)==4) ))
-        {
-            sto[i].x=x;
-            sto[i].y=y;
-            i++;
-        }
-        if((y=4))
-        {
-            y=-4;
-            x++;
-        }
-        else y++;
-    }
-    if(i!=51)
-        return INIT_COORD_ERR;
-
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
     Ability abtemp1 = {Condemn,1,0,6,one_m,1,one_c,0,NULL,FALSE,NULL,{"Condemn","Deal magic damage to an ennemy."},"../inc/sprites/angel/sprite_sheet/A1/"};
     *ab = abtemp1;
-    Ability abtemp2 = {Holy_Storm,2,3,8,one_m,i,sto,1,heal,FALSE,NULL,{"Holy Storm","Deal magic damage to ennemies in an area and heal all allies in the area."},"../inc/sprites/angel/sprite_sheet/A2/"};
+    Ability abtemp2 = {Holy_Storm,2,3,8,one_m,51,aoe51,1,heal,FALSE,NULL,{"Holy Storm","Deal magic damage to ennemies in an area and heal all allies in the area."},"../inc/sprites/angel/sprite_sheet/A2/"};
     *(ab+1) = abtemp2;
     Ability abtemp3 = {Last_Sacrfice,2,5,0,NULL,0,NULL,0,NULL,TRUE,Last_Sacrfice_fn,{"Last Sacrfice","Kill self to resurrect an Ally."},"../inc/sprites/angel/sprite_sheet/A3/"};
     *(ab+2) = abtemp3;
@@ -474,6 +394,58 @@ err_t init_angel(Class * c)
     };
     
     *c = temp;
+
+    return OK;
+}
+
+
+err_t ability_destroy(Ability * a)
+{
+
+    if(a->damage!=NULL)
+    {
+        free(a->damage);
+        a->damage = NULL;
+    }
+
+    if(a->coord!=NULL)
+    {
+        free(a->coord);
+        a->coord = NULL;
+
+    }
+
+    if(a->mods!=NULL)
+    {
+        free(a->mods);
+        a->mods = NULL;
+    }
+
+
+    return OK;
+}
+
+/* DESTRUCTION*/
+
+err_t class_destroy(Class * c)
+{
+    if(c!=NULL)
+    {
+        if(c->cla_abilities!=NULL)
+        {
+            int i;
+            for(i=0; i<NUM_AB; i++)
+            {
+                ability_destroy(c->cla_abilities+i);
+            }
+
+            free(c->cla_abilities);
+            c->cla_abilities = NULL;
+        }
+
+        free(c);
+        c = NULL;
+    }
 
     return OK;
 }

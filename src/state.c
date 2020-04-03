@@ -53,12 +53,26 @@ List_Elem * list_change(StateList * list, int d)
 
 err_t list_remove(StateList * list)
 {
-    List_Elem * temp = list->ec;
-    temp->prec->suiv=temp->suiv;
-    temp->suiv->prec=temp->prec;
-    list->ec=temp->prec;
-    free(temp->value);
-    free(temp);
+    if(!(out_of_list(list)))
+    {
+        List_Elem * temp = list->ec;
+        temp->prec->suiv=temp->suiv;
+        temp->suiv->prec=temp->prec;
+        list->ec=temp->prec;
+
+        if(temp->value!=NULL)
+        {
+            free(temp->value);
+            temp->value = NULL;
+        }
+
+        if(temp!=NULL)
+        {
+            free(temp);
+            temp = NULL;
+        }
+    }
+
     return OK;
 }
 
@@ -118,17 +132,27 @@ bool list_check(StateList * list)
 
 err_t list_destroy(StateList * list)
 {
-    if(!(list_empty(list)))
+    if(list!=NULL)
     {
-        start_list(list);
-        while(!(out_of_list(list)))
+        if(!(list_empty(list)))
         {
-            list_remove(list);
-            list_next(list);
+            start_list(list);
+            while(!(out_of_list(list)))
+            {
+                list_remove(list);
+                list_next(list);
+            }
         }
+
+        if(list->drapeau!=NULL)
+        {
+            free(list->drapeau);
+            list->drapeau = NULL;
+        }
+
+        free(list);
+        list = NULL;
     }
 
-    free(list->drapeau);
-    free(list);
     return OK;
 }

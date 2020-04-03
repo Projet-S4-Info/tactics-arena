@@ -9,7 +9,7 @@ int Bloodlust_counter;
 
 err_t activate_bloodlust(Entity *e, StateList * list)
 {
-    printf("Bloodlust was triggered!\n");
+    if(verbose)printf("Bloodlust was triggered!\n");
     e->stat_mods[atk] *= 2;
 
     Status v = {e->stat_mods[atk]/2,atk,1};
@@ -47,7 +47,7 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target)
         }
         else
         {
-            printf("Block Failed!\n");
+            if(verbose)printf("Block Failed!\n");
         }
         
 
@@ -140,7 +140,7 @@ err_t remove_mod(Status * stat, int cha_id)
     }
     else
     {
-       if(verbose) printf("Modifier to remove is a stat change of a value of %d\n", stat->value);
+        if(verbose)printf("Modifier to remove is a stat change of a value of %d\n", stat->value);
         if(verbose)printf("Stat before the change : %d\n", e->stat_mods[stat->stat]);
         e->stat_mods[stat->stat] += stat->value *-1;
         if(verbose)printf("Stat after the change : %d\n", e->stat_mods[stat->stat]);

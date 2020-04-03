@@ -46,6 +46,8 @@ err_t init_game()
 {
     srand(time(NULL));
 
+    init_repetitives();
+
     init_berserker(&classes[Berserker]);
     init_ranger(&classes[Ranger]);
     init_goliath(&classes[Goliath]);
@@ -63,5 +65,23 @@ err_t init_game()
 
 err_t destroy_game()
 {
+    list_destroy(stSent);
+    list_destroy(stReceived);
+
+    int i,j;
+
+    for(i=0; i<NUM_CLASS; i++)
+    {
+        class_destroy(&classes[i]);
+    }
+
+    for(i=0; i<3; i++)
+    {
+        for(j=0; j<NUM_AB; j++)
+        {
+            ability_destroy(&mage_ab[i][j]);
+        }
+    }
+
     return OK;
 }
