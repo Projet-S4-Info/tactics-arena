@@ -9,4 +9,9 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB]);
 err_t init_valkyrie(Class * c);
 err_t init_angel(Class * c);
 
+err_t init_repetitives();
+
+err_t class_destroy(Class * c);
+err_t ability_destroy(Ability * a);
+
 #endif
