@@ -18,6 +18,7 @@
 #include "menu_multi.h"
 #include "map_editor.h"
 #include "characters.h"
+#include "common.h"
 
 #define X 30
 #define Y 30
@@ -27,7 +28,9 @@
  * \return void
  * \brief Main function
  */
-int main()
+
+bool verbose = FALSE;
+int main(int argc, char * argv[])
 {   
     #ifdef _WIN32
     /*
@@ -40,6 +43,30 @@ int main()
     #endif
 
     int selection = 0;
+
+    int verbose = 0;
+
+    if(argc < 3){
+        printf("\n %d \n", argc);
+        if(argc == 2){
+            if(strcmp(argv[1], "-c") == 0){
+                verbose = TRUE;
+            }else{
+                printf("Argument invalide... \n");
+            }
+        }else if(argc == 1){
+            verbose = FALSE;
+        }
+    }else{
+        printf("Nombre de paramètres incorrectes ...");
+        printf("Usage : ./TacticsArena <arg1> : -c \n");
+    }
+
+    if(verbose == FALSE){
+        printf("Verbose False \n");
+    }else if(verbose == TRUE){
+        printf("Verbose = True \n");
+    }
 
     playMenuMusic(1);
     selection = displayMenu(1280, 720);
