@@ -20,6 +20,15 @@
 Tile grid[_X_SIZE_][_Y_SIZE_];			/**< Contains the pointer to the start of the matrix */
 Tile *matrix = &grid[0][0];
 
+// x and y sizes of the window
+int xWinSize, yWinSize;
+
+// Selected ability
+int selected_ability = 0;
+
+// Ability description
+char description[100];
+
 TabTexture cSprites[50];
 
 void setRendererDriver(SDL_Renderer *renderer)
@@ -243,10 +252,6 @@ int createGameWindow(int x, int y)
 	int XPOS = 50;
 	int YPOS = 50;
 
-	// x and y sizes of the window
-	int xWinSize;
-	int yWinSize;
-
     /* Initialisation simple */
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0 ) {
         fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
@@ -278,6 +283,8 @@ int createGameWindow(int x, int y)
 	}
 
 	setRendererDriver(renderer);
+
+	loadMap(matrix, "map_iceRift");
 
 	// Launcher icon
     SDL_SetWindowIcon(pWindow, loadImage("../inc/img/TacticsArena.png"));
@@ -354,6 +361,20 @@ int createGameWindow(int x, int y)
 							displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 						//}
 
+						// Compétences et actions
+						if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
+						{
+							if (e.motion.x >= 16 && e.motion.x <= 80)	selected_ability = 1;
+							if (e.motion.x >= 96 && e.motion.x <= 160)	selected_ability = 2;
+							if (e.motion.x >= 176 && e.motion.x <= 240)	selected_ability = 3;
+							if (e.motion.x >= 256 && e.motion.x <= 320)	selected_ability = 4;
+							if (e.motion.x >= 336 && e.motion.x <= 400)	selected_ability = 5;
+							printf("Selected ability : %d\n", selected_ability);
+							sprintf(description, "Description competence %d", selected_ability);
+							displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
+						}
+
+
 					break;
 					case SDL_MOUSEWHEEL:
 						if (e.wheel.y > 0)		// Scroll UP
@@ -415,11 +436,6 @@ int createGameWindow(int x, int y)
 						}
 					break;
 					case SDL_MOUSEMOTION:
-
-						if (e.motion.x >= 10 && e.motion.y >= 10)
-						{
-
-						}
 
 					break;
 				}
