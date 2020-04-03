@@ -12,12 +12,17 @@
 
 #define _NB_MAX_TEXTURES_ 50
 #define _NB_MAX_MAPS_ 20
+#define _X_SIZE_ 30
+#define _Y_SIZE_ 30
 
 int isInSaveMenu = 0;
 int isInLoadMenu = 0;
 
 int flagClick = 0;
 Coord moveInit;
+
+Tile blankGrid[_X_SIZE_][_Y_SIZE_];		/**< Contains the pointer to the start of the blank matrix */
+Tile *blankMatrix = &blankGrid[0][0];
 
 // Textures table
 TabTexture textures[_NB_MAX_TEXTURES_];
@@ -256,22 +261,22 @@ int loadMap(Tile * grid, const char * name)
 	return 1;
 }
 
-int changeTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int xSize, int ySize, int toTile)
+int changeTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int toTile)
 // Set the tile selected according to 2D iso from 2D coordinates
 {
 	int xIndex, yIndex, xIsoOrigin, yIsoOrigin, xTile, yTile;
 	float cpAB, cpBC, cpDC, cpAD;
 
 	// On déselectionne toutes les cases
-	for (int i=0; i<xSize; i++){
-		for (int j=0; j<ySize; j++){
-			(*(grid+i*xSize+j)).selected = 0;
+	for (int i=0; i<_X_SIZE_; i++){
+		for (int j=0; j<_Y_SIZE_; j++){
+			(*(grid+i*_X_SIZE_+j)).selected = 0;
 		}
 	}
 
 	// Position de l'origine de la map en 2D isométrique
 	xIsoOrigin = xpos;
-	yIsoOrigin = ypos+ySize*(pxBase/4);
+	yIsoOrigin = ypos+_Y_SIZE_*(pxBase/4);
 
 	// Coordonnées 2D -> 2D iso
 	xIndex = floor(((my-yIsoOrigin)/(pxBase/2) + ((mx-xIsoOrigin)/pxBase)))-1;
@@ -283,7 +288,7 @@ int changeTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 	}
 
 	xTile = xpos+((((xIndex+yIndex)/2)+1)*pxBase);
-	yTile = ypos+((ySize-(yIndex-xIndex))*(pxBase/4)+(pxBase/4));
+	yTile = ypos+((_Y_SIZE_-(yIndex-xIndex))*(pxBase/4)+(pxBase/4));
 
 	// Calcul des coordonnées des 4 coins de la tile
 	Coord A = { xTile, yTile };
@@ -316,28 +321,28 @@ int changeTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 		yIndex--;
 	}
 
-	if (xIndex > xSize-1 || yIndex > ySize-1 || xIndex < 0 || yIndex < 0) return 0;
+	if (xIndex > _X_SIZE_-1 || yIndex > _Y_SIZE_-1 || xIndex < 0 || yIndex < 0) return 0;
 
 	// DEBUG printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
-	(*(grid+xIndex*xSize+yIndex)).tile_id = toTile;
+	(*(grid+xIndex*_X_SIZE_+yIndex)).tile_id = toTile;
 
 	return 1;
 }
 
-void fillMap(Tile * grid, int block_id, int xSize, int ySize)
+void fillMap(Tile * grid, int block_id)
 // Fill the map with the id_block block
 {
-	for (int i = 0; i < xSize; i++)
+	for (int i = 0; i < _X_SIZE_; i++)
 	{
-		for (int j = 0; j < ySize; j++)
+		for (int j = 0; j < _Y_SIZE_; j++)
 		{
-			(*(grid+i*xSize+j)).tile_id = block_id;
+			(*(grid+i*_X_SIZE_+j)).tile_id = block_id;
 		}
 	}
 	printf("[EDITOR] Map remplie avec le bloc [%s] id %d\n", textures[block_id].texture_name, block_id);
 }
 
-int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, int xSize, int ySize, int select, int xWinSize, int yWinSize)
+int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, int select, int xWinSize, int yWinSize)
 // Display the map
 {
 	Coord selectionPos, blockPos, buttonPos;
@@ -346,15 +351,15 @@ int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * gr
     SDL_SetRenderDrawColor(renderer, 173, 216, 230, 255);
 	SDL_RenderClear(renderer);
 
-    for (int i=0; i < xSize; i++){
-        for (int j=(ySize-1); j >= 0; j--){
+    for (int i=0; i < _X_SIZE_; i++){
+        for (int j=(_Y_SIZE_-1); j >= 0; j--){
 
 			blockPos.x = x+(j+1)*(pxBase/2)+(i+1)*(pxBase/2);
-			blockPos.y = y+i*(pxBase/4)+(ySize-j)*(pxBase/4);
+			blockPos.y = y+i*(pxBase/4)+(_Y_SIZE_-j)*(pxBase/4);
 
-			if ((*(grid+i*xSize+j)).tile_id == 1)
+			if ((*(blankMatrix+i*_X_SIZE_+j)).tile_id == 1)
 			{
-				if ((*(grid+i*xSize+j)).selected)
+				if ((*(blankMatrix+i*_X_SIZE_+j)).selected)
 				{
 					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
 					else				displaySprite(renderer, getBigTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
@@ -365,13 +370,13 @@ int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * gr
 					else				displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
 				}
 			}
-			else if ((*(grid+i*xSize+j)).tile_id <= 7)
+			else if ((*(blankMatrix+i*_X_SIZE_+j)).tile_id <= 7)
 			{
-				if (pxBase == 64)	displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].texture, blockPos.x, blockPos.y);
-				else 				displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].big_texture, blockPos.x, blockPos.y);
+				if (pxBase == 64)	displaySprite(renderer, textures[(*(blankMatrix+i*_X_SIZE_+j)).tile_id].texture, blockPos.x, blockPos.y);
+				else 				displaySprite(renderer, textures[(*(blankMatrix+i*_X_SIZE_+j)).tile_id].big_texture, blockPos.x, blockPos.y);
 			}
 
-			if ((*(grid+i*xSize+j)).entity != NULL)	displayCharacters(renderer, cSprites, (*(grid+i*xSize+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
+			if ((*(blankMatrix+i*_X_SIZE_+j)).entity != NULL)	displayCharacters(renderer, cSprites, (*(blankMatrix+i*_X_SIZE_+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
 
 			/*/ -- DEBUG Affichage des indices des tuiles --
 			char pos[6];
@@ -415,7 +420,7 @@ int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * gr
 	displayText(renderer, 220, 20, 20, str, "../inc/font/Pixels.ttf", 255, 255, 255);
 	// -- DEBUG --
 
-	if (isInSaveMenu == 1) displaySaveMenu(renderer, grid, xWinSize, yWinSize, mapName, 1);
+	if (isInSaveMenu == 1) displaySaveMenu(renderer, blankMatrix, xWinSize, yWinSize, mapName, 1);
 	if (isInLoadMenu == 1) displayLoadMenu(renderer, mapList, xWinSize, yWinSize, mapListIndex);
 
 	SDL_RenderPresent(renderer);
@@ -423,7 +428,7 @@ int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * gr
 	return 1;
 }
 
-int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
+int createMapEditorWindow(int x, int y)
 // Create a window with with x*y size (in px)
 {
     // Le pointeur vers la fenetre
@@ -519,7 +524,7 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 
 		SDL_Delay(1);
 
-		displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+		displayEditorMap(renderer, XPOS, YPOS, PX, SELECT, xWinSize, yWinSize);
 
 		SDL_RenderPresent(renderer);
 
@@ -547,7 +552,7 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 
 								SDL_Delay(1);
 
-								displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+								displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 
 								SDL_RenderPresent(renderer);
 
@@ -586,15 +591,15 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 							// Remplir
 							else if (e.motion.y >= yWinSize-160 && e.motion.y <= yWinSize-120)
 							{
-								fillMap(grid, SELECT, xSize, ySize);
+								fillMap(blankMatrix, SELECT);
 							}
 						}
 						else
 						{
-							if (!isInSaveMenu) changeTile(grid, XPOS, YPOS, e.motion.x, e.motion.y, PX, xSize, ySize, SELECT);
+							if (!isInSaveMenu) changeTile(blankMatrix, XPOS, YPOS, e.motion.x, e.motion.y, PX, SELECT);
 						}
 
-						displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+						displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 
 					break;
 					case SDL_MOUSEBUTTONUP:
@@ -611,7 +616,7 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 								printf("[GRAPHICS] Zoom In\n");
 								XPOS *= 2;
 								YPOS *= 2;
-								displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+								displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 							}
 						} else {				// Scroll DOWN
 							if (PX == 128){
@@ -619,7 +624,7 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 								printf("[GRAPHICS] Zoom Out\n");
 								XPOS /= 2;
 								YPOS /= 2;
-								displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+								displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 							}
 						}
 					break;
@@ -633,7 +638,7 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 										printf("[GRAPHICS] Zoom In\n");
 										XPOS *= 2;
 										YPOS *= 2;
-										displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+										displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 									}
 									break;
 								case SDLK_KP_MINUS:	// "-" key
@@ -642,24 +647,24 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 										printf("[GRAPHICS] Zoom Out\n");
 										XPOS /= 2;
 										YPOS /= 2;
-										displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+										displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 									}
 									break;
 								case SDLK_z:		// "z" key
 									YPOS += (10*(PX/64));
-									displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+									displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 									break;
 								case SDLK_q:		// "q" key
 									XPOS += (10*(PX/64));
-									displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+									displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 									break;
 								case SDLK_s:		// "s" key
 									YPOS -= (10*(PX/64));
-									displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+									displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 									break;
 								case SDLK_d:		// "d" key
 									XPOS -= (10*(PX/64));
-									displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+									displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 									break;
 							}
 						}
@@ -669,35 +674,35 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 							{
 								if (strlen(mapName) > 4){
 									mapName[strlen(mapName)-1] = '\0';
-									displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+									displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 								}
 							}
 							else if (e.key.keysym.sym == SDLK_RETURN)
 							{
-								if (isInSaveMenu == 1) saveMap(grid, mapName);
+								if (isInSaveMenu == 1) saveMap(blankMatrix, mapName);
 								if (isInLoadMenu == 1)
 								{
 									listMaps(mapList);
 									char mapSelected[50];
 									sprintf(mapSelected, "%s", mapList[mapListIndex]);
-									loadMap(grid, mapSelected);
+									loadMap(blankMatrix, mapSelected);
 								}
 								isInSaveMenu = 0;
 								isInLoadMenu = 0;
-								displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+								displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 							}
 							else if (e.key.keysym.sym == SDLK_ESCAPE)
 							{
 								isInSaveMenu = 0;
 								isInLoadMenu = 0;
-								displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+								displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 							}
 							else if (e.key.keysym.sym == SDLK_LEFT)
 							{
 								if (isInLoadMenu == 1)
 								{
 									mapListIndex--;
-									displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+									displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 								}
 							}
 							else if (e.key.keysym.sym == SDLK_RIGHT)
@@ -705,7 +710,7 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 								if (isInLoadMenu == 1)
 								{
 									mapListIndex++;
-									displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+									displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 								}
 							}
 						}
@@ -715,7 +720,7 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 						if (isInSaveMenu == 1)
 						{
 							strcat(mapName, e.text.text);
-							displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+							displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 						}
 					break;
 					case SDL_TEXTEDITING:
@@ -724,14 +729,14 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 							composition = e.edit.text;
 							cursor = e.edit.start;
 							selection_len = e.edit.length;
-							displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+							displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 						}
 					case SDL_MOUSEMOTION:
 						if (flagClick)
 						{
 							/*XPOS -= moveInit.x-e.motion.x;
 							YPOS -= moveInit.y-e.motion.y;
-							displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);*/
+							displayEditorMap(renderer, XPOS, YPOS, PX, grid, _X_SIZE_, _Y_SIZE_, SELECT,  xWinSize, yWinSize);*/
 						}
 					break;
 				}
@@ -740,19 +745,19 @@ int createMapEditorWindow(int x, int y, Tile * grid, int xSize, int ySize)
 			// Déplacement de la caméra grâce aux bords de l'écran
 			if (e.motion.x <= xWinSize && e.motion.x >= xWinSize-20){
 				XPOS -= (10*(PX/64));
-				displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+				displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 			}
 			else if (e.motion.x >= 200 && e.motion.x <= 220){
 				XPOS += (10*(PX/64));
-				displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+				displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 			}
-			else if (e.motion.y <= yWinSize && e.motion.y >= yWinSize-20){
+			else if (e.motion.y < yWinSize && e.motion.y >= yWinSize-20){
 				YPOS -= (10*(PX/64));
-				displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+				displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 			}
-			else if (e.motion.y >= 0 && e.motion.y <= 10){
+			else if (e.motion.y <= 10){
 				YPOS += (10*(PX/64));
-				displayEditorMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, SELECT,  xWinSize, yWinSize);
+				displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
 			}
 			SDL_Delay(16);
 

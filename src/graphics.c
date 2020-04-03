@@ -10,6 +10,12 @@
 #include "menu.h"
 #include "characters.h"
 
+#define _X_SIZE_ 30
+#define _Y_SIZE_ 30
+
+Tile grid[_X_SIZE_][_Y_SIZE_];			/**< Contains the pointer to the start of the matrix */
+Tile *matrix = &grid[0][0];
+
 TabTexture cSprites[50];
 
 void setRendererDriver(SDL_Renderer *renderer)
@@ -219,7 +225,7 @@ int closeWindow(SDL_Window *pWindow)
     return 0;
 }
 
-int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize, int pxBase)
+int createGameWindow(int x, int y)
 // Create a window with with x*y size (in px)
 {
     // Le pointeur vers la fenetre
@@ -302,7 +308,7 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize, int pxBase
 
 		SDL_Delay(1);
 
-		displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+		displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 
 		SDL_RenderPresent(renderer);
 
@@ -329,7 +335,7 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize, int pxBase
 
 								SDL_Delay(1);
 
-								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 
 								SDL_RenderPresent(renderer);
 
@@ -340,8 +346,8 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize, int pxBase
 
 						printf("X: %d | Y: %d\n", e.motion.x, e.motion.y);		// Debug console pos x & y on term
 						//if (e.motion.x <= 10*64+XPOS && e.motion.y <= 10*64+YPOS && e.motion.x >= XPOS && e.motion.y >= YPOS){
-							selectTile(grid, XPOS, YPOS, e.motion.x, e.motion.y, PX, xSize, ySize);
-							displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+							selectTile(matrix, XPOS, YPOS, e.motion.x, e.motion.y, PX, _X_SIZE_, _Y_SIZE_);
+							displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 						//}
 
 					break;
@@ -353,7 +359,7 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize, int pxBase
 								printf("[GRAPHICS] Zoom In\n");
 								XPOS *= 2;
 								YPOS *= 2;
-								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 							}
 						} else {				// Scroll DOWN
 							if (PX == 128){
@@ -361,7 +367,7 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize, int pxBase
 								printf("[GRAPHICS] Zoom Out\n");
 								XPOS /= 2;
 								YPOS /= 2;
-								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 							}
 						}
 					break;
@@ -374,7 +380,7 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize, int pxBase
 									printf("[GRAPHICS] Zoom In\n");
 									XPOS *= 2;
 									YPOS *= 2;
-									displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+									displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 								}
 								break;
 							case SDLK_KP_MINUS:	// "-" key
@@ -383,24 +389,24 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize, int pxBase
 									printf("[GRAPHICS] Zoom Out\n");
 									XPOS /= 2;
 									YPOS /= 2;
-									displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+									displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 								}
 								break;
 							case SDLK_z:		// "z" key
 								YPOS += (10*(PX/64));
-								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 								break;
 							case SDLK_q:		// "q" key
 								XPOS += (10*(PX/64));
-								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 								break;
 							case SDLK_s:		// "s" key
 								YPOS -= (10*(PX/64));
-								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 								break;
 							case SDLK_d:		// "d" key
 								XPOS -= (10*(PX/64));
-								displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 								break;
 						}
 					break;
@@ -418,19 +424,19 @@ int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize, int pxBase
 			// Déplacement de la caméra grâce aux bords de l'écran
 			if (e.motion.x <= xWinSize && e.motion.x >= xWinSize-20){
 				XPOS -= (10*(PX/64));
-				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+				displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 			}
 			if (e.motion.x >= 0 && e.motion.x <= 20){
 				XPOS += (10*(PX/64));
-				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+				displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 			}
 			if (e.motion.y <= yWinSize && e.motion.y >= yWinSize-20){
 				YPOS -= (10*(PX/64));
-				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+				displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 			}
-			if (e.motion.y >= 0 && e.motion.y <= 10){
+			if (e.motion.y <= 10){
 				YPOS += (10*(PX/64));
-				displayMap(renderer, XPOS, YPOS, PX, grid, xSize, ySize, cSprites);
+				displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 			}
 
 			// Vérification pour ne pas dépasser des "border" avec la caméra

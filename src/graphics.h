@@ -17,7 +17,7 @@ SDL_Texture * loadTexture(SDL_Renderer * renderer, SDL_Surface * surface);
 void displayText(SDL_Renderer *renderer, int x, int y, int size, const char *content, const char *text_police, int r, int g, int b);
 int displaySprite(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y);
 int closeWindow(SDL_Window *pWindow);
-int createGameWindow(int x, int y, Tile * grid, int xSize, int ySize);
+int createGameWindow(int x, int y);
 int displayMenu(int x, int y);
 
 #endif
