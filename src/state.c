@@ -62,13 +62,13 @@ err_t list_remove(StateList * list)
     return OK;
 }
 
-err_t list_add(StateList * list, Status * v, int entity)
+err_t list_add(StateList * list, Status v, int entity)
 {
     end_list(list);
     
     Status * newstat = malloc(sizeof(Status));
     if(newstat == NULL) return POINTER_NULL;
-    *newstat = *v;
+    *newstat = v;
 
 
     List_Elem * newelem = malloc(sizeof(List_Elem));
