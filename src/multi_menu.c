@@ -238,7 +238,10 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y, int index){
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, 85, 34, 0, 185);
 	SDL_RenderFillRect(renderer, &inputSrv);
-	if(isPseudoValid == 1){
+	if(inputPseudoBtn == 1){
+		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
+		SDL_RenderFillRect(renderer, &pseudoHostBox);
+	}else if(isPseudoValid == 1){
 		SDL_SetRenderDrawColor(renderer, 126, 190, 135, 185);
 		SDL_RenderFillRect(renderer, &pseudoHostBox);
 	}else{
@@ -251,6 +254,7 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y, int index){
 	displayText(renderer, mapListBox.x - 30, mapListBox.y - 30 , 22, "Chosir une map : ", "../inc/font/Pixels.ttf", 255, 255, 255);
 	displayText(renderer, mapListBox.x - 15, mapListBox.y + 3 , 22, "<", "../inc/font/Pixels.ttf", 255, 255, 255);
 	displayText(renderer, mapListBox.x + mapListBox.w + 5, mapListBox.y + 4, 22, ">", "../inc/font/Pixels.ttf", 255, 255, 255);
+	
 	
 	if(isPseudoValid == 1){
 		SDL_SetRenderDrawColor(renderer, 126, 190, 135, 185);
@@ -327,7 +331,10 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, 85, 34, 0, 185);
 	SDL_RenderFillRect(renderer, &inputJoin);
-	if(isPseudoValid == 1){
+	if(inputPseudoBtn == 1){
+		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
+		SDL_RenderFillRect(renderer, &pseudoJoinBox);
+	}else if(isPseudoValid == 1){
 		SDL_SetRenderDrawColor(renderer, 126, 190, 135, 185);
 		SDL_RenderFillRect(renderer, &pseudoJoinBox);
 	}else{
@@ -345,7 +352,10 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, 85, 34, 0, 185);
 	SDL_RenderFillRect(renderer, &infoJoin);
-	if(isIPValid == 1){
+	if(inputIpBtn == 1){
+		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
+		SDL_RenderFillRect(renderer, &ipJoinBox);
+	}else if(isIPValid == 1){
 		SDL_SetRenderDrawColor(renderer, 126, 190, 135, 185);
 		SDL_RenderFillRect(renderer, &ipJoinBox);
 	}else{
@@ -493,12 +503,7 @@ int displayMenuMulti(int x, int y)
 							dispJoinMenu(renderer, x, y);
 						}
 
-						// PseudoBox Join
-						else if (u.motion.x >= 150 && u.motion.x <= 305 && u.motion.y >= 399 && u.motion.y <= 432 && isJoinMenu == 1)
-						{	
-							inputPseudoBtn = 1;
-							inputIpBtn = 0;
-						}
+						
 
 						// PseudoBox Host
 						else if (u.motion.x >= 150 && u.motion.x <= 401 && u.motion.y >= 404 && u.motion.y <= 432 && isHostMenu == 1 && isPseudoValid == 0)
@@ -537,11 +542,17 @@ int displayMenuMulti(int x, int y)
 							dispHostMenu(renderer, x, y, indexMapMulti);
 						}
 
-						//Pseudo Box Join
-						else if (u.motion.x >= 127 && u.motion.x <= 241 && u.motion.y >= 441 && u.motion.y <= 479 && (isJoinMenu == 1 || isHostMenu == 1) && isPseudoValid == 0){
-							isPseudoValid = 1;
+						// PseudoBox Join
+						else if (u.motion.x >= 150 && u.motion.x <= 305 && u.motion.y >= 399 && u.motion.y <= 432 && isJoinMenu == 1)
+						{	
 							inputPseudoBtn = 1;
-							
+							inputIpBtn = 0;
+						}
+
+						//Ok Btn Pseudo Join
+						else if (u.motion.x >= 127 && u.motion.x <= 241 && u.motion.y >= 441 && u.motion.y <= 484 && isJoinMenu == 1 && isPseudoValid == 0){
+							isPseudoValid = 1;
+							inputPseudoBtn = 0;
 							
 							char pseuTemp[50];
 							strcpy(pseuTemp,pseudoJoin);
@@ -561,8 +572,9 @@ int displayMenuMulti(int x, int y)
 							inputPseudoBtn = 0;
 						}
 						
+						// OK Btn join
 						else if (u.motion.x >= 556 && u.motion.x <= 668 && u.motion.y >= 461 && u.motion.y <= 500 && isJoinMenu == 1 && isIPValid == 0){
-							
+							inputIpBtn = 0;
 							isIPValid = 1;
 							char ipTemp[85];
 							
@@ -576,12 +588,13 @@ int displayMenuMulti(int x, int y)
 							if(verbose)printf("\nTest IP Join : %s\n",ipSrv);
 						}
 						
-						// IpJoinSet
+						// Info Join set 
 						else if (u.motion.x >= 608 && u.motion.x <= 721 && u.motion.y >= 550 && u.motion.y <= 590 && isJoinMenu == 1 && isIPValid == 1 && isPseudoValid == 1){
 							isInfoJoinSet = 1;
 							pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);				
 						}
 						
+						// Join Btn after infoJoinSet
 						else if (u.motion.x >= 606 && u.motion.x <= 722 && u.motion.y >= 550 && u.motion.y <= 594 && isHostMenu == 1 && isClientCo == 1){
 							if(verbose)printf("Starting game ... \n");
 							closeWindow(pWindow);
@@ -614,7 +627,7 @@ int displayMenuMulti(int x, int y)
 						}
 			
 						// Bouton "Quit"
-						else if (u.motion.x >= 569 && u.motion.x <= 730 && u.motion.y >= 613 && u.motion.y <= 673)
+						else if (u.motion.x >= 569 && u.motion.x <= 730 && u.motion.y >= 613 && u.motion.y <= 673 && isHostMenu == 0 && isJoinMenu == 0)
 						{
 							closeWindow(pWindow);
 							freeMultiMenuTextures();
@@ -630,12 +643,12 @@ int displayMenuMulti(int x, int y)
 						if (u.key.keysym.sym == SDLK_BACKSPACE)
 							{
 								if(inputPseudoBtn == 1 && isHostMenu == 1){
-									if (strlen(pseudoSrv) > 6){
+									if (strlen(pseudoSrv) > 9){
 										pseudoSrv[strlen(pseudoSrv)-1] = '\0';
 										dispHostMenu(renderer, x, y,indexMapMulti);
 									}
 								}else if(inputPseudoBtn == 1 && isJoinMenu == 1){
-									if (strlen(pseudoJoin) > 6){
+									if (strlen(pseudoJoin) > 9){
 										pseudoJoin[strlen(pseudoJoin)-1] = '\0';
 										dispJoinMenu(renderer, x, y);
 									}
