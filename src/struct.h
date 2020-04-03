@@ -42,6 +42,7 @@ typedef struct
     Coord * coord;
     int nb_mods;
     Modifier * mods;
+    bool only_fn;
     err_t (*function)(action);
     lang eng;
     char sprite_folder[STR_LONG];
