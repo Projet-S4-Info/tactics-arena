@@ -5,3 +5,4 @@ GraphX/SDL2-2.0.10/
 .DS_Store
 obj/
 SDL2/
+SDL2_libraries/
