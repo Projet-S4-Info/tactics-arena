@@ -2,20 +2,20 @@
 #define abilities_h
 #include "struct.h"
 
-err_t mage_switch(action a);
-err_t Killing_Blow_fn(action a);
-err_t Fury_fn(action a);
-err_t Focus_fn(action a);
-err_t Trap_fn(action a);
-err_t Banner_fn(action a);
-err_t FlameCharge_fn(action a);
-err_t Flare_fn(action a);
-err_t Blizzard_fn(action a);
-err_t Volt_Switch_fn(action a);
-err_t Lightning_Chain_fn(action a);
-err_t Thrust_fn(action a);
-err_t Life_Transfer_fn(action a);
-err_t Gates_of_Valhalla_fn(action a);
-err_t Last_Sacrfice_fn(action a);
+bool mage_switch(Coord c, Entity * e, StateList * list);
+bool Killing_Blow_fn(Coord c, Entity * e, StateList * list);
+bool Fury_fn(Coord c, Entity * e, StateList * list);
+bool Focus_fn(Coord c, Entity * e, StateList * list);
+bool Trap_fn(Coord c, Entity * e, StateList * list);
+bool Banner_fn(Coord c, Entity * e, StateList * list);
+bool FlameCharge_fn(Coord c, Entity * e, StateList * list);
+bool Flare_fn(Coord c, Entity * e, StateList * list);
+bool Blizzard_fn(Coord c, Entity * e, StateList * list);
+bool Volt_Switch_fn(Coord c, Entity * e, StateList * list);
+bool Lightning_Chain_fn(Coord c, Entity * e, StateList * list);
+bool Thrust_fn(Coord c, Entity * e, StateList * list);
+bool Life_Transfer_fn(Coord c, Entity * e, StateList * list);
+bool Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list);
+bool Last_Sacrfice_fn(Coord c, Entity * e, StateList * list);
 
 #endif

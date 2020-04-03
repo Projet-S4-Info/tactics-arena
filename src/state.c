@@ -76,7 +76,7 @@ err_t list_remove(StateList * list)
     return OK;
 }
 
-err_t list_add(StateList * list, Status v, int entity)
+err_t list_add(StateList * list, Status v, struct entity_t * entity)
 {
     end_list(list);
     
@@ -99,20 +99,20 @@ err_t list_add(StateList * list, Status v, int entity)
     return OK;
 }
 
-bool list_search(StateList * list, int entity)
+Status * list_search(StateList * list, struct entity_t * entity)
 {
     while(!out_of_list(list))
     {
         if(list->ec->entity == entity)
         {
-            return TRUE;
+            return list->ec->value;
         }
         list_next(list);
     }
-    return FALSE;
+    return NULL;
 }
 
-bool list_check(StateList * list)
+bool list_check(StateList * list) //Returns true if Buff, false if debuff
 {
     if(list->ec->value->value==0)
     {
