@@ -4,7 +4,7 @@
 
 typedef struct listelem{
   Status * value;
-  int entity;
+  struct entity_t * entity;
   struct listelem * suiv;
   struct listelem * prec;
 } List_Elem;
@@ -22,8 +22,8 @@ err_t end_list(StateList * list);
 err_t list_next(StateList * list);
 List_Elem * list_change(StateList * list, int d);
 err_t list_remove(StateList * list);
-err_t list_add(StateList * list, Status v, int entity);
-bool list_search(StateList * list, int entity);
+err_t list_add(StateList * list, Status v, struct entity_t * entity);
+Status * list_search(StateList * list, struct entity_t * entity);
 bool list_check(StateList * list);
 err_t list_destroy(StateList * list);
 

@@ -1,76 +1,76 @@
 #include "struct.h"
 
-err_t mage_switch(action a)
+bool mage_switch(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }
 
-err_t Killing_Blow_fn(action a)
+bool Killing_Blow_fn(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }
 
-err_t Fury_fn(action a)
+bool Fury_fn(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }
 
-err_t Focus_fn(action a)
+bool Focus_fn(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }
 
-err_t Trap_fn(action a)
+bool Trap_fn(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }
 
-err_t Banner_fn(action a)
+bool Banner_fn(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }
 
-err_t FlameCharge_fn(action a)
+bool FlameCharge_fn(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }
 
-err_t Flare_fn(action a)
+bool Flare_fn(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }
 
-err_t Blizzard_fn(action a)
+bool Blizzard_fn(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }
 
-err_t Volt_Switch_fn(action a)
+bool Volt_Switch_fn(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }
 
-err_t Lightning_Chain_fn(action a)
+bool Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }
 
-err_t Thrust_fn(action a)
+bool Thrust_fn(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }
 
-err_t Life_Transfer_fn(action a)
+bool Life_Transfer_fn(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }
 
-err_t Gates_of_Valhalla_fn(action a)
+bool Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }
 
-err_t Last_Sacrfice_fn(action a)
+bool Last_Sacrfice_fn(Coord c, Entity * e, StateList * list)
 {
     return OK;
 }

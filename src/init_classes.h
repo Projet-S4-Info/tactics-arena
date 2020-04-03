@@ -1,6 +1,8 @@
 #ifndef init_classes_h
 #define init_classes_h
-#include "common.h"
+#include "substruct.h"
+
+extern Coord * aoe103;
 
 err_t init_berserker(Class * c);
 err_t init_ranger(Class * c);

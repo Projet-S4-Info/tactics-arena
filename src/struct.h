@@ -7,9 +7,6 @@
 #include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "state.h"
 
-
-
-
 /* BASIC STRUCTURES*/
 typedef struct
 {
@@ -42,8 +39,8 @@ typedef struct
     Coord * coord;
     int nb_mods;
     Modifier * mods;
-    bool only_fn;
-    err_t (*function)(action);
+    fnid fn_use;
+    bool (*function)(Coord, struct entity_t *, StateList *);
     lang eng;
     char sprite_folder[STR_LONG];
 } Ability;
@@ -66,7 +63,7 @@ typedef struct
     // Item List
 } Character;
 
-typedef struct
+typedef struct entity_t
 {
     int cha_id;
     char cha_name[STR_SHORT];

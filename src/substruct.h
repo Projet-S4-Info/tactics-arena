@@ -20,6 +20,10 @@ typedef enum {Cripple, Detained, Provoked, Burning, Freezing, Paralyzed, Blessed
 
 typedef enum {FOES, ALLIES, BOTH} targetType;
 
+typedef enum {NONE, DURING, ONLY, AFTER} fnid;
+
+struct entity_t;
+
 /*Entity Sub Structures*/
 
 typedef struct
