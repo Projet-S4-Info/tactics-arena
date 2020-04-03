@@ -4,7 +4,7 @@
 #include <time.h>
 #include <unistd.h>
 #include "Socket_Server.h"
-
+#include "common.h"
 
 
 
@@ -76,7 +76,7 @@ void getLocalIP(){
           cpt++;
         }
       }
-      printf("L'ip du serveur est : %s", monIP);
+      if(verbose)printf("L'ip du serveur est : %s", monIP);
     }
 }
 
@@ -105,7 +105,7 @@ void sendStruct(void * structure, int size, int socket){
     printf("Impossible d'envoyer la structure... \n");
   }
   else{
-    printf("Structure envoyée ! \n");
+    if(verbose)printf("Structure envoyée ! \n");
   }
 }
 
@@ -136,7 +136,7 @@ void sendMsg(int socket, char pseudo[128], t_msgChat monMsg){
   //printf("\nDEBUG SENDMSG : monMsg.msg:  %s", monMsg.msg);
   sockCli = send(socket,(void *)&monMsg, sizeof(monMsg), 0);
   if(sockCli != SOCKET_ERROR){
-    printf("Message envoyé avec succes ! \n");
+    if(verbose)printf("Message envoyé avec succes ! \n");
   }
   else{
     printf("Send MSG error ... \n");
@@ -184,12 +184,11 @@ void silentChat(int sock, char pseudo[128], t_msgChat monMsg){
 }
 
 int recep(void * container, int size, int socket){
-  printf("bienvenue dans recep \n");
+  if(verbose)printf("bienvenue dans recep \n");
   int flag = 0;
   while(flag == 0){
-    printf("Dans le while \n");
     if(recv(socket,container, size, 0) > -1){
-      printf("struct reçue");
+      if(verbose)printf("struct reçue");
       flag = 1;
     }
   }

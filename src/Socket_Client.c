@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include "Socket_Server.h"
 #include "struct.h"
+#include "common.h"
 
 /*
 * If program run on Windows
@@ -77,7 +78,7 @@ int startTCPSocketCli(int socketCli){
       
   if(!windWSAError){
   servIP = ipSrv;
-  printf("\n%s\n", servIP);
+  if(verbose)printf("\n%s\n", servIP);
   
   /*---------- Initialisation des structures pour les sockets ----*/
   
@@ -88,21 +89,21 @@ int startTCPSocketCli(int socketCli){
   sockIn.sin_port = htons(PORT);
 
   /*-------------------------------------------------------------*/
-    printf("\nLancement de la créatoin du client...\n");
+    if(verbose)printf("\nLancement de la créatoin du client...\n");
     
     //-- Création de la socket (IPv4, TCP, 0)
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if(sock != INVALID_SOCKET){
-      printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
+      if(verbose)printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
 
       // -- Tentative de connection vers le serveur
       if(connect(sock, (SOCKADDR*)&sockIn, sizeof(sockIn)) != SOCKET_ERROR){
-        printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
+       if(verbose) printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
         socketConnectedCli = sock;
-        printf("\nVous vous appelez : %s", pseudoUser);
+        if(verbose)printf("\nVous vous appelez : %s", pseudoUser);
         sprintf(infoMoi.pseudo, "%s", pseudoUser);
-        printf("\nDébut de la communication : \n");
-        printf("socketConnectedCli = %d\n", socketConnectedCli);
+       if(verbose) printf("\nDébut de la communication : \n");
+       if(verbose) printf("socketConnectedCli = %d\n", socketConnectedCli);
 
         sendStruct(&infoMoi, sizeof(infoMoi), socketConnectedCli);
         

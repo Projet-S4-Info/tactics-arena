@@ -86,7 +86,7 @@ void startTCPSocketServ(){
   #endif
 
 
-  printf("\nLancement de la créatoin du serveur...\n");
+  if(verbose)printf("\nLancement de la créatoin du serveur...\n");
   logFlag = 1;
   /*
   * Setting up the socket for all systems
@@ -118,7 +118,7 @@ void startTCPSocketServ(){
     */
     if((sock = socket(AF_INET, SOCK_STREAM, 0)) != INVALID_SOCKET){
   
-      printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
+      if(verbose)printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
       sleep(1);
       logFlag = 2;
       
@@ -130,16 +130,16 @@ void startTCPSocketServ(){
       * Check if the socket is correct
       */
       if(sockError != SOCKET_ERROR){
-        printf("\nDémarrage du serveur... \n");
+        if(verbose)printf("\nDémarrage du serveur... \n");
         /*
         * Starting to connect
         * (max number of connection 5)
         */
         getLocalIP();
-        printf("LIP DU SERV EST %s", monIP);
+        if(verbose)printf("LIP DU SERV EST %s", monIP);
         sockError = listen(sock,5);
         if(sockError != SOCKET_ERROR){
-          printf("\nEn attente de la connexion d'un client...\n");
+          if(verbose)printf("\nEn attente de la connexion d'un client...\n");
           sleep(1);
           logFlag = 3;
           getLocalIP();
@@ -149,17 +149,17 @@ void startTCPSocketServ(){
             
             int choixServ = 0;
             
-            printf("\nConnexion établie avec le client !\n");
+            if(verbose)printf("\nConnexion établie avec le client !\n");
             sleep(1);
             logFlag = 4;
 
             socketConnectedSrv = socketConnected;
-            printf("socketConnectedCli = %d\n", socketConnectedSrv);
+            if(verbose)printf("socketConnectedCli = %d\n", socketConnectedSrv);
 
             if(recep(&infoClient, sizeof(infoClient), socketConnectedSrv) == 1){
-              printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
+              if(verbose)printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
               sprintf(pseudoCli, "%s s'est connecté !", infoClient.pseudo);
-              printf("SocketServer pseudoCli : %s\n", pseudoCli);
+              if(verbose)printf("SocketServer pseudoCli : %s\n", pseudoCli);
               logFlag = 5; 
             }
             
@@ -170,7 +170,7 @@ void startTCPSocketServ(){
             monMsg.ident = 2;
             sprintf(monMsg.msg,"Client");
             if(isPseudoValid == 1){
-              printf("\nVous vous appelez : %s", pseudoUser);
+              if(verbose)printf("\nVous vous appelez : %s", pseudoUser);
               sprintf(monMsg.pseudoChat,"%s",pseudoUser);
             }else{
               printf("\nLe pseudo n'est pas mis \n");

@@ -3,6 +3,7 @@
 #include "grid.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "common.h"
 
 int Bloodlust_counter;
 
@@ -25,7 +26,7 @@ Coord add_coords(Coord a, Coord b)
     c.x = a.x + b.x;
     c.y = a.y + b.y;
 
-    printf("Coords a(%d,%d) and b(%d,%d) added to give c(%d,%d)\n", a.x, a.y, b.x, b.y, c.x, c.y);
+    if(verbose)printf("Coords a(%d,%d) and b(%d,%d) added to give c(%d,%d)\n", a.x, a.y, b.x, b.y, c.x, c.y);
 
     return c;
 }
@@ -36,11 +37,11 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target)
     {
         int block = target->status_effect[Guarding] == 1 ? 70 : 30;
 
-        printf("Block chance : %d\n", block);
+        if(verbose)printf("Block chance : %d\n", block);
 
         if(block>=(rand()%100+1))
         {
-            printf("Block Successful!\n");
+            if(verbose)printf("Block Successful!\n");
             //PLAY ANIMATION
             return FALSE;
         }
@@ -55,13 +56,13 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target)
     float crippled = target->status_effect[Cripple] == 1 ? 1.75 : 1;
 
     if(crippled==1.75)
-        printf("%s is crippled!\n", target->cha_name);
+        if(verbose)printf("%s is crippled!\n", target->cha_name);
 
-    printf("%s's health before the attack : %d\n", target->cha_name, target->stat_mods[pv]);
+    if(verbose)printf("%s's health before the attack : %d\n", target->cha_name, target->stat_mods[pv]);
 
     if(caster->status_effect[Piercing])
     {
-        printf("%s has piercing!\n", caster->cha_name);
+        if(verbose)printf("%s has piercing!\n", caster->cha_name);
         target->stat_mods[pv] -= (caster->stat_mods[d->type] * d->multiplier * crippled)+0.4;
     }
     else
@@ -69,13 +70,13 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target)
         target->stat_mods[pv] -= (caster->stat_mods[d->type]/(1+(target->stat_mods[d->type+2]/15)) * d->multiplier * crippled)+0.4;
     }
 
-    printf("%s's health after the attack : %d\n", target->cha_name, target->stat_mods[pv]);
+    if(verbose)printf("%s's health after the attack : %d\n", target->cha_name, target->stat_mods[pv]);
 
     //UPDATE HEALTH VISUALLY
 
     if(target->stat_mods[pv]<=0)
     {
-        printf("%s was killed!\n", target->cha_name);
+        if(verbose)printf("%s was killed!\n", target->cha_name);
         target->active = Dead;
         return TRUE;
     }
@@ -87,11 +88,11 @@ err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
 {
     if(m.chance*100>=(rand()%100+1))
     {
-        printf("Modifier landed!\n");
+        if(verbose)printf("Modifier landed!\n");
 
         if(m.effect.value==0)
         {
-            printf("Modifier is a status effect!\n");
+            if(verbose)printf("Modifier is a status effect!\n");
             if(m.effect.stat==Provoked)
             {
                 target->status_effect[m.effect.stat] = caster_id;
@@ -100,29 +101,29 @@ err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
             {
                 target->status_effect[m.effect.stat] = 1;
             }
-            printf("Status effect : %d", target->status_effect[m.effect.stat]);
+            if(verbose)printf("Status effect : %d", target->status_effect[m.effect.stat]);
         }
         else
         {
-            printf("Modifier is a stat change of %d\n", m.effect.value);
-            printf("Stat before the change : %d\n", target->stat_mods[m.effect.stat]);
+            if(verbose)printf("Modifier is a stat change of %d\n", m.effect.value);
+            if(verbose)printf("Stat before the change : %d\n", target->stat_mods[m.effect.stat]);
             target->stat_mods[m.effect.stat] += m.effect.value;
             target->stat_mods[m.effect.stat] = target->stat_mods[m.effect.stat]<0 ? 0 : target->stat_mods[m.effect.stat];
-            printf("Stat after the change : %d\n", target->stat_mods[m.effect.stat]);
+            if(verbose)printf("Stat after the change : %d\n", target->stat_mods[m.effect.stat]);
         }
 
         if(m.effect.duration!=0)
         {
-        printf("The mod will last %d turns!\n", m.effect.duration);
+        if(verbose)printf("The mod will last %d turns!\n", m.effect.duration);
         return list_add(list, m.effect, target->cha_id);
         }
         else
-            printf("The mod is permanent!\n");
+           if(verbose) printf("The mod is permanent!\n");
         
     }
     else
     {
-        printf("Modifier not landed!\n");
+        if(verbose)printf("Modifier not landed!\n");
     }
     
     return OK;
@@ -134,15 +135,15 @@ err_t remove_mod(Status * stat, int cha_id)
 
     if(stat->value==0)
     {
-        printf("Modifier to remove is a status effect!\n");
+        if(verbose)printf("Modifier to remove is a status effect!\n");
         e->status_effect[stat->stat] = 0;
     }
     else
     {
-        printf("Modifier to remove is a stat change of a value of %d\n", stat->value);
-        printf("Stat before the change : %d\n", e->stat_mods[stat->stat]);
+       if(verbose) printf("Modifier to remove is a stat change of a value of %d\n", stat->value);
+        if(verbose)printf("Stat before the change : %d\n", e->stat_mods[stat->stat]);
         e->stat_mods[stat->stat] += stat->value *-1;
-        printf("Stat after the change : %d\n", e->stat_mods[stat->stat]);
+        if(verbose)printf("Stat after the change : %d\n", e->stat_mods[stat->stat]);
     }
 
     return OK;
@@ -171,7 +172,7 @@ err_t new_death(Entity * e)
 
     //PLAY DEATH ANIMATION
 
-    printf("%s has been killed!\n", e->cha_name);
+    if(verbose)printf("%s has been killed!\n", e->cha_name);
 
     return OK;
 }
@@ -199,11 +200,11 @@ err_t apply_action(action a)
 
     //ANIMATE THE ACTION
 
-    printf("\n\n%s has chosen to %s at the following coordinates : %d,%d\n", active_ent->cha_name, active_ab.eng.name, a.c.x, a.c.y);
+    if(verbose)printf("\n\n%s has chosen to %s at the following coordinates : %d,%d\n", active_ent->cha_name, active_ab.eng.name, a.c.x, a.c.y);
 
     if(active_ab.only_fn!=TRUE)
     {
-        printf("only_fn = TRUE\n");
+        if(verbose)printf("only_fn = TRUE\n");
         int i,j;
 
         for(i=0; i<active_ab.nb_coords; i++)
@@ -211,11 +212,11 @@ err_t apply_action(action a)
             //e=getEntity(add_coords(a.c, active_ab.coord[i]));
             if(e!=NULL&&(e->cha_id!=Trap+1&&e->cha_id!=(Trap*-1)+1))
             {
-                printf("%s was found in the zone!\n", e->cha_name);
+                if(verbose)printf("%s was found in the zone!\n", e->cha_name);
 
                 if(e->cha_id<0)
                 {
-                    printf("%s is an Ennemy!\n", e->cha_name);
+                    if(verbose)printf("%s is an Ennemy!\n", e->cha_name);
                     if(active_ab.damage!=NULL)
                         if(apply_damage(active_ab.damage, active_ent, e))
                         {
@@ -224,7 +225,7 @@ err_t apply_action(action a)
                 }
                 else
                 {
-                    printf("%s is an Ally!\n", e->cha_name);
+                    if(verbose)printf("%s is an Ally!\n", e->cha_name);
                 }
 
                 if(active_ab.mods!=NULL&&e->active!=Dead)
@@ -249,7 +250,7 @@ err_t apply_action(action a)
     }
     else
     {
-        printf("only_fn = FALSE\n");
+        if(verbose)printf("only_fn = FALSE\n");
     }
     
 
@@ -262,7 +263,7 @@ err_t apply_action(action a)
     }
     else
     {
-        printf("%s is Blessed!\n", active_ent->cha_name);
+        if(verbose)printf("%s is Blessed!\n", active_ent->cha_name);
     }
 
     return OK;

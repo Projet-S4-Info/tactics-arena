@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "../SDL2/include/SDL2/SDL.h"
 #include "../SDL2/include/SDL2/SDL_mixer.h"
+#include "common.h"
 
 Mix_Music* myMus;
 Mix_Music* multiMus;
@@ -16,7 +17,7 @@ int playMenuMusic(int nb)
         return -1;
     }
 
-    printf("[SDL] Audio driver: %s\n", SDL_GetCurrentAudioDriver());
+    if(verbose)printf("[SDL] Audio driver: %s\n", SDL_GetCurrentAudioDriver());
     
     //int i, count = SDL_GetNumAudioDevices(0);
     
@@ -67,7 +68,7 @@ int stopMenuMusic(int nb)
 int pauseMenuMusic()
 // Pause menu music
 {
-    printf("[AUDIO] Music paused\n");
+    if(verbose)printf("[AUDIO] Music paused\n");
     Mix_PauseMusic();
     return 1;
 }
@@ -75,7 +76,7 @@ int pauseMenuMusic()
 int resumeMenuMusic()
 // Resume menu music
 {
-    printf("[AUDIO] Music resumed\n");
+    if(verbose)printf("[AUDIO] Music resumed\n");
     Mix_ResumeMusic();
     return 1;
 }

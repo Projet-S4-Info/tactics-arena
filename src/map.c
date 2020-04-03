@@ -7,6 +7,7 @@
 #include "audio.h"
 #include "graphics.h"
 #include "characters.h"
+#include "common.h"
 
 #define _NB_MAX_TEXTURES_ 50
 
@@ -18,11 +19,11 @@ int loadMapTextures(SDL_Renderer * renderer)
 {
 	int index;
 
-	printf("[GRAPHICS] Effacement des textures pré-existantes...\n");
+	if(verbose)printf("[GRAPHICS] Effacement des textures pré-existantes...\n");
 
 	freeTextures(textures);
 
-	printf("[GRAPHICS] Chargement des textures du jeu...\n");
+	if(verbose)printf("[GRAPHICS] Chargement des textures du jeu...\n");
 
     // Loading blank pattern textures
 	addTextureToTable(	textures,
@@ -78,7 +79,7 @@ int loadMapTextures(SDL_Renderer * renderer)
 								loadTexture(renderer, loadImage("../inc/img/selection_128.png")),
 								"selection");
 
-	printf("[GRAPHICS] %d texture(s) chargée(s) !\n", index+1);
+	if(verbose)printf("[GRAPHICS] %d texture(s) chargée(s) !\n", index+1);
 
 	return index+1;
 }
@@ -117,7 +118,7 @@ int selectTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 
 	xTile = xpos+((((xIndex+yIndex)/2)+1)*pxBase);
 	yTile = ypos+((ySize-(yIndex-xIndex))*(pxBase/4)+(pxBase/4));
-	printf("xTile : %d yTile : %d\n", xTile, yTile);
+	if(verbose)printf("xTile : %d yTile : %d\n", xTile, yTile);
 
 	// Calcul des coordonnées des 4 coins de la tile
 	Coord A = { xTile, yTile };
@@ -152,7 +153,7 @@ int selectTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 
 	if (xIndex > xSize-1 || yIndex > ySize-1 || xIndex < 0 || yIndex < 0) return 0;
 
-	printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
+	if(verbose)printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
 	(*(grid+xIndex*xSize+yIndex)).selected = 1;
 
 	return 1;

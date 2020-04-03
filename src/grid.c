@@ -11,6 +11,7 @@
 #include <time.h>
 #include "grid.h"
 #include "characters.h"
+#include "common.h"
 
 /**
  * \fn void createGrid(Entity * grid, int x, int y)
@@ -43,10 +44,10 @@ void debugGrid(Tile * grid, int x, int y)
 {
     for (int i = 0; i < x; i++){
         for (int j = 0; j < y; j++){
-            printf("%d ", (*(grid+i*x+j)).tile_id);
-            if ((*(grid+i*x+j)).entity != NULL) printf("X");
+            if(verbose)printf("%d ", (*(grid+i*x+j)).tile_id);
+            if ((*(grid+i*x+j)).entity != NULL && verbose == TRUE) printf("X");
         }
-        printf("\n");
+        if(verbose)printf("\n");
     }
 }
 
