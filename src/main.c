@@ -44,8 +44,6 @@ int main(int argc, char * argv[])
 
     int selection = 0;
 
-    int verbose = 0;
-
     if(argc < 3){
         printf("\n %d \n", argc);
         if(argc == 2){
