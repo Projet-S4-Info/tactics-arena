@@ -65,8 +65,8 @@ void startTCPSocketServ(){
     * Create firewall rules
     */
     system("chcp 65001");
-    system("netsh advfirewall firewall add rule name=\"Tactics\" protocol=TCP dir=in localport=50135 action=allow");
-    system("netsh advfirewall firewall add rule name=\"Tactics\" protocol=TCP dir=out localport=50135 action=allow");
+    system("netsh advfirewall firewall add rule name=\"Tactics\" protocol=TCP dir=in localport=3555 action=allow");
+    system("netsh advfirewall firewall add rule name=\"Tactics\" protocol=TCP dir=out localport=3555 action=allow");
     system("ipconfig | findstr /r \"IPv4.*192\" > .test.txt");
     system("cls");
     WSADATA WSAData;
