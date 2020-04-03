@@ -189,7 +189,7 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y, int index){
 			inputSrv.x = 40;
 			inputSrv.y = 350;
 			inputSrv.w = 400;
-			inputSrv.h = 300;
+			inputSrv.h = 350;
 	
 	SDL_Rect pseudoHostBox;
 			pseudoHostBox.x = 150;
