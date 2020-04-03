@@ -19,6 +19,8 @@
 #include "map_editor.h"
 #include "characters.h"
 #include "common.h"
+#include "init.h"
+#include "errt.h"
 
 #define X 30
 #define Y 30
@@ -62,6 +64,8 @@ int main(int argc, char * argv[])
 
     playMenuMusic(1);
     selection = displayMenu(1280, 720);
+    
+    error_message[init_game()];
 
     // Lancement du jeu
     if (selection == 2)
@@ -91,6 +95,8 @@ int main(int argc, char * argv[])
     }
 
     //getchar();  // Wait for the user to press a key to end the program
+
+    error_message[destroy_game()];
 
     return 0;
 }

@@ -10,5 +10,6 @@ extern Entity Allies[NUM_CLASS];
 extern Entity Foes[NUM_CLASS];
 
 err_t init_game();
+err_t destroy_game();
 
 #endif

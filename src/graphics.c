@@ -10,7 +10,10 @@
 #include "menu.h"
 #include "characters.h"
 #include "common.h"
+#include "map_editor.h"
 
+
+#define _NB_MAX_MAPS_ 50
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
 
