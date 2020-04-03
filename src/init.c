@@ -60,3 +60,8 @@ err_t init_game()
 
     return OK;
 }
+
+err_t destroy_game()
+{
+    return OK;
+}

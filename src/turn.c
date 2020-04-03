@@ -4,6 +4,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+int Bloodlust_counter;
+
+err_t activate_bloodlust(Entity *e, StateList * list)
+{
+    printf("Bloodlust was triggered!\n");
+    e->stat_mods[atk] *= 2;
+
+    Status v = {e->stat_mods[atk]/2,atk,1};
+    
+    Bloodlust_counter = -1;
+
+    return list_add(list, v, e->cha_id);
+}
+
 Coord add_coords(Coord a, Coord b)
 {
     Coord c;
@@ -100,7 +114,7 @@ err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
         if(m.effect.duration!=0)
         {
         printf("The mod will last %d turns!\n", m.effect.duration);
-        return list_add(list, &m.effect, target->cha_id);
+        return list_add(list, m.effect, target->cha_id);
         }
         else
             printf("The mod is permanent!\n");
@@ -227,6 +241,11 @@ err_t apply_action(action a)
 
         for(i=0; i<death_count; i++)
             new_death(morts[i]);
+        
+        if(abs(active_ent->cha_id)-1==Berserker && Bloodlust_counter!=-1)
+        {
+            Bloodlust_counter += death_count;
+        }
     }
     else
     {
@@ -266,12 +285,15 @@ Entity * play_check(Entity *E)
     return NULL;
 }
 
-err_t turn()
+err_t local_turn()
 {
     //check sent statelist
     //decrease cooldowns
+
     Entity * active_ent=Allies;
     action a;
+    Bloodlust_counter = 0;
+
     while((active_ent=play_check(active_ent))!=NULL)
     {
         //while action selected is change character
@@ -285,7 +307,11 @@ err_t turn()
             //call mvt function (dont forget to remove semicolon after if)
         else
             apply_action(a);
-        
+
+        if(Bloodlust_counter == 2)
+        {
+            activate_bloodlust(active_ent, stSent);
+        }
     }
 
     //check for local burns
@@ -293,4 +319,3 @@ err_t turn()
 
     return OK;
 }
-
