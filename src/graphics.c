@@ -9,6 +9,7 @@
 #include "map.h"
 #include "menu.h"
 #include "characters.h"
+#include "common.h"
 
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
@@ -28,14 +29,14 @@ void setRendererDriver(SDL_Renderer *renderer)
         printf("[GRAPHICS] Erreur lors de l'obtention des informations du renderer : %s\n", SDL_GetError());
 		return;
     } else {
-		printf("Driver utilisé par le renderer : %s\n", global_renderer_info->name);
-		printf("Résolution maximale des textures : %dpx / %dpx\n", global_renderer_info->max_texture_width, global_renderer_info->max_texture_height);
+		if(verbose)printf("Driver utilisé par le renderer : %s\n", global_renderer_info->name);
+		if(verbose)printf("Résolution maximale des textures : %dpx / %dpx\n", global_renderer_info->max_texture_width, global_renderer_info->max_texture_height);
 	}
 
 	if (!strcmp(global_renderer_info->name, "opengl")){
 		if (SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl"))
 		{
-			printf("[GRAPHICS] Le driver utilisé est maintenant OpenGL\n");
+			if(verbose)printf("[GRAPHICS] Le driver utilisé est maintenant OpenGL\n");
 		} else {
 			printf("[GRAPHICS] Erreur lors du changement de driver : %s\n", SDL_GetError());
 			return;
@@ -80,7 +81,7 @@ int addTextureToTable(TabTexture * texturesTable, SDL_Texture * texture, SDL_Tex
 	texturesTable[index].big_texture = big_texture;
 	texturesTable[index].texture_name = texture_name;
 
-	printf("[GRAPHICS] Ajout de la texture [%s] à l'id %d\n", texture_name, index);
+	if(verbose)printf("[GRAPHICS] Ajout de la texture [%s] à l'id %d\n", texture_name, index);
 
 	return index;
 }
@@ -344,7 +345,7 @@ int createGameWindow(int x, int y)
 					break;
 					case SDL_MOUSEBUTTONDOWN:
 
-						printf("X: %d | Y: %d\n", e.motion.x, e.motion.y);		// Debug console pos x & y on term
+						if(verbose)printf("X: %d | Y: %d\n", e.motion.x, e.motion.y);		// Debug console pos x & y on term
 						//if (e.motion.x <= 10*64+XPOS && e.motion.y <= 10*64+YPOS && e.motion.x >= XPOS && e.motion.y >= YPOS){
 							selectTile(matrix, XPOS, YPOS, e.motion.x, e.motion.y, PX, _X_SIZE_, _Y_SIZE_);
 							displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
@@ -356,7 +357,7 @@ int createGameWindow(int x, int y)
 						{
 							if (PX == 64){
 								PX = 128;
-								printf("[GRAPHICS] Zoom In\n");
+								if(verbose)printf("[GRAPHICS] Zoom In\n");
 								XPOS *= 2;
 								YPOS *= 2;
 								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
@@ -364,7 +365,7 @@ int createGameWindow(int x, int y)
 						} else {				// Scroll DOWN
 							if (PX == 128){
 								PX = 64;
-								printf("[GRAPHICS] Zoom Out\n");
+								if(verbose)printf("[GRAPHICS] Zoom Out\n");
 								XPOS /= 2;
 								YPOS /= 2;
 								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
@@ -377,7 +378,7 @@ int createGameWindow(int x, int y)
 							case SDLK_KP_PLUS: 	// "+" key
 								if (PX == 64){
 									PX = 128;
-									printf("[GRAPHICS] Zoom In\n");
+									if(verbose)printf("[GRAPHICS] Zoom In\n");
 									XPOS *= 2;
 									YPOS *= 2;
 									displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
@@ -386,7 +387,7 @@ int createGameWindow(int x, int y)
 							case SDLK_KP_MINUS:	// "-" key
 								if (PX == 128){
 									PX = 64;
-									printf("[GRAPHICS] Zoom Out\n");
+									if(verbose)printf("[GRAPHICS] Zoom Out\n");
 									XPOS /= 2;
 									YPOS /= 2;
 									displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);

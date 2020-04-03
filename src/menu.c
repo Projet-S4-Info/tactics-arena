@@ -9,6 +9,7 @@
 #include "struct.h"
 #include "graphics.h"
 #include "map_editor.h"
+#include "common.h"
 
 #ifdef _WIN32
 #  include <windows.h>
@@ -43,7 +44,7 @@ int mapIndex = 0;
 void loadMenuTextures(SDL_Renderer *renderer)
 // Load all the textures needed for the menu
 {
-	printf("Chargement des textures du menu...\n");
+	if(verbose)printf("Chargement des textures du menu...\n");
 
 	// == Loading background ==
 	background = loadTexture(renderer, loadImage("../inc/img/menu2_720p.png"));
@@ -182,7 +183,7 @@ int displayMenu(int x, int y)
 					break;
 					case SDL_MOUSEBUTTONDOWN:
 
-						printf("X: %d | Y: %d\n", e.motion.x, e.motion.y);		// Debug console pos x & y on term
+						if(verbose)printf("X: %d | Y: %d\n", e.motion.x, e.motion.y);		// Debug console pos x & y on term
 
 						// Bouton "Start"
 						if (e.motion.x >= 569 && e.motion.x <= 730 && e.motion.y >= 394 && e.motion.y <= 443)

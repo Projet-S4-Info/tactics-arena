@@ -14,6 +14,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <dirent.h>
+#include "common.h"
 #define _NB_MAX_MAPS_ 20
 
 
@@ -90,7 +91,7 @@ static void * fn_client (void * p_data)
 void loadMultiMenuTextures(SDL_Renderer *renderer)
 // Load all the textures needed for the menu
 {
-	printf("Chargement des textures du menu...\n");
+	if(verbose)printf("Chargement des textures du menu...\n");
 
 	// == Loading background ==
 	background_Multi = loadTexture(renderer, loadImage("../inc/img/menu2_720p.png"));
@@ -472,13 +473,13 @@ int displayMenuMulti(int x, int y)
 					break;
 					case SDL_MOUSEBUTTONDOWN:
 
-						printf("\nX: %d | Y: %d\n", u.motion.x, u.motion.y);	// Debug console pos x & y on term
+						if(verbose)printf("\nX: %d | Y: %d\n", u.motion.x, u.motion.y);	// Debug console pos x & y on term
 
 						// Bouton "Host"
 						if (u.motion.x >= 576 && u.motion.x <= 723 && u.motion.y >= 449 && u.motion.y <= 488 && isHostMenu == 0 && isJoinMenu == 0)
 						{
 							isHostMenu = 1;
-                            printf("Host cliqué :) \n");
+                            if(verbose)printf("Host cliqué :) \n");
                             
                             dispHostMenu(renderer, x, y, indexMapMulti);
 						}
@@ -487,7 +488,7 @@ int displayMenuMulti(int x, int y)
 						else if (u.motion.x >= 575 && u.motion.x <= 724 && u.motion.y >= 513 && u.motion.y <= 554 && isHostMenu == 0 && isJoinMenu == 0)
 						{
 							isJoinMenu = 1;
-                            printf("Join cliqué :) \n");
+                           if(verbose)printf("Join cliqué :) \n");
 							
 							dispJoinMenu(renderer, x, y);
 						}
@@ -517,8 +518,8 @@ int displayMenuMulti(int x, int y)
 								//printf("\nps | i : %d | char %c \n", i, pseuTemp[i]);
 							}
 							sprintf(mapMultiSelected, "%s", mapNameMulti);
-							printf("\nTest User pseudo : %s\n",pseudoUser);
-							printf("\n Test mapMultiSelected : %s \n", mapMultiSelected);
+							if(verbose)printf("\nTest User pseudo : %s\n",pseudoUser);
+							if(verbose)printf("\n Test mapMultiSelected : %s \n", mapMultiSelected);
 
 							pthread_create(&threadServ.thread_server, NULL, fn_server, NULL);
 							
@@ -550,7 +551,7 @@ int displayMenuMulti(int x, int y)
 								pseudoUser[i-9] = pseuTemp[i];
 								//printf("\nps | i : %d | char %c \n", i, pseuTemp[i]);
 							}
-							printf("\nTest User pseudo : %s\n",pseudoUser);
+							if(verbose)printf("\nTest User pseudo : %s\n",pseudoUser);
 						}
 
 						// IPBox
@@ -572,7 +573,7 @@ int displayMenuMulti(int x, int y)
 								ipSrv[i-5] = ipTemp[i];
 								//printf("\nipTemp[%d] | char %c \n", i, ipTemp[i]);
 							}
-							printf("\nTest IP Join : %s\n",ipSrv);
+							if(verbose)printf("\nTest IP Join : %s\n",ipSrv);
 						}
 						
 						// IpJoinSet
@@ -582,7 +583,7 @@ int displayMenuMulti(int x, int y)
 						}
 						
 						else if (u.motion.x >= 606 && u.motion.x <= 722 && u.motion.y >= 550 && u.motion.y <= 594 && isHostMenu == 1 && isClientCo == 1){
-							printf("Starting game ... \n");
+							if(verbose)printf("Starting game ... \n");
 							closeWindow(pWindow);
 							freeMultiMenuTextures();
 							stopMenuMusic(2);

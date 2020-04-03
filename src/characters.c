@@ -5,6 +5,7 @@
 #include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "graphics.h"
 #include "substruct.h"
+#include "common.h"
 
 int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
 // Load all the textures needed for the characters
@@ -13,7 +14,7 @@ int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
 
     freeTextures(cSprites);
 
-    printf("Chargement des textures des personnages...\n");
+    if(verbose)printf("Chargement des textures des personnages...\n");
 
     addTextureToTable(  cSprites,
                         loadTexture(renderer, loadImage("../inc/img/heart_16.png")),
@@ -25,7 +26,7 @@ int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
                                     loadTexture(renderer, loadImage("../inc/sprites/base/sprite_sheet/128_128/Sprite_frontview_128.png")),
                                     "base_model");
 
-    printf("[CHARACTERS] %d texture(s) de personnage(s) et icone(s) chargée(s) !\n", nbSprites+1);
+    if(verbose)printf("[CHARACTERS] %d texture(s) de personnage(s) et icone(s) chargée(s) !\n", nbSprites+1);
     return nbSprites;
 }
 

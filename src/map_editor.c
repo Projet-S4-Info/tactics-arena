@@ -9,6 +9,7 @@
 #include "graphics.h"
 #include "map.h"
 #include "characters.h"
+#include "common.h"
 
 #define _NB_MAX_TEXTURES_ 50
 #define _NB_MAX_MAPS_ 20
@@ -44,11 +45,11 @@ int loadEditorTextures(SDL_Renderer * renderer, TabTexture * textures)
 {
 	int index;
 
-	printf("[GRAPHICS] Effacement des textures pré-existantes...\n");
+	if(verbose)printf("[GRAPHICS] Effacement des textures pré-existantes...\n");
 
 	freeTextures(textures);
 
-	printf("[GRAPHICS] Chargement des textures du jeu...\n");
+	if(verbose)printf("[GRAPHICS] Chargement des textures du jeu...\n");
 
     // Loading blank pattern textures
 	addTextureToTable(	textures,
@@ -153,7 +154,7 @@ int loadEditorTextures(SDL_Renderer * renderer, TabTexture * textures)
 								NULL,
 								"save_menu");
 
-	printf("[GRAPHICS] %d texture(s) chargée(s) !\n", index+1);
+	if(verbose)printf("[GRAPHICS] %d texture(s) chargée(s) !\n", index+1);
 
 	return index+1;
 }
@@ -250,7 +251,7 @@ int loadMap(Tile * grid, const char * name)
 	char mapName[20];
 
 	sprintf(mapName, "../maps/%s", name);
-	printf("[EDITOR] Chargement de la map %s...\n", mapName);
+	if(verbose)printf("[EDITOR] Chargement de la map %s...\n", mapName);
 
 	FILE * map;
 	map = fopen(mapName, "rb");
@@ -339,7 +340,7 @@ void fillMap(Tile * grid, int block_id)
 			(*(grid+i*_X_SIZE_+j)).tile_id = block_id;
 		}
 	}
-	printf("[EDITOR] Map remplie avec le bloc [%s] id %d\n", textures[block_id].texture_name, block_id);
+	if(verbose)printf("[EDITOR] Map remplie avec le bloc [%s] id %d\n", textures[block_id].texture_name, block_id);
 }
 
 int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, int select, int xWinSize, int yWinSize)
@@ -613,7 +614,7 @@ int createMapEditorWindow(int x, int y)
 						{
 							if (PX == 64){
 								PX = 128;
-								printf("[GRAPHICS] Zoom In\n");
+								if(verbose)printf("[GRAPHICS] Zoom In\n");
 								XPOS *= 2;
 								YPOS *= 2;
 								displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
@@ -621,7 +622,7 @@ int createMapEditorWindow(int x, int y)
 						} else {				// Scroll DOWN
 							if (PX == 128){
 								PX = 64;
-								printf("[GRAPHICS] Zoom Out\n");
+								if(verbose)printf("[GRAPHICS] Zoom Out\n");
 								XPOS /= 2;
 								YPOS /= 2;
 								displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
@@ -635,7 +636,7 @@ int createMapEditorWindow(int x, int y)
 								case SDLK_KP_PLUS: 	// "+" key
 									if (PX == 64){
 										PX = 128;
-										printf("[GRAPHICS] Zoom In\n");
+										if(verbose)printf("[GRAPHICS] Zoom In\n");
 										XPOS *= 2;
 										YPOS *= 2;
 										displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
@@ -644,7 +645,7 @@ int createMapEditorWindow(int x, int y)
 								case SDLK_KP_MINUS:	// "-" key
 									if (PX == 128){
 										PX = 64;
-										printf("[GRAPHICS] Zoom Out\n");
+										if(verbose)printf("[GRAPHICS] Zoom Out\n");
 										XPOS /= 2;
 										YPOS /= 2;
 										displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);

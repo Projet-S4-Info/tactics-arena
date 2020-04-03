@@ -45,7 +45,6 @@ int main(int argc, char * argv[])
     int selection = 0;
 
     if(argc < 3){
-        printf("\n %d \n", argc);
         if(argc == 2){
             if(strcmp(argv[1], "-c") == 0){
                 verbose = TRUE;
@@ -60,11 +59,6 @@ int main(int argc, char * argv[])
         printf("Usage : ./TacticsArena <arg1> : -c \n");
     }
 
-    if(verbose == FALSE){
-        printf("Verbose False \n");
-    }else if(verbose == TRUE){
-        printf("Verbose = True \n");
-    }
 
     playMenuMusic(1);
     selection = displayMenu(1280, 720);
