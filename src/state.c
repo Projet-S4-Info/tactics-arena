@@ -99,13 +99,20 @@ err_t list_add(StateList * list, Status v, struct entity_t * entity)
     return OK;
 }
 
-Status * list_search(StateList * list, struct entity_t * entity)
+Status * list_search(StateList * list, struct entity_t * entity, statusId status)
 {
     while(!out_of_list(list))
     {
         if(list->ec->entity == entity)
         {
+            if(status==-1)
+            {
             return list->ec->value;
+            }
+            else if(list->ec->value->value == 0 && list->ec->value->stat == status)
+            {
+                return list->ec->value;
+            }
         }
         list_next(list);
     }

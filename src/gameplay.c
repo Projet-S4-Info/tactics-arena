@@ -1,6 +1,18 @@
 #include "init.h"
 #include "grid.h"
 
+int get_range(int vision, int range_mod)
+{
+    int range = range_mod * (vision/10);
+
+    if(range<=0)
+    {
+        range = 1;
+    }
+
+    return range;
+}
+
 bool same_team(Entity *a, Entity *b)
 {
     if(a->cha_id<0&&b->cha_id<0)
@@ -14,33 +26,6 @@ bool same_team(Entity *a, Entity *b)
     {
         return FALSE;
     }
-}
-
-err_t apply_to_ent(action a, Ability active_ab, Entity * active_ent, StateList * list, int * deaths, bool (*standard)(Coord, Ability, Entity *,StateList *), bool (*fn)(Coord, Entity *, StateList *) )
-{
-    int i;
-    Coord c;
-
-    for(i=0; i<active_ab.nb_coords; i++)
-    {
-        //c=add_coords(a.c, active_ab.coord[i])
-        if(standard!=NULL)
-        {
-            if(standard(c,active_ab,active_ent,list))
-            {
-                (*deaths)++;
-            }
-        }
-        if(fn!=NULL)
-        {
-            if(fn(c,active_ent,list))
-            {
-               (*deaths)++; 
-            }
-        }
-    }
-
-    return OK;
 }
 
 Coord add_coords(Coord a, Coord b)
@@ -74,6 +59,24 @@ err_t remove_mod(Status * stat, Entity * e)
     return OK;
 }
 
+Status * renew_mod(Entity * e, statusId status)
+{
+    Status * v;
+
+    start_list(stReceived);
+    v = list_search(stReceived,e,-status);
+    list_remove(stReceived);
+
+    if(v==NULL)
+    {
+        start_list(stSent);
+        v = list_search(stSent,e,-status);
+        list_remove(stSent);
+    }
+
+    return v;
+}
+
 err_t new_death(Entity * e)
 {
     int i;
@@ -88,24 +91,37 @@ err_t new_death(Entity * e)
     Status * v;
 
     start_list(stSent);
-    while((v = list_search(stSent,e))!=NULL)
+    while((v = list_search(stSent,e,-1))!=NULL)
     {
         remove_mod(v, e);
         list_remove(stSent);
     }
 
     start_list(stReceived);
-    while((v = list_search(stReceived,e))!=NULL)
+    while((v = list_search(stReceived,e,-1))!=NULL)
     {
         remove_mod(v, e);
         list_remove(stReceived);
     }
 
     //PLAY DEATH ANIMATION
+    //REMOVE ENTITY FROM MAP
 
     if(verbose)printf("%s has been killed!\n", e->cha_name);
 
     return OK;
+}
+
+bool death_check(Entity * e)
+{
+    if(e->stat_mods[pv]<=0)
+    {
+        if(verbose)printf("%s was killed!\n", e->cha_name);
+        new_death(e);
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 bool apply_damage(Damage * d, Entity * caster, Entity * target)
@@ -127,7 +143,6 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target)
             if(verbose)printf("Block Failed!\n");
         }
         
-
     }
 
     float crippled = target->status_effect[Cripple] == 1 ? 1.75 : 1;
@@ -151,14 +166,86 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target)
 
     //UPDATE HEALTH VISUALLY
 
-    if(target->stat_mods[pv]<=0)
+    return death_check(target);
+
+}
+
+err_t apply_status(Status s, Entity *target, StateList *list, int caster_id)
+{
+    if(verbose)printf("Modifier is a status effect!\n");
+
+    if(target->status_effect[s.stat])
     {
-        if(verbose)printf("%s was killed!\n", target->cha_name);
-        new_death(target);
-        return TRUE;
+        renew_mod(target, s.stat);
+    }
+
+    else if(s.stat==Provoked)
+    {
+        target->status_effect[s.stat] = caster_id;
+    }
+
+    else if(s.stat==Burning && target->status_effect[Freezing])
+    {
+        remove_mod(renew_mod(target, Freezing),target);
+        if(verbose)printf("Attempting to burn %s has thawed him out!\n", target->cha_name);
+    }
+
+    else if(s.stat==Freezing && target->status_effect[Burning])
+    {
+        if(verbose)printf("Target is burning, cannot be frozen!\n");
+        return OK;
+    }
+
+    else
+    {
+        target->status_effect[s.stat] = 1;
+    }
+
+    if(verbose)printf("Status effect : %d", target->status_effect[s.stat]);
+
+    if(s.duration!=0)
+    {
+        if(verbose)printf("The mod will last %d turns!\n", s.duration);
+        return list_add(list, s, target);
     }
     else
-        return FALSE;
+    {
+        if(verbose) printf("The mod is permanent!\n");
+        return OK;
+    }
+
+}
+
+err_t apply_stat_change(Status s, Entity * target, StateList * list)
+{
+    if(verbose)printf("Modifier is a stat change of %d\n", s.value);
+    if(verbose)printf("Stat before the change : %d\n", target->stat_mods[s.stat]);
+
+    target->stat_mods[s.stat] += s.value;
+
+    if(target->stat_mods[s.stat]>20)
+    {
+        s.value -= target->stat_mods[s.stat] - 20;
+        target->stat_mods[s.stat] = 20;
+    }
+    else if(target->stat_mods[s.stat]<0)
+    {
+        s.value -= target->stat_mods[s.stat];
+        target->stat_mods[s.stat] = 0;
+    }
+    
+    if(verbose)printf("Stat after the change : %d\n", target->stat_mods[s.stat]);
+
+    if(s.duration!=0)
+    {
+        if(verbose)printf("The mod will last %d turns!\n", s.duration);
+        return list_add(list, s, target);
+    }
+    else
+    {
+        if(verbose) printf("The mod is permanent!\n");
+        return OK;
+    }
 }
 
 err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
@@ -169,80 +256,16 @@ err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
 
         if(m.effect.value==0)
         {
-            if(verbose)printf("Modifier is a status effect!\n");
-            if(m.effect.stat==Provoked)
-            {
-                target->status_effect[m.effect.stat] = caster_id;
-            }
-            else
-            {
-                target->status_effect[m.effect.stat] = 1;
-            }
-            if(verbose)printf("Status effect : %d", target->status_effect[m.effect.stat]);
+            return apply_status(m.effect,target, list, caster_id);
         }
         else
         {
-            if(verbose)printf("Modifier is a stat change of %d\n", m.effect.value);
-            if(verbose)printf("Stat before the change : %d\n", target->stat_mods[m.effect.stat]);
-            target->stat_mods[m.effect.stat] += m.effect.value;
-            target->stat_mods[m.effect.stat] = target->stat_mods[m.effect.stat]<0 ? 0 : target->stat_mods[m.effect.stat];
-            target->stat_mods[m.effect.stat] = target->stat_mods[m.effect.stat]>20 ? 20 : target->stat_mods[m.effect.stat];
-            if(verbose)printf("Stat after the change : %d\n", target->stat_mods[m.effect.stat]);
+            return apply_stat_change(m.effect,target, list);
         }
-
-        if(m.effect.duration!=0)
-        {
-        if(verbose)printf("The mod will last %d turns!\n", m.effect.duration);
-        return list_add(list, m.effect, target);
-        }
-        else
-           if(verbose) printf("The mod is permanent!\n");
-        
     }
     else
     {
         if(verbose)printf("Modifier not landed!\n");
+        return OK;
     }
-    
-    return OK;
-}
-
-bool standard_apply(Coord c, Ability active_ab, Entity * active_ent, StateList * list)
-{
-    bool death = FALSE;
-    Entity * e;
-    int j;
-
-    //e=getEntity(c);
-    if(e!=NULL&&(e->cha_id!=Trap+1&&e->cha_id!=(Trap*-1)+1))
-    {
-        if(verbose)printf("%s was found in the zone!\n", e->cha_name);
-
-        if(!same_team(e,active_ent))
-        {
-            if(verbose)printf("%s is an Ennemy!\n", e->cha_name);
-            if(active_ab.damage!=NULL)
-                death = apply_damage(active_ab.damage, active_ent, e);
-
-        }
-        else
-        {
-            if(verbose)printf("%s is an Ally!\n", e->cha_name);
-        }
-
-        if(active_ab.mods!=NULL&&e->active!=Dead)
-        {
-            for(j=0; j<active_ab.nb_mods; j++)
-            {
-                if(!same_team(e,active_ent)&&active_ab.mods[j].t!=ALLIES)
-                    apply_mod(active_ab.mods[j],e, list, active_ent->cha_id);
-
-                else if((same_team(e,active_ent)&&active_ab.mods[j].t!=FOES))
-                    apply_mod(active_ab.mods[j],e, list, active_ent->cha_id);
-            }
-        }
-
-    }
-
-    return death;
 }

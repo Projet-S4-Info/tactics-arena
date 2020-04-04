@@ -1,5 +1,6 @@
 #include "gameplay.h"
 #include "init_classes.h"
+#include "init.h"
 
 int Bloodlust_counter;
 
@@ -29,6 +30,17 @@ err_t activate_aura(Entity *e)
             active->stat_mods[pv] = active->stat_mods[pv]==20 ? 20 : active->stat_mods[pv] + 5;
             printf("%s was healed by %s's Aura!\n", active->cha_name, e->cha_name);
         }
+    }
+    return OK;
+}
+
+err_t sentinel_check(Entity *e)
+{
+    //Entity * r = e->cha_id<0 ? &Allies[Ranger] : &Foes[Ranger];
+
+    //int sight = get_range(r->stat_mods[vis], r->cha_class->cla_abilities->range);
+
+    //insert function lucien ici
 
     return OK;
 }
