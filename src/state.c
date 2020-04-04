@@ -107,7 +107,7 @@ Status * list_search(StateList * list, struct entity_t * entity, statusId status
         {
             if(status==-1)
             {
-            return list->ec->value;
+                return list->ec->value;
             }
             else if(list->ec->value->value == 0 && list->ec->value->stat == status)
             {

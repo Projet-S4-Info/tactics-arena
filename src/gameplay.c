@@ -28,6 +28,17 @@ bool same_team(Entity *a, Entity *b)
     }
 }
 
+err_t reset_cooldowns(Entity * e)
+{
+    int i;
+    for(i=0; i<NUM_AB; i++)
+    {
+        e->ab_cooldown[i] = 0;
+    }
+
+    return OK;
+}
+
 Coord add_coords(Coord a, Coord b)
 {
     Coord c;
@@ -79,11 +90,7 @@ Status * renew_mod(Entity * e, statusId status)
 
 err_t new_death(Entity * e)
 {
-    int i;
-    for(i=0; i<NUM_AB; i++)
-    {
-        e->ab_cooldown[i] = 0;
-    }
+    reset_cooldowns(e);
 
     e->active = Dead;
     e->stat_mods[pv]=20;
@@ -95,6 +102,7 @@ err_t new_death(Entity * e)
     {
         remove_mod(v, e);
         list_remove(stSent);
+        list_next(stSent);
     }
 
     start_list(stReceived);
@@ -102,6 +110,7 @@ err_t new_death(Entity * e)
     {
         remove_mod(v, e);
         list_remove(stReceived);
+        list_next(stReceived);
     }
 
     //PLAY DEATH ANIMATION

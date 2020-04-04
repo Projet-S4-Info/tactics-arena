@@ -6,6 +6,7 @@ int get_range(int vision, int range_mod);
 bool same_team(Entity *a, Entity *b);
 Coord add_coords(Coord a, Coord b);
 bool death_check(Entity * e);
+err_t reset_cooldowns(Entity * e);
 
 err_t new_death(Entity * e);
 bool apply_damage(Damage * d, Entity * caster, Entity * target);
