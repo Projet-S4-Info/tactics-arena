@@ -7,6 +7,10 @@
 #include "audio.h"
 #include "struct.h"
 
+extern int xWinSize, yWinSize;
+extern int selected_ability;
+extern char description[100];
+
 void setRendererDriver(SDL_Renderer *renderer);
 void freeTextures(TabTexture * textures);
 int addTextureToTable(TabTexture * texturesTable, SDL_Texture * texture, SDL_Texture * big_texture, const char * texture_name);

@@ -42,3 +42,6 @@ cd ../SDL2_mixer-${V_SDL2_mixer}
 ./configure --prefix=${pwd}/SDL2
 sudo make
 sudo make install
+
+apt get install net-tools
+snap install pulseaudio
