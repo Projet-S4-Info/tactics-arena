@@ -141,7 +141,7 @@ err_t turn_start(Entity *e)
 
 err_t turn_end(Entity *e, StateList * list)
 {
-    int i;
+    int i,j;
     for(i=0; i<NUM_CLASS; i++)
     {
         if((e+i)->status_effect[Burning])
