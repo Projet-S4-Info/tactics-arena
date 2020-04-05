@@ -9,6 +9,7 @@
 
 extern int xWinSize, yWinSize;
 extern int selected_ability;
+extern int hover_ability;
 extern char description[100];
 
 void setRendererDriver(SDL_Renderer *renderer);

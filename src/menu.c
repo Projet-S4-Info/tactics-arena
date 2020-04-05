@@ -121,6 +121,9 @@ int displayMenu(int x, int y)
 	int xWinSize;
 	int yWinSize;
 
+	char * videoDriver;
+    printf("Current video driver : %s\n", SDL_GetCurrentVideoDriver);
+
     /* Initialisation simple */
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0 ) {
         fprintf(stdout,"[MENU] Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());

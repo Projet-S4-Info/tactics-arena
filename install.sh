@@ -21,7 +21,7 @@ tar -zxvf SDL2_ttf-${V_SDL2_ttf}.tar.gz
 tar -zxvf SDL2_mixer-${V_SDL2_mixer}.tar.gz
 
 cd SDL2-${V_SDL2}
-./configure --prefix=${pwd}/SDL2
+./configure --prefix=${pwd}/SDL2 --disable-video-mir
 sudo make
 sudo make install
 

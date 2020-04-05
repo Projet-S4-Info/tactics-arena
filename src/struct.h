@@ -71,6 +71,7 @@ typedef struct entity_t
     Class * cha_class;
     lifeId active;
     Coord coords;
+    Direction direction;
     int act_points;
     int base_stats[NUM_STATS];
     int stat_mods[NUM_STATS];

@@ -87,9 +87,9 @@ int loadMapTextures(SDL_Renderer * renderer)
 
 	// Loading sand block textures
 	index = addTextureToTable(	textures,
-								loadTexture(renderer, loadImage("../inc/img/abilities_menu.png")),
+								loadTexture(renderer, loadImage("../inc/img/turn_end.png")),
 								NULL,
-								"abilities_menu");
+								"end_turn");
 
 	if(verbose)printf("[GRAPHICS] %d texture(s) chargée(s) !\n", index+1);
 
@@ -174,11 +174,15 @@ int selectTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 int displayAbilities(SDL_Renderer *renderer)
 // Display the abilities menu
 {
+	// Abilities icons
 	displaySprite(renderer, getTexture(textures, "attack"), 16, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "attack"), 16+1*80, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "attack"), 16+2*80, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "attack"), 16+3*80, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "attack"), 16+4*80, yWinSize-80);
+
+	// Turn end icon
+	displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize-280, yWinSize-80);
 
 	return 0;
 }
@@ -239,7 +243,11 @@ int displayMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, in
 	displayText(renderer, 20, 20, 20, str, "../inc/font/Pixels.ttf", 255, 255, 255);
 	// -- DEBUG --
 
-	if (selected_ability > 0) displayText(renderer, 16, yWinSize-110, 20, description, "../inc/font/Pixels.ttf", 255, 255, 255);
+	if (selected_ability != 0){
+		displayText(renderer, 16, yWinSize-110, 20, description, "../inc/font/Pixels.ttf", 255, 255, 255);
+	} else {
+		if (hover_ability > 0) displayText(renderer, 16, yWinSize-110, 20, "Description capacite " + (char)hover_ability, "../inc/font/Pixels.ttf", 255, 255, 255);
+	}
 
 	SDL_RenderPresent(renderer);
 

@@ -25,6 +25,8 @@ int xWinSize, yWinSize;
 
 // Selected ability
 int selected_ability = 0;
+// Hover ability
+int hover_ability = 0;
 
 // Ability description
 char description[100];
@@ -284,8 +286,6 @@ int createGameWindow(int x, int y)
 
 	setRendererDriver(renderer);
 
-	loadMap(matrix, "map_iceRift");
-
 	// Launcher icon
     SDL_SetWindowIcon(pWindow, loadImage("../inc/img/TacticsArena.png"));
 
@@ -436,6 +436,18 @@ int createGameWindow(int x, int y)
 						}
 					break;
 					case SDL_MOUSEMOTION:
+						hover_ability = 0;
+						if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
+						{
+							if (e.motion.x >= 16 && e.motion.x <= 80)			hover_ability = 1;
+							else if (e.motion.x >= 96 && e.motion.x <= 160)		hover_ability = 2;
+							else if (e.motion.x >= 176 && e.motion.x <= 240)	hover_ability = 3;
+							else if (e.motion.x >= 256 && e.motion.x <= 320)	hover_ability = 4;
+							else if (e.motion.x >= 336 && e.motion.x <= 400)	hover_ability = 5;
+							else 												hover_ability = 0;
+							displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
+						}
+						displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 
 					break;
 				}
