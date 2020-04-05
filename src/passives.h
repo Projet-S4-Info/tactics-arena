@@ -6,7 +6,7 @@ extern int Bloodlust_counter;
 
 err_t activate_bloodlust(Entity *e, StateList * list);
 
-err_t activate_aura(Entity *e);
+err_t activate_aura(Entity *e, StateList * list);
 
 err_t sentinel_check(Entity *e);
 

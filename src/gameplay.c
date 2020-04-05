@@ -39,6 +39,16 @@ err_t reset_cooldowns(Entity * e)
     return OK;
 }
 
+Coord compare_coords(Coord a, Coord b)
+{
+    Coord c;
+
+    c.x = b.x - a.x;
+    c.y = b.y - a.y;
+
+    return c;
+}
+
 Coord add_coords(Coord a, Coord b)
 {
     Coord c;
@@ -277,4 +287,60 @@ err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
         if(verbose)printf("Modifier not landed!\n");
         return OK;
     }
+}
+
+int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord starting_point)
+{
+    int death_count = 0;
+    int i,j;
+    Coord c;
+    Entity * e;
+
+        for(i=0; i<active_ab.nb_coords; i++)
+        {
+            c=add_coords(starting_point, active_ab.coord[i]);
+
+            //e=getEntity(c);
+            if(e!=NULL)
+            {
+                if(verbose)printf("%s was found in the zone!\n", e->cha_name);
+
+                if(!same_team(e,active_ent))
+                {
+                    if(verbose)printf("%s is an Ennemy!\n", e->cha_name);
+
+                    if(active_ab.damage!=NULL)
+                    {
+                        if(apply_damage(active_ab.damage, active_ent, e))
+                        {
+                            death_count++;
+                        }
+                    }
+
+                }
+                else
+                {
+                    if(verbose)printf("%s is an Ally!\n", e->cha_name);
+                }
+
+                if(active_ab.mods!=NULL && e->active!=Dead)
+                {
+                    for(j=0; j<active_ab.nb_mods; j++)
+                    {
+                        if(!same_team(e,active_ent) && active_ab.mods[j].t!=ALLIES)
+                            apply_mod(active_ab.mods[j],e, list, active_ent->cha_id);
+
+                        else if((same_team(e,active_ent) && active_ab.mods[j].t!=FOES))
+                            apply_mod(active_ab.mods[j],e, list, active_ent->cha_id);
+                    }
+                }
+
+            }
+            if(active_ab.fn_use==DURING)
+            {
+                death_count += active_ab.function(c,active_ent,list); 
+            }
+        }
+
+    return death_count;
 }

@@ -29,69 +29,19 @@ err_t apply_action(action a)
 
     if(verbose)printf("\n\n%s has chosen to %s at the following coordinates : %d,%d\n", active_ent->cha_name, active_ab.eng.name, a.c.x, a.c.y);
 
+    if(active_ab.fn_use==BEFORE)
+    {
+        death_count += active_ab.function(a.c, active_ent, list);
+    }
     
     if(active_ab.fn_use!=ONLY)
     {
-        int i,j;
-        Coord c;
-        Entity * e;
-
-        for(i=0; i<active_ab.nb_coords; i++)
-        {
-            c=add_coords(a.c, active_ab.coord[i]);
-
-            //e=getEntity(c);
-            if(e!=NULL && (e->cha_id!=Trap+1 && e->cha_id!=(Trap*-1)+1))
-            {
-                if(verbose)printf("%s was found in the zone!\n", e->cha_name);
-
-                if(!same_team(e,active_ent))
-                {
-                    if(verbose)printf("%s is an Ennemy!\n", e->cha_name);
-
-                    if(active_ab.damage!=NULL)
-                    {
-                        if(apply_damage(active_ab.damage, active_ent, e))
-                        {
-                            death_count++;
-                        }
-                    }
-
-                }
-                else
-                {
-                    if(verbose)printf("%s is an Ally!\n", e->cha_name);
-                }
-
-                if(active_ab.mods!=NULL && e->active!=Dead)
-                {
-                    for(j=0; j<active_ab.nb_mods; j++)
-                    {
-                        if(!same_team(e,active_ent) && active_ab.mods[j].t!=ALLIES)
-                            apply_mod(active_ab.mods[j],e, list, active_ent->cha_id);
-
-                        else if((same_team(e,active_ent) && active_ab.mods[j].t!=FOES))
-                            apply_mod(active_ab.mods[j],e, list, active_ent->cha_id);
-                    }
-                }
-
-            }
-            if(active_ab.fn_use==DURING)
-            {
-                if(active_ab.function(c,active_ent,list))
-                {
-                    death_count++; 
-                }
-            }
-        }
+        death_count += apply_to(active_ab, active_ent, list, a.c);
     }
 
     if(active_ab.fn_use>=ONLY)
     {
-        if(active_ab.function(a.c, active_ent, list))
-        {
-            death_count++;
-        }
+        death_count += active_ab.function(a.c, active_ent, list);
     }
 
     if(abs(active_ent->cha_id)-1==Berserker && Bloodlust_counter!=-1)
@@ -201,7 +151,7 @@ err_t local_turn()
     
     if(Allies[Angel].active!=Dead)
     {
-        activate_aura(&Allies[Angel]);
+        activate_aura(&Allies[Angel], stSent);
     }
 
     while((active_ent=play_check(active_ent))!=NULL)
@@ -238,7 +188,7 @@ err_t opposing_turn()
 
     if(Foes[Angel].active!=Dead)
     {
-        activate_aura(&Foes[Angel]);
+        activate_aura(&Foes[Angel], stReceived);
     }
 
     /*

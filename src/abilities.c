@@ -3,7 +3,7 @@
 #include "gameplay.h"
 #include "grid.h"
 
-bool Killing_Blow_fn(Coord c, Entity * e, StateList * list)
+int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
 {
     Status v = {3,atk,0};
     Entity * t;
@@ -16,10 +16,10 @@ bool Killing_Blow_fn(Coord c, Entity * e, StateList * list)
             e->act_points+=1;
         }
     }
-    return FALSE;
+    return 0;
 }
 
-bool Fury_fn(Coord c, Entity * e, StateList * list)
+int Fury_fn(Coord c, Entity * e, StateList * list)
 {
     int turns = 0;
     Status * v;
@@ -52,10 +52,16 @@ bool Fury_fn(Coord c, Entity * e, StateList * list)
 
     apply_stat_change(d, e, list);
 
-    return FALSE;
+    return 0;
 }
 
-bool Focus_fn(Coord c, Entity * e, StateList * list)
+int Frenzied_Dash_fn(Coord c, Entity * e, StateList * list)
+{
+    //Switch Coords
+    return 0;
+}
+
+int Focus_fn(Coord c, Entity * e, StateList * list)
 {
     Status * v;
 
@@ -95,16 +101,18 @@ bool Focus_fn(Coord c, Entity * e, StateList * list)
         list_next(stReceived);
     }
 
-    return FALSE;
+    return 0;
 }
 
-bool Trap_fn(Coord c, Entity * e, StateList * list)
+int Trap_fn(Coord c, Entity * e, StateList * list)
 {
-    //VOIR AVEC THIBAULT
-    return FALSE;
+
+    Trap_t t = {e->cha_id, same_team(e, Allies)};
+    //APPLY TRAP TO c
+    return 0;
 }
 
-bool Banner_fn(Coord c, Entity * e, StateList * list)
+int Banner_fn(Coord c, Entity * e, StateList * list)
 {
     Entity * all;
     if(e->cha_id<0)
@@ -122,56 +130,117 @@ bool Banner_fn(Coord c, Entity * e, StateList * list)
         reset_cooldowns(all+i);
     }
 
-    return FALSE;
+    return 0;
 }
 
-bool mage_switch(Coord c, Entity * e, StateList * list)
+int mage_switch(Coord c, Entity * e, StateList * list)
 {
-    
-    return FALSE;
+    int i = rand()%2;
+    if((Ability*)mage_ab+i != e->cha_class->cla_abilities)
+    {
+        e->cha_class->cla_abilities = (Ability*)mage_ab+i;
+    }
+    else
+    {
+        e->cha_class->cla_abilities = (Ability*)mage_ab+2;
+    }
+
+    return 0;
 }
 
-bool FlameCharge_fn(Coord c, Entity * e, StateList * list)
+int FlameCharge_fn(Coord c, Entity * e, StateList * list)
 {
-    return FALSE;
+    Ability F = e->cha_class->cla_abilities[FlameCharge%NUM_AB];
+    //Insert Pathfinding
+    //Change F's zone to match pathfinding route
+    return apply_to(F,e,list,e->coords);
 }
 
-bool Flare_fn(Coord c, Entity * e, StateList * list)
+int Flare_fn(Coord c, Entity * e, StateList * list)
 {
-    return FALSE;
+    Entity * all;
+    if(e->cha_id<0)
+    {
+        all = Foes;
+    }
+    else
+    {
+        all = Allies;
+    }
+
+    Status b_vis = {4,vis,2};
+    Status b_mv = {4,mv,2};
+
+    int i;
+    for(i=0; i<NUM_CLASS; i++)
+    {
+        apply_stat_change(b_vis,all+i,list);
+        apply_stat_change(b_mv,all+i,list);
+    }
+
+    //TRAP CHECK
+
+    return 0;
 }
 
-bool Blizzard_fn(Coord c, Entity * e, StateList * list)
+int Blizzard_fn(Coord c, Entity * e, StateList * list)
 {
-    return FALSE;
+    //IF c is water
+    //Change to ice
+    return 0;
 }
 
-bool Volt_Switch_fn(Coord c, Entity * e, StateList * list)
+int Volt_Switch_fn(Coord c, Entity * e, StateList * list)
 {
-    return FALSE;
+    //Switch coords
+    return 0;
 }
 
-bool Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
+int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
 {
-    return FALSE;
+    //Implement algo de lucien
+    return 0;
 }
 
-bool Thrust_fn(Coord c, Entity * e, StateList * list)
+int Thrust_fn(Coord c, Entity * e, StateList * list)
 {
-    return FALSE;
+    /*Entity * target = getEntity(add_coords(c,compare_coords(e->coords,c)));
+
+    if(target!=NULL)
+    {
+        apply_mod(*e->cha_class->cla_abilities[Thrust%NUM_AB].mods,target, list, e->cha_id);
+        if(apply_damage(e->cha_class->cla_abilities[Thrust%NUM_AB].damage,e,target))
+        {
+            return 1;
+        }
+    }*/
+
+    return 0;
 }
 
-bool Life_Transfer_fn(Coord c, Entity * e, StateList * list)
+int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
 {
-    return FALSE;
+    Entity *f;
+    Entity *t;
+    Coord ct;
+    //Select an Ennemy
+    //f=getEntity(c);
+    //t=getEntity(ct);
+    int h = f->base_stats[pv] - f->stat_mods[pv];
+    f->stat_mods[pv] = 20;
+
+    Status s = {h,mv,3};
+
+    apply_stat_change(s,t,list);
+    return 0;
 }
 
-bool Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list)
+int Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list)
 {
-    return FALSE;
+    return 0;
 }
 
-bool Last_Sacrfice_fn(Coord c, Entity * e, StateList * list)
+int Last_Sacrfice_fn(Coord c, Entity * e, StateList * list)
 {
-    return FALSE;
+    return 0;
 }

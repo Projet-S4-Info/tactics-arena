@@ -10,6 +10,7 @@ Class classes[NUM_CLASS] = {};
 Ability mage_ab[3][NUM_AB] = {};
 Entity Allies[NUM_CLASS] = {};
 Entity Foes[NUM_CLASS] = {};
+Ability Aura_ab;
 
 err_t temp_ent_init(Entity *e)
 {
@@ -53,7 +54,7 @@ err_t init_game()
     init_goliath(&classes[Goliath]);
     init_mage(&classes[Ranger], mage_ab);
     init_valkyrie(&classes[Valkyrie]);
-    init_angel(&classes[Angel]);
+    init_angel(&classes[Angel], &Aura_ab);
 
     init_list(stSent);
     init_list(stReceived);

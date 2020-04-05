@@ -34,13 +34,14 @@ typedef struct
     int ab_cost;
     int ab_cooldown;
     int range; //If zero then self cast
+    targetType target;
     Damage * damage;
     int nb_coords; 
     Coord * coord;
     int nb_mods;
     Modifier * mods;
     fnid fn_use;
-    bool (*function)(Coord, struct entity_t *, StateList *);
+    int (*function)(Coord, struct entity_t *, StateList *);
     lang eng;
     char sprite_folder[STR_LONG];
 } Ability;
@@ -77,6 +78,14 @@ typedef struct entity_t
     int ab_cooldown[NUM_AB];
 } Entity;
 
+/*ABILITY STRUCTURES*/
+
+typedef struct
+{
+    int cha_id;
+    bool visible;
+} Trap_t;
+
 /* TERRAIN STRUCTURES */
 
 typedef struct
@@ -84,6 +93,7 @@ typedef struct
     int tile_id;
     int selected;
     Entity * entity;
+    Trap_t trap;
     int walkable;
 } Tile;
 

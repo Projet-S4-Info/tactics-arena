@@ -16,21 +16,9 @@ err_t activate_bloodlust(Entity *e, StateList * list)
     return list_add(list, v, e);
 }
 
-err_t activate_aura(Entity *e)
+err_t activate_aura(Entity *e, StateList *list)
 {
-    int i;
-    Entity * active;
-
-    for(i=0; i<103; i++)
-    {
-        //active=getEntity(add_coords(e->coords, *(aoe103+i)));
-
-        if(active!=NULL&&same_team(e,active))
-        {
-            active->stat_mods[pv] = active->stat_mods[pv]==20 ? 20 : active->stat_mods[pv] + 5;
-            printf("%s was healed by %s's Aura!\n", active->cha_name, e->cha_name);
-        }
-    }
+    apply_to(Aura_ab, e, list, e->coords);
     return OK;
 }
 

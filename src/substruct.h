@@ -12,15 +12,15 @@ typedef enum {pv, mv, vis, atk, magic, res_physic, res_magic} statId;
 
 typedef enum {Berserker, Ranger, Goliath, Mage, Valkyrie, Angel} classId;
 
-typedef enum {Mvt, M, v, t, Slash, Killing_Blow, Fury, Frenzied_Dash, Bolt, Focus, Trap, Deadeye, Bash, Shields_Up, Detain, Banner, Fireball, FlameCharge, Flare, Eruption, Icy_Winds, Freeze, Frozen_Armor, Blizzard, Shock, Volt_Switch, Shock_Therapy, Lightning_Chain, Thrust, Odins_Eyes, Life_Transfer, Gates_of_Valhalla, Condemn, Holy_Storm, Last_Sacrfice, Gods_Blessing} abilityId;
+typedef enum {Mvt, Aura, t1, t2, Slash, Killing_Blow, Fury, Frenzied_Dash, Bolt, Focus, Trap, Deadeye, Bash, Shields_Up, Detain, Banner, Fireball, FlameCharge, Flare, Eruption, Icy_Winds, Freeze, Frozen_Armor, Blizzard, Shock, Volt_Switch, Shock_Therapy, Lightning_Chain, Thrust, Odins_Eyes, Life_Transfer, Gates_of_Valhalla, Condemn, Holy_Storm, Last_Sacrfice, Gods_Blessing} abilityId;
 
 typedef enum {Dead, Alive} lifeId;
 
 typedef enum {Cripple, Detained, Provoked, Burning, Freezing, Paralyzed, Blessed, Piercing, Guarding, Summoned} statusId;
 
-typedef enum {FOES, ALLIES, BOTH} targetType;
+typedef enum {FOES, ALLIES, BOTH, FREE_TILE, ANY_TILE} targetType;
 
-typedef enum {NONE, DURING, ONLY, AFTER} fnid;
+typedef enum {NONE, DURING, BEFORE, ONLY, AFTER} fnid;
 
 struct entity_t;
 
