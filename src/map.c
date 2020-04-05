@@ -87,7 +87,7 @@ int loadMapTextures(SDL_Renderer * renderer)
 
 	// Loading sand block textures
 	index = addTextureToTable(	textures,
-								loadTexture(renderer, loadImage("../inc/img/turn_end.png")),
+								loadTexture(renderer, loadImage("../inc/img/turn_end_grey.png")),
 								NULL,
 								"end_turn");
 
@@ -187,6 +187,19 @@ int displayAbilities(SDL_Renderer *renderer)
 	return 0;
 }
 
+int displayInterface(SDL_Renderer *renderer)
+// Display the UI
+{
+	displayAbilities(renderer);
+	if (selected_ability != 0){
+		displayText(renderer, 16, yWinSize-110, 20, description, "../inc/font/Pixels.ttf", 255, 255, 255);
+	} else {
+		if (hover_ability > 0) displayText(renderer, 16, yWinSize-110, 20, "Description capacite " + (char)hover_ability, "../inc/font/Pixels.ttf", 255, 255, 255);
+	}
+
+	return 0;
+}
+
 int displayMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, int xSize, int ySize, TabTexture * cSprites)
 // Display the map
 {
@@ -226,7 +239,6 @@ int displayMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, in
 				else				displaySprite(renderer, getBigTexture(textures, "selection"), blockPos.x, blockPos.y);
 			}
 
-			displayAbilities(renderer);
 			if ((*(grid+i*xSize+j)).entity != NULL)	displayCharacters(renderer, cSprites, (*(grid+i*xSize+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
 
 			/*/ -- DEBUG Affichage des indices des tuiles --
@@ -237,17 +249,13 @@ int displayMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, in
         }
     }
 
+	displayInterface(renderer);
+
 	// -- DEBUG Affichage des coordonnées d'affichage de la map
 	char str[12];
 	sprintf(str, "%d, %d", x, y);
 	displayText(renderer, 20, 20, 20, str, "../inc/font/Pixels.ttf", 255, 255, 255);
 	// -- DEBUG --
-
-	if (selected_ability != 0){
-		displayText(renderer, 16, yWinSize-110, 20, description, "../inc/font/Pixels.ttf", 255, 255, 255);
-	} else {
-		if (hover_ability > 0) displayText(renderer, 16, yWinSize-110, 20, "Description capacite " + (char)hover_ability, "../inc/font/Pixels.ttf", 255, 255, 255);
-	}
 
 	SDL_RenderPresent(renderer);
 
