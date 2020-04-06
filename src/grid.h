@@ -11,5 +11,7 @@ Tile getSelected();
 Coord getSelectedPos();
 void unselect();
 void setSelected(Coord pos);
+void freezeWater(Coord pos);
+Tile * getTile(Coord pos);
 
 #endif

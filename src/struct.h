@@ -6,6 +6,7 @@
 #include "../SDL2/include/SDL2/SDL_ttf.h"
 #include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "state.h"
+#include "substruct.h"
 
 /* BASIC STRUCTURES*/
 typedef struct

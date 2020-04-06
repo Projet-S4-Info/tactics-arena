@@ -2,6 +2,7 @@
 #define gameplay_h
 #include "struct.h"
 
+
 int get_range(int vision, int range_mod);
 char * get_desc(Entity * e, abilityId ab_id);
 bool able_ability(Entity *e, abilityId ab_id);
