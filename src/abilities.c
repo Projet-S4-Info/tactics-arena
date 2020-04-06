@@ -2,12 +2,13 @@
 #include "init.h"
 #include "gameplay.h"
 #include "grid.h"
+#include "graphics.h"
 
 int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
 {
     Status v = {3,atk,0};
     Entity * t;
-    //t = getEntity(c);
+    t = getEntity(matrix, c);
     if(t!=NULL)
     {
         if(t==Dead)
@@ -108,7 +109,7 @@ int Trap_fn(Coord c, Entity * e, StateList * list)
 {
 
     Trap_t t = {e->cha_id, same_team(e, Allies)};
-    //APPLY TRAP TO c
+    Set_Trap(t, c);
     return 0;
 }
 
@@ -204,7 +205,7 @@ int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
 
 int Thrust_fn(Coord c, Entity * e, StateList * list)
 {
-    /*Entity * target = getEntity(add_coords(c,compare_coords(e->coords,c)));
+    Entity * target = getEntity(matrix, add_coords(c,compare_coords(e->coords,c)));
 
     if(target!=NULL)
     {
@@ -213,19 +214,40 @@ int Thrust_fn(Coord c, Entity * e, StateList * list)
         {
             return 1;
         }
-    }*/
-
+    }
     return 0;
 }
 
 int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
 {
     Entity *f;
-    Entity *t;
-    Coord ct;
-    //Select an Ennemy
-    //f=getEntity(c);
-    //t=getEntity(ct);
+    Entity *t = NULL;
+
+    Entity * all;
+    if(e->cha_id<0)
+    {
+        all = Allies;
+    }
+    else
+    {
+        all = Foes;
+    }
+
+    /*int j=NUM_CLASS;
+    int tab[NUM_CLASS] = {1,1,1,1,1,1};
+
+    do
+    {
+        if(t!=NULL)
+        {
+            tab
+        }
+
+
+    }while(t->active!=Alive);*/
+
+    f=getEntity(matrix, c);
+
     int h = f->base_stats[pv] - f->stat_mods[pv];
     f->stat_mods[pv] = 20;
 

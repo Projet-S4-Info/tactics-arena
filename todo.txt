@@ -1,0 +1,15 @@
+GAME START
+
+init.
+map selection.
+map load.
+
+return side ;
+
+initialisation en fonction des cotes (Direction, Coords depart);
+
+Passer les info sur les joueurs ennemies ;
+
+Afficher tt les entités.
+
+

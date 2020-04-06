@@ -1,5 +1,6 @@
 #include "init.h"
 #include "grid.h"
+#include "graphics.h"
 
 int get_range(int vision, int range_mod)
 {
@@ -11,6 +12,16 @@ int get_range(int vision, int range_mod)
     }
 
     return range;
+}
+
+char * get_desc(Entity * e, abilityId ab_id)
+{
+    return e->cha_class->cla_abilities[ab_id%NUM_AB].eng.desc;
+}
+
+bool able_ability(Entity *e, abilityId ab_id)
+{
+    return e->act_points >= e->cha_class->cla_abilities[ab_id%NUM_AB].ab_cost;
 }
 
 bool same_team(Entity *a, Entity *b)
@@ -300,7 +311,8 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
         {
             c=add_coords(starting_point, active_ab.coord[i]);
 
-            //e=getEntity(c);
+            e=getEntity(matrix , c);
+            
             if(e!=NULL)
             {
                 if(verbose)printf("%s was found in the zone!\n", e->cha_name);

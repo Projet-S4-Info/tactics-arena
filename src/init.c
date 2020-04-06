@@ -25,6 +25,7 @@ err_t temp_ent_init(Entity *e)
         (e+i)->coords.x = 0;
         (e+i)->coords.y = 0;
         (e+i)->act_points = 3;
+        (e+i)->direction = N;
 
         for(j=0;j<NUM_STATS;j++)
         {
