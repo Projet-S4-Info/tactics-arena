@@ -164,7 +164,11 @@ int selectTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 		yIndex--;
 	}
 
-	if (xIndex > xSize-1 || yIndex > ySize-1 || xIndex < 0 || yIndex < 0) return 0;
+	if (xIndex > xSize-1 || yIndex > ySize-1 || xIndex < 0 || yIndex < 0)
+	{
+		selected_ability = -1;
+		return 0;
+	}
 
 	if(verbose)printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
 	(*(grid+xIndex*xSize+yIndex)).selected = 1;
@@ -202,11 +206,11 @@ int displayInterface(SDL_Renderer *renderer)
 	if (tempEntity != NULL)
 	{
 		displayAbilities(renderer);
-		if (selected_ability != 0){
-			displayText(renderer, 16, yWinSize-110, 20, description, "../inc/font/Pixels.ttf", 255, 255, 255);
+		if (selected_ability != -1){
+			displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, selected_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
 		} else {
 			if (hover_ability == 10) displayText(renderer, xWinSize-280, yWinSize-110, 20, "Passer son tour", "../inc/font/Pixels.ttf", 255, 255, 255);
-			else if (hover_ability > 0) displayText(renderer, 16, yWinSize-110, 20, "Description capacite " + (char)hover_ability, "../inc/font/Pixels.ttf", 255, 255, 255);
+			else if (hover_ability > 0) displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, selected_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
 		}
 	}
 

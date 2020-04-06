@@ -11,6 +11,7 @@
 #include "characters.h"
 #include "common.h"
 #include "map_editor.h"
+#include "grid.h"
 
 #define _NB_MAX_MAPS_ 50
 #define _X_SIZE_ 30
@@ -25,7 +26,9 @@ int xWinSize, yWinSize;
 // Selected ability
 int selected_ability = 0;
 // Hover ability
-int hover_ability = 0;
+int hover_ability = -1;
+// Fin de tour
+int end_of_turn = 0;
 
 // Ability description
 char description[100];
@@ -324,6 +327,8 @@ int createGameWindow(int x, int y)
 
 		SDL_RenderPresent(renderer);
 
+		Entity * tempEntity = NULL;
+
 		int running = 1;
 		while(running) {
 			SDL_Event e;
@@ -363,7 +368,7 @@ int createGameWindow(int x, int y)
 						//}
 
 						// Compétences et actions
-						Entity * tempEntity = getEntity(matrix, getSelectedPos());
+						tempEntity = getEntity(matrix, getSelectedPos());
 						if (tempEntity != NULL)
 						{
 							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
@@ -373,8 +378,7 @@ int createGameWindow(int x, int y)
 								if (e.motion.x >= 176 && e.motion.x <= 240)	selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
 								if (e.motion.x >= 256 && e.motion.x <= 320)	selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
 								if (e.motion.x >= 336 && e.motion.x <= 400)	selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-								printf("Selected ability : %d\n", selected_ability);
-								sprintf(description, "Description competence %d", selected_ability);
+								if(verbose)printf("Selected ability : %d\n", selected_ability);
 								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 							}
 						}
@@ -441,17 +445,20 @@ int createGameWindow(int x, int y)
 						}
 					break;
 					case SDL_MOUSEMOTION:
-						hover_ability = 0;
-						if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
+						hover_ability = -1;
+						// Compétences et actions
+						tempEntity = getEntity(matrix, getSelectedPos());
+						if (tempEntity != NULL)
 						{
-							if (e.motion.x >= 16 && e.motion.x <= 80)							hover_ability = 0;
-							else if (e.motion.x >= 96 && e.motion.x <= 160)						hover_ability = 2;
-							else if (e.motion.x >= 176 && e.motion.x <= 240)					hover_ability = 3;
-							else if (e.motion.x >= 256 && e.motion.x <= 320)					hover_ability = 4;
-							else if (e.motion.x >= 336 && e.motion.x <= 400)					hover_ability = 5;
-							else if (e.motion.x >= xWinSize-272 && e.motion.x <= xWinSize-16)	hover_ability = 10;
-							else 																hover_ability = 0;
-							displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
+							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
+							{
+								if (e.motion.x >= 16 && e.motion.x <= 80)	hover_ability = 0;
+								if (e.motion.x >= 96 && e.motion.x <= 160)	hover_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+								if (e.motion.x >= 176 && e.motion.x <= 240)	hover_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
+								if (e.motion.x >= 256 && e.motion.x <= 320)	hover_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
+								if (e.motion.x >= 336 && e.motion.x <= 400)	hover_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
+								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
+							}
 						}
 						displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 
