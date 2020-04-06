@@ -132,9 +132,14 @@ Entity * play_check(Entity *E)
     do
     {
         if((F[i].active) && (F[i].act_points>0) && !(F[i].status_effect[Freezing]))
+        {
+            //setSelected((F+i)->coords);
             return F + i;
+        }
         else
-            i = i==NUM_CLASS-1 ? 0 : i+1;    
+        {
+            i = i==NUM_CLASS-1 ? 0 : i+1;  
+        }  
         
     } while(i!=current);
     
@@ -161,6 +166,7 @@ err_t local_turn()
                 //Select entity pointed to by active_ent
                 //wait for action selection
                 //wait for coordinate selection
+                a = fonction(Entity * e)
             }while(a.act<0);*/
 
         //relay action information & wait for confirmation
@@ -203,3 +209,4 @@ err_t opposing_turn()
 
     return OK;
 }
+
