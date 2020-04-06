@@ -8,6 +8,7 @@
 #include "graphics.h"
 #include "characters.h"
 #include "common.h"
+#include "grid.h"
 
 #define _NB_MAX_TEXTURES_ 50
 
@@ -167,6 +168,16 @@ int selectTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 
 	if(verbose)printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
 	(*(grid+xIndex*xSize+yIndex)).selected = 1;
+	Coord selectedTile = {xIndex, yIndex};
+	Entity *selectedEntity = getEntity(grid, selectedTile);
+	if (selectedEntity != NULL)
+	{
+		action act = {selectedEntity->cha_id, selectedTile, selected_ability};
+		if (selected_ability != -1)
+		{
+			if (selected_ability == 0) apply_action(act);
+		}
+	}
 
 	return 1;
 }
@@ -181,21 +192,26 @@ int displayAbilities(SDL_Renderer *renderer)
 	displaySprite(renderer, getTexture(textures, "attack"), 16+3*80, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "attack"), 16+4*80, yWinSize-80);
 
-	// Turn end icon
-	displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize-280, yWinSize-80);
-
 	return 0;
 }
 
 int displayInterface(SDL_Renderer *renderer)
 // Display the UI
 {
-	displayAbilities(renderer);
-	if (selected_ability != 0){
-		displayText(renderer, 16, yWinSize-110, 20, description, "../inc/font/Pixels.ttf", 255, 255, 255);
-	} else {
-		if (hover_ability > 0) displayText(renderer, 16, yWinSize-110, 20, "Description capacite " + (char)hover_ability, "../inc/font/Pixels.ttf", 255, 255, 255);
+	Entity * tempEntity = getEntity(matrix, getSelectedPos());
+	if (tempEntity != NULL)
+	{
+		displayAbilities(renderer);
+		if (selected_ability != 0){
+			displayText(renderer, 16, yWinSize-110, 20, description, "../inc/font/Pixels.ttf", 255, 255, 255);
+		} else {
+			if (hover_ability == 10) displayText(renderer, xWinSize-280, yWinSize-110, 20, "Passer son tour", "../inc/font/Pixels.ttf", 255, 255, 255);
+			else if (hover_ability > 0) displayText(renderer, 16, yWinSize-110, 20, "Description capacite " + (char)hover_ability, "../inc/font/Pixels.ttf", 255, 255, 255);
+		}
 	}
+
+	// Turn end icon
+	displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize-280, yWinSize-80);
 
 	return 0;
 }

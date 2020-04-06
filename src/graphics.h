@@ -7,6 +7,7 @@
 #include "audio.h"
 #include "struct.h"
 
+extern Tile *matrix;
 extern int xWinSize, yWinSize;
 extern int selected_ability;
 extern int hover_ability;
