@@ -9,8 +9,6 @@ typedef enum error_type {OK, POINTER_NULL, SDL_ERROR, COORD_OUT_OF_BOUND, INIT_C
 
 typedef enum {FALSE, TRUE} bool;
 
-typedef enum {N, E, S, W} Direction;
-
 extern bool verbose;
 
 #endif
