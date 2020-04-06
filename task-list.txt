@@ -1,9 +1,3 @@
 Robin :
 Apply ability coord restriction (ennemy, ally, any coord).
 Implement all Status Effects.
-
-Thibault =  add_trap(), 
-            freeze_water(),
-            trap_check(),
-
-Aussi a l'initialisation il faut que tt Tiles soit initialiser avec trap = {0,FALSE}.

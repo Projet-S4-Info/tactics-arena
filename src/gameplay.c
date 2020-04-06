@@ -14,6 +14,11 @@ int get_range(int vision, int range_mod)
     return range;
 }
 
+char * get_name(Entity * e, abilityId ab_id)
+{
+    return e->cha_class->cla_abilities[ab_id%NUM_AB].eng.name;
+}
+
 char * get_desc(Entity * e, abilityId ab_id)
 {
     return e->cha_class->cla_abilities[ab_id%NUM_AB].eng.desc;

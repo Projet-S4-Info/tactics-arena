@@ -179,21 +179,35 @@ int Flare_fn(Coord c, Entity * e, StateList * list)
         apply_stat_change(b_mv,all+i,list);
     }
 
-    //TRAP CHECK
+    Ability a = e->cha_class->cla_abilities[Flare%NUM_AB];
+    Trap_t t;
+
+    for(i=0; i<a.nb_coords; i++)
+    {
+        t = Get_Trap(add_coords(c,a.coord[i]));
+        if(t.cha_id<0)
+        {
+            t.visible = TRUE;
+            Set_Trap(t);
+        }
+    }
 
     return 0;
 }
 
 int Blizzard_fn(Coord c, Entity * e, StateList * list)
 {
-    //IF c is water
-    //Change to ice
+    freezeWater(c);
     return 0;
 }
 
 int Volt_Switch_fn(Coord c, Entity * e, StateList * list)
 {
-    //Switch coords
+    Entity * t = getEntity(matrix,c);
+    switchEntities(c,e->coords);
+    t->coords = e->coords;
+    e->coords = c;
+
     return 0;
 }
 
@@ -221,7 +235,7 @@ int Thrust_fn(Coord c, Entity * e, StateList * list)
 int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
 {
     Entity *f;
-    Entity *t = NULL;
+    Entity *t;
 
     Entity * all;
     if(e->cha_id<0)
@@ -233,18 +247,19 @@ int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
         all = Foes;
     }
 
-    /*int j=NUM_CLASS;
-    int tab[NUM_CLASS] = {1,1,1,1,1,1};
+    int i,j=0;
+    int r;
+    int tab[NUM_CLASS];
 
-    do
+    for(i=0; i<NUM_CLASS; i++)
     {
-        if(t!=NULL)
+        if((all+i)->active)
         {
-            tab
+            tab[j++] = (all+i)->cha_class->cla_id;
         }
+    }
 
-
-    }while(t->active!=Alive);*/
+    t = &all[tab[rand()%j]];
 
     f=getEntity(matrix, c);
 

@@ -133,7 +133,7 @@ Entity * play_check(Entity *E)
     {
         if((F[i].active) && (F[i].act_points>0) && !(F[i].status_effect[Freezing]))
         {
-            //setSelected((F+i)->coords);
+            setSelected((F+i)->coords);
             return F + i;
         }
         else
@@ -210,3 +210,22 @@ err_t opposing_turn()
     return OK;
 }
 
+err_t game_loop(err_t (*turn1)(void), err_t (*turn2)(void))
+{
+    while(TRUE)
+    {
+        turn1();
+        turn2();
+    }
+    return OK;
+}
+
+err_t init_client()
+{
+    return OK;
+}
+
+err_t init_server()
+{
+    return OK;
+}
