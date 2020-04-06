@@ -12,7 +12,6 @@
 #include "common.h"
 #include "map_editor.h"
 
-
 #define _NB_MAX_MAPS_ 50
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
@@ -317,6 +316,8 @@ int createGameWindow(int x, int y)
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
 
+		loadMap(matrix, "map_plains");
+
 		SDL_Delay(1);
 
 		displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
@@ -362,16 +363,20 @@ int createGameWindow(int x, int y)
 						//}
 
 						// Compétences et actions
-						if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
+						Entity * tempEntity = getEntity(matrix, getSelectedPos());
+						if (tempEntity != NULL)
 						{
-							if (e.motion.x >= 16 && e.motion.x <= 80)	selected_ability = 1;
-							if (e.motion.x >= 96 && e.motion.x <= 160)	selected_ability = 2;
-							if (e.motion.x >= 176 && e.motion.x <= 240)	selected_ability = 3;
-							if (e.motion.x >= 256 && e.motion.x <= 320)	selected_ability = 4;
-							if (e.motion.x >= 336 && e.motion.x <= 400)	selected_ability = 5;
-							printf("Selected ability : %d\n", selected_ability);
-							sprintf(description, "Description competence %d", selected_ability);
-							displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
+							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
+							{
+								if (e.motion.x >= 16 && e.motion.x <= 80)	selected_ability = 0;
+								if (e.motion.x >= 96 && e.motion.x <= 160)	selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+								if (e.motion.x >= 176 && e.motion.x <= 240)	selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
+								if (e.motion.x >= 256 && e.motion.x <= 320)	selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
+								if (e.motion.x >= 336 && e.motion.x <= 400)	selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
+								printf("Selected ability : %d\n", selected_ability);
+								sprintf(description, "Description competence %d", selected_ability);
+								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
+							}
 						}
 
 
@@ -439,12 +444,13 @@ int createGameWindow(int x, int y)
 						hover_ability = 0;
 						if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
 						{
-							if (e.motion.x >= 16 && e.motion.x <= 80)			hover_ability = 1;
-							else if (e.motion.x >= 96 && e.motion.x <= 160)		hover_ability = 2;
-							else if (e.motion.x >= 176 && e.motion.x <= 240)	hover_ability = 3;
-							else if (e.motion.x >= 256 && e.motion.x <= 320)	hover_ability = 4;
-							else if (e.motion.x >= 336 && e.motion.x <= 400)	hover_ability = 5;
-							else 												hover_ability = 0;
+							if (e.motion.x >= 16 && e.motion.x <= 80)							hover_ability = 0;
+							else if (e.motion.x >= 96 && e.motion.x <= 160)						hover_ability = 2;
+							else if (e.motion.x >= 176 && e.motion.x <= 240)					hover_ability = 3;
+							else if (e.motion.x >= 256 && e.motion.x <= 320)					hover_ability = 4;
+							else if (e.motion.x >= 336 && e.motion.x <= 400)					hover_ability = 5;
+							else if (e.motion.x >= xWinSize-272 && e.motion.x <= xWinSize-16)	hover_ability = 10;
+							else 																hover_ability = 0;
 							displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 						}
 						displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
@@ -455,19 +461,19 @@ int createGameWindow(int x, int y)
 
 			// Déplacement de la caméra grâce aux bords de l'écran
 			if (e.motion.x <= xWinSize && e.motion.x >= xWinSize-20){
-				XPOS -= (10*(PX/64));
+				XPOS -= (5*(PX/64));
 				displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 			}
 			if (e.motion.x >= 0 && e.motion.x <= 20){
-				XPOS += (10*(PX/64));
+				XPOS += (5*(PX/64));
 				displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 			}
 			if (e.motion.y <= yWinSize && e.motion.y >= yWinSize-20){
-				YPOS -= (10*(PX/64));
+				YPOS -= (5*(PX/64));
 				displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 			}
 			if (e.motion.y <= 10){
-				YPOS += (10*(PX/64));
+				YPOS += (5*(PX/64));
 				displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 			}
 

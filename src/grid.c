@@ -12,6 +12,10 @@
 #include "grid.h"
 #include "characters.h"
 #include "common.h"
+#include "graphics.h"
+
+#define _X_SIZE_ 30
+#define _Y_SIZE_ 30
 
 /**
  * \fn void createGrid(Entity * grid, int x, int y)
@@ -56,4 +60,58 @@ Entity * getEntity(Tile * grid, Coord pos)
 {
     if ((*(grid+pos.x*30+pos.y)).entity == NULL) return NULL;
     else return (*(grid+pos.x*30+pos.y)).entity;
+}
+
+int Set_Trap(Trap_t trap, Coord pos)
+// Set a trap on a tile
+{
+    (*(matrix+pos.x*30+pos.y)).trap = trap;
+    return 0;
+}
+
+Tile getSelected()
+// Return the selected tile
+{
+    for (int i=0; i < _X_SIZE_; i++)
+    {
+        for (int j=0; j < _Y_SIZE_; j++)
+        {
+            if ((*(matrix+i*_X_SIZE_+j)).selected == 1) return (*(matrix+i*_X_SIZE_+j));
+        }
+    }
+}
+
+Coord getSelectedPos()
+// Return the coordinates of the selected tile
+{
+    for (int i=0; i < _X_SIZE_; i++)
+    {
+        for (int j=0; j < _Y_SIZE_; j++)
+        {
+            if ((*(matrix+i*_X_SIZE_+j)).selected == 1)
+            {
+                Coord res = {i, j};
+                return res;
+            }
+        }
+    }
+}
+
+void unselect()
+// Unselect the selected tile
+{
+    for (int i=0; i < _X_SIZE_; i++)
+    {
+        for (int j=0; j < _Y_SIZE_; j++)
+        {
+            if ((*(matrix+i*_X_SIZE_+j)).selected == 1) (*(matrix+i*_X_SIZE_+j)).selected = 0;
+        }
+    }
+}
+
+void setSelected(Coord pos)
+// Set the tile at pos selected
+{
+    unselect();
+    (*(matrix+pos.x*_X_SIZE_+pos.y)).selected = 1;
 }
