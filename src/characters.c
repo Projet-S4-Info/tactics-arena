@@ -33,41 +33,41 @@ int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
     return nbSprites;
 }
 
-void setEntityToTile(Tile * grid, Entity * entity, Coord tile, int xSize, int ySize)
+void setEntityToTile(Entity * entity, Coord tile)
 // Set an entity to a specific tile
 {    
-    if (tile.x < 0 || tile.x >= xSize || tile.y < 0 || tile.y >= ySize)
+    if (tile.x < 0 || tile.x >= _X_SIZE_ || tile.y < 0 || tile.y >= _Y_SIZE_)
     {
         printf("\033[31;01mERRoR\033[00m : Coordinates out of boundaries\n");
         exit(EXIT_FAILURE);
     };
 
-    if (entity == NULL || grid == NULL)
+    if (entity == NULL || matrix == NULL)
     {
         printf("\033[31;01mERROR\033[00m : Pointer null on tile or entity\n");
         exit(EXIT_FAILURE);
     }
 
-    grid[tile.x*xSize+tile.y].entity = entity;
+    matrix[tile.x*_X_SIZE_+tile.y].entity = entity;
 }
 
-void moveEntity(Tile * grid, Coord from, Coord to, int xSize, int ySize)
+void moveEntity(Coord from, Coord to)
 // Move an entity already set on a tile to a new one
 {
-    if (from.x < 0 || from.x >= xSize || from.y < 0 || from.y >= ySize || to.x < 0 || to.x >= xSize || to.y < 0 || to.y >= ySize)
+    if (from.x < 0 || from.x >= _X_SIZE_ || from.y < 0 || from.y >= _Y_SIZE_ || to.x < 0 || to.x >= _X_SIZE_ || to.y < 0 || to.y >= _Y_SIZE_)
     {
         printf("\033[31;01mERROR\033[00m : Coordinates out of boundaries\n");
         exit(EXIT_FAILURE);
     };
 
-    if (grid[from.x*xSize+from.y].entity == NULL || grid == NULL)
+    if (matrix[from.x*_X_SIZE_+from.y].entity == NULL || matrix == NULL)
     {
         printf("\033[31;01mERROR\033[00m : Pointer null on tile or entity\n");
         exit(EXIT_FAILURE);
     }
 
-    grid[to.x*xSize+to.y].entity = grid[from.x*xSize+from.y].entity;
-    grid[from.x*xSize+from.y].entity = NULL;
+    matrix[to.x*_X_SIZE_+to.y].entity = matrix[from.x*_X_SIZE_+from.y].entity;
+    matrix[from.x*_X_SIZE_+from.y].entity = NULL;
 }
 
 void switchEntities(Coord pos1, Coord pos2)
@@ -78,12 +78,12 @@ void switchEntities(Coord pos1, Coord pos2)
     (*(matrix+pos2.x*_X_SIZE_+pos2.y)).entity = temp;
 }
 
-void createCharacters(Tile * grid, Coord pos, int xSize, int ySize, int pdv)
+void createCharacters(Coord pos, int pdv)
 // Create a new character at (x,y) pos
 {
     Entity * entity = malloc(sizeof(Entity));
     entity->stat_mods[0] = pdv;
-    grid[pos.x*xSize+pos.y].entity = entity;
+    matrix[pos.x*_X_SIZE_+pos.y].entity = entity;
 }
 
 int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Entity * entity, int x, int y, int pxBase)

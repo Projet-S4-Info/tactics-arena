@@ -176,14 +176,14 @@ int selectTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 	(*(grid+xIndex*xSize+yIndex)).selected = 1;
 	Coord selectedTile = {xIndex, yIndex};
 	Entity *selectedEntity = getEntity(grid, selectedTile);
-	/*if (selectedEntity != NULL)
+	if (selectedEntity != NULL)
 	{
 		action act = {selectedEntity->cha_id, selectedTile, selected_ability};
 		if (selected_ability != -1)
 		{
-			if (selected_ability == 0) apply_action(act);
+			apply_action(act);
 		}
-	}*/
+	}
 
 	return 1;
 }

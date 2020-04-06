@@ -5,6 +5,7 @@
 #include "common.h"
 #include "passives.h"
 #include "gameplay.h"
+#include "grid.h"
 
 err_t apply_action(action a)
 {
