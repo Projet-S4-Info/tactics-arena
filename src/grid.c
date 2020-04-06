@@ -13,6 +13,7 @@
 #include "characters.h"
 #include "common.h"
 #include "graphics.h"
+#include "struct.h"
 
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
@@ -28,11 +29,13 @@ void createGrid(Tile * grid, int seed, int x, int y)
 // create the grid with x*y size
 {
     srand(time(NULL));
+    Trap_t trap = {0, FALSE};
     for (int i = 0; i < x*y; i++){
         grid[i].tile_id = rand()%seed;
         int t = rand()%5;
         grid[i].selected = 0;
         grid[i].entity = NULL;
+        grid[i].trap = trap;
     }
 }
 
@@ -67,6 +70,12 @@ int Set_Trap(Trap_t trap, Coord pos)
 {
     (*(matrix+pos.x*30+pos.y)).trap = trap;
     return 0;
+}
+
+Trap_t Get_Trap(Coord pos)
+// Returns the trap at the given coordinates
+{
+    return (*(matrix+pos.x*_X_SIZE_+pos.y)).trap;
 }
 
 Tile getSelected()
@@ -114,4 +123,16 @@ void setSelected(Coord pos)
 {
     unselect();
     (*(matrix+pos.x*_X_SIZE_+pos.y)).selected = 1;
+}
+
+void freezeWater(Coord pos)
+// Turns the given water block to an ice block
+{
+    if ((*(matrix+pos.x*_X_SIZE_+pos.y)).tile_id == 4)   (*(matrix+pos.x*_X_SIZE_+pos.y)).tile_id = 6;
+}
+
+Tile * getTile(Coord pos)
+// Returns the tile at the given coordinates
+{
+    return (matrix+pos.x*_X_SIZE_+pos.y);
 }

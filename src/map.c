@@ -9,6 +9,8 @@
 #include "characters.h"
 #include "common.h"
 #include "grid.h"
+#include "gameplay.h"
+#include "turn.h"
 
 #define _NB_MAX_TEXTURES_ 50
 
@@ -174,14 +176,14 @@ int selectTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 	(*(grid+xIndex*xSize+yIndex)).selected = 1;
 	Coord selectedTile = {xIndex, yIndex};
 	Entity *selectedEntity = getEntity(grid, selectedTile);
-	if (selectedEntity != NULL)
+	/*if (selectedEntity != NULL)
 	{
 		action act = {selectedEntity->cha_id, selectedTile, selected_ability};
 		if (selected_ability != -1)
 		{
 			if (selected_ability == 0) apply_action(act);
 		}
-	}
+	}*/
 
 	return 1;
 }
@@ -210,7 +212,7 @@ int displayInterface(SDL_Renderer *renderer)
 			displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, selected_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
 		} else {
 			if (hover_ability == 10) displayText(renderer, xWinSize-280, yWinSize-110, 20, "Passer son tour", "../inc/font/Pixels.ttf", 255, 255, 255);
-			else if (hover_ability > 0) displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, selected_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
+			if (hover_ability > 0) displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, hover_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
 		}
 	}
 

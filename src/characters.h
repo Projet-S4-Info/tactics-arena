@@ -8,5 +8,6 @@ int setEntityToTile(Tile * grid, Entity * entity, Coord tile, int xSize, int ySi
 void moveEntity(Tile * grid, Coord from, Coord to, int xSize, int ySize);
 void createCharacters(Tile * grid, Coord pos, int xSize, int ySize, int pdv);
 int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Entity * entity, int x, int y, int pxBase);
+void switchEntities(Coord pos1, Coord pos2);
 
 #endif

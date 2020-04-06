@@ -7,6 +7,9 @@
 #include "substruct.h"
 #include "common.h"
 
+#define _X_SIZE_ 30
+#define _Y_SIZE_ 30
+
 int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
 // Load all the textures needed for the characters
 {
@@ -65,6 +68,14 @@ void moveEntity(Tile * grid, Coord from, Coord to, int xSize, int ySize)
 
     grid[to.x*xSize+to.y].entity = grid[from.x*xSize+from.y].entity;
     grid[from.x*xSize+from.y].entity = NULL;
+}
+
+void switchEntities(Coord pos1, Coord pos2)
+// Switch the positions of the 2 entities
+{
+    Entity * temp = (*(matrix+pos1.x*_X_SIZE_+pos1.y)).entity;
+    (*(matrix+pos1.x*_X_SIZE_+pos1.y)).entity = (*(matrix+pos2.x*_X_SIZE_+pos2.y)).entity;
+    (*(matrix+pos2.x*_X_SIZE_+pos2.y)).entity = temp;
 }
 
 void createCharacters(Tile * grid, Coord pos, int xSize, int ySize, int pdv)

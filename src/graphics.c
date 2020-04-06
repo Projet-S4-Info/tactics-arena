@@ -12,6 +12,8 @@
 #include "common.h"
 #include "map_editor.h"
 #include "grid.h"
+#include "init.h"
+#include "gameplay.h"
 
 #define _NB_MAX_MAPS_ 50
 #define _X_SIZE_ 30
@@ -24,7 +26,7 @@ Tile *matrix = &grid[0][0];
 int xWinSize, yWinSize;
 
 // Selected ability
-int selected_ability = 0;
+int selected_ability = -1;
 // Hover ability
 int hover_ability = -1;
 // Fin de tour
@@ -323,6 +325,13 @@ int createGameWindow(int x, int y)
 
 		SDL_Delay(1);
 
+		Coord testCoord = {10,13};
+		setEntityToTile(matrix, &Allies[0], testCoord, 30, 30);
+		Coord testCoord2 = {21,11};
+		setEntityToTile(matrix, &Allies[1], testCoord2, 30, 30);
+		Coord testCoord3 = {6,23};
+		setEntityToTile(matrix, &Allies[2], testCoord3, 30, 30);
+
 		displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 
 		SDL_RenderPresent(renderer);
@@ -371,6 +380,10 @@ int createGameWindow(int x, int y)
 						tempEntity = getEntity(matrix, getSelectedPos());
 						if (tempEntity != NULL)
 						{
+							printf("%s\n", get_desc(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id));
+								printf("%s\n", get_desc(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id));
+								printf("%s\n", get_desc(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id));
+								printf("%s\n", get_desc(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id));
 							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
 							{
 								if (e.motion.x >= 16 && e.motion.x <= 80)	selected_ability = 0;
@@ -457,6 +470,7 @@ int createGameWindow(int x, int y)
 								if (e.motion.x >= 176 && e.motion.x <= 240)	hover_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
 								if (e.motion.x >= 256 && e.motion.x <= 320)	hover_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
 								if (e.motion.x >= 336 && e.motion.x <= 400)	hover_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
+								printf("Hovering ability ID %d\n", hover_ability);
 								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 							}
 						}
