@@ -22,6 +22,8 @@ typedef enum {FOES, ALLIES, BOTH, FREE_TILE, ANY_TILE} targetType;
 
 typedef enum {NONE, DURING, BEFORE, ONLY, AFTER} fnid;
 
+typedef enum {N, E, S, W} Direction;
+
 struct entity_t;
 
 /*Entity Sub Structures*/
