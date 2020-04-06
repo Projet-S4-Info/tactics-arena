@@ -210,22 +210,32 @@ err_t opposing_turn()
     return OK;
 }
 
-err_t game_loop(err_t (*turn1)(void), err_t (*turn2)(void))
+winId game_loop(err_t (*turn1)(void), err_t (*turn2)(void))
 {
+    winId game_end;
+
     while(TRUE)
     {
         turn1();
+
+        if(game_end = game_over())
+            break;
+
         turn2();
+
+        if(game_end = game_over())
+            break;
     }
-    return OK;
+
+    return game_end;
 }
 
-err_t init_client()
+winId init_client()
 {
-    return OK;
+    return game_loop(opposing_turn,local_turn);
 }
 
-err_t init_server()
+winId init_server()
 {
-    return OK;
+    return game_loop(local_turn,opposing_turn);
 }

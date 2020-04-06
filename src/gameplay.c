@@ -2,6 +2,27 @@
 #include "grid.h"
 #include "graphics.h"
 
+winId game_over()
+{
+    winId all_dead = LOSE;
+    int i;
+
+    for(i=0; i<NUM_CLASS && all_dead; i++)
+    {
+        all_dead = Allies[i].active ? ONGOING : LOSE;
+    }
+
+    if(!all_dead)
+    {
+        all_dead = WIN;
+        for(i=0; i<NUM_CLASS && all_dead; i++)
+        {
+            all_dead = Foes[i].active ? ONGOING : WIN;
+        }
+    }
+
+    return all_dead;
+}
 
 int get_range(int vision, int range_mod)
 {

@@ -24,6 +24,8 @@ typedef enum {NONE, DURING, BEFORE, ONLY, AFTER} fnid;
 
 typedef enum {N, E, S, W} Direction;
 
+typedef enum {ONGOING, WIN, LOSE} winId;
+
 struct entity_t;
 
 /*Entity Sub Structures*/
