@@ -181,14 +181,16 @@ int Flare_fn(Coord c, Entity * e, StateList * list)
 
     Ability a = e->cha_class->cla_abilities[Flare%NUM_AB];
     Trap_t t;
+    Coord c2;
 
     for(i=0; i<a.nb_coords; i++)
     {
-        t = Get_Trap(add_coords(c,a.coord[i]));
+        c2 = add_coords(c,a.coord[i]);
+        t = Get_Trap(c2);
         if(t.cha_id<0)
         {
             t.visible = TRUE;
-            Set_Trap(t);
+            Set_Trap(t,c2);
         }
     }
 
