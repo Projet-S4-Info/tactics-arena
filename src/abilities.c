@@ -58,7 +58,7 @@ int Fury_fn(Coord c, Entity * e, StateList * list)
 
 int Frenzied_Dash_fn(Coord c, Entity * e, StateList * list)
 {
-    //Move Entity
+    
     return 0;
 }
 
