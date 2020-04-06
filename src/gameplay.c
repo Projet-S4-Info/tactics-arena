@@ -2,6 +2,7 @@
 #include "grid.h"
 #include "graphics.h"
 
+
 int get_range(int vision, int range_mod)
 {
     int range = range_mod * (vision/10);
@@ -355,4 +356,121 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
         }
 
     return death_count;
+}
+
+int setActionZone(int posX, int posY, int actionRange, Coord coorTab[]){
+
+    int cpt = 0;
+    int h;
+
+    //quart gauche haut
+    h = posY;
+    for(int x = (posX - actionRange) ; x <= posX; x++){
+        if((x > 0) && (x < taille)){
+            coorTab[cpt].x = x;
+            coorTab[cpt].y = h;
+            cpt++;
+        }else if(x <= 0 && h >= 0){
+            coorTab[cpt].x = 0;
+            coorTab[cpt].y = h;
+            cpt++;
+        }
+        if(h <= 0){
+            h = 0;
+        }else{
+            h--;
+        }
+    }
+
+    //quart droit haut
+    h = posY;
+    for(int x = (posX + actionRange) ; x >= posX; x--){
+        if((x > 0) && (x < taille )){
+            coorTab[cpt].x = x;
+            coorTab[cpt].y = h;
+            cpt++;
+        }else if(x >= taille -1){
+            coorTab[cpt].x = taille -1;
+            coorTab[cpt].y = h;
+            cpt++;
+        }
+        if(h <= 0){
+            h = 0;
+        }else{
+            h--;
+        }
+    }
+
+    //quart droite bas
+    h = posY;
+    for(int x = (posX + actionRange) ; x >= posX; x--){
+        if((x > 0) && (x < taille)){
+            coorTab[cpt].x = x;
+            coorTab[cpt].y = h;
+            cpt++;
+        }else if(x >= taille -1){
+            coorTab[cpt].x = taille -1;
+            coorTab[cpt].y = h;
+            cpt++;
+        }
+        if(h >= taille -1){
+            h = taille -1;
+        }else{
+            h++;
+        }
+    }
+
+    //quart gauche bas
+    h=posY;
+    for(int x = (posX - actionRange) ; x <= posX; x++){
+        if((x > 0) && (x < taille)){
+            coorTab[cpt].x = x;
+            coorTab[cpt].y = h;
+            cpt++;
+        }else if(x <= 0){
+            coorTab[cpt].x = 0;
+            coorTab[cpt].y = h;
+            cpt++;
+        }
+        if(h >= taille -1){
+            h = taille -1;
+        }else{
+            h++;
+        }
+    }
+    
+    coorTab[cpt].x = -99;
+    coorTab[cpt].y = -99;
+
+    if(verbose){
+        printf("nbcoord : %d\n", cpt-1);
+        for(int i = 0; i < maxRange; i++){
+            printf(" tour %d :\nx = %d\ny = %d\n", i, coorTab[i].x, coorTab[i].y);
+        }
+    }
+
+    return 1;
+}
+
+int isInRnage(Coord coorTab[], Coord attack, int nbCoord){
+    
+    int cursY = attack.y;
+    int touchLine = 0;
+    for(int i = 0; i < nbCoord; i++){
+        int cursX=0;
+        for(int j = 0; j <= cursY; j++){
+            if(cursX == (coorTab[i].x + 1) && cursY == (coorTab[i].y + 1)){
+                touchLine++;
+                cursX++;
+            }
+            if(verbose)printf("test %d : %d | %d : %d \n", cursX,cursY,coorTab[i].x, coorTab[i].y);
+            cursX++;
+        }
+        if(verbose)printf("\n");
+    }
+    if(touchLine == 1){
+        return 1;
+    }else{
+        return 0;
+    }
 }
