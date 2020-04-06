@@ -38,10 +38,10 @@ Blizzard : Deal damage in a zone and highly reduce ennemy vision for a turn, has
 Lightning Chain : Zap an ennemy, the bolt will bounce to another close ennemy until either there are no ennemies close enough or it has bounced 3 times.
 
 VALKYRIE
-0: Precision: Damaging an ennemy has a chance to paralyze them. 
+0: Precision: Damaging an ennemy has a chance to paralyze them.
 1: Thrust : Thrust your spear forward.
 2: Odin's Eyes : Call forth a swarm of crows to deal magic damage to an area.
-2: Life Transfer : Select an Ennemy and an Ally, heal the ally back to full and slow the ennemy by the amount healed.
+2: Life Transfer : Select an Ally, heal the ally back to full and slow a random ennemy by the amount healed.
 3: Gates of Valhalla : Resurrect all dead allies for a turn.
 
 ANGEL

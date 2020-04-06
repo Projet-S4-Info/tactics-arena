@@ -2,6 +2,34 @@
 #include "grid.h"
 #include "graphics.h"
 
+err_t get_team(Entity *e, Entity **all, bool same)
+{
+    if(same)
+    {
+        if(e->cha_id<0)
+        {
+            *all = Foes;
+        }
+        else
+        {
+            *all = Allies;
+        }
+    }
+    else
+    {
+        if(e->cha_id<0)
+        {
+            *all = Allies;
+        }
+        else
+        {
+            *all = Foes;
+        }
+    }
+
+    return OK;
+}
+
 winId game_over()
 {
     winId all_dead = LOSE;
@@ -75,6 +103,11 @@ err_t reset_cooldowns(Entity * e)
     }
 
     return OK;
+}
+
+bool closer_coords(Coord a, Coord b)
+{
+    return sqrt(a.x*a.x+a.y+a.y) <= sqrt(b.x*b.x+b.y*b.y);
 }
 
 Coord compare_coords(Coord a, Coord b)
