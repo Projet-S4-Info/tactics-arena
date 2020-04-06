@@ -470,7 +470,7 @@ int actionZone(int posX, int posY, int actionRange, Coord coorTab[]){
 
     if(verbose){
         printf("nbcoord : %d\n", cpt-1);
-        for(int i = 0; i < maxRange; i++){
+        for(int i = 0; i < MAXRANGE; i++){
             printf(" tour %d :\nx = %d\ny = %d\n", i, coorTab[i].x, coorTab[i].y);
         }
     }
@@ -479,11 +479,11 @@ int actionZone(int posX, int posY, int actionRange, Coord coorTab[]){
 }
 
 
-int isInRnage(Coord coorTab[], Coord attack, int nbCoord){
+int isInRange(Coord coorTab[], Coord attack){
     
     int cursY = attack.y;
     int touchLine = 0;
-    for(int i = 0; i < nbCoord; i++){
+    for(int i = 0; coorTab[i].x!=-99; i++){
         int cursX=0;
         for(int j = 0; j <= cursY; j++){
             if(cursX == (coorTab[i].x + 1) && cursY == (coorTab[i].y + 1)){

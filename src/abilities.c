@@ -3,6 +3,7 @@
 #include "gameplay.h"
 #include "grid.h"
 #include "graphics.h"
+#include "characters.h"
 
 int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
 {
@@ -58,7 +59,7 @@ int Fury_fn(Coord c, Entity * e, StateList * list)
 
 int Frenzied_Dash_fn(Coord c, Entity * e, StateList * list)
 {
-    //Move Entity
+    
     return 0;
 }
 
@@ -250,7 +251,6 @@ int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
     }
 
     int i,j=0;
-    int r;
     int tab[NUM_CLASS];
 
     for(i=0; i<NUM_CLASS; i++)

@@ -24,11 +24,30 @@ err_t activate_aura(Entity *e, StateList *list)
 
 err_t sentinel_check(Entity *e)
 {
-    //Entity * r = e->cha_id<0 ? &Allies[Ranger] : &Foes[Ranger];
+    Entity * r;
+    StateList * list;
 
-    //int sight = get_range(r->stat_mods[vis], r->cha_class->cla_abilities->range);
+    if(e->cha_id<0)
+    {
+        r = &Allies[Ranger];
+        list = stSent;
+    }
+    else
+    {
+        r = &Foes[Ranger];
+        list = stReceived;
+    }
 
-    //insert function lucien ici
+    int sight = get_range(r->stat_mods[vis], r->cha_class->cla_abilities->range);
+
+    Coord t[MAXRANGE];
+
+    setActionZone(r->coords,sight,t);
+    
+    if(isInRange(t, e->coords))
+    {
+        apply_to(r->cha_class->cla_abilities[Bolt%NUM_AB], r, list, e->coords);
+    }
 
     return OK;
 }
