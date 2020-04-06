@@ -384,7 +384,7 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
     return death_count;
 }
 
-int setActionZone(int posX, int posY, int actionRange, Coord coorTab[]){
+int actionZone(int posX, int posY, int actionRange, Coord coorTab[]){
 
     int cpt = 0;
     int h;
@@ -478,6 +478,7 @@ int setActionZone(int posX, int posY, int actionRange, Coord coorTab[]){
     return 1;
 }
 
+
 int isInRnage(Coord coorTab[], Coord attack, int nbCoord){
     
     int cursY = attack.y;
@@ -499,4 +500,30 @@ int isInRnage(Coord coorTab[], Coord attack, int nbCoord){
     }else{
         return 0;
     }
+}
+
+int setActionZone(Coord perso, int actionRange, Coord coorTab[]){
+    int posX = perso.x;
+    int posY = perso.y;
+    int res = 0;
+
+    if(posX == 30 && posY == 30){
+        if(verbose)printf("posX = 30 && posY = 30");
+        res = actionZone(posX-1,posY -1, actionRange, coorTab);
+    }else if(posX == 0 && posY == 0){
+        if(verbose)printf("posX = 0 && posY = 0");
+        res = actionZone(posX,posY, actionRange, coorTab);
+    }else if(posX == 0 && posY == 30){
+        if(verbose)printf("posX = 0 && posY = 30\n");
+        res = actionZone(posX,posY-1, actionRange, coorTab);
+    }else if (posX == 30 && posY == 0){
+       if(verbose)printf("posx = 30 && posY = 0\n");
+        res = actionZone(posX -1, posY, actionRange, coorTab);
+    }
+    else{
+        if(verbose)printf("Autres cas \n");
+        res = actionZone(posX,posY, actionRange, coorTab);
+    }
+
+    return res;
 }
