@@ -189,7 +189,6 @@ err_t local_turn()
 
 err_t opposing_turn()
 {
-    //action a;
 
     turn_start(Foes);
 

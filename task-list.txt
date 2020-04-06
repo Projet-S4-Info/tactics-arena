@@ -1,3 +1,6 @@
 Robin :
-Apply ability coord restriction (ennemy, ally, any coord).
+Coord Selection Restriction.
 Implement all Status Effects.
+Finish Implementing abilities with pathfinding algorithm.
+Complete and Implement init_server and init_client
+Implement action information relay
