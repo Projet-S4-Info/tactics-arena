@@ -311,7 +311,8 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
         {
             c=add_coords(starting_point, active_ab.coord[i]);
 
-            //e=getEntity(matrix , c);
+            e=getEntity(matrix , c);
+            
             if(e!=NULL)
             {
                 if(verbose)printf("%s was found in the zone!\n", e->cha_name);
