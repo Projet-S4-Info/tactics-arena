@@ -164,12 +164,12 @@ err_t startTCPSocketServ(){
             
             printf("\nChargement de la partie... \n");
 
-            if(isPseudoValid == 1){
-              if(verbose)printf("\nVous vous appelez : %s", pseudoUser);
-              sprintf(monMsg.pseudoChat,"%s",pseudoUser);
-            }else{
-              printf("\nLe pseudo n'est pas mis \n");
-            }
+            // if(isPseudoValid == 1){
+            //   if(verbose)printf("\nVous vous appelez : %s", pseudoUser);
+            //   sprintf(monMsg.pseudoChat,"%s",pseudoUser);
+            // }else{
+            //   printf("\nLe pseudo n'est pas mis \n");
+            // }
             
 
 
