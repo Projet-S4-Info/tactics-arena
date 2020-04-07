@@ -14,7 +14,7 @@
 #include "graphics.h"
 #include "audio.h"
 #include "menu.h"
-#include "menu_multi.h"
+#include "multi_menu.h"
 #include "map_editor.h"
 #include "characters.h"
 #include "common.h"
