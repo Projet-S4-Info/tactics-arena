@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
 #include "../SDL2/include/SDL2/SDL.h"
 #include "../SDL2/include/SDL2/SDL_image.h"
 #include "../SDL2/include/SDL2/SDL_ttf.h"
@@ -11,56 +13,85 @@
 #define _Y_SIZE_ 30
 
 #define _NB_CLASSES_ 6
+#define _NB_ANIM_ 6
 
 CharTexture charTextures[_NB_CLASSES_];
+int indexCharTable = 0;
 
-int addCharacterTexture(SDL_Texture * textureN, SDL_Texture * textureE, SDL_Texture * textureS, SDL_Texture * textureW, 
-                        SDL_Texture * bigTextureN, SDL_Texture * bigTextureE, SDL_Texture * bigTextureS, SDL_Texture * bigTextureW,
-                        char * texture_name)
-// Add to the TabTexture table the given texture and its big one
+int addCharacterTexture(SDL_Renderer *renderer, char * name)
+// Add to the CharTexture table all the animation of a class and its given direction
 {
-	int index = 0;
+    int dirIndex = N;
+    int animIndex = 1;
+    char path[100];
+    char temp[100];
+    char *dirFolder;
 
-	while (charTextures[index].textures[0] != NULL)
-	{
-		index++;
-	}
+    sprintf(path, "../inc/sprites/%s/sprite_indiv/", name);
+    if(verbose) printf("Chargement des textures du dossier : %s\n", path);
 
-	charTextures[index].textures[N] = textureN;
-	charTextures[index].textures[E] = textureE;
-    charTextures[index].textures[S] = textureS;
-    charTextures[index].textures[W] = textureW;
-    charTextures[index].textures[4+N] = bigTextureN;
-	charTextures[index].textures[4+E] = bigTextureE;
-    charTextures[index].textures[4+S] = bigTextureS;
-    charTextures[index].textures[4+W] = bigTextureW;
-	charTextures[index].texture_name = texture_name;
+	charTextures[indexCharTable].texture_name = name;
+    if(verbose) printf("Chargement de la texture : %s\n", strcat(path, "front/Sprite_frontview_64.png"));
+    sprintf(path, "../inc/sprites/%s/sprite_indiv/", name);
+    charTextures[indexCharTable].front = loadTexture(renderer, loadImage(strcat(path, "front/Sprite_frontview_64.png")));
+    sprintf(path, "../inc/sprites/%s/sprite_indiv/", name);
 
-	if(verbose)printf("[GRAPHICS] Ajout de la texture de la classe [%s] à l'id %d\n", texture_name, index);
+    for (dirIndex = N; dirIndex <= W; dirIndex++)
+    {
+        if (dirIndex == N) dirFolder = "haut_gauche";
+        else if (dirIndex == E) dirFolder = "haut_droit";
+        else if (dirIndex == S) dirFolder = "bas_droit";
+        else if (dirIndex == W) dirFolder = "bas_gauche";
 
-	return index;
+        for (animIndex = 1; animIndex <= _NB_ANIM_; animIndex++)
+        {
+            sprintf(temp, "%s%s/Sprite_%s%d.png", path, dirFolder, dirFolder, animIndex);
+            if(verbose) printf("Chargement de la texture : %s\n", temp);
+            charTextures[indexCharTable].textures[dirIndex][animIndex-1] = loadTexture(renderer, loadImage(temp));
+        }
+    }
+
+    indexCharTable++;
+
+	if(verbose)printf("[GRAPHICS] Ajout de la texture de la classe [%s] à l'id %d\n", name, indexCharTable);
+
+	return indexCharTable;
+}
+
+SDL_Texture * getCharTexture(char *name, Direction direction, int indexAnim)
+// Returns the texture of a given class in a given direction at a given animation index
+{
+    name[0] = tolower(name[0]);
+    for (int i=0; i < _NB_CLASSES_; i++)
+    {
+        if (strcmp(name, charTextures[i].texture_name) == 0) return charTextures[i].textures[direction][indexAnim];
+    }
 }
 
 int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
 // Load all the textures needed for the characters
 {
     int nbSprites = 0;
+    int nbChar = 0;
 
     freeTextures(cSprites);
 
     if(verbose)printf("Chargement des textures des personnages...\n");
 
-    addTextureToTable(  cSprites,
+    nbSprites = addTextureToTable(  cSprites,
                         loadTexture(renderer, loadImage("../inc/img/heart_16.png")),
                         loadTexture(renderer, loadImage("../inc/img/heart_32.png")),
                         "heart_icon");
 
-    nbSprites = addTextureToTable(  cSprites,
-                                    loadTexture(renderer, loadImage("../inc/sprites/base/sprite_sheet/64_64/Sprite_frontview_64.png")),
-                                    loadTexture(renderer, loadImage("../inc/sprites/base/sprite_sheet/128_128/Sprite_frontview_128.png")),
-                                    "base_model");
+    addCharacterTexture(renderer, "angel");
+    addCharacterTexture(renderer, "berserker");
+    addCharacterTexture(renderer, "goliath");
+    addCharacterTexture(renderer, "mage");
+    addCharacterTexture(renderer, "ranger");
+    nbChar = addCharacterTexture(renderer, "valkyrie");
 
-    if(verbose)printf("[CHARACTERS] %d texture(s) de personnage(s) et icone(s) chargée(s) !\n", nbSprites+1);
+    if(verbose)printf("[CHARACTERS] %d texture(s) d'icone(s) chargée(s) !\n", nbSprites+1);
+    if(verbose)printf("[CHARACTERS] %d texture(s) de personnage(s) chargée(s) !\n", nbChar+1);
     return nbSprites;
 }
 
@@ -121,8 +152,8 @@ int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Entity * e
 // Display the characters on the map
 {
     // Display the character
-    if (pxBase == 64)   displaySprite(renderer, getTexture(cSprites, "base_model"), x, y);
-    else                displaySprite(renderer, getBigTexture(cSprites, "base_model"), x, y);
+    if (pxBase == 64)   displaySprite(renderer, getCharTexture(entity->cha_name, entity->direction, 0), x, y);
+    //else                displaySprite(renderer, getBigTexture(cSprites, "base_model"), x, y);
 
     // Display character's life points
     char temp[20];

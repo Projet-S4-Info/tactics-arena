@@ -111,7 +111,8 @@ typedef struct
 typedef struct
 {
     char * texture_name;
-    SDL_Texture *textures[8]; // 4 directions and 2 different sizes -> 8 in total
+    SDL_Texture *front;
+    SDL_Texture *textures[4][6]; // 4 directions and 2 different sizes -> 8 in total and 6 animation sprites
 } CharTexture;
 
 
