@@ -3,6 +3,7 @@
 #define MAX_BUFF_SIZE 1024
 #define PORT 3555
 #include "struct.h"
+#include "common.h"
 
 
 
@@ -25,9 +26,10 @@ extern char MapMultiSelected[50];
 extern int socketConnectedSrv;
 extern int socketConnectedCli;
 
-void startTCPSocketServ();
-int startTCPSocketCli();
-int stopTCPSocketServ(int socketConnected);
+err_t startTCPSocketServ();
+err_t startTCPSocketCli();
+err_t stopTCPSocketServ(int socketConnected);
+err_t stopTCPSocketCli(int socketConnected);
 int listenChanges(int socketConnected);
 void sendStruct(void * structure, int size,int socket);
 void sendPseudo(int sock,t_user info);
