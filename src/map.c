@@ -216,6 +216,21 @@ int displayInterface(SDL_Renderer *renderer)
 	char pa_text[2];
 	char pm_text[2];
 
+	SDL_Rect chatScreen;
+	chatScreen.x = xWinSize-300;
+	chatScreen.y = yWinSize-450;
+	chatScreen.w = 275;
+	chatScreen.h = 350;
+
+	SDL_Rect chatBox;
+	chatBox.x = chatScreen.x - 5;
+	chatBox.y = chatScreen.y - 25;
+	chatBox.w = chatScreen.w + 10;
+	chatBox.h = chatScreen.h + 30; 
+
+
+
+
 	if (tempEntity != NULL)
 	{
 		displayAbilities(renderer);
@@ -254,6 +269,16 @@ int displayInterface(SDL_Renderer *renderer)
 
 	// Turn end icon
 	displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize-280, yWinSize-80);
+
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
+	SDL_RenderFillRect(renderer, &chatBox);
+
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
+	SDL_RenderFillRect(renderer, &chatScreen);
+
+	displayText(renderer, chatBox.x + (chatBox.w /2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255);
 
 	return 0;
 }
