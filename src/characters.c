@@ -68,6 +68,16 @@ SDL_Texture * getCharTexture(char *name, Direction direction, int indexAnim)
     }
 }
 
+SDL_Texture * getCharFrontTexture(char *name)
+// Returns the front texture of a given class
+{
+    name[0] = tolower(name[0]);
+    for (int i=0; i < _NB_CLASSES_; i++)
+    {
+        if (strcmp(name, charTextures[i].texture_name) == 0) return charTextures[i].front;
+    }
+}
+
 int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
 // Load all the textures needed for the characters
 {
@@ -78,10 +88,20 @@ int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
 
     if(verbose)printf("Chargement des textures des personnages...\n");
 
-    nbSprites = addTextureToTable(  cSprites,
+    addTextureToTable(  cSprites,
                         loadTexture(renderer, loadImage("../inc/img/heart_16.png")),
                         loadTexture(renderer, loadImage("../inc/img/heart_32.png")),
                         "heart_icon");
+
+    addTextureToTable(  cSprites,
+                        loadTexture(renderer, loadImage("../inc/img/mv_icon_16.png")),
+                        loadTexture(renderer, loadImage("../inc/img/mv_icon_32.png")),
+                        "mv_icon");
+
+    nbSprites = addTextureToTable(  cSprites,
+                        loadTexture(renderer, loadImage("../inc/img/star_icon_16.png")),
+                        loadTexture(renderer, loadImage("../inc/img/star_icon_32.png")),
+                        "star_icon");
 
     addCharacterTexture(renderer, "angel");
     addCharacterTexture(renderer, "berserker");

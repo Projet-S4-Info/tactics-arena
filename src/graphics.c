@@ -29,6 +29,9 @@ int xWinSize, yWinSize;
 int selected_ability = -1;
 // Hover ability
 int hover_ability = -1;
+// Hover passive help in ID card (with mouse position)
+int hover_passive_help = 0;
+Coord mouse_position;
 // Fin de tour
 int end_of_turn = 0;
 
@@ -380,10 +383,6 @@ int createGameWindow(int x, int y)
 						tempEntity = getEntity(matrix, getSelectedPos());
 						if (tempEntity != NULL)
 						{
-							printf("%s\n", get_desc(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id));
-								printf("%s\n", get_desc(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id));
-								printf("%s\n", get_desc(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id));
-								printf("%s\n", get_desc(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id));
 							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
 							{
 								if (e.motion.x >= 16 && e.motion.x <= 80)	selected_ability = 0;
@@ -470,7 +469,16 @@ int createGameWindow(int x, int y)
 								if (e.motion.x >= 176 && e.motion.x <= 240)	hover_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
 								if (e.motion.x >= 256 && e.motion.x <= 320)	hover_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
 								if (e.motion.x >= 336 && e.motion.x <= 400)	hover_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-								printf("Hovering ability ID %d\n", hover_ability);
+								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
+							}
+							else if (e.motion.x >= 377 && e.motion.x <= 396 && e.motion.y >= 128 && e.motion.y <= 146)
+							{
+								hover_passive_help = 1;
+								mouse_position.x = e.motion.x;
+								mouse_position.y = e.motion.y;
+								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
+							} else {
+								hover_passive_help = 0;
 								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 							}
 						}

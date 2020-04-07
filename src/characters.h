@@ -3,8 +3,11 @@
 
 #include "struct.h"
 
+extern CharTexture charTextures[];
+
 int addCharacterTexture(SDL_Renderer *renderer, char * name);
 SDL_Texture * getCharTexture(char *name, Direction direction, int indexAnim);
+SDL_Texture * getCharFrontTexture(char *name);
 int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites);
 int setEntityToTile(Entity * entity, Coord tile);
 void moveEntity(Coord from, Coord to);

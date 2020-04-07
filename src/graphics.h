@@ -8,9 +8,12 @@
 #include "struct.h"
 
 extern Tile *matrix;
+extern TabTexture cSprites[];
 extern int xWinSize, yWinSize;
 extern int selected_ability;
 extern int hover_ability;
+extern int hover_passive_help;
+extern Coord mouse_position;
 extern char description[100];
 
 void setRendererDriver(SDL_Renderer *renderer);
