@@ -47,7 +47,7 @@ char pseudoCli[128];
 int socketConnectedSrv = 0;
 
 
-int stopTcpSocketServ(int socketConnected){
+err_t stopTcpSocketServ(int socketConnected){
   printf("Shutdown socketConnected ...\n");
   shutdown(socketConnected, 2);
   printf("Close socket : socketConnected...\n");
@@ -58,7 +58,7 @@ int stopTcpSocketServ(int socketConnected){
 
 
 
-void startTCPSocketServ(){
+err_t startTCPSocketServ(){
   #ifdef __WIN64
     /*
     * Change the cmd codepage
@@ -175,51 +175,35 @@ void startTCPSocketServ(){
             }else{
               printf("\nLe pseudo n'est pas mis \n");
             }
-
             
 
-            printf("\nPress (1) start chat :");
-            printf("\nPress (2) send structure : ");
-            printf("\nPress (3) start silent chat : \n");
-            scanf("%d",&choixServ);
-            switch(choixServ){
-              // case 1: startChat(socketConnected);break;
-             // case 2 : sendStruct(socketConnected, (t_personnage)monpersoServ);break;
-              case 3 : silentChat(socketConnected, pseudoUser,(t_msgChat)monMsg);break;
-              case 4 : stopTcpSocketServ(socketConnected);break;
-              case -1 : 
-                printf("Shutdown socketConnected ...\n");
-                shutdown(socketConnected, 2);
-                printf("Close socket : socketConnected...\n");
-                closesocket(socketConnected);
-                break;
-            }
 
-            // if(recv(socketConnected,(void *)&monpersoServ, sizeof(monpersoServ), 0) != SOCKET_ERROR){
-              //   printf("Votre perso a été modifié ! \n");
-              //   printf("l'id du perso est maintenant : %d \n", monpersoServ.id);
-              //   printf("Le nom du perso est maintenant : %s \n", monpersoServ.nom);
-              // }
 
-            printf("Fin de la partie :( \n");
-            
+
+
+
           }
           /*-- Commande pour fermer le firewall sur windows --*/
          // system("netsh advfirewall firewall delete rule name=\"Tactics\"");
         }
         else{
           printf("\nUn problème est survenu lors de la connexion du client :( \n");
+          return SERV_ERROR;
         }
       }
       else{
         printf("\nUn problème est survenu lors de la liaison avec le client :( \n");
+        return SERV_ERROR;
       }
     }
     else{
       printf("\nUn problème est survenu lors de la création de la socket :( \n");
+      return SERV_ERROR;
     }
   }
   else{
     printf("Un problème est survenu avec Windows :( \n");
+    return SERV_ERROR;
   }
+  return SERV_OK;
 }

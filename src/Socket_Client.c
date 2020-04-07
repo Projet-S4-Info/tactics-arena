@@ -26,11 +26,6 @@
   #include <netinet/in.h>
   #include <arpa/inet.h>
   #include <unistd.h>
-  /*
-  * Avoid differences to close a socket
-  * between socket.h and winsock2.h
-  * Adding missing definitions with socket.h
-  */
   #define closesocket(param) close(param)
   #define INVALID_SOCKET -1
   #define SOCKET_ERROR -1
@@ -46,7 +41,16 @@ int socketCli = 0;
 int socketConnectedCli = 0;
 
 
-int startTCPSocketCli(int socketCli){
+err_t stopTCPSocketCli(int socketCli){
+  
+  if(verbose)printf("Fermeture du socket Client ... \n");
+  shutdown(socketCli, 2);
+  closesocket(socketCli);
+  return CLI_OK;
+}
+
+
+err_t startTCPSocketCli(int socketCli){
 
   #ifdef _WIN32
     /*
@@ -68,7 +72,6 @@ int startTCPSocketCli(int socketCli){
     int windWSAError= 0;
   #endif
 
-  int choixCli = 0;
   
   const char * servIP = malloc(sizeof(char) * 85);
 
@@ -77,18 +80,17 @@ int startTCPSocketCli(int socketCli){
     sprintf(infoMoi.pseudo,"LucienCh2424");
       
   if(!windWSAError){
-  servIP = ipSrv;
-  if(verbose)printf("\n%s\n", servIP);
+    servIP = ipSrv;
+    if(verbose)printf("\n%s\n", servIP);
   
   /*---------- Initialisation des structures pour les sockets ----*/
-  
-  SOCKADDR_IN sockIn;
-  SOCKET sock;
-  sockIn.sin_addr.s_addr= inet_addr(servIP);
-  sockIn.sin_family = AF_INET;
-  sockIn.sin_port = htons(PORT);
-
+    SOCKADDR_IN sockIn;
+    SOCKET sock;
+    sockIn.sin_addr.s_addr= inet_addr(servIP);
+    sockIn.sin_family = AF_INET;
+    sockIn.sin_port = htons(PORT);
   /*-------------------------------------------------------------*/
+    
     if(verbose)printf("\nLancement de la création du client...\n");
     
     //-- Création de la socket (IPv4, TCP, 0)
@@ -98,39 +100,29 @@ int startTCPSocketCli(int socketCli){
 
       // -- Tentative de connection vers le serveur
       if(connect(sock, (SOCKADDR*)&sockIn, sizeof(sockIn)) != SOCKET_ERROR){
-       if(verbose)printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
+        if(verbose)printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
         socketConnectedCli = sock;
         if(verbose)printf("\nVous vous appelez : %s", pseudoUser);
         sprintf(infoMoi.pseudo, "%s", pseudoUser);
-       if(verbose)printf("\nDébut de la communication : \n");
-       if(verbose)printf("socketConnectedCli = %d\n", socketConnectedCli);
+        if(verbose)printf("\nDébut de la communication : \n");
+        if(verbose)printf("socketConnectedCli = %d\n", socketConnectedCli);
 
         sendStruct(&infoMoi, sizeof(infoMoi), socketConnectedCli);
-        
-        //printf("Press (1) start chat :\n");
-        //printf("Pess (2) send structure : \n");
-        //printf("Press (3) send mvt : \n");
-        scanf("%d",&choixCli);
-        switch(choixCli){
-          //case 1: startChat(sock,pseudoUser,(t_msgChat)monMsg);break;
-          //case 2: sendStruct(sock, (t_user)infoMoi);break;
-          
-        }
-        printf("Fin de la communication \n");
+        if(verbose)printf("Conexion établie sans soucis fermeture de la fonction... \n");
+        return CLI_OK;
       }
       else{
         printf("Impossble de se connecter au serveur... :( \n");
+        return CLI_ERROR;
       }
-      printf("\nFermeture de la socket... \n");
-      shutdown(sock, 2);
-      closesocket(sock);
     }
     else{
       printf("\nLa socket est invalide :( \n");
+      return CLI_ERROR;
     }
   }
   else{
     printf("\nImpossible de créer une socket :( \n");
+    return CLI_ERROR;
   }
-  return 0;
 }
