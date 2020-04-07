@@ -1,3 +1,13 @@
+/**
+ * \file Socket_Client.c
+ * \brief Client programm for Tactics Arena
+ * \details Contains TCP Client function
+ * \author Lucien Chauvin
+ * \version 0.1.0
+ * \date 18/03/2020
+ */
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -40,6 +50,11 @@
 int socketCli = 0;
 int socketConnectedCli = 0;
 
+/**
+ * \fn err_t stopTCPSocketCli(int socket)
+ * \return err_t CLI_OK
+ * \brief Function to stop the Client connection (close sockets)
+ */
 
 err_t stopTCPSocketCli(int socketCli){
   
@@ -49,6 +64,11 @@ err_t stopTCPSocketCli(int socketCli){
   return CLI_OK;
 }
 
+/**
+ * \fn err_t startTCPSocketCli(int socket)
+ * \return err_t CLI_OK or CLI_ERROR
+ * \brief Function to start to connect a client to a server
+ */
 
 err_t startTCPSocketCli(int socketCli){
 

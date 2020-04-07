@@ -1,3 +1,13 @@
+/**
+ * \file servFcnt.c
+ * \brief All the function used by the server or the client
+ * \details Contains all the function for server and client 
+ * \author Lucien Chauvin
+ * \version 0.1.0
+ * \date 18/03/2020
+*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -49,11 +59,18 @@ char monIP[85];
 
 
 
+/**
+ * \fn void getLocalIP(void)
+ * \return void
+ * \brief Function to get the local ip of the server
+*/
 
 void getLocalIP(){
+  
   char s[81];
-
   FILE *fic;
+  system("ifconfig | grep \"inet 1[97]2.*\" | sed \"s/netmask.*//g\" | sed \"s/inet//g\" > .test.txt");
+
   fic=fopen(".test.txt", "r" );
    if( fic == NULL ){
       printf( "The file was not opened\n" );
@@ -63,22 +80,28 @@ void getLocalIP(){
       /*
       * Get ip from the file named fic
       */
-     #ifdef _WIN32
+    #ifdef _WIN32
       fgets(s,sizeof(s),fic);
     #else
       fscanf(fic,"%s",s);   // C4996
     #endif
       int cpt = 0;
-  
       for(int i = 0; s[i]; i++){
         if(((int)s[i] >= 46) && ((int)s[i] <= 57)){
           monIP[cpt] = s[i];
           cpt++;
         }
       }
-      if(verbose)printf("L'ip du serveur est : %s", monIP);
-    }
+    if(verbose)printf("L'ip du serveur est : %s", monIP);
+  }
 }
+
+/**
+ * \fn const char * setServIP(void)
+ * \return const char *
+ * \brief Function to set the server IP address to a const char * (used for debugging)
+ */
+
 
 const char * setServIP(){
   char * servIP = malloc(sizeof(char) * MAX_BUFF_SIZE);
@@ -87,6 +110,13 @@ const char * setServIP(){
   // printf("\n%s\n", servIP);
   return servIP;
 }
+
+/**
+ * \fn char * flushMsg(char msg[])
+ * \return char *
+ * \brief Function to flush and clean given string
+*/
+
 
 char * flushMsg(char monMsg[MAX_BUFF_SIZE]){
   // printf("\nMon MSG before flush : %s", monMsg);
@@ -97,19 +127,30 @@ char * flushMsg(char monMsg[MAX_BUFF_SIZE]){
   return monMsg;
 }
 
-void sendStruct(void * structure, int size, int socket){
+/**
+ * \fn err_t sendStruct(void * structure, int size, int socket)
+ * \return err_t SEND_OK or SEND_ERROR
+ * \brief Generic function to send a structur to a client or a server
+*/
+
+err_t sendStruct(void * structure, int size, int socket){
   int sockSendError;
 
   sockSendError = send(socket,structure, size, 0);
-  if(sockSendError == SOCKET_ERROR){
-    printf("Impossible d'envoyer la structure... \n");
-  }
-  else{
-    if(verbose)printf("Structure envoyée ! \n");
+  if(sockSendError != SOCKET_ERROR){
+    return SEND_OK;
+  }else{
+    return SEND_ERROR;
   }
 }
 
-void sendMsg(int socket, char pseudo[128], t_msgChat monMsg){
+/**
+ * \fn err_t sendMsg(int socket, char pseudo[], t_msgChat monMsg)
+ * \return err_t SEND_OK or SEND_ERROR
+ * \brief function to send a message to a client or a server
+*/
+
+err_t sendMsg(int socket, char pseudo[128], t_msgChat monMsg){
   int sockCli;
   char buffer[MAX_BUFF_SIZE];
   flushMsg(buffer);
@@ -126,18 +167,27 @@ void sendMsg(int socket, char pseudo[128], t_msgChat monMsg){
   sockCli = send(socket,(void *)&monMsg, sizeof(monMsg), 0);
   if(sockCli != SOCKET_ERROR){
     if(verbose)printf("Message envoyé avec succes ! \n");
+    return SEND_OK;
   }
   else{
     printf("Send MSG error ... \n");
+    return SEND_ERROR;
   }
 }
 
+/**
+ * \fn void startChat(int socket, char pseudo[], t_msgChat monMsg)
+ * \return void
+ * \brief Function to start the chat
+*/
 
 void startChat(int sock, char pseudo[128], t_msgChat monMsg){
 
     sendMsg(sock,pseudo,monMsg);
     silentChat(sock,pseudo,(t_msgChat)monMsg);
 }
+
+
 
 void silentChat(int sock, char pseudo[128], t_msgChat monMsg){
 
@@ -172,7 +222,13 @@ void silentChat(int sock, char pseudo[128], t_msgChat monMsg){
   }
 }
 
-int recep(void * container, int size, int socket){
+/**
+ * \fn err_t recep(void * container, int size, int socket)
+ * \return err_t RECV_OK 
+ * \brief Generic function to receive structures
+*/
+
+err_t recep(void * container, int size, int socket){
   if(verbose)printf("bienvenue dans recep \n");
   int flag = 0;
   while(flag == 0){
@@ -181,5 +237,5 @@ int recep(void * container, int size, int socket){
       flag = 1;
     }
   }
-  return 1;
+  return RECV_OK;
 }
