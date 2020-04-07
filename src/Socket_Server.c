@@ -147,8 +147,6 @@ err_t startTCPSocketServ(){
           socketConnected = accept(sock, (struct  sockaddr  *)&clientAddr, &sizeofSocketConnected);
           if(socketConnected != SOCKET_ERROR){
             
-            int choixServ = 0;
-            
             if(verbose)printf("\nConnexion établie avec le client !\n");
             sleep(1);
             logFlag = 4;
@@ -166,9 +164,6 @@ err_t startTCPSocketServ(){
             
             printf("\nChargement de la partie... \n");
 
-            t_msgChat monMsg;
-            monMsg.ident = 2;
-            sprintf(monMsg.msg,"Client");
             if(isPseudoValid == 1){
               if(verbose)printf("\nVous vous appelez : %s", pseudoUser);
               sprintf(monMsg.pseudoChat,"%s",pseudoUser);
