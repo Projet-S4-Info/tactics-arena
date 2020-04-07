@@ -2,8 +2,13 @@
 #define gameplay_h
 #include "struct.h"
 
+err_t get_team(Entity *e, Entity **all, bool same);
+bool game_over();
 int get_range(int vision, int range_mod);
+char * get_desc(Entity * e, abilityId ab_id);
+bool able_ability(Entity *e, abilityId ab_id);
 bool same_team(Entity *a, Entity *b);
+bool closer_coords(Coord a, Coord b);
 Coord add_coords(Coord a, Coord b);
 Coord compare_coords(Coord a, Coord b);
 bool death_check(Entity * e);
@@ -20,5 +25,8 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id);
 err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id);
 
 int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord starting_point);
+
+int isInRange(Coord coorTab[], Coord attack);
+int setActionZone(Coord perso, int actionRange, Coord coorTab[]);
 
 #endif

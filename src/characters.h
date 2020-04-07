@@ -3,10 +3,14 @@
 
 #include "struct.h"
 
+int addCharacterTexture(SDL_Texture * textureN, SDL_Texture * textureE, SDL_Texture * textureS, SDL_Texture * textureW, 
+                        SDL_Texture * bigTextureN, SDL_Texture * bigTextureE, SDL_Texture * bigTextureS, SDL_Texture * bigTextureW,
+                        char * texture_name);
 int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites);
-int setEntityToTile(Tile * grid, Entity * entity, Coord tile, int xSize, int ySize);
-void moveEntity(Tile * grid, Coord from, Coord to, int xSize, int ySize);
-void createCharacters(Tile * grid, Coord pos, int xSize, int ySize, int pdv);
+int setEntityToTile(Entity * entity, Coord tile);
+void moveEntity(Coord from, Coord to);
+void createCharacters(Coord pos, int pdv);
 int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Entity * entity, int x, int y, int pxBase);
+void switchEntities(Coord pos1, Coord pos2);
 
 #endif

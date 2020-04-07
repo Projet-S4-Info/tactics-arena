@@ -1,9 +1,6 @@
 Robin :
-Apply ability coord restriction (ennemy, ally, any coord).
+Coord Selection Restriction.
 Implement all Status Effects.
-
-Thibault =  add_trap(), 
-            freeze_water(),
-            trap_check(),
-            get_grid().
-Aussi a l'initialisation il faut que tt Tiles soit initialiser avec trap = {0,FALSE}.
+Finish Implementing abilities with pathfinding algorithm.
+Complete and Implement init_server and init_client
+Implement action information relay

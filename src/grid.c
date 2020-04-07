@@ -12,6 +12,11 @@
 #include "grid.h"
 #include "characters.h"
 #include "common.h"
+#include "graphics.h"
+#include "struct.h"
+
+#define _X_SIZE_ 30
+#define _Y_SIZE_ 30
 
 /**
  * \fn void createGrid(Entity * grid, int x, int y)
@@ -24,11 +29,13 @@ void createGrid(Tile * grid, int seed, int x, int y)
 // create the grid with x*y size
 {
     srand(time(NULL));
+    Trap_t trap = {0, FALSE};
     for (int i = 0; i < x*y; i++){
         grid[i].tile_id = rand()%seed;
         int t = rand()%5;
         grid[i].selected = 0;
         grid[i].entity = NULL;
+        grid[i].trap = trap;
     }
 }
 
@@ -56,4 +63,76 @@ Entity * getEntity(Tile * grid, Coord pos)
 {
     if ((*(grid+pos.x*30+pos.y)).entity == NULL) return NULL;
     else return (*(grid+pos.x*30+pos.y)).entity;
+}
+
+int Set_Trap(Trap_t trap, Coord pos)
+// Set a trap on a tile
+{
+    (*(matrix+pos.x*30+pos.y)).trap = trap;
+    return 0;
+}
+
+Trap_t Get_Trap(Coord pos)
+// Returns the trap at the given coordinates
+{
+    return (*(matrix+pos.x*_X_SIZE_+pos.y)).trap;
+}
+
+Tile getSelected()
+// Return the selected tile
+{
+    for (int i=0; i < _X_SIZE_; i++)
+    {
+        for (int j=0; j < _Y_SIZE_; j++)
+        {
+            if ((*(matrix+i*_X_SIZE_+j)).selected == 1) return (*(matrix+i*_X_SIZE_+j));
+        }
+    }
+}
+
+Coord getSelectedPos()
+// Return the coordinates of the selected tile
+{
+    for (int i=0; i < _X_SIZE_; i++)
+    {
+        for (int j=0; j < _Y_SIZE_; j++)
+        {
+            if ((*(matrix+i*_X_SIZE_+j)).selected == 1)
+            {
+                Coord res = {i, j};
+                return res;
+            }
+        }
+    }
+}
+
+void unselect()
+// Unselect the selected tile
+{
+    for (int i=0; i < _X_SIZE_; i++)
+    {
+        for (int j=0; j < _Y_SIZE_; j++)
+        {
+            if ((*(matrix+i*_X_SIZE_+j)).selected == 1) (*(matrix+i*_X_SIZE_+j)).selected = 0;
+        }
+    }
+}
+
+void setSelected(Coord pos)
+// Set the tile at pos selected
+{
+    unselect();
+    (*(matrix+pos.x*_X_SIZE_+pos.y)).selected = 1;
+}
+
+void freezeWater(Coord pos)
+// Turns the given water block to an ice block
+{
+    if ((*(matrix+pos.x*_X_SIZE_+pos.y)).tile_id == 4)   (*(matrix+pos.x*_X_SIZE_+pos.y)).tile_id = 6;
+}
+
+Tile * getTile(Coord pos)
+// Returns the tile at the given coordinates
+{
+    return (matrix+pos.x*_X_SIZE_+pos.y);
 }

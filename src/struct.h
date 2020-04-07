@@ -6,6 +6,7 @@
 #include "../SDL2/include/SDL2/SDL_ttf.h"
 #include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "state.h"
+#include "substruct.h"
 
 /* BASIC STRUCTURES*/
 typedef struct
@@ -25,7 +26,7 @@ typedef struct
 typedef struct {
     int char_id;
     Coord c;
-    abilityId act; //-1 if movement
+    abilityId act; //0 if movement
 }action;
 
 typedef struct
@@ -106,6 +107,12 @@ typedef struct
     SDL_Texture *texture;
     SDL_Texture *big_texture;
 } TabTexture;
+
+typedef struct
+{
+    char * texture_name;
+    SDL_Texture *textures[8]; // 4 directions and 2 different sizes -> 8 in total
+} CharTexture;
 
 
 /* COMMUNICATION STRUCTURES */

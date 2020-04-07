@@ -1,5 +1,56 @@
 #include "init.h"
 #include "grid.h"
+#include "graphics.h"
+
+err_t get_team(Entity *e, Entity **all, bool same)
+{
+    if(same)
+    {
+        if(e->cha_id<0)
+        {
+            *all = Foes;
+        }
+        else
+        {
+            *all = Allies;
+        }
+    }
+    else
+    {
+        if(e->cha_id<0)
+        {
+            *all = Allies;
+        }
+        else
+        {
+            *all = Foes;
+        }
+    }
+
+    return OK;
+}
+
+winId game_over()
+{
+    winId all_dead = LOSE;
+    int i;
+
+    for(i=0; i<NUM_CLASS && all_dead; i++)
+    {
+        all_dead = Allies[i].active ? ONGOING : LOSE;
+    }
+
+    if(!all_dead)
+    {
+        all_dead = WIN;
+        for(i=0; i<NUM_CLASS && all_dead; i++)
+        {
+            all_dead = Foes[i].active ? ONGOING : WIN;
+        }
+    }
+
+    return all_dead;
+}
 
 int get_range(int vision, int range_mod)
 {
@@ -11,6 +62,21 @@ int get_range(int vision, int range_mod)
     }
 
     return range;
+}
+
+char * get_name(Entity * e, abilityId ab_id)
+{
+    return e->cha_class->cla_abilities[ab_id%NUM_AB].eng.name;
+}
+
+char * get_desc(Entity * e, abilityId ab_id)
+{
+    return e->cha_class->cla_abilities[ab_id%NUM_AB].eng.desc;
+}
+
+bool able_ability(Entity *e, abilityId ab_id)
+{
+    return e->act_points >= e->cha_class->cla_abilities[ab_id%NUM_AB].ab_cost;
 }
 
 bool same_team(Entity *a, Entity *b)
@@ -37,6 +103,11 @@ err_t reset_cooldowns(Entity * e)
     }
 
     return OK;
+}
+
+bool closer_coords(Coord a, Coord b)
+{
+    return sqrt(a.x*a.x+a.y+a.y) <= sqrt(b.x*b.x+b.y*b.y);
 }
 
 Coord compare_coords(Coord a, Coord b)
@@ -300,7 +371,8 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
         {
             c=add_coords(starting_point, active_ab.coord[i]);
 
-            //e=getEntity(c);
+            e=getEntity(matrix , c);
+            
             if(e!=NULL)
             {
                 if(verbose)printf("%s was found in the zone!\n", e->cha_name);
@@ -343,4 +415,148 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
         }
 
     return death_count;
+}
+
+int actionZone(int posX, int posY, int actionRange, Coord coorTab[]){
+
+    int cpt = 0;
+    int h;
+
+    //quart gauche haut
+    h = posY;
+    for(int x = (posX - actionRange) ; x <= posX; x++){
+        if((x > 0) && (x < taille)){
+            coorTab[cpt].x = x;
+            coorTab[cpt].y = h;
+            cpt++;
+        }else if(x <= 0 && h >= 0){
+            coorTab[cpt].x = 0;
+            coorTab[cpt].y = h;
+            cpt++;
+        }
+        if(h <= 0){
+            h = 0;
+        }else{
+            h--;
+        }
+    }
+
+    //quart droit haut
+    h = posY;
+    for(int x = (posX + actionRange) ; x >= posX; x--){
+        if((x > 0) && (x < taille )){
+            coorTab[cpt].x = x;
+            coorTab[cpt].y = h;
+            cpt++;
+        }else if(x >= taille -1){
+            coorTab[cpt].x = taille -1;
+            coorTab[cpt].y = h;
+            cpt++;
+        }
+        if(h <= 0){
+            h = 0;
+        }else{
+            h--;
+        }
+    }
+
+    //quart droite bas
+    h = posY;
+    for(int x = (posX + actionRange) ; x >= posX; x--){
+        if((x > 0) && (x < taille)){
+            coorTab[cpt].x = x;
+            coorTab[cpt].y = h;
+            cpt++;
+        }else if(x >= taille -1){
+            coorTab[cpt].x = taille -1;
+            coorTab[cpt].y = h;
+            cpt++;
+        }
+        if(h >= taille -1){
+            h = taille -1;
+        }else{
+            h++;
+        }
+    }
+
+    //quart gauche bas
+    h=posY;
+    for(int x = (posX - actionRange) ; x <= posX; x++){
+        if((x > 0) && (x < taille)){
+            coorTab[cpt].x = x;
+            coorTab[cpt].y = h;
+            cpt++;
+        }else if(x <= 0){
+            coorTab[cpt].x = 0;
+            coorTab[cpt].y = h;
+            cpt++;
+        }
+        if(h >= taille -1){
+            h = taille -1;
+        }else{
+            h++;
+        }
+    }
+    
+    coorTab[cpt].x = -99;
+    coorTab[cpt].y = -99;
+
+    if(verbose){
+        printf("nbcoord : %d\n", cpt-1);
+        for(int i = 0; i < MAXRANGE; i++){
+            printf(" tour %d :\nx = %d\ny = %d\n", i, coorTab[i].x, coorTab[i].y);
+        }
+    }
+
+    return 1;
+}
+
+
+int isInRange(Coord coorTab[], Coord attack){
+    
+    int cursY = attack.y;
+    int touchLine = 0;
+    for(int i = 0; coorTab[i].x!=-99; i++){
+        int cursX=0;
+        for(int j = 0; j <= cursY; j++){
+            if(cursX == (coorTab[i].x + 1) && cursY == (coorTab[i].y + 1)){
+                touchLine++;
+                cursX++;
+            }
+            if(verbose)printf("test %d : %d | %d : %d \n", cursX,cursY,coorTab[i].x, coorTab[i].y);
+            cursX++;
+        }
+        if(verbose)printf("\n");
+    }
+    if(touchLine == 1){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+int setActionZone(Coord perso, int actionRange, Coord coorTab[]){
+    int posX = perso.x;
+    int posY = perso.y;
+    int res = 0;
+
+    if(posX == 30 && posY == 30){
+        if(verbose)printf("posX = 30 && posY = 30");
+        res = actionZone(posX-1,posY -1, actionRange, coorTab);
+    }else if(posX == 0 && posY == 0){
+        if(verbose)printf("posX = 0 && posY = 0");
+        res = actionZone(posX,posY, actionRange, coorTab);
+    }else if(posX == 0 && posY == 30){
+        if(verbose)printf("posX = 0 && posY = 30\n");
+        res = actionZone(posX,posY-1, actionRange, coorTab);
+    }else if (posX == 30 && posY == 0){
+       if(verbose)printf("posx = 30 && posY = 0\n");
+        res = actionZone(posX -1, posY, actionRange, coorTab);
+    }
+    else{
+        if(verbose)printf("Autres cas \n");
+        res = actionZone(posX,posY, actionRange, coorTab);
+    }
+
+    return res;
 }

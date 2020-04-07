@@ -5,6 +5,7 @@
 #include "common.h"
 #include "passives.h"
 #include "gameplay.h"
+#include "grid.h"
 
 err_t apply_action(action a)
 {
@@ -24,6 +25,15 @@ err_t apply_action(action a)
         list = stSent;
     }
     active_ab = active_ent->cha_class->cla_abilities[a.act%NUM_AB];
+
+    if(!active_ent->status_effect[Blessed])
+    {
+        active_ent->ab_cooldown[a.act%NUM_AB] = active_ab.ab_cooldown;
+    }
+    else
+    {
+        if(verbose)printf("%s is Blessed!\n", active_ent->cha_name);
+    }
 
     //ANIMATE THE ACTION
 
@@ -52,15 +62,6 @@ err_t apply_action(action a)
         {
         activate_bloodlust(active_ent, list);
         }
-    }
-    
-    if(!active_ent->status_effect[Blessed])
-    {
-        active_ent->ab_cooldown[a.act%NUM_AB] = active_ab.ab_cooldown;
-    }
-    else
-    {
-        if(verbose)printf("%s is Blessed!\n", active_ent->cha_name);
     }
 
     active_ent->act_points -= active_ab.ab_cost;
@@ -132,9 +133,14 @@ Entity * play_check(Entity *E)
     do
     {
         if((F[i].active) && (F[i].act_points>0) && !(F[i].status_effect[Freezing]))
+        {
+            setSelected((F+i)->coords);
             return F + i;
+        }
         else
-            i = i==NUM_CLASS-1 ? 0 : i+1;    
+        {
+            i = i==NUM_CLASS-1 ? 0 : i+1;  
+        }  
         
     } while(i!=current);
     
@@ -161,6 +167,7 @@ err_t local_turn()
                 //Select entity pointed to by active_ent
                 //wait for action selection
                 //wait for coordinate selection
+                a = fonction(Entity * e)
             }while(a.act<0);*/
 
         //relay action information & wait for confirmation
@@ -182,7 +189,6 @@ err_t local_turn()
 
 err_t opposing_turn()
 {
-    //action a;
 
     turn_start(Foes);
 
@@ -202,4 +208,34 @@ err_t opposing_turn()
     turn_end(Foes, stSent);
 
     return OK;
+}
+
+winId game_loop(err_t (*turn1)(void), err_t (*turn2)(void))
+{
+    winId game_end;
+
+    while(TRUE)
+    {
+        turn1();
+
+        if((game_end = game_over()))
+            break;
+
+        turn2();
+
+        if((game_end = game_over()))
+            break;
+    }
+
+    return game_end;
+}
+
+winId init_client()
+{
+    return game_loop(opposing_turn,local_turn);
+}
+
+winId init_server()
+{
+    return game_loop(local_turn,opposing_turn);
 }

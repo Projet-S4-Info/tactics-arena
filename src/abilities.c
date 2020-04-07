@@ -2,12 +2,14 @@
 #include "init.h"
 #include "gameplay.h"
 #include "grid.h"
+#include "graphics.h"
+#include "characters.h"
 
 int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
 {
     Status v = {3,atk,0};
     Entity * t;
-    //t = getEntity(c);
+    t = getEntity(matrix, c);
     if(t!=NULL)
     {
         if(t==Dead)
@@ -57,7 +59,8 @@ int Fury_fn(Coord c, Entity * e, StateList * list)
 
 int Frenzied_Dash_fn(Coord c, Entity * e, StateList * list)
 {
-    //Switch Coords
+    moveEntity(e->coords, c);
+    e->coords = c;
     return 0;
 }
 
@@ -108,21 +111,14 @@ int Trap_fn(Coord c, Entity * e, StateList * list)
 {
 
     Trap_t t = {e->cha_id, same_team(e, Allies)};
-    //APPLY TRAP TO c
+    Set_Trap(t, c);
     return 0;
 }
 
 int Banner_fn(Coord c, Entity * e, StateList * list)
 {
     Entity * all;
-    if(e->cha_id<0)
-    {
-        all = Foes;
-    }
-    else
-    {
-        all = Allies;
-    }
+    get_team(e, &all, TRUE);
 
     int i;
     for(i=0; i<NUM_CLASS; i++)
@@ -159,14 +155,7 @@ int FlameCharge_fn(Coord c, Entity * e, StateList * list)
 int Flare_fn(Coord c, Entity * e, StateList * list)
 {
     Entity * all;
-    if(e->cha_id<0)
-    {
-        all = Foes;
-    }
-    else
-    {
-        all = Allies;
-    }
+    get_team(e, &all, TRUE);
 
     Status b_vis = {4,vis,2};
     Status b_mv = {4,mv,2};
@@ -178,33 +167,94 @@ int Flare_fn(Coord c, Entity * e, StateList * list)
         apply_stat_change(b_mv,all+i,list);
     }
 
-    //TRAP CHECK
+    Ability a = e->cha_class->cla_abilities[Flare%NUM_AB];
+    Trap_t t;
+    Coord c2;
+
+    for(i=0; i<a.nb_coords; i++)
+    {
+        c2 = add_coords(c,a.coord[i]);
+        t = Get_Trap(c2);
+        if(t.cha_id<0)
+        {
+            t.visible = TRUE;
+            Set_Trap(t,c2);
+        }
+    }
 
     return 0;
 }
 
 int Blizzard_fn(Coord c, Entity * e, StateList * list)
 {
-    //IF c is water
-    //Change to ice
+    freezeWater(c);
     return 0;
 }
 
 int Volt_Switch_fn(Coord c, Entity * e, StateList * list)
 {
-    //Switch coords
+    Entity * t = getEntity(matrix,c);
+    switchEntities(c,e->coords);
+    t->coords = e->coords;
+    e->coords = c;
+
     return 0;
 }
 
 int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
 {
-    //Implement algo de lucien
-    return 0;
+    Entity * all;
+    get_team(e, &all, FALSE);
+
+    Coord ct = c;
+    Coord t[MAXRANGE];
+    int i,j,d=0;
+    Entity * target = NULL;
+    Coord closest = {-99, -99} , ctemp;
+
+    for(i=0; i<3; i++)
+    {
+        setActionZone(ct, 6, t);
+        for(j=0; j<NUM_CLASS; j++)
+        {
+            if(isInRange(t, (all+j)->coords))
+            {
+                if(closest.x == -99)
+                {
+                    target = all+j;
+                    closest = compare_coords(c, target->coords);
+                }
+                else
+                {
+                    ctemp = compare_coords(c, (all+j)->coords);
+                    if(closer_coords(ctemp, closest))
+                    {
+                        target = all+j;
+                        closest = ctemp;
+                    }
+                }
+            }
+        }
+
+        if(target != NULL)
+        {
+            apply_damage(e->cha_class->cla_abilities[Lightning_Chain%NUM_AB].damage, e, target);
+            ct = target->coords;
+            closest.x = -99;
+            target = NULL;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return d;
 }
 
 int Thrust_fn(Coord c, Entity * e, StateList * list)
 {
-    /*Entity * target = getEntity(add_coords(c,compare_coords(e->coords,c)));
+    Entity * target = getEntity(matrix, add_coords(c,compare_coords(e->coords,c)));
 
     if(target!=NULL)
     {
@@ -213,8 +263,7 @@ int Thrust_fn(Coord c, Entity * e, StateList * list)
         {
             return 1;
         }
-    }*/
-
+    }
     return 0;
 }
 
@@ -222,10 +271,25 @@ int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
 {
     Entity *f;
     Entity *t;
-    Coord ct;
-    //Select an Ennemy
-    //f=getEntity(c);
-    //t=getEntity(ct);
+
+    Entity * all;
+    get_team(e, &all, FALSE);
+
+    int i,j=0;
+    int tab[NUM_CLASS];
+
+    for(i=0; i<NUM_CLASS; i++)
+    {
+        if((all+i)->active)
+        {
+            tab[j++] = (all+i)->cha_class->cla_id;
+        }
+    }
+
+    t = &all[tab[rand()%j]];
+
+    f=getEntity(matrix, c);
+
     int h = f->base_stats[pv] - f->stat_mods[pv];
     f->stat_mods[pv] = 20;
 

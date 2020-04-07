@@ -7,6 +7,40 @@
 #include "substruct.h"
 #include "common.h"
 
+#define _X_SIZE_ 30
+#define _Y_SIZE_ 30
+
+#define _NB_CLASSES_ 6
+
+CharTexture charTextures[_NB_CLASSES_];
+
+int addCharacterTexture(SDL_Texture * textureN, SDL_Texture * textureE, SDL_Texture * textureS, SDL_Texture * textureW, 
+                        SDL_Texture * bigTextureN, SDL_Texture * bigTextureE, SDL_Texture * bigTextureS, SDL_Texture * bigTextureW,
+                        char * texture_name)
+// Add to the TabTexture table the given texture and its big one
+{
+	int index = 0;
+
+	while (charTextures[index].textures[0] != NULL)
+	{
+		index++;
+	}
+
+	charTextures[index].textures[N] = textureN;
+	charTextures[index].textures[E] = textureE;
+    charTextures[index].textures[S] = textureS;
+    charTextures[index].textures[W] = textureW;
+    charTextures[index].textures[4+N] = bigTextureN;
+	charTextures[index].textures[4+E] = bigTextureE;
+    charTextures[index].textures[4+S] = bigTextureS;
+    charTextures[index].textures[4+W] = bigTextureW;
+	charTextures[index].texture_name = texture_name;
+
+	if(verbose)printf("[GRAPHICS] Ajout de la texture de la classe [%s] à l'id %d\n", texture_name, index);
+
+	return index;
+}
+
 int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
 // Load all the textures needed for the characters
 {
@@ -30,49 +64,57 @@ int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
     return nbSprites;
 }
 
-void setEntityToTile(Tile * grid, Entity * entity, Coord tile, int xSize, int ySize)
+void setEntityToTile(Entity * entity, Coord tile)
 // Set an entity to a specific tile
 {    
-    if (tile.x < 0 || tile.x >= xSize || tile.y < 0 || tile.y >= ySize)
+    if (tile.x < 0 || tile.x >= _X_SIZE_ || tile.y < 0 || tile.y >= _Y_SIZE_)
     {
         printf("\033[31;01mERRoR\033[00m : Coordinates out of boundaries\n");
         exit(EXIT_FAILURE);
     };
 
-    if (entity == NULL || grid == NULL)
+    if (entity == NULL || matrix == NULL)
     {
         printf("\033[31;01mERROR\033[00m : Pointer null on tile or entity\n");
         exit(EXIT_FAILURE);
     }
 
-    grid[tile.x*xSize+tile.y].entity = entity;
+    matrix[tile.x*_X_SIZE_+tile.y].entity = entity;
 }
 
-void moveEntity(Tile * grid, Coord from, Coord to, int xSize, int ySize)
+void moveEntity(Coord from, Coord to)
 // Move an entity already set on a tile to a new one
 {
-    if (from.x < 0 || from.x >= xSize || from.y < 0 || from.y >= ySize || to.x < 0 || to.x >= xSize || to.y < 0 || to.y >= ySize)
+    if (from.x < 0 || from.x >= _X_SIZE_ || from.y < 0 || from.y >= _Y_SIZE_ || to.x < 0 || to.x >= _X_SIZE_ || to.y < 0 || to.y >= _Y_SIZE_)
     {
         printf("\033[31;01mERROR\033[00m : Coordinates out of boundaries\n");
         exit(EXIT_FAILURE);
     };
 
-    if (grid[from.x*xSize+from.y].entity == NULL || grid == NULL)
+    if (matrix[from.x*_X_SIZE_+from.y].entity == NULL || matrix == NULL)
     {
         printf("\033[31;01mERROR\033[00m : Pointer null on tile or entity\n");
         exit(EXIT_FAILURE);
     }
 
-    grid[to.x*xSize+to.y].entity = grid[from.x*xSize+from.y].entity;
-    grid[from.x*xSize+from.y].entity = NULL;
+    matrix[to.x*_X_SIZE_+to.y].entity = matrix[from.x*_X_SIZE_+from.y].entity;
+    matrix[from.x*_X_SIZE_+from.y].entity = NULL;
 }
 
-void createCharacters(Tile * grid, Coord pos, int xSize, int ySize, int pdv)
+void switchEntities(Coord pos1, Coord pos2)
+// Switch the positions of the 2 entities
+{
+    Entity * temp = (*(matrix+pos1.x*_X_SIZE_+pos1.y)).entity;
+    (*(matrix+pos1.x*_X_SIZE_+pos1.y)).entity = (*(matrix+pos2.x*_X_SIZE_+pos2.y)).entity;
+    (*(matrix+pos2.x*_X_SIZE_+pos2.y)).entity = temp;
+}
+
+void createCharacters(Coord pos, int pdv)
 // Create a new character at (x,y) pos
 {
     Entity * entity = malloc(sizeof(Entity));
     entity->stat_mods[0] = pdv;
-    grid[pos.x*xSize+pos.y].entity = entity;
+    matrix[pos.x*_X_SIZE_+pos.y].entity = entity;
 }
 
 int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Entity * entity, int x, int y, int pxBase)
