@@ -1,5 +1,5 @@
-#ifndef menu_multi_h
-#define menu_multi_h
+#ifndef multi_menu_h
+#define multi_menu_h
 
 #include "../SDL2/include/SDL2/SDL.h"
 #include "../SDL2/include/SDL2/SDL_image.h"

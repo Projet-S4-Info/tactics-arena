@@ -115,8 +115,6 @@ err_t startTCPSocketCli(int socketCli){
         printf("Impossble de se connecter au serveur... :( \n");
         return CLI_ERROR;
       }
-     
-      
     }
     else{
       printf("\nLa socket est invalide :( \n");
