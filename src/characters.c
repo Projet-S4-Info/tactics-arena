@@ -10,6 +10,37 @@
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
 
+#define _NB_CLASSES_ 6
+
+CharTexture charTextures[_NB_CLASSES_];
+
+int addCharacterTexture(SDL_Texture * textureN, SDL_Texture * textureE, SDL_Texture * textureS, SDL_Texture * textureW, 
+                        SDL_Texture * bigTextureN, SDL_Texture * bigTextureE, SDL_Texture * bigTextureS, SDL_Texture * bigTextureW,
+                        char * texture_name)
+// Add to the TabTexture table the given texture and its big one
+{
+	int index = 0;
+
+	while (charTextures[index].textures[0] != NULL)
+	{
+		index++;
+	}
+
+	charTextures[index].textures[N] = textureN;
+	charTextures[index].textures[E] = textureE;
+    charTextures[index].textures[S] = textureS;
+    charTextures[index].textures[W] = textureW;
+    charTextures[index].textures[4+N] = bigTextureN;
+	charTextures[index].textures[4+E] = bigTextureE;
+    charTextures[index].textures[4+S] = bigTextureS;
+    charTextures[index].textures[4+W] = bigTextureW;
+	charTextures[index].texture_name = texture_name;
+
+	if(verbose)printf("[GRAPHICS] Ajout de la texture de la classe [%s] à l'id %d\n", texture_name, index);
+
+	return index;
+}
+
 int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
 // Load all the textures needed for the characters
 {

@@ -326,11 +326,11 @@ int createGameWindow(int x, int y)
 		SDL_Delay(1);
 
 		Coord testCoord = {10,13};
-		setEntityToTile(matrix, &Allies[0], testCoord, 30, 30);
+		setEntityToTile(&Allies[0], testCoord);
 		Coord testCoord2 = {21,11};
-		setEntityToTile(matrix, &Allies[1], testCoord2, 30, 30);
+		setEntityToTile(&Allies[1], testCoord2);
 		Coord testCoord3 = {6,23};
-		setEntityToTile(matrix, &Allies[2], testCoord3, 30, 30);
+		setEntityToTile(&Allies[2], testCoord3);
 
 		displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 

@@ -108,6 +108,12 @@ typedef struct
     SDL_Texture *big_texture;
 } TabTexture;
 
+typedef struct
+{
+    char * texture_name;
+    SDL_Texture *textures[8]; // 4 directions and 2 different sizes -> 8 in total
+} CharTexture;
+
 
 /* COMMUNICATION STRUCTURES */
 

@@ -212,6 +212,7 @@ int displayInterface(SDL_Renderer *renderer)
 			displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, selected_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
 		} else {
 			if (hover_ability == 10) displayText(renderer, xWinSize-280, yWinSize-110, 20, "Passer son tour", "../inc/font/Pixels.ttf", 255, 255, 255);
+			if (hover_ability == 0) displayText(renderer, 16, yWinSize-110, 20, "Déplacement", "../inc/font/Pixels.ttf", 255, 255, 255);
 			if (hover_ability > 0) displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, hover_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
 		}
 	}
