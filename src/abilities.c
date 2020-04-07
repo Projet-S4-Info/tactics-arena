@@ -59,7 +59,8 @@ int Fury_fn(Coord c, Entity * e, StateList * list)
 
 int Frenzied_Dash_fn(Coord c, Entity * e, StateList * list)
 {
-    
+    moveEntity(e->coords, c);
+    e->coords = c;
     return 0;
 }
 
@@ -117,14 +118,7 @@ int Trap_fn(Coord c, Entity * e, StateList * list)
 int Banner_fn(Coord c, Entity * e, StateList * list)
 {
     Entity * all;
-    if(e->cha_id<0)
-    {
-        all = Foes;
-    }
-    else
-    {
-        all = Allies;
-    }
+    get_team(e, &all, TRUE);
 
     int i;
     for(i=0; i<NUM_CLASS; i++)
@@ -161,14 +155,7 @@ int FlameCharge_fn(Coord c, Entity * e, StateList * list)
 int Flare_fn(Coord c, Entity * e, StateList * list)
 {
     Entity * all;
-    if(e->cha_id<0)
-    {
-        all = Foes;
-    }
-    else
-    {
-        all = Allies;
-    }
+    get_team(e, &all, TRUE);
 
     Status b_vis = {4,vis,2};
     Status b_mv = {4,mv,2};
@@ -216,8 +203,53 @@ int Volt_Switch_fn(Coord c, Entity * e, StateList * list)
 
 int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
 {
-    //Implement algo de lucien
-    return 0;
+    Entity * all;
+    get_team(e, &all, FALSE);
+
+    Coord ct = c;
+    Coord t[MAXRANGE];
+    int i,j,d=0;
+    Entity * target = NULL;
+    Coord closest = {-99, -99} , ctemp;
+
+    for(i=0; i<3; i++)
+    {
+        setActionZone(ct, 6, t);
+        for(j=0; j<NUM_CLASS; j++)
+        {
+            if(isInRange(t, (all+j)->coords))
+            {
+                if(closest.x == -99)
+                {
+                    target = all+j;
+                    closest = compare_coords(c, target->coords);
+                }
+                else
+                {
+                    ctemp = compare_coords(c, (all+j)->coords);
+                    if(closer_coords(ctemp, closest))
+                    {
+                        target = all+j;
+                        closest = ctemp;
+                    }
+                }
+            }
+        }
+
+        if(target != NULL)
+        {
+            apply_damage(e->cha_class->cla_abilities[Lightning_Chain%NUM_AB].damage, e, target);
+            ct = target->coords;
+            closest.x = -99;
+            target = NULL;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return d;
 }
 
 int Thrust_fn(Coord c, Entity * e, StateList * list)
@@ -241,14 +273,7 @@ int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
     Entity *t;
 
     Entity * all;
-    if(e->cha_id<0)
-    {
-        all = Allies;
-    }
-    else
-    {
-        all = Foes;
-    }
+    get_team(e, &all, FALSE);
 
     int i,j=0;
     int tab[NUM_CLASS];

@@ -26,6 +26,15 @@ err_t apply_action(action a)
     }
     active_ab = active_ent->cha_class->cla_abilities[a.act%NUM_AB];
 
+    if(!active_ent->status_effect[Blessed])
+    {
+        active_ent->ab_cooldown[a.act%NUM_AB] = active_ab.ab_cooldown;
+    }
+    else
+    {
+        if(verbose)printf("%s is Blessed!\n", active_ent->cha_name);
+    }
+
     //ANIMATE THE ACTION
 
     if(verbose)printf("\n\n%s has chosen to %s at the following coordinates : %d,%d\n", active_ent->cha_name, active_ab.eng.name, a.c.x, a.c.y);
@@ -53,15 +62,6 @@ err_t apply_action(action a)
         {
         activate_bloodlust(active_ent, list);
         }
-    }
-    
-    if(!active_ent->status_effect[Blessed])
-    {
-        active_ent->ab_cooldown[a.act%NUM_AB] = active_ab.ab_cooldown;
-    }
-    else
-    {
-        if(verbose)printf("%s is Blessed!\n", active_ent->cha_name);
     }
 
     active_ent->act_points -= active_ab.ab_cost;
@@ -189,7 +189,6 @@ err_t local_turn()
 
 err_t opposing_turn()
 {
-    //action a;
 
     turn_start(Foes);
 
@@ -219,12 +218,12 @@ winId game_loop(err_t (*turn1)(void), err_t (*turn2)(void))
     {
         turn1();
 
-        if(game_end = game_over())
+        if((game_end = game_over()))
             break;
 
         turn2();
 
-        if(game_end = game_over())
+        if((game_end = game_over()))
             break;
     }
 
