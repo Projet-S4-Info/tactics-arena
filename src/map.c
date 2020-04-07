@@ -88,11 +88,17 @@ int loadMapTextures(SDL_Renderer * renderer)
 						NULL,
 						"attack");
 
-	// Loading sand block textures
+	// Loading end of turn button
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/turn_end_grey.png")),
+						NULL,
+						"end_turn");
+
+	// Loading ID card texture
 	index = addTextureToTable(	textures,
-								loadTexture(renderer, loadImage("../inc/img/turn_end_grey.png")),
-								NULL,
-								"end_turn");
+						loadTexture(renderer, loadImage("../inc/img/id_card.png")),
+						NULL,
+						"id_card");
 
 	if(verbose)printf("[GRAPHICS] %d texture(s) chargée(s) !\n", index+1);
 
@@ -205,15 +211,44 @@ int displayInterface(SDL_Renderer *renderer)
 // Display the UI
 {
 	Entity * tempEntity = getEntity(matrix, getSelectedPos());
+	char passive[100];
+	char pv_text[2];
+	char pa_text[2];
+	char pm_text[2];
+
 	if (tempEntity != NULL)
 	{
 		displayAbilities(renderer);
 		if (selected_ability != -1){
 			displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, selected_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
 		} else {
-			if (hover_ability == 10) displayText(renderer, xWinSize-280, yWinSize-110, 20, "Passer son tour", "../inc/font/Pixels.ttf", 255, 255, 255);
-			if (hover_ability == 0) displayText(renderer, 16, yWinSize-110, 20, "Déplacement", "../inc/font/Pixels.ttf", 255, 255, 255);
+			if (hover_ability == 10) displayText(renderer, xWinSize-280, yWinSize-110, 20, "Skip turn", "../inc/font/Pixels.ttf", 255, 255, 255);
+			if (hover_ability == 0) displayText(renderer, 16, yWinSize-110, 20, "Move", "../inc/font/Pixels.ttf", 255, 255, 255);
 			if (hover_ability > 0) displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, hover_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
+		}
+
+		// Display the ID card of the selected entity
+		displaySprite(renderer, getTexture(textures, "id_card"), 10, 10);
+		displayText(renderer, 382, 128, 18, "?", "../inc/font/Pixels.ttf", 255, 255, 255);
+		displaySprite(renderer, getCharFrontTexture(tempEntity->cha_name), 51, 52);
+		displayText(renderer, 170, 45, 20, tempEntity->cha_class->cla_name, "../inc/font/Pixels.ttf", 255, 255, 255);
+		// -- entity health
+		displaySprite(renderer, getBigTexture(cSprites, "heart_icon"), 170, 70);
+		sprintf(pv_text, "%d", tempEntity->stat_mods[pv]);
+		displayText(renderer, 200, 70, 30, pv_text, "../inc/font/Pixels.ttf", 255, 0, 0);
+		// -- entity action points
+		displaySprite(renderer, getBigTexture(cSprites, "star_icon"), 165, 102);
+		sprintf(pa_text, "%d", tempEntity->act_points);
+		displayText(renderer, 202, 106, 30, pa_text, "../inc/font/Pixels.ttf", 49, 174, 196);
+		// -- entity mouvement points
+		displaySprite(renderer, getBigTexture(cSprites, "mv_icon"), 250, 102);
+		sprintf(pm_text, "%d", tempEntity->stat_mods[mv]);
+		displayText(renderer, 287, 106, 30, pm_text, "../inc/font/Pixels.ttf", 52, 169, 43);
+		if (hover_passive_help == 1)
+		{
+			sprintf(passive, "Passive : %s", tempEntity->cha_class->Passive.name);
+			displayText(renderer, mouse_position.x+20, mouse_position.y+20, 20, passive, "../inc/font/Pixels.ttf", 238, 165, 53);
+			displayText(renderer, mouse_position.x+20, mouse_position.y+40, 20, tempEntity->cha_class->Passive.desc, "../inc/font/Pixels.ttf", 238, 165, 53);
 		}
 	}
 
@@ -274,11 +309,11 @@ int displayMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, in
 
 	displayInterface(renderer);
 
-	// -- DEBUG Affichage des coordonnées d'affichage de la map
+	/* -- DEBUG Affichage des coordonnées d'affichage de la map
 	char str[12];
 	sprintf(str, "%d, %d", x, y);
 	displayText(renderer, 20, 20, 20, str, "../inc/font/Pixels.ttf", 255, 255, 255);
-	// -- DEBUG --
+	// -- DEBUG --*/
 
 	SDL_RenderPresent(renderer);
 
