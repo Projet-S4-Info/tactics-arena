@@ -1,3 +1,14 @@
+/**
+ * \file Socket_Server.c
+ * \brief Server programm for Tactics Arena
+ * \details Contains TCP server function
+ * \author Lucien Chauvin
+ * \version 0.1.0
+ * \date 18/03/2020
+ */
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -46,17 +57,26 @@ unsigned int logFlag = 0;
 char pseudoCli[128];
 int socketConnectedSrv = 0;
 
+/**
+ * \fn err_t stopTCPSocketServ(int socket)
+ * \return err_t SERV_OK
+ * \brief Function to stop the server (close sockets)
+ */
 
 err_t stopTcpSocketServ(int socketConnected){
   printf("Shutdown socketConnected ...\n");
   shutdown(socketConnected, 2);
   printf("Close socket : socketConnected...\n");
   closesocket(socketConnected);
-  return 0;
+  return SERV_OK;
 }
 
 
-
+/**
+ * \fn err_t startTCPSocketServ(void)
+ * \return err_t SERV_OK or SERV_ERROR
+ * \brief Function to create the server and wait incoming connection
+ */
 
 err_t startTCPSocketServ(){
   #ifdef __WIN64
@@ -81,7 +101,7 @@ err_t startTCPSocketServ(){
     windWSAError = WSAStartup(MAKEWORD(2,2), &WSAData);
 
   #else 
-    system("ifconfig | grep \"inet 1[97]2.*\" | sed \"s/netmask.*//g\" | sed \"s/inet//g\" > .test.txt");
+    
     int windWSAError= 0;
   #endif
 
