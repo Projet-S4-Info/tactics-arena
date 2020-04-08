@@ -328,7 +328,7 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
         "Mage",
         {20,7,10,0,14,8,12},
         {"Elementalist","After every use of a basic attack, change element (Fire, Ice, Electricity)."},
-        &movesets[rand()%3][0]
+        NULL
     };
 
     *c = temp;

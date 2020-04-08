@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <time.h>
 #include <string.h>
 #include "struct.h"
 #include "init_classes.h"
@@ -13,7 +12,7 @@ Entity Allies[NUM_CLASS] = {};
 Entity Foes[NUM_CLASS] = {};
 Ability Aura_ab;
 
-err_t temp_ent_init(Entity *e)
+err_t ent_init(Entity *e)
 {
 
     int i,j;
@@ -42,13 +41,14 @@ err_t temp_ent_init(Entity *e)
         }
         if(verbose) printf("Allies : %s initialized!\n", (e+i)->cha_name);
     }
-    
+
+    Allies[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
+
     return OK;
 }
 
-err_t init_game()
+err_t init_classes()
 {
-    srand(time(NULL));
 
     printf("%s",error_message[init_repetitives()]);
 
@@ -61,8 +61,6 @@ err_t init_game()
     
     printf("%s",error_message[init_list(stSent)]);
     printf("%s",error_message[init_list(stReceived)]);
-
-    temp_ent_init(Allies);
 
     if(verbose) printf("End of initialisation!\n");
 
