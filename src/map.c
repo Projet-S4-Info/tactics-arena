@@ -261,7 +261,7 @@ int displayInterface(SDL_Renderer *renderer)
 		displaySprite(renderer, getTexture(textures, "id_card"), 10, 10);
 		displayText(renderer, 382, 128, 18, "?", "../inc/font/Pixels.ttf", 255, 255, 255);
 		displaySprite(renderer, getCharFrontTexture(tempEntity->cha_name), 51, 52);
-		displayText(renderer, 170, 45, 20, tempEntity->cha_class->cla_name, "../inc/font/Pixels.ttf", 255, 255, 255);
+		displayText(renderer, 170, 45, 20, tempEntity->cha_name, "../inc/font/Pixels.ttf", 255, 255, 255);
 		// -- entity health
 		displaySprite(renderer, getBigTexture(cSprites, "heart_icon"), 170, 70);
 		sprintf(pv_text, "%d", tempEntity->stat_mods[pv]);

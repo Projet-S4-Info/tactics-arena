@@ -338,6 +338,12 @@ int createGameWindow(int x, int y)
 		setEntityToTile(&Allies[1], testCoord2);
 		Coord testCoord3 = {6,23};
 		setEntityToTile(&Allies[2], testCoord3);
+		/*Coord testCoord4 = {2,7};
+		setEntityToTile(&Allies[3], testCoord4);*/
+		Coord testCoord5 = {8,21};
+		setEntityToTile(&Allies[4], testCoord5);
+		Coord testCoord6 = {28,19};
+		setEntityToTile(&Allies[5], testCoord6);
 
 		displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 
