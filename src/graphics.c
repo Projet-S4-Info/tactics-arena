@@ -332,17 +332,17 @@ int createGameWindow(int x, int y)
 
 		SDL_Delay(1);
 
-		Coord testCoord = {10,13};
+		Coord testCoord = {rand()%30,rand()%30};
 		setEntityToTile(&Allies[0], testCoord);
-		Coord testCoord2 = {21,11};
+		Coord testCoord2 = {rand()%30,rand()%30};
 		setEntityToTile(&Allies[1], testCoord2);
-		Coord testCoord3 = {6,23};
+		Coord testCoord3 = {rand()%30,rand()%30};
 		setEntityToTile(&Allies[2], testCoord3);
-		Coord testCoord4 = {2,7};
+		Coord testCoord4 = {rand()%30,rand()%30};
 		setEntityToTile(&Allies[3], testCoord4);
-		Coord testCoord5 = {8,21};
+		Coord testCoord5 = {rand()%30,rand()%30};
 		setEntityToTile(&Allies[4], testCoord5);
-		Coord testCoord6 = {28,19};
+		Coord testCoord6 = {rand()%30,rand()%30};
 		setEntityToTile(&Allies[5], testCoord6);
 
 		displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
