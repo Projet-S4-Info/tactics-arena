@@ -3,6 +3,7 @@
 #include <string.h>
 #include "struct.h"
 #include "init_classes.h"
+#include "common.h"
 
 StateList *stSent = NULL;
 StateList *stReceived = NULL;
@@ -39,7 +40,10 @@ err_t temp_ent_init(Entity *e)
         {
             (e+i)->ab_cooldown[j] = 0;
         }
+        if(verbose) printf("Allies : %s initialized!\n", (e+i)->cha_name);
     }
+
+    (e+i)->cha_class->cla_abilities = (Ability *)&mage_ab[rand()%3];
 
     return OK;
 }
@@ -48,17 +52,17 @@ err_t init_game()
 {
     srand(time(NULL));
 
-    init_repetitives();
+    printf("%s",error_message[init_repetitives()]);
 
-    init_berserker(&classes[Berserker]);
-    init_ranger(&classes[Ranger]);
-    init_goliath(&classes[Goliath]);
-    init_mage(&classes[Ranger], mage_ab);
-    init_valkyrie(&classes[Valkyrie]);
-    init_angel(&classes[Angel], &Aura_ab);
-
-    init_list(stSent);
-    init_list(stReceived);
+    printf("%s",error_message[init_berserker(&classes[Berserker])]);
+    printf("%s",error_message[init_ranger(&classes[Ranger])]);
+    printf("%s",error_message[init_goliath(&classes[Goliath])]);
+    printf("%s",error_message[init_mage(&classes[Mage], mage_ab)]);
+    printf("%s",error_message[init_valkyrie(&classes[Valkyrie])]);
+    printf("%s",error_message[init_angel(&classes[Angel], &Aura_ab)]);  
+    
+    printf("%s",error_message[init_list(stSent)]);
+    printf("%s",error_message[init_list(stReceived)]);
 
     temp_ent_init(Allies);
 

@@ -2,6 +2,10 @@
 #define errt_h
 #include "common.h"
 
-char error_message[NUM_ERROR][STR_LONG] = {"", "ERROR: Pointer is Null\n", "ERROR : SDL\n", "ERROR : Coordinates out of limits\n", "ERROR : Ability coordinates were not initialised correctly.\n"};
+char error_message[NUM_ERROR][STR_LONG] = {"", 
+                                            "ERROR: Pointer is Null\n", 
+                                            "ERROR : SDL\n", 
+                                            "ERROR : Coordinates out of limits\n", 
+                                            "ERROR : Ability coordinates were not initialised correctly.\n"};
 
 #endif

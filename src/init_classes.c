@@ -22,7 +22,7 @@ err_t init_aoe()
             aoe51[i].y=y;
             i++;
         }
-        if((y=4))
+        if((y==4))
         {
             y=-4;
             x++;
@@ -30,7 +30,10 @@ err_t init_aoe()
         else y++;
     }
     if(i!=51)
+    {
+        if(verbose)printf("%d\n",i);
         return INIT_COORD_ERR;
+    }
 
     Coord * aoe103=malloc(sizeof(Coord)*103);
     if(aoe103==NULL) return POINTER_NULL;
@@ -43,7 +46,7 @@ err_t init_aoe()
             aoe103[i].y=y;
             i++;
         }
-        if((y=6))
+        if((y==6))
         {
             y=-6;
             x++;
@@ -52,7 +55,10 @@ err_t init_aoe()
     }
 
     if(i!=103)
+    {
+        if(verbose)printf("%d\n",i);
         return INIT_COORD_ERR;
+    }
 
     return OK;
 }
@@ -89,13 +95,13 @@ err_t init_berserker(Class * c)
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
-    Ability abtemp1 = {Slash,1,0,1,FOES,one_a,1,one_c,0,NULL,NONE,NULL,{"Slash", "Slash at an ennemy."},"../inc/sprites/berserker/sprite_sheet/A1/"};
+    Ability abtemp1 = {Slash,1,0,1,FOES,one_a,1,one_c,0,NULL,NONE,NULL,{"Slash", "Slash at an ennemy."}};
     *ab = abtemp1;
-    Ability abtemp2 = {Killing_Blow,2,1,1,FOES,one_a,1,one_c,0,NULL,DURING,Killing_Blow_fn,{"Killing Blow","Slash at an ennemy, killing him increases attack permanently and gives one action point back."},"../inc/sprites/berserker/sprite_sheet/A2/"};
+    Ability abtemp2 = {Killing_Blow,2,1,1,FOES,one_a,1,one_c,0,NULL,DURING,Killing_Blow_fn,{"Killing Blow","Slash at an ennemy, killing him increases attack permanently and gives one action point back."}};
     *(ab+1) = abtemp2;
-    Ability abtemp3 = {Fury,2,2,0,ANY_TILE,NULL,1,one_c,0,NULL,ONLY,Fury_fn,{"Fury","Remove all debuffs and permanently increase attack by the number of turns removed."},"../inc/sprites/berserker/sprite_sheet/A3/"};
+    Ability abtemp3 = {Fury,2,2,0,ANY_TILE,NULL,1,one_c,0,NULL,ONLY,Fury_fn,{"Fury","Remove all debuffs and permanently increase attack by the number of turns removed."}};
     *(ab+2) = abtemp3;
-    Ability abtemp4 = {Frenzied_Dash,3,4,9,FREE_TILE,FD,51,aoe51,0,NULL,BEFORE,NULL,{"Frenzied Dash","Jump to a tile, dealing aoe damage when landing."},"../inc/sprites/berserker/sprite_sheet/A4/"};
+    Ability abtemp4 = {Frenzied_Dash,3,4,9,FREE_TILE,FD,51,aoe51,0,NULL,BEFORE,NULL,{"Frenzied Dash","Jump to a tile, dealing aoe damage when landing."}};
     *(ab+3) = abtemp4;
     
 
@@ -105,11 +111,12 @@ err_t init_berserker(Class * c)
         "Berserker",
         {20,8,10,10,0,10,10},
         {"Bloodlust","Killing two ennemies in the same turn refills action points and doubles mp and atk stats for one turn."},
-        ab,
-        "../inc/sprites/berserker/sprite_sheet/"
+        ab
     };
 
     *c = temp;
+
+    if(verbose) printf("%s initialized!\n", c->cla_name);
 
     return OK;
 }
@@ -126,13 +133,13 @@ err_t init_ranger(Class * c)
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
-    Ability abtemp1 = {Bolt,1,0,6,FOES,one_a,1,one_c,0,NULL,NONE,NULL,{"Bolt","Attack an ennemy from range."},"../inc/sprites/ranger/sprite_sheet/A1/"};
+    Ability abtemp1 = {Bolt,1,0,6,FOES,one_a,1,one_c,0,NULL,NONE,NULL,{"Bolt","Attack an ennemy from range."}};
     *ab = abtemp1;
-    Ability abtemp2 = {Focus,2,4,0,ANY_TILE,NULL,1,one_c,0,NULL,ONLY,Focus_fn,{"Focus","Increase by two turns all buffs and decrease by one all debuffs."},"../inc/sprites/ranger/sprite_sheet/A2/"};
+    Ability abtemp2 = {Focus,2,4,0,ANY_TILE,NULL,1,one_c,0,NULL,ONLY,Focus_fn,{"Focus","Increase by two turns all buffs and decrease by one all debuffs."}};
     *(ab+1) = abtemp2;
-    Ability abtemp3 = {Trap,2,2,4,FREE_TILE,NULL,1,one_c,0,NULL,ONLY,Trap_fn,{"Trap","Put a hidden trap that will cripple an ennemy that walks over it."},"../inc/sprites/ranger/sprite_sheet/A3/"};
+    Ability abtemp3 = {Trap,2,2,4,FREE_TILE,NULL,1,one_c,0,NULL,ONLY,Trap_fn,{"Trap","Put a hidden trap that will cripple an ennemy that walks over it."}};
     *(ab+2) = abtemp3;
-    Ability abtemp4 = {Deadeye,3,5,0,ANY_TILE,NULL,1,one_c,3,m,NONE,NULL,{"Deadeye","Increases range and makes bolt piercing but reduces mv for three turns."},"../inc/sprites/ranger/sprite_sheet/A4/"};
+    Ability abtemp4 = {Deadeye,3,5,0,ANY_TILE,NULL,1,one_c,3,m,NONE,NULL,{"Deadeye","Increases range and makes bolt piercing but reduces mv for three turns."}};
     *(ab+3) = abtemp4;
 
 
@@ -142,11 +149,12 @@ err_t init_ranger(Class * c)
         "Ranger",
         {20,12,10,12,0,8,8},
         {"Sentinel","The first ennemy that moves to a spot inside a ranger's range every turn, will get bolted."},
-        ab,
-        "../inc/sprites/ranger/sprite_sheet/"
+        ab
     };
     
     *c = temp;
+
+    if(verbose) printf("%s initialized!\n", c->cla_name);
 
     return OK;
 }
@@ -178,13 +186,13 @@ err_t init_goliath(Class * c)
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
-    Ability abtemp1 = {Bash,1,0,1,FOES,one_a,1,one_c,2,m,NONE,NULL,{"Bash","Damage and reduce the ennemy's resistances for a turn."},"../inc/sprites/goliath/sprite_sheet/A1/"};
+    Ability abtemp1 = {Bash,1,0,1,FOES,one_a,1,one_c,2,m,NONE,NULL,{"Bash","Damage and reduce the ennemy's resistances for a turn."}};
     *ab = abtemp1;
-    Ability abtemp2 = {Shields_Up,2,1,0,ANY_TILE,NULL,1,one_c,1,n,NONE,NULL,{"Shields Up","Increase passive block chance to 70% for one turn."},"../inc/sprites/goliath/sprite_sheet/A2/"};
+    Ability abtemp2 = {Shields_Up,2,1,0,ANY_TILE,NULL,1,one_c,1,n,NONE,NULL,{"Shields Up","Increase passive block chance to 70% for one turn."}};
     *(ab+1) = abtemp2;
-    Ability abtemp3 = {Detain,2,4,2,FOES,NULL,1,one_c,1,d,NONE,NULL,{"Detain","Capture an Ennemy for three turns."},"../inc/sprites/goliath/sprite_sheet/A3/"};
+    Ability abtemp3 = {Detain,2,4,2,FOES,NULL,1,one_c,1,d,NONE,NULL,{"Detain","Capture an Ennemy for three turns."}};
     *(ab+2) = abtemp3;
-    Ability abtemp4 = {Banner,3,5,0,ANY_TILE,NULL,103,aoe103,1,u,AFTER,Banner_fn,{"Banner","Provoke all ennemies in a zone for one turn and reset all allies' cooldowns."},"../inc/sprites/goliath/sprite_sheet/A4/"};
+    Ability abtemp4 = {Banner,3,5,0,ANY_TILE,NULL,103,aoe103,1,u,AFTER,Banner_fn,{"Banner","Provoke all ennemies in a zone for one turn and reset all allies' cooldowns."}};
     *(ab+3) = abtemp4;
 
 
@@ -194,11 +202,12 @@ err_t init_goliath(Class * c)
         "Goliath",
         {20,6,10,8,0,14,12},
         {"Guardian","Has a 30% chance to block incoming damage."},
-        ab,
-        "../inc/sprites/goliath/sprite_sheet/"
+        ab
     };
     
     *c = temp;
+
+    if(verbose) printf("%s initialized!\n", c->cla_name);
 
     return OK;
 }
@@ -258,18 +267,18 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
     *thera = py[0];
     *(thera+1) = py[1];
 
-    Coord * aoe71=malloc(sizeof(Coord)*71);
-    if(aoe71==NULL) return POINTER_NULL;
+    Coord * aoe75=malloc(sizeof(Coord)*75);
+    if(aoe75==NULL) return POINTER_NULL;
     int i=0,x=-4,y=-5;
-    while(x<=5)
+    while(x<=4)
     {
         if(!(( abs(x)==4 && abs(y)>=3 ) || (abs(y)==5 && abs(x)>=2)  || (abs(x)==3 && abs(y)==4)))
         {
-            aoe71[i].x=x;
-            aoe71[i].y=y;
+            aoe75[i].x=x;
+            aoe75[i].y=y;
             i++;
         }
-        if((y=5))
+        if((y==5))
         {
             y=-5;
             x++;
@@ -277,35 +286,39 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
         else y++;
     }
 
-    if(i!=71)
+    if(i!=75)
+    {  
+        if(verbose)printf("%d\n",i);
         return INIT_COORD_ERR;
+    }
 
 
-    Ability abtemp1 = {Fireball,1,0,8,BOTH,one_m,1,one_c,1,fire1,AFTER,mage_switch,{"Fireball","Deals damage and has a chance to set target ablaze."},"../inc/sprites/mage/sprite_sheet/A1/fire"};
+
+    Ability abtemp1 = {Fireball,1,0,8,BOTH,one_m,1,one_c,1,fire1,AFTER,mage_switch,{"Fireball","Deals damage and has a chance to set target ablaze."}};
     movesets[0][0] = abtemp1;
-    Ability abtemp2 = {FlameCharge,2,3,10,FREE_TILE,one_m,1,one_c,1,fire2,ONLY,FlameCharge_fn,{"FlameCharge","Engulf yourself in flames and dash, dealing damage and burning entities in your path."},"../inc/sprites/mage/sprite_sheet/A2/fire"};
+    Ability abtemp2 = {FlameCharge,2,3,10,FREE_TILE,one_m,1,one_c,1,fire2,ONLY,FlameCharge_fn,{"FlameCharge","Engulf yourself in flames and dash, dealing damage and burning entities in your path."}};
     movesets[0][1] = abtemp2;
-    Ability abtemp3 = {Flare,2,3,5,ANY_TILE,NULL,103,aoe103,0,NULL,ONLY,Flare_fn,{"Flare","Increases all allies' vision and their mp for two turns, will spot traps in the chosen area."},"../inc/sprites/mage/sprite_sheet/A3/fire"};
+    Ability abtemp3 = {Flare,2,3,5,ANY_TILE,NULL,103,aoe103,0,NULL,ONLY,Flare_fn,{"Flare","Increases all allies' vision and their mp for two turns, will spot traps in the chosen area."}};
     movesets[0][2] = abtemp3;
-    Ability abtemp4 = {Eruption,3,5,12,ANY_TILE,u,71,aoe71,1,fire2,NONE,NULL,{"Eruption","Deal massive damage in a zone and burn all entities."},"../inc/sprites/mage/sprite_sheet/A4/fire"};
+    Ability abtemp4 = {Eruption,3,5,12,ANY_TILE,u,75,aoe75,1,fire2,NONE,NULL,{"Eruption","Deal massive damage in a zone and burn all entities."}};
     movesets[0][3] = abtemp4;
 
-    Ability abtemp11 = {Icy_Winds,1,0,8,FOES,one_m,1,one_c,1,ice1,AFTER,mage_switch,{"Icy Winds","Deals damage and has a chance to freeze target."},"../inc/sprites/mage/sprite_sheet/A1/ice"};
+    Ability abtemp11 = {Icy_Winds,1,0,8,FOES,one_m,1,one_c,1,ice1,AFTER,mage_switch,{"Icy Winds","Deals damage and has a chance to freeze target."}};
     movesets[1][0] = abtemp11;
-    Ability abtemp12 = {Freeze,2,3,8,FOES,red,1,one_c,1,ice2,NONE,NULL,{"Freeze","Deal damage to and freeze an ennemy. "},"../inc/sprites/mage/sprite_sheet/A2/ice"};
+    Ability abtemp12 = {Freeze,2,3,8,FOES,red,1,one_c,1,ice2,NONE,NULL,{"Freeze","Deal damage to and freeze an ennemy. "}};
     movesets[1][1] = abtemp12;
-    Ability abtemp13 = {Frozen_Armor,2,3,6,ALLIES,NULL,1,one_c,2,armor,NONE,NULL,{"Frozen Armor","Increase ally physical and magic resistances."},"../inc/sprites/mage/sprite_sheet/A3/ice"};
+    Ability abtemp13 = {Frozen_Armor,2,3,6,ALLIES,NULL,1,one_c,2,armor,NONE,NULL,{"Frozen Armor","Increase ally physical and magic resistances."}};
     movesets[1][2] = abtemp13;
-    Ability abtemp14 = {Blizzard,3,5,12,ANY_TILE,d,71,aoe71,2,ice3,DURING,Blizzard_fn,{"Blizzard","Deal damage in a zone and highly reduce ennemy vision for a turn, has a chance to freeze ennemies. Water tiles in the are will also freeze."},"../inc/sprites/mage/sprite_sheet/A4/ice"};
+    Ability abtemp14 = {Blizzard,3,5,12,ANY_TILE,d,75,aoe75,2,ice3,DURING,Blizzard_fn,{"Blizzard","Deal damage in a zone and highly reduce ennemy vision for a turn, has a chance to freeze ennemies. Water tiles in the are will also freeze."}};
     movesets[1][3] = abtemp14;
 
-    Ability abtemp21 = {Shock,1,0,8,FOES,d,1,one_c,0,NULL,AFTER,mage_switch,{"Shock","Zap an ennemy."},"../inc/sprites/mage/sprite_sheet/A1/lightning"};
+    Ability abtemp21 = {Shock,1,0,8,FOES,d,1,one_c,0,NULL,AFTER,mage_switch,{"Shock","Zap an ennemy."}};
     movesets[2][0] = abtemp21;
-    Ability abtemp22 = {Volt_Switch,2,3,10,ALLIES,one_m,51,aoe51,0,NULL,BEFORE,Volt_Switch_fn,{"Volt Switch","Switch spots with an ally and deal electric damage around caster."},"../inc/sprites/mage/sprite_sheet/A2/lightning"};
+    Ability abtemp22 = {Volt_Switch,2,3,10,ALLIES,one_m,51,aoe51,0,NULL,BEFORE,Volt_Switch_fn,{"Volt Switch","Switch spots with an ally and deal electric damage around caster."}};
     movesets[2][1] = abtemp22;
-    Ability abtemp23 = {Shock_Therapy,2,3,6,ALLIES,NULL,1,one_c,2,thera,NONE,NULL,{"Shock Therapy","Increase ally atk and magic."},"../inc/sprites/mage/sprite_sheet/A3/lightning"};
+    Ability abtemp23 = {Shock_Therapy,2,3,6,ALLIES,NULL,1,one_c,2,thera,NONE,NULL,{"Shock Therapy","Increase ally atk and magic."}};
     movesets[2][2] = abtemp23;
-    Ability abtemp24 = {Lightning_Chain,3,5,8,FOES,d,1,one_c,0,NULL,AFTER,Lightning_Chain_fn,{"Lightning Chain","Zap an ennemy, the bolt will bounce to another close ennemy until either there are no ennemies close enough or it has bounced 3 times."},"../inc/sprites/mage/sprite_sheet/A4/lightning"};
+    Ability abtemp24 = {Lightning_Chain,3,5,8,FOES,d,1,one_c,0,NULL,AFTER,Lightning_Chain_fn,{"Lightning Chain","Zap an ennemy, the bolt will bounce to another close ennemy until either there are no ennemies close enough or it has bounced 3 times."}};
     movesets[2][3] = abtemp24;
 
     Class temp = 
@@ -314,11 +327,12 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
         "Mage",
         {20,7,10,0,14,8,12},
         {"Elementalist","After every use of a basic attack, change element (Fire, Ice, Electricity)."},
-        NULL,
-        "../inc/sprites/mage/sprite_sheet/"
+        NULL
     };
 
     *c = temp;
+
+    if(verbose) printf("%s initialized!\n", c->cla_name);
 
     return OK;
 }
@@ -333,13 +347,13 @@ err_t init_valkyrie(Class * c)
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
-    Ability abtemp1 = {Thrust,1,0,1,ANY_TILE,one_a,1,one_c,1,para,AFTER,Thrust_fn,{"Thrust","Thrust your spear forward."},"../inc/sprites/valkyrie/sprite_sheet/A1/"};
+    Ability abtemp1 = {Thrust,1,0,1,ANY_TILE,one_a,1,one_c,1,para,AFTER,Thrust_fn,{"Thrust","Thrust your spear forward."}};
     *ab = abtemp1;
-    Ability abtemp2 = {Odins_Eyes,2,2,8,ANY_TILE,one_m,51,aoe51,1,para,NONE,NULL,{"Odin's Eyes","Call forth a swarm of crows to deal magic damage to an area."},"../inc/sprites/valkyrie/sprite_sheet/A2/"};
+    Ability abtemp2 = {Odins_Eyes,2,2,8,ANY_TILE,one_m,51,aoe51,1,para,NONE,NULL,{"Odin's Eyes","Call forth a swarm of crows to deal magic damage to an area."}};
     *(ab+1) = abtemp2;
-    Ability abtemp3 = {Life_Transfer,2,3,8,ALLIES,NULL,1,one_c,0,NULL,ONLY,Life_Transfer_fn,{"Life Transfer","Select an Ally, heal the ally back to full and slow a random ennemy for three turns by the amount healed."},"../inc/sprites/valkyrie/sprite_sheet/A3/"};
+    Ability abtemp3 = {Life_Transfer,2,3,8,ALLIES,NULL,1,one_c,0,NULL,ONLY,Life_Transfer_fn,{"Life Transfer","Select an Ally, heal the ally back to full and slow a random ennemy for three turns by the amount healed."}};
     *(ab+2) = abtemp3;
-    Ability abtemp4 = {Gates_of_Valhalla,3,5,0,ANY_TILE,NULL,0,NULL,0,NULL,ONLY,Gates_of_Valhalla_fn,{"Gates of Valhalla","Resurrect all dead allies for a turn."},"../inc/sprites/valkyrie/sprite_sheet/A4/"};
+    Ability abtemp4 = {Gates_of_Valhalla,3,5,0,ANY_TILE,NULL,0,NULL,0,NULL,ONLY,Gates_of_Valhalla_fn,{"Gates of Valhalla","Resurrect all dead allies for a turn."}};
     *(ab+3) = abtemp4;
 
 
@@ -349,11 +363,12 @@ err_t init_valkyrie(Class * c)
         "Valkyrie",
         {20,10,10,10,10,10,10},
         {"Precision","Damaging an ennemy has a chance to paralyze them."},
-        ab,
-        "../inc/sprites/valkyrie/sprite_sheet/"
+        ab
     };
     
     *c = temp;
+
+    if(verbose) printf("%s initialized!\n", c->cla_name);
 
     return OK;
 }
@@ -378,16 +393,16 @@ err_t init_angel(Class * c, Ability *pass)
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
-    Ability abtemp1 = {Condemn,1,0,6,FOES,one_m,1,one_c,0,NULL,NONE,NULL,{"Condemn","Deal magic damage to an ennemy."},"../inc/sprites/angel/sprite_sheet/A1/"};
+    Ability abtemp1 = {Condemn,1,0,6,FOES,one_m,1,one_c,0,NULL,NONE,NULL,{"Condemn","Deal magic damage to an ennemy."}};
     *ab = abtemp1;
-    Ability abtemp2 = {Holy_Storm,2,3,8,ANY_TILE,one_m,51,aoe51,1,heal,NONE,NULL,{"Holy Storm","Deal magic damage to ennemies in an area and heal all allies in the area."},"../inc/sprites/angel/sprite_sheet/A2/"};
+    Ability abtemp2 = {Holy_Storm,2,3,8,ANY_TILE,one_m,51,aoe51,1,heal,NONE,NULL,{"Holy Storm","Deal magic damage to ennemies in an area and heal all allies in the area."}};
     *(ab+1) = abtemp2;
-    Ability abtemp3 = {Last_Sacrfice,2,5,0,ANY_TILE,NULL,0,NULL,0,NULL,ONLY,Last_Sacrfice_fn,{"Last Sacrfice","Kill self to resurrect an Ally."},"../inc/sprites/angel/sprite_sheet/A3/"};
+    Ability abtemp3 = {Last_Sacrfice,2,5,0,ANY_TILE,NULL,0,NULL,0,NULL,ONLY,Last_Sacrfice_fn,{"Last Sacrfice","Kill self to resurrect an Ally."}};
     *(ab+2) = abtemp3;
-    Ability abtemp4 = {Gods_Blessing,3,5,8,ALLIES,NULL,1,one_c,1,bless,NONE,NULL,{"God's Blessing","Double an Ally's action points and apply no cooldowns for a turn."},"../inc/sprites/angel/sprite_sheet/A4/"};
+    Ability abtemp4 = {Gods_Blessing,3,5,8,ALLIES,NULL,1,one_c,1,bless,NONE,NULL,{"God's Blessing","Double an Ally's action points and apply no cooldowns for a turn."}};
     *(ab+3) = abtemp4;
 
-    Ability abpass = {Aura,0,0,0,ANY_TILE,NULL,103,aoe103,1,passive,NONE,NULL,{"",""},""};
+    Ability abpass = {Aura,0,0,0,ANY_TILE,NULL,103,aoe103,1,passive,NONE,NULL,{"",""}};
     *pass = abpass;
 
     Class temp = 
@@ -396,11 +411,12 @@ err_t init_angel(Class * c, Ability *pass)
         "Angel",
         {20,8,10,0,10,12,12},
         {"Aura","Heal all nearby allies at start of your turn."},
-        ab,
-        "../inc/sprites/angel/sprite_sheet/"
+        ab
     };
     
     *c = temp;
+
+    if(verbose) printf("%s initialized!\n", c->cla_name);
 
     return OK;
 }

@@ -15,4 +15,6 @@ extern bool verbose;
 
 extern int isChatActive;
 
+extern char error_message[NUM_ERROR][STR_LONG];
+
 #endif

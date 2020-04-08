@@ -44,7 +44,6 @@ typedef struct
     fnid fn_use;
     int (*function)(Coord, struct entity_t *, StateList *);
     lang eng;
-    char sprite_folder[STR_LONG];
 } Ability;
 
 typedef struct
@@ -54,7 +53,6 @@ typedef struct
     int basic_stats[NUM_STATS];
     lang Passive;
     Ability * cla_abilities;
-    char sprite_folder[STR_LONG];
 } Class;
 
 typedef struct
