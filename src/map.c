@@ -12,6 +12,7 @@
 #include "gameplay.h"
 #include "turn.h"
 
+
 #define _NB_MAX_TEXTURES_ 50
 
 // Textures table
@@ -93,6 +94,14 @@ int loadMapTextures(SDL_Renderer * renderer)
 						loadTexture(renderer, loadImage("../inc/img/turn_end_grey.png")),
 						NULL,
 						"end_turn");
+	
+	// Loading close btn
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/close.png")),
+						NULL,
+						"close_btn");
+
+	
 
 	// Loading ID card texture
 	index = addTextureToTable(	textures,
@@ -218,15 +227,21 @@ int displayInterface(SDL_Renderer *renderer)
 
 	SDL_Rect chatScreen;
 	chatScreen.x = xWinSize-300;
-	chatScreen.y = yWinSize-450;
+	chatScreen.y = yWinSize-460;
 	chatScreen.w = 275;
-	chatScreen.h = 350;
+	chatScreen.h = 310;
 
 	SDL_Rect chatBox;
 	chatBox.x = chatScreen.x - 5;
-	chatBox.y = chatScreen.y - 25;
+	chatBox.y = chatScreen.y - 35;
 	chatBox.w = chatScreen.w + 10;
-	chatBox.h = chatScreen.h + 30; 
+	chatBox.h = 375;
+
+	SDL_Rect chatMsg;
+	chatMsg.x = chatScreen.x;
+	chatMsg.y = chatScreen.y + chatScreen.h + 2;
+	chatMsg.w = chatScreen.w;
+	chatMsg.h = 20; 
 
 
 
@@ -270,15 +285,28 @@ int displayInterface(SDL_Renderer *renderer)
 	// Turn end icon
 	displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize-280, yWinSize-80);
 
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
-	SDL_RenderFillRect(renderer, &chatBox);
+	if(isChatActive){
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
+		SDL_RenderFillRect(renderer, &chatBox);
 
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
-	SDL_RenderFillRect(renderer, &chatScreen);
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
+		SDL_RenderFillRect(renderer, &chatScreen);
+		displayText(renderer, chatBox.x + (chatBox.w /2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255);
+		displaySprite(renderer, getTexture(textures,"close_btn"), chatScreen.w + chatScreen.x - 38 , chatScreen.y - 30);
+		
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+		SDL_SetRenderDrawColor(renderer, 85, 34, 0, 255);
+		SDL_RenderFillRect(renderer, &chatMsg);
 
-	displayText(renderer, chatBox.x + (chatBox.w /2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255);
+		displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , "Chat :", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+
+	}else{
+		displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize-280, yWinSize - 150);
+	}
+	
+	
 
 	return 0;
 }

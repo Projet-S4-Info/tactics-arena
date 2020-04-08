@@ -7,6 +7,7 @@
 #include "audio.h"
 #include "struct.h"
 
+
 int loadMapTextures(SDL_Renderer * renderer);
 float crossProduct(Vector AB, Vector AC);
 int displayAbilities(SDL_Renderer * renderer);

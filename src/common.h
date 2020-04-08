@@ -13,4 +13,6 @@ typedef enum {FALSE, TRUE} bool;
 
 extern bool verbose;
 
+extern int isChatActive;
+
 #endif

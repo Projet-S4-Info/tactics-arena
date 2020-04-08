@@ -38,6 +38,10 @@ int end_of_turn = 0;
 // Ability description
 char description[100];
 
+// Chat Btn
+
+int isChatActive = 0;
+
 TabTexture cSprites[50];
 
 void setRendererDriver(SDL_Renderer *renderer)
@@ -393,6 +397,15 @@ int createGameWindow(int x, int y)
 								if(verbose)printf("Selected ability : %d\n", selected_ability);
 								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 							}
+						}
+
+						if(e.motion.x >= 1653 && e.motion.x <= 1889 && e.motion.y >= 873 && e.motion.y <= 925){
+							isChatActive = 1;
+							displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
+						}
+						else if(e.motion.x >= 1863 && e.motion.x <= 1894 && e.motion.y >= 527 && e.motion.y <= 556 && isChatActive == 1){
+							isChatActive = 0;
+							displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 						}
 
 
