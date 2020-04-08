@@ -134,11 +134,11 @@ int mage_switch(Coord c, Entity * e, StateList * list)
     int i = rand()%2;
     if((Ability*)mage_ab+i != e->cha_class->cla_abilities)
     {
-        e->cha_class->cla_abilities = (Ability*)mage_ab+i;
+        e->cha_class->cla_abilities = (Ability*)mage_ab+(i*NUM_AB);
     }
     else
     {
-        e->cha_class->cla_abilities = (Ability*)mage_ab+2;
+        e->cha_class->cla_abilities = (Ability*)mage_ab+(2*NUM_AB);
     }
 
     return 0;

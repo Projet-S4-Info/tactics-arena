@@ -42,9 +42,7 @@ err_t temp_ent_init(Entity *e)
         }
         if(verbose) printf("Allies : %s initialized!\n", (e+i)->cha_name);
     }
-
-    (e+i)->cha_class->cla_abilities = (Ability *)&mage_ab[rand()%3];
-
+    
     return OK;
 }
 
@@ -65,6 +63,8 @@ err_t init_game()
     printf("%s",error_message[init_list(stReceived)]);
 
     temp_ent_init(Allies);
+
+    if(verbose) printf("End of initialisation!\n");
 
     return OK;
 }

@@ -68,6 +68,7 @@ int main(int argc, char * argv[])
     // Lancement du jeu
     if (selection == 2)
     {
+        if(verbose) printf("GAME START!\n");
         stopMenuMusic(1);
         createGameWindow(1920, 1080);
     }

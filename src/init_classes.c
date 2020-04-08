@@ -321,13 +321,14 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
     Ability abtemp24 = {Lightning_Chain,3,5,8,FOES,d,1,one_c,0,NULL,AFTER,Lightning_Chain_fn,{"Lightning Chain","Zap an ennemy, the bolt will bounce to another close ennemy until either there are no ennemies close enough or it has bounced 3 times."}};
     movesets[2][3] = abtemp24;
 
+
     Class temp = 
     {
         Mage,
         "Mage",
         {20,7,10,0,14,8,12},
         {"Elementalist","After every use of a basic attack, change element (Fire, Ice, Electricity)."},
-        NULL
+        &movesets[rand()%3][0]
     };
 
     *c = temp;
