@@ -26,7 +26,7 @@ typedef struct
 typedef struct {
     int char_id;
     Coord c;
-    abilityId act; //0 if movement
+    abilityId act; //Mvt if movement
 }action;
 
 typedef struct

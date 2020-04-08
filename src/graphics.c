@@ -395,7 +395,7 @@ int createGameWindow(int x, int y)
 						{
 							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
 							{
-								if (e.motion.x >= 16 && e.motion.x <= 80)	selected_ability = 0;
+								if (e.motion.x >= 16 && e.motion.x <= 80)	selected_ability = Mvt;
 								if (e.motion.x >= 96 && e.motion.x <= 160)	selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
 								if (e.motion.x >= 176 && e.motion.x <= 240)	selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
 								if (e.motion.x >= 256 && e.motion.x <= 320)	selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
@@ -483,7 +483,7 @@ int createGameWindow(int x, int y)
 						{
 							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
 							{
-								if (e.motion.x >= 16 && e.motion.x <= 80)	hover_ability = 0;
+								if (e.motion.x >= 16 && e.motion.x <= 80)	hover_ability = Mvt;
 								if (e.motion.x >= 96 && e.motion.x <= 160)	hover_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
 								if (e.motion.x >= 176 && e.motion.x <= 240)	hover_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
 								if (e.motion.x >= 256 && e.motion.x <= 320)	hover_ability = tempEntity->cha_class->cla_abilities[2].ab_id;

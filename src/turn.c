@@ -6,6 +6,15 @@
 #include "passives.h"
 #include "gameplay.h"
 #include "grid.h"
+#include "Socket_Server.h"
+
+bool turn_active = FALSE;
+const action turn_over = {0,{0,0},0};
+
+bool your_turn()
+{
+    return turn_active;
+}
 
 err_t apply_action(action a)
 {
@@ -87,11 +96,18 @@ err_t turn_start(Entity *e)
 
     Bloodlust_counter = 0;
 
+    if(e[Angel].active!=Dead)
+    {
+        activate_aura(&e[Angel], stReceived);
+    }
+
     return OK;
 }
 
 err_t turn_end(Entity *e, StateList * list)
 {
+    //sendStruct(&turn_over, sizeof(action), );
+
     int i,j;
     for(i=0; i<NUM_CLASS; i++)
     {
@@ -144,43 +160,37 @@ Entity * play_check(Entity *E)
         
     } while(i!=current);
     
+    turn_active = FALSE;
+
     return NULL;
+}
+
+err_t action_set(action a)
+{
+    //sendStruct(&a, sizeof(action), );
+
+    if(a.act == Mvt)
+    {
+        //Mvt function
+    }
+    else
+    {
+        apply_action(a);
+    }
+
+    play_check(&Allies[a.char_id-1]);
+
+    return OK;    
 }
 
 err_t local_turn()
 {   
 
-    Entity * active_ent = Allies;
-    //action a;
-
     turn_start(Allies);
-    
-    if(Allies[Angel].active!=Dead)
-    {
-        activate_aura(&Allies[Angel], stSent);
-    }
 
-    while((active_ent=play_check(active_ent))!=NULL)
-    {
-            /*do
-            {
-                //Select entity pointed to by active_ent
-                //wait for action selection
-                //wait for coordinate selection
-                a = fonction(Entity * e)
-            }while(a.act<0);*/
+    turn_active = TRUE;
 
-        //relay action information & wait for confirmation
-
-        /*if(a.act==0)
-        {
-            call mvt function
-        }
-        else
-        {
-            apply_action(a);
-        }*/
-    }
+    while(turn_active);
 
     turn_end(Allies, stReceived);
 
@@ -191,19 +201,24 @@ err_t opposing_turn()
 {
 
     turn_start(Foes);
+    
+    action a;
 
-    if(Foes[Angel].active!=Dead)
+    //recep(&a, sizeof(action), );
+
+    while(a.char_id != 0)
     {
-        activate_aura(&Foes[Angel], stReceived);
+        if(a.act == Mvt)
+        {
+            //Mvt function
+        }
+        else
+        {
+            apply_action(a);
+        }
+        
+        //recep(&a, sizeof(action), );
     }
-
-    /*
-    while(Wait for action & relay confirmation!=End Turn)
-    {
-
-    apply_action(a);
-
-    }*/
 
     turn_end(Foes, stSent);
 
