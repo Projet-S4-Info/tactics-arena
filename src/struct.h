@@ -21,6 +21,13 @@ typedef struct
     float y;
 } Vector;
 
+typedef struct
+{
+    Uint32 start;
+    Uint32 end;
+} Timer;
+
+
 /* ENTITY STRUCTURES */
 
 typedef struct {
