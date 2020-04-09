@@ -1,5 +1,5 @@
-#ifndef socket_server_h
-#define socket_server_h
+#ifndef servFcnt_h
+#define servFcnt_h
 #define MAX_BUFF_SIZE 1024
 #define PORT 3555
 #include "struct.h"
@@ -23,8 +23,7 @@ extern char monIP[85];
 extern char ipSrv[85];
 extern char pseudoUser[50];
 extern char MapMultiSelected[50];
-extern int socketConnectedSrv;
-extern int socketConnectedCli;
+extern int socketConnected;
 
 err_t startTCPSocketServ();
 err_t startTCPSocketCli();

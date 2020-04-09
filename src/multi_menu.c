@@ -8,7 +8,7 @@
 #include "map.h"
 #include "struct.h"
 #include "graphics.h"
-#include "Socket_Server.h"
+#include "servFcnt.h"
 #include "multi_menu.h"
 #include <unistd.h>
 #include <string.h>
