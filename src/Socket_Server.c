@@ -14,7 +14,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <time.h>
-#include "Socket_Server.h"
+#include "servFcnt.h"
 #include "struct.h"
 
 
