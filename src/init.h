@@ -10,7 +10,8 @@ extern Entity Allies[NUM_CLASS];
 extern Entity Foes[NUM_CLASS];
 extern Ability Aura_ab;
 
-err_t init_game();
+err_t ent_init(Entity *e);
+err_t init_classes();
 err_t destroy_game();
 
 #endif

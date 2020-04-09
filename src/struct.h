@@ -21,12 +21,19 @@ typedef struct
     float y;
 } Vector;
 
+typedef struct
+{
+    Uint32 start;
+    Uint32 end;
+} Timer;
+
+
 /* ENTITY STRUCTURES */
 
 typedef struct {
     int char_id;
     Coord c;
-    abilityId act; //0 if movement
+    abilityId act; //Mvt if movement
 }action;
 
 typedef struct

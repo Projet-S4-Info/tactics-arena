@@ -7,6 +7,7 @@
  * \date 28/01/2020
  */
 
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "grid.h"
@@ -58,15 +59,17 @@ int main(int argc, char * argv[])
         printf("Usage : ./TacticsArena <arg1> : -c \n");
     }
 
+    srand(time(NULL));
 
     playMenuMusic(1);
     selection = displayMenu(1280, 720);
     
-    printf("%s",error_message[init_game()]);
+    printf("%s",error_message[init_classes()]);
 
     // Lancement du jeu
     if (selection == 2)
     {
+        ent_init(Allies);
         if(verbose) printf("GAME START!\n");
         stopMenuMusic(1);
         createGameWindow(1920, 1080);
@@ -81,6 +84,8 @@ int main(int argc, char * argv[])
                 
     // Multiplayer
     else if (selection == 4){
+
+        ent_init(Allies);
         stopMenuMusic(1);
         int res = 0;
         playMenuMusic(2);

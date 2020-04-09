@@ -19,11 +19,19 @@
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
 
+#define _FPS_ 30						// Define at which frequency the game have to refresh
+
 Tile grid[_X_SIZE_][_Y_SIZE_];			/**< Contains the pointer to the start of the matrix */
 Tile *matrix = &grid[0][0];
 
 // x and y sizes of the window
 int xWinSize, yWinSize;
+
+// Frames
+unsigned long long frames = 0;
+
+// Speed of the camera movements
+const int camSpeed = 10;
 
 // Selected ability
 int selected_ability = -1;
@@ -69,6 +77,19 @@ void setRendererDriver(SDL_Renderer *renderer)
 	}
 	
 	free(global_renderer_info);
+}
+
+SDL_Surface *optimize(SDL_Surface *surf)
+// Optimizes the surface for the display format
+{
+	SDL_Surface *opt = SDL_ConvertSurfaceFormat(surf, surf->format, 0);
+	if (opt)
+	{
+		SDL_FreeSurface(surf);
+		return opt;
+	}
+	
+	return surf;
 }
 
 void freeTextures(TabTexture * textures)
@@ -166,7 +187,7 @@ SDL_Surface * loadImage(const char * img)
 
 	SDL_FreeRW(rwop);
 
-	return surface;
+	return optimize(surface);
 }
 
 SDL_Texture * loadTexture(SDL_Renderer * renderer, SDL_Surface * surface)
@@ -231,11 +252,12 @@ int displaySprite(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y)
 // Display a sprite on the window
 {
 	SDL_Rect imgDestRect;
-
+	
 	imgDestRect.x = x;
 	imgDestRect.y = y;
 	SDL_QueryTexture(texture, NULL, NULL, &(imgDestRect.w), &(imgDestRect.h));
 	SDL_RenderCopy(renderer, texture, NULL, &imgDestRect);
+	frames++;
 
 	return 1;
 }
@@ -395,7 +417,7 @@ int createGameWindow(int x, int y)
 						{
 							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
 							{
-								if (e.motion.x >= 16 && e.motion.x <= 80)	selected_ability = 0;
+								if (e.motion.x >= 16 && e.motion.x <= 80)	selected_ability = Mvt;
 								if (e.motion.x >= 96 && e.motion.x <= 160)	selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
 								if (e.motion.x >= 176 && e.motion.x <= 240)	selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
 								if (e.motion.x >= 256 && e.motion.x <= 320)	selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
@@ -483,7 +505,7 @@ int createGameWindow(int x, int y)
 						{
 							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
 							{
-								if (e.motion.x >= 16 && e.motion.x <= 80)	hover_ability = 0;
+								if (e.motion.x >= 16 && e.motion.x <= 80)	hover_ability = Mvt;
 								if (e.motion.x >= 96 && e.motion.x <= 160)	hover_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
 								if (e.motion.x >= 176 && e.motion.x <= 240)	hover_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
 								if (e.motion.x >= 256 && e.motion.x <= 320)	hover_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
@@ -507,30 +529,33 @@ int createGameWindow(int x, int y)
 				}
 			}
 
-			// Déplacement de la caméra grâce aux bords de l'écran
-			if (e.motion.x <= xWinSize && e.motion.x >= xWinSize-20){
-				XPOS -= (5*(PX/64));
-				displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
-			}
-			if (e.motion.x >= 0 && e.motion.x <= 20){
-				XPOS += (5*(PX/64));
-				displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
-			}
-			if (e.motion.y <= yWinSize && e.motion.y >= yWinSize-20){
-				YPOS -= (5*(PX/64));
-				displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
-			}
-			if (e.motion.y <= 10){
-				YPOS += (5*(PX/64));
-				displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
+			if (SDL_GetMouseFocus() == pWindow)
+			{
+				// Déplacement de la caméra grâce aux bords de l'écran
+				if (e.motion.x <= xWinSize && e.motion.x >= xWinSize-20){
+					XPOS -= (camSpeed*(PX/64));
+					displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
+				}
+				if (e.motion.x >= 0 && e.motion.x <= 20){
+					XPOS += (camSpeed*(PX/64));
+					displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
+				}
+				if (e.motion.y <= yWinSize && e.motion.y >= yWinSize-20){
+					YPOS -= (camSpeed*(PX/64));
+					displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
+				}
+				if (e.motion.y <= 20){
+					YPOS += (camSpeed*(PX/64));
+					displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
+				}
+				// Vérification pour ne pas dépasser des "border" avec la caméra
+				if (XPOS > 500*(PX/64)) 	XPOS = 500*(PX/64);
+				if (XPOS < -1000*(PX/64)) 	XPOS = -1000*(PX/64);
+				if (YPOS > 300*(PX/64))		YPOS = 300*(PX/64);
+				if (YPOS < -500*(PX/64)) 	YPOS = -500*(PX/64);
 			}
 
-			// Vérification pour ne pas dépasser des "border" avec la caméra
-			if (XPOS > 500*(PX/64)) 	XPOS = 500*(PX/64);
-			if (XPOS < -1000*(PX/64)) 	XPOS = -1000*(PX/64);
-			if (YPOS > 300*(PX/64))		YPOS = 300*(PX/64);
-			if (YPOS < -500*(PX/64)) 	YPOS = -500*(PX/64);
-			SDL_Delay(16);
+			SDL_Delay(1000/_FPS_);
 
 		}
 		closeWindow(pWindow);
