@@ -330,33 +330,38 @@ int displayMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, in
 			blockPos.x = x+(j+1)*(pxBase/2)+(i+1)*(pxBase/2);
 			blockPos.y = y+i*(pxBase/4)+(ySize-j)*(pxBase/4);
 
-			if ((*(grid+i*xSize+j)).tile_id == 1)
+			if (blockPos.x >= -64 && blockPos.x <= xWinSize && blockPos.y >= -64 && blockPos.y <= yWinSize)
 			{
-				if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
-				else				displaySprite(renderer, getBigTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
-				if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "block"), blockPos.x, blockPos.y);
-				else				displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
-			}
-			else if ((*(grid+i*xSize+j)).tile_id <= 7)
-			{
-				if (pxBase == 64)	displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].texture, blockPos.x, blockPos.y);
-				else 				displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].big_texture, blockPos.x, blockPos.y);
-			}
 
-			// Affichage tuile de sélection
-			if ((*(grid+i*xSize+j)).selected == 1)
-			{
-				if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "selection"), blockPos.x, blockPos.y);
-				else				displaySprite(renderer, getBigTexture(textures, "selection"), blockPos.x, blockPos.y);
+				if ((*(grid+i*xSize+j)).tile_id == 1)
+				{
+					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
+					else				displaySprite(renderer, getBigTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
+					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "block"), blockPos.x, blockPos.y);
+					else				displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
+				}
+				else if ((*(grid+i*xSize+j)).tile_id <= 7)
+				{
+					if (pxBase == 64)	displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].texture, blockPos.x, blockPos.y);
+					else 				displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].big_texture, blockPos.x, blockPos.y);
+				}
+
+				// Affichage tuile de sélection
+				if ((*(grid+i*xSize+j)).selected == 1)
+				{
+					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "selection"), blockPos.x, blockPos.y);
+					else				displaySprite(renderer, getBigTexture(textures, "selection"), blockPos.x, blockPos.y);
+				}
+
+				if ((*(grid+i*xSize+j)).entity != NULL)	displayCharacters(renderer, cSprites, (*(grid+i*xSize+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
+
+				/*/ -- DEBUG Affichage des indices des tuiles --
+				char pos[6];
+				sprintf(pos, "%d,%d", i, j);
+				displayText(renderer, imgDestRect.x+(pxBase/2)-10, imgDestRect.y+(pxBase/4), (pxBase/64)*10, pos, "../inc/font/Pixels.ttf", 255, 50, 50);
+				// -- DEBUG --*/
+
 			}
-
-			if ((*(grid+i*xSize+j)).entity != NULL)	displayCharacters(renderer, cSprites, (*(grid+i*xSize+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
-
-			/*/ -- DEBUG Affichage des indices des tuiles --
-			char pos[6];
-			sprintf(pos, "%d,%d", i, j);
-			displayText(renderer, imgDestRect.x+(pxBase/2)-10, imgDestRect.y+(pxBase/4), (pxBase/64)*10, pos, "../inc/font/Pixels.ttf", 255, 50, 50);
-			// -- DEBUG --*/
         }
     }
 
