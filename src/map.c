@@ -330,7 +330,7 @@ int displayMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, in
 			blockPos.x = x+(j+1)*(pxBase/2)+(i+1)*(pxBase/2);
 			blockPos.y = y+i*(pxBase/4)+(ySize-j)*(pxBase/4);
 
-			if (blockPos.x >= -64 && blockPos.x <= xWinSize && blockPos.y >= -64 && blockPos.y <= yWinSize)
+			if (blockPos.x >= -pxBase && blockPos.x <= xWinSize && blockPos.y >= -pxBase && blockPos.y <= yWinSize)
 			{
 
 				if ((*(grid+i*xSize+j)).tile_id == 1)

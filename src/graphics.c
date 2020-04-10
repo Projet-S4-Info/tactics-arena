@@ -1,3 +1,7 @@
+
+/* =============== DEPENDANCES =============== */
+
+
 #include <stdio.h>
 #include <string.h>
 #include "../SDL2/include/SDL2/SDL.h"
@@ -15,42 +19,37 @@
 #include "init.h"
 #include "gameplay.h"
 
+
+/* =============== CONSTANTES ================ */
+
+
 #define _NB_MAX_MAPS_ 50
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
+#define _FPS_ 60							// Define at which frequency the game have to refresh
 
-#define _FPS_ 30						// Define at which frequency the game have to refresh
 
-Tile grid[_X_SIZE_][_Y_SIZE_];			/**< Contains the pointer to the start of the matrix */
+/* =============== VARIABLES ================ */
+
+
+Tile grid[_X_SIZE_][_Y_SIZE_];				// Constains the grid of tiles
 Tile *matrix = &grid[0][0];
 
-// x and y sizes of the window
-int xWinSize, yWinSize;
+unsigned long long frames = 0;				// Frames
+const int camSpeed = 10;					// Speed of the camera movements
+int selected_ability = -1;					// Selected ability
+int hover_ability = -1;						// Hover ability
+int hover_passive_help = 0;					// Hover passive help in ID card (with mouse position)
+int end_of_turn = 0;						// Fin de tour
+int isChatActive = 0;						// Chat button
 
-// Frames
-unsigned long long frames = 0;
-
-// Speed of the camera movements
-const int camSpeed = 10;
-
-// Selected ability
-int selected_ability = -1;
-// Hover ability
-int hover_ability = -1;
-// Hover passive help in ID card (with mouse position)
-int hover_passive_help = 0;
-Coord mouse_position;
-// Fin de tour
-int end_of_turn = 0;
-
-// Ability description
-char description[100];
-
-// Chat Btn
-
-int isChatActive = 0;
-
+int xWinSize, yWinSize;						// x and y sizes of the window
 TabTexture cSprites[50];
+Coord mouse_position;
+
+
+/* =============== FONCTIONS ================ */
+
 
 void setRendererDriver(SDL_Renderer *renderer)
 // Set the default renderer driver to OpenGL for MacOS compatibility
@@ -79,10 +78,13 @@ void setRendererDriver(SDL_Renderer *renderer)
 	free(global_renderer_info);
 }
 
+
+
 SDL_Surface *optimize(SDL_Surface *surf)
 // Optimizes the surface for the display format
 {
 	SDL_Surface *opt = SDL_ConvertSurfaceFormat(surf, surf->format, 0);
+
 	if (opt)
 	{
 		SDL_FreeSurface(surf);
@@ -91,6 +93,8 @@ SDL_Surface *optimize(SDL_Surface *surf)
 	
 	return surf;
 }
+
+
 
 void freeTextures(TabTexture * textures)
 // Free all the textures in the given textures table
@@ -113,6 +117,8 @@ void freeTextures(TabTexture * textures)
 	}
 }
 
+
+
 int addTextureToTable(TabTexture * texturesTable, SDL_Texture * texture, SDL_Texture * big_texture, char * texture_name)
 // Add to the TabTexture table the given texture and its big one
 {
@@ -132,10 +138,13 @@ int addTextureToTable(TabTexture * texturesTable, SDL_Texture * texture, SDL_Tex
 	return index;
 }
 
+
+
 SDL_Texture * getTexture(TabTexture * textures, const char * texture_name)
 // Return the texture associated with its name
 {
 	int index = 0;
+
 	while (textures[index].texture != NULL)
 	{
 		index++;
@@ -152,10 +161,13 @@ SDL_Texture * getTexture(TabTexture * textures, const char * texture_name)
 	exit(EXIT_FAILURE);
 }
 
+
+
 SDL_Texture * getBigTexture(TabTexture * textures, const char * texture_name)
 // Return the texture associated with its name
 {
 	int index = 0;
+
 	while (textures[index].texture != NULL)
 	{
 		index++;
@@ -171,6 +183,8 @@ SDL_Texture * getBigTexture(TabTexture * textures, const char * texture_name)
 
 	exit(EXIT_FAILURE);
 }
+
+
 
 SDL_Surface * loadImage(const char * img)
 // Load a PNG image into a surface
@@ -190,6 +204,8 @@ SDL_Surface * loadImage(const char * img)
 	return optimize(surface);
 }
 
+
+
 SDL_Texture * loadTexture(SDL_Renderer * renderer, SDL_Surface * surface)
 // Create a texture from a surface
 {
@@ -203,6 +219,8 @@ SDL_Texture * loadTexture(SDL_Renderer * renderer, SDL_Surface * surface)
 
 	return texture;
 }
+
+
 
 void displayText(SDL_Renderer *renderer, int x, int y, int size, const char *content, const char *text_police, int r, int g, int b)
 // Displays text on the window
@@ -248,6 +266,8 @@ void displayText(SDL_Renderer *renderer, int x, int y, int size, const char *con
 	TTF_CloseFont(police);
 }
 
+
+
 int displaySprite(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y)
 // Display a sprite on the window
 {
@@ -262,6 +282,8 @@ int displaySprite(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y)
 	return 1;
 }
 
+
+
 int closeWindow(SDL_Window *pWindow)
 // Kill and close the window
 {
@@ -272,6 +294,8 @@ int closeWindow(SDL_Window *pWindow)
 
     return 0;
 }
+
+
 
 int createGameWindow(int x, int y)
 // Create a window with with x*y size (in px)
@@ -329,8 +353,10 @@ int createGameWindow(int x, int y)
 		// Chargement des textures
 		loadMapTextures(renderer);
 		loadSprites(renderer, cSprites);
+		
 		int start_seconds = SDL_GetTicks()/1000;
 		int load_index = 0;
+
 		while((SDL_GetTicks()/1000)-start_seconds < 3)
 		{
 			load_index++;
@@ -480,19 +506,19 @@ int createGameWindow(int x, int y)
 								}
 								break;
 							case SDLK_z:		// "z" key
-								YPOS += (10*(PX/64));
+								YPOS += (camSpeed*(PX/64));
 								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 								break;
 							case SDLK_q:		// "q" key
-								XPOS += (10*(PX/64));
+								XPOS += (camSpeed*(PX/64));
 								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 								break;
 							case SDLK_s:		// "s" key
-								YPOS -= (10*(PX/64));
+								YPOS -= (camSpeed*(PX/64));
 								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 								break;
 							case SDLK_d:		// "d" key
-								XPOS -= (10*(PX/64));
+								XPOS -= (camSpeed*(PX/64));
 								displayMap(renderer, XPOS, YPOS, PX, matrix, _X_SIZE_, _Y_SIZE_, cSprites);
 								break;
 						}
