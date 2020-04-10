@@ -143,6 +143,8 @@ int createGameWindow(int x, int y)
 		Coord testCoord6 = {rand()%30,rand()%30};
 		setEntityToTile(&Allies[5], testCoord6);
 
+		displayMap(renderer, XPOS, YPOS);
+
 		SDL_RenderPresent(renderer);
 
 		Entity * tempEntity = NULL;
@@ -299,9 +301,10 @@ int createGameWindow(int x, int y)
 				if (XPOS < -1000*(PX/64)) 	XPOS = -1000*(PX/64);
 				if (YPOS > 300*(PX/64))		YPOS = 300*(PX/64);
 				if (YPOS < -500*(PX/64)) 	YPOS = -500*(PX/64);
+
+				displayMap(renderer, XPOS, YPOS);
 			}
 
-			displayMap(renderer, XPOS, YPOS);
 			SDL_Delay(1000/_FPS_);
 
 		}
