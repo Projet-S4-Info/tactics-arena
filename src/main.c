@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "grid.h"
-#include "graphics.h"
+#include "game_window.h"
 #include "audio.h"
 #include "menu.h"
 #include "multi_menu.h"

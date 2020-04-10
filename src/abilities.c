@@ -2,14 +2,14 @@
 #include "init.h"
 #include "gameplay.h"
 #include "grid.h"
-#include "graphics.h"
+#include "game_window.h"
 #include "characters.h"
 
 int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
 {
     Status v = {3,atk,0};
     Entity * t;
-    t = getEntity(matrix, c);
+    t = getEntity(c);
     if(t!=NULL)
     {
         if(t==Dead)
@@ -193,7 +193,7 @@ int Blizzard_fn(Coord c, Entity * e, StateList * list)
 
 int Volt_Switch_fn(Coord c, Entity * e, StateList * list)
 {
-    Entity * t = getEntity(matrix,c);
+    Entity * t = getEntity(c);
     switchEntities(c,e->coords);
     t->coords = e->coords;
     e->coords = c;
@@ -254,7 +254,7 @@ int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
 
 int Thrust_fn(Coord c, Entity * e, StateList * list)
 {
-    Entity * target = getEntity(matrix, add_coords(c,compare_coords(e->coords,c)));
+    Entity * target = getEntity(add_coords(c,compare_coords(e->coords,c)));
 
     if(target!=NULL)
     {
@@ -288,7 +288,7 @@ int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
 
     t = &all[tab[rand()%j]];
 
-    f=getEntity(matrix, c);
+    f=getEntity(c);
 
     int h = f->base_stats[pv] - f->stat_mods[pv];
     f->stat_mods[pv] = 20;

@@ -5,12 +5,14 @@
 #include "../SDL2/include/SDL2/SDL_ttf.h"
 #include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "audio.h"
-#include "graphics.h"
+#include "game_window.h"
 #include "characters.h"
 #include "common.h"
 #include "grid.h"
 #include "gameplay.h"
 #include "turn.h"
+#include "display.h"
+#include "textures.h"
 
 
 #define _NB_MAX_TEXTURES_ 50
@@ -120,22 +122,22 @@ float crossProduct(Vector AB, Vector AC)
 	return (( AB.y * AC.x ) - ( AB.x * AC.y ));
 }
 
-int selectTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int xSize, int ySize)
+int selectTile(int xpos, int ypos, int mx, int my)
 // Set the tile selected according to 2D iso from 2D coordinates
 {
 	int xIndex, yIndex, xIsoOrigin, yIsoOrigin, xTile, yTile;
 	float cpAB, cpBC, cpDC, cpAD;
 
 	// On déselectionne toutes les cases
-	for (int i=0; i<xSize; i++){
-		for (int j=0; j<ySize; j++){
-			(*(grid+i*xSize+j)).selected = 0;
+	for (int i=0; i<_X_SIZE_; i++){
+		for (int j=0; j<_Y_SIZE_; j++){
+			(*(matrix+i*_X_SIZE_+j)).selected = 0;
 		}
 	}
 
 	// Position de l'origine de la map en 2D isométrique
 	xIsoOrigin = xpos;
-	yIsoOrigin = ypos+ySize*(pxBase/4);
+	yIsoOrigin = ypos+_Y_SIZE_*(pxBase/4);
 
 	// Coordonnées 2D -> 2D iso
 	xIndex = floor(((my-yIsoOrigin)/(pxBase/2) + ((mx-xIsoOrigin)/pxBase)))-1;
@@ -147,7 +149,7 @@ int selectTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 	}
 
 	xTile = xpos+((((xIndex+yIndex)/2)+1)*pxBase);
-	yTile = ypos+((ySize-(yIndex-xIndex))*(pxBase/4)+(pxBase/4));
+	yTile = ypos+((_Y_SIZE_-(yIndex-xIndex))*(pxBase/4)+(pxBase/4));
 	if(verbose)printf("xTile : %d yTile : %d\n", xTile, yTile);
 
 	// Calcul des coordonnées des 4 coins de la tile
@@ -181,16 +183,16 @@ int selectTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 		yIndex--;
 	}
 
-	if (xIndex > xSize-1 || yIndex > ySize-1 || xIndex < 0 || yIndex < 0)
+	if (xIndex > _X_SIZE_-1 || yIndex > _Y_SIZE_-1 || xIndex < 0 || yIndex < 0)
 	{
 		selected_ability = -1;
 		return 0;
 	}
 
 	if(verbose)printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
-	(*(grid+xIndex*xSize+yIndex)).selected = 1;
+	(*(matrix+xIndex*_X_SIZE_+yIndex)).selected = 1;
 	Coord selectedTile = {xIndex, yIndex};
-	Entity *selectedEntity = getEntity(grid, selectedTile);
+	Entity *selectedEntity = getEntity(selectedTile);
 	if (selectedEntity != NULL)
 	{
 		action act = {selectedEntity->cha_id, selectedTile, selected_ability};
@@ -219,7 +221,7 @@ int displayAbilities(SDL_Renderer *renderer)
 int displayInterface(SDL_Renderer *renderer)
 // Display the UI
 {
-	Entity * tempEntity = getEntity(matrix, getSelectedPos());
+	Entity * tempEntity = getEntity(getSelectedPos());
 	char passive[100];
 	char pv_text[2];
 	char pa_text[2];
@@ -242,8 +244,6 @@ int displayInterface(SDL_Renderer *renderer)
 	chatMsg.y = chatScreen.y + chatScreen.h + 2;
 	chatMsg.w = chatScreen.w;
 	chatMsg.h = 20; 
-
-
 
 
 	if (tempEntity != NULL)
@@ -311,7 +311,7 @@ int displayInterface(SDL_Renderer *renderer)
 	return 0;
 }
 
-int displayMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, int xSize, int ySize, TabTexture * cSprites)
+int displayMap(SDL_Renderer *renderer, int x, int y)
 // Display the map
 {
 	/* Le fond de la fenêtre sera blanc */
@@ -324,36 +324,36 @@ int displayMap(SDL_Renderer *renderer, int x, int y, int pxBase, Tile * grid, in
     SDL_SetRenderDrawColor(renderer, 173, 216, 230, 255);
 	SDL_RenderClear(renderer);
 
-    for (int i=0; i < xSize; i++){
-        for (int j=(ySize-1); j >= 0; j--){
+    for (int i=0; i < _X_SIZE_; i++){
+        for (int j=(_Y_SIZE_-1); j >= 0; j--){
 
 			blockPos.x = x+(j+1)*(pxBase/2)+(i+1)*(pxBase/2);
-			blockPos.y = y+i*(pxBase/4)+(ySize-j)*(pxBase/4);
+			blockPos.y = y+i*(pxBase/4)+(_Y_SIZE_-j)*(pxBase/4);
 
 			if (blockPos.x >= -pxBase && blockPos.x <= xWinSize && blockPos.y >= -pxBase && blockPos.y <= yWinSize)
 			{
 
-				if ((*(grid+i*xSize+j)).tile_id == 1)
+				if ((*(matrix+i*_X_SIZE_+j)).tile_id == 1)
 				{
 					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
 					else				displaySprite(renderer, getBigTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
 					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "block"), blockPos.x, blockPos.y);
 					else				displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
 				}
-				else if ((*(grid+i*xSize+j)).tile_id <= 7)
+				else if ((*(matrix+i*_X_SIZE_+j)).tile_id <= 7)
 				{
-					if (pxBase == 64)	displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].texture, blockPos.x, blockPos.y);
-					else 				displaySprite(renderer, textures[(*(grid+i*xSize+j)).tile_id].big_texture, blockPos.x, blockPos.y);
+					if (pxBase == 64)	displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].texture, blockPos.x, blockPos.y);
+					else 				displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].big_texture, blockPos.x, blockPos.y);
 				}
 
 				// Affichage tuile de sélection
-				if ((*(grid+i*xSize+j)).selected == 1)
+				if ((*(matrix+i*_X_SIZE_+j)).selected == 1)
 				{
 					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "selection"), blockPos.x, blockPos.y);
 					else				displaySprite(renderer, getBigTexture(textures, "selection"), blockPos.x, blockPos.y);
 				}
 
-				if ((*(grid+i*xSize+j)).entity != NULL)	displayCharacters(renderer, cSprites, (*(grid+i*xSize+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
+				if ((*(matrix+i*_X_SIZE_+j)).entity != NULL)	displayCharacters(renderer, cSprites, (*(matrix+i*_X_SIZE_+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
 
 				/*/ -- DEBUG Affichage des indices des tuiles --
 				char pos[6];

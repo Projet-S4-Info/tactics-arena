@@ -6,17 +6,38 @@
  * \date 28/01/2020
  */
 
+
+/* =============== DEPENDENCES =============== */
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include "grid.h"
 #include "characters.h"
 #include "common.h"
-#include "graphics.h"
+#include "game_window.h"
 #include "struct.h"
+
+
+/* =============== CONSTANTES =============== */
+
 
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
+
+
+/* =============== GRILLES DE JEU =============== */
+
+
+Tile grid[_X_SIZE_][_Y_SIZE_];				// Grille du jeu
+Tile blankGrid[_X_SIZE_][_Y_SIZE_];          // Grille de l'éditeur de map
+Tile *matrix = &grid[0][0];
+Tile *blankMatrix = &blankGrid[0][0];
+
+
+/* =============== FONCTIONS =============== */
+
 
 /**
  * \fn void createGrid(Entity * grid, int x, int y)
@@ -28,11 +49,10 @@
 void createGrid(Tile * grid, int seed, int x, int y)
 // create the grid with x*y size
 {
-    srand(time(NULL));
     Trap_t trap = {0, FALSE};
+
     for (int i = 0; i < x*y; i++){
         grid[i].tile_id = rand()%seed;
-        int t = rand()%5;
         grid[i].selected = 0;
         grid[i].entity = NULL;
         grid[i].trap = trap;
@@ -58,11 +78,11 @@ void debugGrid(Tile * grid, int x, int y)
     }
 }
 
-Entity * getEntity(Tile * grid, Coord pos)
+Entity * getEntity(Coord pos)
 // Returns entity at given coord, if not return NULL
 {
-    if ((*(grid+pos.x*30+pos.y)).entity == NULL) return NULL;
-    else return (*(grid+pos.x*30+pos.y)).entity;
+    if ((*(matrix+pos.x*_X_SIZE_+pos.y)).entity == NULL) return NULL;
+    else return (*(matrix+pos.x*_X_SIZE_+pos.y)).entity;
 }
 
 int Set_Trap(Trap_t trap, Coord pos)
@@ -81,13 +101,21 @@ Trap_t Get_Trap(Coord pos)
 Tile getSelected()
 // Return the selected tile
 {
+    Tile result;
+
     for (int i=0; i < _X_SIZE_; i++)
     {
         for (int j=0; j < _Y_SIZE_; j++)
         {
-            if ((*(matrix+i*_X_SIZE_+j)).selected == 1) return (*(matrix+i*_X_SIZE_+j));
+            if ((*(matrix+i*_X_SIZE_+j)).selected == 1)
+            {
+                result = (*(matrix+i*_X_SIZE_+j));
+                break;
+            }
         }
     }
+
+    return result;
 }
 
 Coord getSelectedPos()
@@ -99,8 +127,8 @@ Coord getSelectedPos()
         {
             if ((*(matrix+i*_X_SIZE_+j)).selected == 1)
             {
-                Coord res = {i, j};
-                return res;
+                Coord result = {i, j};
+                return result;
             }
         }
     }

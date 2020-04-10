@@ -7,9 +7,11 @@
 #include "audio.h"
 #include "map.h"
 #include "struct.h"
-#include "graphics.h"
+#include "game_window.h"
 #include "map_editor.h"
 #include "common.h"
+#include "display.h"
+#include "textures.h"
 
 #ifdef _WIN32
 #  include <windows.h>

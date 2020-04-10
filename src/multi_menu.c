@@ -7,7 +7,9 @@
 #include "audio.h"
 #include "map.h"
 #include "struct.h"
-#include "graphics.h"
+#include "game_window.h"
+#include "display.h"
+#include "textures.h"
 #include "servFcnt.h"
 #include "multi_menu.h"
 #include <unistd.h>

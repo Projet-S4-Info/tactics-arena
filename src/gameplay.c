@@ -1,6 +1,6 @@
 #include "init.h"
 #include "grid.h"
-#include "graphics.h"
+#include "game_window.h"
 
 err_t get_team(Entity *e, Entity **all, bool same)
 {
@@ -371,7 +371,7 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
         {
             c=add_coords(starting_point, active_ab.coord[i]);
 
-            e=getEntity(matrix , c);
+            e=getEntity(c);
             
             if(e!=NULL)
             {

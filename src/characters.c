@@ -5,9 +5,12 @@
 #include "../SDL2/include/SDL2/SDL_image.h"
 #include "../SDL2/include/SDL2/SDL_ttf.h"
 #include "../SDL2/include/SDL2/SDL_mixer.h"
-#include "graphics.h"
+#include "game_window.h"
 #include "substruct.h"
 #include "common.h"
+#include "textures.h"
+#include "display.h"
+#include "grid.h"
 
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
@@ -15,7 +18,6 @@
 #define _NB_CLASSES_ 6
 #define _NB_ANIM_ 6
 
-CharTexture charTextures[_NB_CLASSES_];
 int indexCharTable = 0;
 
 int addCharacterTexture(SDL_Renderer *renderer, char * name)
@@ -61,21 +63,37 @@ int addCharacterTexture(SDL_Renderer *renderer, char * name)
 SDL_Texture * getCharTexture(char *name, Direction direction, int indexAnim)
 // Returns the texture of a given class in a given direction at a given animation index
 {
+    SDL_Texture * result;
+
     name[0] = tolower(name[0]);
     for (int i=0; i < _NB_CLASSES_; i++)
     {
-        if (strcmp(name, charTextures[i].texture_name) == 0) return charTextures[i].textures[direction][indexAnim];
+        if (strcmp(name, charTextures[i].texture_name) == 0)
+        {
+            result = charTextures[i].textures[direction][indexAnim];
+            break;
+        }
     }
+
+    return result;
 }
 
 SDL_Texture * getCharFrontTexture(char *name)
 // Returns the front texture of a given class
 {
     name[0] = tolower(name[0]);
+    SDL_Texture * result = NULL;
+
     for (int i=0; i < _NB_CLASSES_; i++)
     {
-        if (strcmp(name, charTextures[i].texture_name) == 0) return charTextures[i].front;
+        if (strcmp(name, charTextures[i].texture_name) == 0)
+        {
+            result = charTextures[i].front;
+            break;
+        }
     }
+
+    return result;
 }
 
 int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
@@ -181,6 +199,6 @@ int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Entity * e
     if (pxBase == 64)   displaySprite(renderer, getTexture(cSprites, "heart_icon"), x+(pxBase/4), y-(pxBase/4));
     else                displaySprite(renderer, getBigTexture(cSprites, "heart_icon"), x+(pxBase/4), y-(pxBase/4));
     displayText(renderer, x+(pxBase/2), y-(pxBase/4), (pxBase/64)*15, temp, "../inc/font/Pixels.ttf", 255, 0, 0);
-    
+
     return 0;
 }

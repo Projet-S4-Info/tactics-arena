@@ -6,28 +6,21 @@
 #include "../SDL2/include/SDL2/SDL_ttf.h"
 #include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "audio.h"
-#include "graphics.h"
+#include "game_window.h"
 #include "map.h"
 #include "characters.h"
 #include "common.h"
+#include "textures.h"
+#include "grid.h"
+#include "display.h"
 
-#define _NB_MAX_TEXTURES_ 50
 #define _NB_MAX_MAPS_ 20
-#define _X_SIZE_ 30
-#define _Y_SIZE_ 30
 
 int isInSaveMenu = 0;
 int isInLoadMenu = 0;
 
 int flagClick = 0;
 Coord moveInit;
-
-Tile blankGrid[_X_SIZE_][_Y_SIZE_];		/**< Contains the pointer to the start of the blank matrix */
-Tile *blankMatrix = &blankGrid[0][0];
-
-// Textures table
-TabTexture textures[_NB_MAX_TEXTURES_];
-TabTexture cSprites[_NB_MAX_TEXTURES_];
 
 // Map list
 char *mapList[_NB_MAX_MAPS_];
@@ -258,6 +251,8 @@ int loadMap(Tile * grid, const char * name)
 	fread(grid, sizeof(Tile)*30*30, 1, map);
 
 	fclose(map);
+
+	if(verbose)printf("[EDITOR] Map %s chargée avec succès !\n", mapName);
 
 	return 1;
 }
@@ -524,7 +519,7 @@ int createMapEditorWindow(int x, int y)
 		SDL_RenderClear(renderer);
 
 		SDL_Delay(1);
-
+		
 		displayEditorMap(renderer, XPOS, YPOS, PX, SELECT, xWinSize, yWinSize);
 
 		SDL_RenderPresent(renderer);

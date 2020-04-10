@@ -6,7 +6,7 @@
 #include "passives.h"
 #include "gameplay.h"
 #include "grid.h"
-#include "Socket_Server.h"
+#include "servFcnt.h"
 
 bool turn_active = FALSE;
 const action turn_over = {0,{0,0},0};
