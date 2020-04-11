@@ -39,7 +39,7 @@ int pxBase = 64;
 SDL_Surface *optimize(SDL_Surface *surf)
 // Optimizes the surface for the display format
 {
-	SDL_Surface *opt = SDL_ConvertSurfaceFormat(surf, (Uint32) surf->format, 0);
+	SDL_Surface *opt = SDL_ConvertSurfaceFormat(surf, surf->format->format, 0);
 
 	if (opt)
 	{
@@ -156,6 +156,7 @@ SDL_Surface * loadImage(const char * img)
 	}
 
 	SDL_FreeRW(rwop);
+	rwop = NULL;
 
 	return optimize(surface);
 }
@@ -172,6 +173,9 @@ SDL_Texture * loadTexture(SDL_Renderer * renderer, SDL_Surface * surface)
 		fprintf(stderr, "[GRAPHICS] loadTexture error while creating texture : %s\n", SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
+
+	SDL_FreeSurface(surface);
+	surface = NULL;
 
 	return texture;
 }

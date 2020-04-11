@@ -100,19 +100,18 @@ void displayText(SDL_Renderer *renderer, int x, int y, int size, const char *con
 		fprintf(stderr, "Erreur à la création du rendu du texte : %s\n", SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
-	SDL_FreeSurface(text);
 	SDL_QueryTexture(text_tex, NULL, NULL, &(txtDestRect.w), &(txtDestRect.h));
 
 	txtDestRect.x = x;
 	txtDestRect.y = y;
 
 	/* Ajout du texte en noir */
-  SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-  SDL_RenderCopy(renderer, text_tex, NULL, &txtDestRect);
+  	SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+  	SDL_RenderCopy(renderer, text_tex, NULL, &txtDestRect);
 
-	//SDL_RenderPresent(renderer);
-
+	SDL_FreeSurface(text);
 	TTF_CloseFont(police);
+	SDL_DestroyTexture(text_tex);
 }
 
 
