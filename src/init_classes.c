@@ -1,17 +1,15 @@
 #include <stdlib.h>
+#include <string.h>
 #include "abilities.h"
+#include "test.h"
 
-Coord * one_c;
-Damage * one_a;
-Damage * one_m;
-Coord * aoe51;
-Coord * aoe103;
+#include "pointers.h"
 
 err_t init_aoe()
 {
     int i,x,y;
 
-    Coord * aoe51=malloc(sizeof(Coord)*51);
+    aoe51=malloc(sizeof(Coord)*51);
     if(aoe51==NULL) return POINTER_NULL;
     i=0,x=-3,y=-4;
     while(x<=3)
@@ -35,7 +33,7 @@ err_t init_aoe()
         return INIT_COORD_ERR;
     }
 
-    Coord * aoe103=malloc(sizeof(Coord)*103);
+    aoe103=malloc(sizeof(Coord)*103);
     if(aoe103==NULL) return POINTER_NULL;
     i=0,x=-5,y=-6;
     while(x<=5)
@@ -65,11 +63,11 @@ err_t init_aoe()
 
 err_t init_repetitives()
 {
-    Coord * one_c = malloc(sizeof(Coord));
+    one_c = malloc(sizeof(Coord));
     if(one_c==NULL) return POINTER_NULL;
-    Damage * one_a = malloc(sizeof(Damage));
+    one_a = malloc(sizeof(Damage));
     if(one_a==NULL) return POINTER_NULL;
-    Damage * one_m = malloc(sizeof(Damage));
+    one_m = malloc(sizeof(Damage));
     if(one_m==NULL) return POINTER_NULL;
 
     Coord ctemp = {0,0};
@@ -85,7 +83,7 @@ err_t init_repetitives()
 
 err_t init_berserker(Class * c)
 {
-    Damage * FD = malloc(sizeof(Damage));
+    FD = malloc(sizeof(Damage));
     if(FD==NULL) return POINTER_NULL;
 
     Damage dtmp = {0.8,atk};
@@ -95,15 +93,16 @@ err_t init_berserker(Class * c)
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
-    Ability abtemp1 = {Slash,1,0,1,FOES,one_a,1,one_c,0,NULL,NONE,NULL,{"Slash", "Slash at an ennemy."}};
+    Ability abtemp1 = {Slash,1,0,1,FOES,&one_a,1,&one_c,0,NULL,NONE,NULL,{"Slash", "Slash at an ennemy."}};
     *ab = abtemp1;
-    Ability abtemp2 = {Killing_Blow,2,1,1,FOES,one_a,1,one_c,0,NULL,DURING,Killing_Blow_fn,{"Killing Blow","Slash at an ennemy, killing him increases attack permanently and gives one action point back."}};
+    Ability abtemp2 = {Killing_Blow,2,1,1,FOES,&one_a,1,&one_c,0,NULL,DURING,Killing_Blow_fn,{"Killing Blow","Slash at an ennemy, killing him increases attack permanently and gives one action point back."}};
     *(ab+1) = abtemp2;
-    Ability abtemp3 = {Fury,2,2,0,ANY_TILE,NULL,1,one_c,0,NULL,ONLY,Fury_fn,{"Fury","Remove all debuffs and permanently increase attack by the number of turns removed."}};
+    Ability abtemp3 = {Fury,2,2,0,ANY_TILE,NULL,1,&one_c,0,NULL,ONLY,Fury_fn,{"Fury","Remove all debuffs and permanently increase attack by the number of turns removed."}};
     *(ab+2) = abtemp3;
-    Ability abtemp4 = {Frenzied_Dash,3,4,9,FREE_TILE,FD,51,aoe51,0,NULL,BEFORE,NULL,{"Frenzied Dash","Jump to a tile, dealing aoe damage when landing."}};
+    Ability abtemp4 = {Frenzied_Dash,3,4,9,FREE_TILE,&FD,51,&aoe51,0,NULL,BEFORE,NULL,{"Frenzied Dash","Jump to a tile, dealing aoe damage when landing."}};
     *(ab+3) = abtemp4;
     
+    print_Damage(&FD, "");
 
     Class temp = 
     {
@@ -123,23 +122,23 @@ err_t init_berserker(Class * c)
 
 err_t init_ranger(Class * c)
 {
-    Modifier * m = malloc(sizeof(Modifier)*3);
-    if(m==NULL) return POINTER_NULL;
+    DE = malloc(sizeof(Modifier)*3);
+    if(DE==NULL) return POINTER_NULL;
     Modifier t[3] = {{{7,vis,3},1,ALLIES},{{0,Piercing,3},1,ALLIES},{{-8,mv,3},1,ALLIES}};
-    *m=t[0];
-    *(m+1)=t[1];
-    *(m+2)=t[2];
+    *DE=t[0];
+    *(DE+1)=t[1];
+    *(DE+2)=t[2];
 
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
-    Ability abtemp1 = {Bolt,1,0,6,FOES,one_a,1,one_c,0,NULL,NONE,NULL,{"Bolt","Attack an ennemy from range."}};
+    Ability abtemp1 = {Bolt,1,0,6,FOES,&one_a,1,&one_c,0,NULL,NONE,NULL,{"Bolt","Attack an ennemy from range."}};
     *ab = abtemp1;
-    Ability abtemp2 = {Focus,2,4,0,ANY_TILE,NULL,1,one_c,0,NULL,ONLY,Focus_fn,{"Focus","Increase by two turns all buffs and decrease by one all debuffs."}};
+    Ability abtemp2 = {Focus,2,4,0,ANY_TILE,NULL,1,&one_c,0,NULL,ONLY,Focus_fn,{"Focus","Increase by two turns all buffs and decrease by one all debuffs."}};
     *(ab+1) = abtemp2;
-    Ability abtemp3 = {Trap,2,2,4,FREE_TILE,NULL,1,one_c,0,NULL,ONLY,Trap_fn,{"Trap","Put a hidden trap that will cripple an ennemy that walks over it."}};
+    Ability abtemp3 = {Trap,2,2,4,FREE_TILE,NULL,1,&one_c,0,NULL,ONLY,Trap_fn,{"Trap","Put a hidden trap that will cripple an ennemy that walks over it."}};
     *(ab+2) = abtemp3;
-    Ability abtemp4 = {Deadeye,3,5,0,ANY_TILE,NULL,1,one_c,3,m,NONE,NULL,{"Deadeye","Increases range and makes bolt piercing but reduces mv for three turns."}};
+    Ability abtemp4 = {Deadeye,3,5,0,ANY_TILE,NULL,1,&one_c,3,&DE,NONE,NULL,{"Deadeye","Increases range and makes bolt piercing but reduces mv for three turns."}};
     *(ab+3) = abtemp4;
 
 
@@ -162,37 +161,37 @@ err_t init_ranger(Class * c)
 err_t init_goliath(Class * c)
 {
 
-    Modifier * m = malloc(sizeof(Modifier)*2);
-    if(m==NULL) return POINTER_NULL;
+    Ba = malloc(sizeof(Modifier)*2);
+    if(Ba==NULL) return POINTER_NULL;
     Modifier t[2]= {{{-5,res_physic,1},1,FOES},{{-5,res_magic,1},1,FOES}};
-    *m = t[0];
-    *(m+1) = t[1];
+    *Ba = t[0];
+    *(Ba+1) = t[1];
 
-    Modifier * n = malloc(sizeof(Modifier));
-    if(n==NULL) return POINTER_NULL;
+    SU = malloc(sizeof(Modifier));
+    if(SU==NULL) return POINTER_NULL;
     Modifier f= {{0,Guarding,1},1,ALLIES};
-    *n = f;
+    *SU = f;
 
-    Modifier * d = malloc(sizeof(Modifier));
-    if(d==NULL) return POINTER_NULL;
+    D = malloc(sizeof(Modifier));
+    if(D==NULL) return POINTER_NULL;
     Modifier l= {{0,Detained,3},1,FOES};
-    *d = l;
+    *D = l;
 
-    Modifier * u = malloc(sizeof(Modifier));
-    if(d==NULL) return POINTER_NULL;
+    P = malloc(sizeof(Modifier));
+    if(P==NULL) return POINTER_NULL;
     Modifier ut= {{0,Provoked,1},1,FOES};
-    *u= ut;
+    *P= ut;
 
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
-    Ability abtemp1 = {Bash,1,0,1,FOES,one_a,1,one_c,2,m,NONE,NULL,{"Bash","Damage and reduce the ennemy's resistances for a turn."}};
+    Ability abtemp1 = {Bash,1,0,1,FOES,&one_a,1,&one_c,2,&Ba,NONE,NULL,{"Bash","Damage and reduce the ennemy's resistances for a turn."}};
     *ab = abtemp1;
-    Ability abtemp2 = {Shields_Up,2,1,0,ANY_TILE,NULL,1,one_c,1,n,NONE,NULL,{"Shields Up","Increase passive block chance to 70% for one turn."}};
+    Ability abtemp2 = {Shields_Up,2,1,0,ANY_TILE,NULL,1,&one_c,1,&SU,NONE,NULL,{"Shields Up","Increase passive block chance to 70% for one turn."}};
     *(ab+1) = abtemp2;
-    Ability abtemp3 = {Detain,2,4,2,FOES,NULL,1,one_c,1,d,NONE,NULL,{"Detain","Capture an Ennemy for three turns."}};
+    Ability abtemp3 = {Detain,2,4,2,FOES,NULL,1,&one_c,1,&D,NONE,NULL,{"Detain","Capture an Ennemy for three turns."}};
     *(ab+2) = abtemp3;
-    Ability abtemp4 = {Banner,3,5,0,ANY_TILE,NULL,103,aoe103,1,u,AFTER,Banner_fn,{"Banner","Provoke all ennemies in a zone for one turn and reset all allies' cooldowns."}};
+    Ability abtemp4 = {Banner,3,5,0,ANY_TILE,NULL,103,&aoe103,1,&P,AFTER,Banner_fn,{"Banner","Provoke all ennemies in a zone for one turn and reset all allies' cooldowns."}};
     *(ab+3) = abtemp4;
 
 
@@ -214,60 +213,60 @@ err_t init_goliath(Class * c)
 
 err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
 {
-    Damage * d = malloc(sizeof(Damage));
+    d = malloc(sizeof(Damage));
     if(d==NULL) return POINTER_NULL;
     Damage l = {1.3,magic};
     *d = l;
 
-    Damage * u = malloc(sizeof(Damage));
+    u = malloc(sizeof(Damage));
     if(u==NULL) return POINTER_NULL;
     Damage r = {1.5,magic};
     *u = r;
 
-    Damage * red = malloc(sizeof(Damage));
+    red = malloc(sizeof(Damage));
     if(red==NULL) return POINTER_NULL;
     Damage k = {0.8,magic};
     *red = k;
 
-    Modifier * fire1= malloc(sizeof(Modifier));
+    fire1= malloc(sizeof(Modifier));
     if(fire1==NULL) return POINTER_NULL;
     Modifier f1 = {{0,Burning,3},0.6,BOTH};
     *fire1 = f1;
 
-    Modifier * fire2= malloc(sizeof(Modifier));
+    fire2= malloc(sizeof(Modifier));
     if(fire2==NULL) return POINTER_NULL;
     Modifier f2 = {{0,Burning,3},1,BOTH};
     *fire2 = f2;
 
-    Modifier * ice1= malloc(sizeof(Modifier));
+    ice1= malloc(sizeof(Modifier));
     if(ice1==NULL) return POINTER_NULL;
     Modifier ie1 = {{0,Freezing,3},0.3,FOES};
     *ice1 = ie1;
 
-    Modifier * ice2= malloc(sizeof(Modifier));
+    ice2= malloc(sizeof(Modifier));
     if(ice2==NULL) return POINTER_NULL;
     Modifier ie2 = {{0,Freezing,3},1,FOES};
     *ice2 = ie2;
 
-    Modifier * ice3= malloc(sizeof(Modifier)*2);
+    ice3= malloc(sizeof(Modifier)*2);
     if(ice3==NULL) return POINTER_NULL;
     Modifier ie3[2] = {ie1,{{-8,vis,3},1,FOES}};
     *ice3 = ie3[0];
     *(ice3+1) = ie3[1];
 
-    Modifier * armor= malloc(sizeof(Modifier)*2);
+    armor= malloc(sizeof(Modifier)*2);
     if(armor==NULL) return POINTER_NULL;
     Modifier arm[2] = {{{6,res_physic,2},1,ALLIES},{{6,res_magic,2},1,ALLIES}};
     *armor = arm[0];
     *(armor+1) = arm[1];
 
-    Modifier * thera= malloc(sizeof(Modifier)*2);
+    thera= malloc(sizeof(Modifier)*2);
     if(thera==NULL) return POINTER_NULL;
     Modifier py[2] = {{{6,atk,2},1,ALLIES},{{6,magic,2},1,ALLIES}};
     *thera = py[0];
     *(thera+1) = py[1];
 
-    Coord * aoe75=malloc(sizeof(Coord)*75);
+    aoe75=malloc(sizeof(Coord)*75);
     if(aoe75==NULL) return POINTER_NULL;
     int i=0,x=-4,y=-5;
     while(x<=4)
@@ -294,31 +293,31 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
 
 
 
-    Ability abtemp1 = {Fireball,1,0,8,BOTH,one_m,1,one_c,1,fire1,AFTER,mage_switch,{"Fireball","Deals damage and has a chance to set target ablaze."}};
+    Ability abtemp1 = {Fireball,1,0,8,BOTH,&one_m,1,&one_c,1,&fire1,AFTER,mage_switch,{"Fireball","Deals damage and has a chance to set target ablaze."}};
     movesets[0][0] = abtemp1;
-    Ability abtemp2 = {FlameCharge,2,3,10,FREE_TILE,one_m,1,one_c,1,fire2,ONLY,FlameCharge_fn,{"FlameCharge","Engulf yourself in flames and dash, dealing damage and burning entities in your path."}};
+    Ability abtemp2 = {FlameCharge,2,3,10,FREE_TILE,&one_m,1,&one_c,1,&fire2,ONLY,FlameCharge_fn,{"FlameCharge","Engulf yourself in flames and dash, dealing damage and burning entities in your path."}};
     movesets[0][1] = abtemp2;
-    Ability abtemp3 = {Flare,2,3,5,ANY_TILE,NULL,103,aoe103,0,NULL,ONLY,Flare_fn,{"Flare","Increases all allies' vision and their mp for two turns, will spot traps in the chosen area."}};
+    Ability abtemp3 = {Flare,2,3,5,ANY_TILE,NULL,103,&aoe103,0,NULL,ONLY,Flare_fn,{"Flare","Increases all allies' vision and their mp for two turns, will spot traps in the chosen area."}};
     movesets[0][2] = abtemp3;
-    Ability abtemp4 = {Eruption,3,5,12,ANY_TILE,u,75,aoe75,1,fire2,NONE,NULL,{"Eruption","Deal massive damage in a zone and burn all entities."}};
+    Ability abtemp4 = {Eruption,3,5,12,ANY_TILE,&u,75,&aoe75,1,&fire2,NONE,NULL,{"Eruption","Deal massive damage in a zone and burn all entities."}};
     movesets[0][3] = abtemp4;
 
-    Ability abtemp11 = {Icy_Winds,1,0,8,FOES,one_m,1,one_c,1,ice1,AFTER,mage_switch,{"Icy Winds","Deals damage and has a chance to freeze target."}};
+    Ability abtemp11 = {Icy_Winds,1,0,8,FOES,&one_m,1,&one_c,1,&ice1,AFTER,mage_switch,{"Icy Winds","Deals damage and has a chance to freeze target."}};
     movesets[1][0] = abtemp11;
-    Ability abtemp12 = {Freeze,2,3,8,FOES,red,1,one_c,1,ice2,NONE,NULL,{"Freeze","Deal damage to and freeze an ennemy. "}};
+    Ability abtemp12 = {Freeze,2,3,8,FOES,&red,1,&one_c,1,&ice2,NONE,NULL,{"Freeze","Deal damage to and freeze an ennemy. "}};
     movesets[1][1] = abtemp12;
-    Ability abtemp13 = {Frozen_Armor,2,3,6,ALLIES,NULL,1,one_c,2,armor,NONE,NULL,{"Frozen Armor","Increase ally physical and magic resistances."}};
+    Ability abtemp13 = {Frozen_Armor,2,3,6,ALLIES,NULL,1,&one_c,2,&armor,NONE,NULL,{"Frozen Armor","Increase ally physical and magic resistances."}};
     movesets[1][2] = abtemp13;
-    Ability abtemp14 = {Blizzard,3,5,12,ANY_TILE,d,75,aoe75,2,ice3,DURING,Blizzard_fn,{"Blizzard","Deal damage in a zone and highly reduce ennemy vision for a turn, has a chance to freeze ennemies. Water tiles in the are will also freeze."}};
+    Ability abtemp14 = {Blizzard,3,5,12,ANY_TILE,&d,75,&aoe75,2,&ice3,DURING,Blizzard_fn,{"Blizzard","Deal damage in a zone and highly reduce ennemy vision for a turn, has a chance to freeze ennemies. Water tiles in the are will also freeze."}};
     movesets[1][3] = abtemp14;
 
-    Ability abtemp21 = {Shock,1,0,8,FOES,d,1,one_c,0,NULL,AFTER,mage_switch,{"Shock","Zap an ennemy."}};
+    Ability abtemp21 = {Shock,1,0,8,FOES,&d,1,&one_c,0,NULL,AFTER,mage_switch,{"Shock","Zap an ennemy."}};
     movesets[2][0] = abtemp21;
-    Ability abtemp22 = {Volt_Switch,2,3,10,ALLIES,one_m,51,aoe51,0,NULL,BEFORE,Volt_Switch_fn,{"Volt Switch","Switch spots with an ally and deal electric damage around caster."}};
+    Ability abtemp22 = {Volt_Switch,2,3,10,ALLIES,&one_m,51,&aoe51,0,NULL,BEFORE,Volt_Switch_fn,{"Volt Switch","Switch spots with an ally and deal electric damage around caster."}};
     movesets[2][1] = abtemp22;
-    Ability abtemp23 = {Shock_Therapy,2,3,6,ALLIES,NULL,1,one_c,2,thera,NONE,NULL,{"Shock Therapy","Increase ally atk and magic."}};
+    Ability abtemp23 = {Shock_Therapy,2,3,6,ALLIES,NULL,1,&one_c,2,&thera,NONE,NULL,{"Shock Therapy","Increase ally atk and magic."}};
     movesets[2][2] = abtemp23;
-    Ability abtemp24 = {Lightning_Chain,3,5,8,FOES,d,1,one_c,0,NULL,AFTER,Lightning_Chain_fn,{"Lightning Chain","Zap an ennemy, the bolt will bounce to another close ennemy until either there are no ennemies close enough or it has bounced 3 times."}};
+    Ability abtemp24 = {Lightning_Chain,3,5,8,FOES,&d,1,&one_c,0,NULL,AFTER,Lightning_Chain_fn,{"Lightning Chain","Zap an ennemy, the bolt will bounce to another close ennemy until either there are no ennemies close enough or it has bounced 3 times."}};
     movesets[2][3] = abtemp24;
 
 
@@ -340,7 +339,7 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
 
 err_t init_valkyrie(Class * c)
 {
-    Modifier * para= malloc(sizeof(Modifier));
+    para= malloc(sizeof(Modifier));
     if(para==NULL) return POINTER_NULL;
     Modifier p = {{0,Paralyzed,2},0.4,FOES};
     *para = p;
@@ -348,11 +347,11 @@ err_t init_valkyrie(Class * c)
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
-    Ability abtemp1 = {Thrust,1,0,1,ANY_TILE,one_a,1,one_c,1,para,AFTER,Thrust_fn,{"Thrust","Thrust your spear forward."}};
+    Ability abtemp1 = {Thrust,1,0,1,ANY_TILE,&one_a,1,&one_c,1,&para,AFTER,Thrust_fn,{"Thrust","Thrust your spear forward."}};
     *ab = abtemp1;
-    Ability abtemp2 = {Odins_Eyes,2,2,8,ANY_TILE,one_m,51,aoe51,1,para,NONE,NULL,{"Odin's Eyes","Call forth a swarm of crows to deal magic damage to an area."}};
+    Ability abtemp2 = {Odins_Eyes,2,2,8,ANY_TILE,&one_m,51,&aoe51,1,&para,NONE,NULL,{"Odin's Eyes","Call forth a swarm of crows to deal magic damage to an area."}};
     *(ab+1) = abtemp2;
-    Ability abtemp3 = {Life_Transfer,2,3,8,ALLIES,NULL,1,one_c,0,NULL,ONLY,Life_Transfer_fn,{"Life Transfer","Select an Ally, heal the ally back to full and slow a random ennemy for three turns by the amount healed."}};
+    Ability abtemp3 = {Life_Transfer,2,3,8,ALLIES,NULL,1,&one_c,0,NULL,ONLY,Life_Transfer_fn,{"Life Transfer","Select an Ally, heal the ally back to full and slow a random ennemy for three turns by the amount healed."}};
     *(ab+2) = abtemp3;
     Ability abtemp4 = {Gates_of_Valhalla,3,5,0,ANY_TILE,NULL,0,NULL,0,NULL,ONLY,Gates_of_Valhalla_fn,{"Gates of Valhalla","Resurrect all dead allies for a turn."}};
     *(ab+3) = abtemp4;
@@ -376,17 +375,17 @@ err_t init_valkyrie(Class * c)
 
 err_t init_angel(Class * c, Ability *pass)
 {
-    Modifier * heal= malloc(sizeof(Modifier));
+    heal= malloc(sizeof(Modifier));
     if(heal==NULL) return POINTER_NULL;
     Modifier p = {{6,pv,0},1,ALLIES};
     *heal = p;
 
-    Modifier * passive= malloc(sizeof(Modifier));
+    passive= malloc(sizeof(Modifier));
     if(passive==NULL) return POINTER_NULL;
     Modifier h = {{4,pv,0},1,ALLIES};
     *passive = h;
 
-    Modifier * bless= malloc(sizeof(Modifier));
+    bless= malloc(sizeof(Modifier));
     if(bless==NULL) return POINTER_NULL;
     Modifier pb = {{0,Blessed,1},1,ALLIES};
     *bless = pb;
@@ -394,16 +393,16 @@ err_t init_angel(Class * c, Ability *pass)
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
-    Ability abtemp1 = {Condemn,1,0,6,FOES,one_m,1,one_c,0,NULL,NONE,NULL,{"Condemn","Deal magic damage to an ennemy."}};
+    Ability abtemp1 = {Condemn,1,0,6,FOES,&one_m,1,&one_c,0,NULL,NONE,NULL,{"Condemn","Deal magic damage to an ennemy."}};
     *ab = abtemp1;
-    Ability abtemp2 = {Holy_Storm,2,3,8,ANY_TILE,one_m,51,aoe51,1,heal,NONE,NULL,{"Holy Storm","Deal magic damage to ennemies in an area and heal all allies in the area."}};
+    Ability abtemp2 = {Holy_Storm,2,3,8,ANY_TILE,&one_m,51,&aoe51,1,&heal,NONE,NULL,{"Holy Storm","Deal magic damage to ennemies in an area and heal all allies in the area."}};
     *(ab+1) = abtemp2;
     Ability abtemp3 = {Last_Sacrfice,2,5,0,ANY_TILE,NULL,0,NULL,0,NULL,ONLY,Last_Sacrfice_fn,{"Last Sacrfice","Kill self to resurrect an Ally."}};
     *(ab+2) = abtemp3;
-    Ability abtemp4 = {Gods_Blessing,3,5,8,ALLIES,NULL,1,one_c,1,bless,NONE,NULL,{"God's Blessing","Double an Ally's action points and apply no cooldowns for a turn."}};
+    Ability abtemp4 = {Gods_Blessing,3,5,8,ALLIES,NULL,1,&one_c,1,&bless,NONE,NULL,{"God's Blessing","Double an Ally's action points and apply no cooldowns for a turn."}};
     *(ab+3) = abtemp4;
 
-    Ability abpass = {Aura,0,0,0,ANY_TILE,NULL,103,aoe103,1,passive,NONE,NULL,{"",""}};
+    Ability abpass = {Aura,0,0,0,ANY_TILE,NULL,103,&aoe103,1,&passive,NONE,NULL,{"Aura",""}};
     *pass = abpass;
 
     Class temp = 
@@ -426,24 +425,47 @@ err_t init_angel(Class * c, Ability *pass)
 
 err_t ability_destroy(Ability * a)
 {
-
-    if(a->damage!=NULL)
+    if(a!=NULL)
     {
-        free(a->damage);
-        a->damage = NULL;
-    }
+        if(verbose) printf("Destroying %s's pointers!\n", a->eng.name);
 
-    if(a->coord!=NULL)
-    {
-        free(a->coord);
-        a->coord = NULL;
+        if(verbose) printf("Damage...");
+        if(a->damage!=NULL&&*(a->damage)!=NULL)
+        {
+            free(*(a->damage));
+            *(a->damage) = NULL;
+            if(verbose) printf("freed\n");
+        }
+        else
+        {
+            if(verbose) printf("null\n");
+        }
 
-    }
+        if(verbose) printf("Coords...");
+        if(a->coord!=NULL&&*(a->coord)!=NULL)
+        {
+            free(*(a->coord));
+            *(a->coord) = NULL;
+            if(verbose) printf("freed\n");
+        }
+        else
+        {
+            if(verbose) printf("null\n");
+        }
 
-    if(a->mods!=NULL)
-    {
-        free(a->mods);
-        a->mods = NULL;
+        if(verbose) printf("Modifiers...");
+        if(a->mods!=NULL&&*(a->mods)!=NULL)
+        {  
+            free(*(a->mods));
+            *(a->mods) = NULL;
+            if(verbose) printf("freed\n");
+        }
+        else
+        {
+            if(verbose) printf("NULL\n");
+        }
+
+        if(verbose) printf("%s's pointers destroyed!\n", a->eng.name);
     }
 
     return OK;
@@ -451,23 +473,31 @@ err_t ability_destroy(Ability * a)
 
 err_t class_destroy(Class * c)
 {
-    if(c!=NULL)
+    if(c->cla_id!=Mage)
     {
-        if(c->cla_abilities!=NULL)
+        char name[STR_SHORT];
+
+        if(c!=NULL)
         {
-            int i;
-            for(i=0; i<NUM_AB; i++)
+            strcpy(name, c->cla_name);
+
+            if(verbose) printf("Starting destruction of %s!\n", name);
+
+            if(c->cla_abilities!=NULL)
             {
-                ability_destroy(c->cla_abilities+i);
+                int i;
+                for(i=0; i<NUM_AB; i++)
+                {
+                    ability_destroy(c->cla_abilities+i);
+                }
+
+                free(c->cla_abilities);
+                c->cla_abilities = NULL;
+                if(verbose) printf("%s's abilities destroyed!\n", name);
             }
 
-            free(c->cla_abilities);
-            c->cla_abilities = NULL;
+            if(verbose) printf("Destruction of %s finished!\n\n", name);
         }
-
-        free(c);
-        c = NULL;
     }
-
     return OK;
 }

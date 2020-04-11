@@ -43,11 +43,11 @@ typedef struct
     int ab_cooldown;
     int range; //If zero then self cast
     targetType target;
-    Damage * damage;
+    Damage ** damage;
     int nb_coords; 
-    Coord * coord;
+    Coord ** coord;
     int nb_mods;
-    Modifier * mods;
+    Modifier ** mods;
     fnid fn_use;
     int (*function)(Coord, struct entity_t *, StateList *);
     lang eng;
