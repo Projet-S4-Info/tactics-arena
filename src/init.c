@@ -69,6 +69,8 @@ err_t init_classes()
 
 err_t destroy_game()
 {
+    if(verbose) printf("\nStart of Destruction!\n");
+
     list_destroy(stSent);
     list_destroy(stReceived);
 
@@ -79,6 +81,7 @@ err_t destroy_game()
         class_destroy(&classes[i]);
     }
 
+    if(verbose) printf("Starting destruction of Mage!\n");
     for(i=0; i<3; i++)
     {
         for(j=0; j<NUM_AB; j++)
@@ -86,6 +89,10 @@ err_t destroy_game()
             ability_destroy(&mage_ab[i][j]);
         }
     }
+    if(verbose) printf("Mage's abilities destroyed!\n\n");
+
+    ability_destroy(&Aura_ab);
+    if(verbose) printf("Angel's Aura passive destroyed!\n");
 
     return OK;
 }

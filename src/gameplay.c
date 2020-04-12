@@ -369,7 +369,7 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
 
         for(i=0; i<active_ab.nb_coords; i++)
         {
-            c=add_coords(starting_point, active_ab.coord[i]);
+            c=add_coords(starting_point, *(active_ab.coord[i]));
 
             e=getEntity(c);
             
@@ -383,7 +383,7 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
 
                     if(active_ab.damage!=NULL)
                     {
-                        if(apply_damage(active_ab.damage, active_ent, e))
+                        if(apply_damage(*(active_ab.damage), active_ent, e))
                         {
                             death_count++;
                         }
@@ -399,11 +399,11 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
                 {
                     for(j=0; j<active_ab.nb_mods; j++)
                     {
-                        if(!same_team(e,active_ent) && active_ab.mods[j].t!=ALLIES)
-                            apply_mod(active_ab.mods[j],e, list, active_ent->cha_id);
+                        if(!same_team(e,active_ent) && (*(active_ab.mods)+j)->t!=ALLIES)
+                            apply_mod(*(active_ab.mods)[j],e, list, active_ent->cha_id);
 
-                        else if((same_team(e,active_ent) && active_ab.mods[j].t!=FOES))
-                            apply_mod(active_ab.mods[j],e, list, active_ent->cha_id);
+                        else if((same_team(e,active_ent) && (*(active_ab.mods)+j)->t!=FOES))
+                            apply_mod(*(active_ab.mods)[j],e, list, active_ent->cha_id);
                     }
                 }
 

@@ -19,6 +19,7 @@
 #include "characters.h"
 #include "errt.h"
 #include "init.h"
+#include "test.h"
 
 #define X 30
 #define Y 30
@@ -48,7 +49,8 @@ int main(int argc, char * argv[])
         if(argc == 2){
             if(strcmp(argv[1], "-c") == 0){
                 verbose = TRUE;
-            }else{
+            }
+            else{
                 printf("Argument invalide... \n");
             }
         }else if(argc == 1){
@@ -61,10 +63,58 @@ int main(int argc, char * argv[])
 
     srand(time(NULL));
 
+    printf("%s", error_message[ init_classes() ] );
+    if(verbose)
+    {
+        printf("Initiation Check!\n\n");
+        int i,j;
+
+        for(i=0; i<NUM_CLASS; i++)
+        {
+            printf("\n%s\n", classes[i].cla_name);
+            if(classes[i].cla_abilities!=NULL)
+            {
+                for(j=0; j<NUM_AB; j++)
+                {
+                    print_Ability(classes[i].cla_abilities+j, "");
+                }
+            }
+            else
+            {
+                printf("Abilities : NULL\n");
+            }
+            
+        }
+
+        for(i=0; i<3; i++)
+        {
+            printf("\nMage Abilities");
+
+            for(j=0; j<NUM_AB; j++)
+            {
+                switch (j)
+                {
+                    case 0:
+                        printf("\nFire\n");
+                        break;
+                    case 1:
+                        printf("\nIce\n");
+                        break;
+                    case 2:
+                        printf("\nLighting\n");
+                        break;
+                }
+
+                print_Ability(&mage_ab[i][j], "");
+
+            }
+        }
+
+    }
+
     playMenuMusic(1);
     selection = displayMenu(1280, 720);
     
-    printf("%s",error_message[init_classes()]);
 
     // Lancement du jeu
     if (selection == 2)

@@ -173,7 +173,7 @@ int Flare_fn(Coord c, Entity * e, StateList * list)
 
     for(i=0; i<a.nb_coords; i++)
     {
-        c2 = add_coords(c,a.coord[i]);
+        c2 = add_coords(c , *(*(a.coord)+i));
         t = Get_Trap(c2);
         if(t.cha_id<0)
         {
@@ -238,7 +238,7 @@ int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
 
         if(target != NULL)
         {
-            apply_damage(e->cha_class->cla_abilities[Lightning_Chain%NUM_AB].damage, e, target);
+            apply_damage(*(e->cha_class->cla_abilities[Lightning_Chain%NUM_AB].damage), e, target);
             ct = target->coords;
             closest.x = -99;
             target = NULL;
@@ -258,8 +258,8 @@ int Thrust_fn(Coord c, Entity * e, StateList * list)
 
     if(target!=NULL)
     {
-        apply_mod(*e->cha_class->cla_abilities[Thrust%NUM_AB].mods,target, list, e->cha_id);
-        if(apply_damage(e->cha_class->cla_abilities[Thrust%NUM_AB].damage,e,target))
+        apply_mod(*(*(e->cha_class->cla_abilities[Thrust%NUM_AB].mods)), target, list, e->cha_id);
+        if(apply_damage(*(e->cha_class->cla_abilities[Thrust%NUM_AB].damage), e, target))
         {
             return 1;
         }
