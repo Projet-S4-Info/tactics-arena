@@ -172,10 +172,7 @@ int createGameWindow(int x, int y)
 					case SDL_MOUSEBUTTONDOWN:
 
 						if(verbose)printf("X: %d | Y: %d\n", e.motion.x, e.motion.y);		// Debug console pos x & y on term
-						//if (e.motion.x <= 10*64+XPOS && e.motion.y <= 10*64+YPOS && e.motion.x >= XPOS && e.motion.y >= YPOS){
-							selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
-							
-						//}
+						selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 
 						// Compétences et actions
 						tempEntity = getEntity(getSelectedPos());
@@ -189,7 +186,6 @@ int createGameWindow(int x, int y)
 								if (e.motion.x >= 256 && e.motion.x <= 320)	selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
 								if (e.motion.x >= 336 && e.motion.x <= 400)	selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
 								if(verbose)printf("Selected ability : %d\n", selected_ability);
-								
 							}
 						}
 

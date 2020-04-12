@@ -1,3 +1,7 @@
+
+/* =============== DEPENDENCES =============== */
+
+
 #include <stdio.h>
 #include <math.h>
 #include "../SDL2/include/SDL2/SDL.h"
@@ -15,10 +19,19 @@
 #include "textures.h"
 
 
+/* =============== CONSTANTES =============== */
+
+
 #define _NB_MAX_TEXTURES_ 50
 
-// Textures table
-TabTexture textures[_NB_MAX_TEXTURES_];
+
+/* =============== VARIABLES =============== */
+
+
+
+
+
+/* =============== FONCTIONS =============== */
 
 int loadMapTextures(SDL_Renderer * renderer)
 // Load all the map related textures
@@ -281,6 +294,10 @@ int displayInterface(SDL_Renderer *renderer)
 			displayText(renderer, mouse_position.x+20, mouse_position.y+40, 20, tempEntity->cha_class->Passive.desc, "../inc/font/Pixels.ttf", 238, 165, 53);
 		}
 	}
+
+	// Logs
+	Coord logPos = {20, 170};
+	displayLog(renderer, logPos);
 
 	// Turn end icon
 	displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize-280, yWinSize-80);

@@ -11,16 +11,19 @@
 
 
 extern int xWinSize, yWinSize;              // x and y sizes of the window
-Coord mouse_position;
-
-unsigned long long frames;				// Frames
-const int camSpeed;					// Speed of the camera movements
+extern const int camSpeed;
+extern Coord mouse_position;
+extern char *logs[];
 
 
 /* =============== FONCTIONS ================ */
 
 
 void setRendererDriver(SDL_Renderer *renderer);
+
+void addLog(char * message);
+
+void displayLog(SDL_Renderer * renderer, Coord pos);
 
 void displayText(SDL_Renderer *renderer, int x, int y, int size, const char *content, const char *text_police, int r, int g, int b);
 

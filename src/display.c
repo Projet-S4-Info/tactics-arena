@@ -27,16 +27,19 @@
 #define _X_SIZE_ 30                         // | Size of the grid
 #define _Y_SIZE_ 30                         // |
 #define _FPS_ 60							// Define at which frequency the game has to refresh
+#define _NB_MAX_LOGS_ 10					// Define how many logs the screen can display
+#define _MAX_SIZE_LOGS_ 50					// Max length of a log message
 
 
 /* =============== VARIABLES ================ */
 
 
 unsigned long long frames = 0;				// Frames
-const int camSpeed = 10;					// Speed of the camera movements
+const int camSpeed = 5;						// Speed of the camera movements
 
 int xWinSize, yWinSize;						// x and y sizes of the window
 Coord mouse_position;
+char *logs[_NB_MAX_LOGS_];
 
 
 /* =============== FONCTIONS ================ */
@@ -141,4 +144,63 @@ int closeWindow(SDL_Window *pWindow)
   	SDL_Quit();
 
     return 0;
+}
+
+
+
+void addLog(char * message)
+// Add a new message to display as log
+{
+	int logsSize;
+
+	for (logsSize = 0; logs[logsSize]; logsSize++);
+
+	printf("Ajout d'une log...\n");
+
+	if (verbose) printf("[LOGS] %d messages dans les logs.\n", logsSize);
+	
+	if (strlen(message) >= _MAX_SIZE_LOGS_)
+	{
+		if (verbose) printf("[LOGS] La log %s ne peut être ajoutée car sa taille est trop importante (max : %d caracteres).\n", message, _MAX_SIZE_LOGS_);
+		exit(EXIT_FAILURE);
+	}
+
+	if (logsSize > 0)
+	{
+		for (int i = logsSize; i >= 0; i--)
+		{
+			if (i == _NB_MAX_LOGS_-1) logs[_NB_MAX_LOGS_-1] = NULL;
+			else
+			{
+				logs[i+1] = logs[i];
+				logs[i] = NULL;
+			}
+			printf("Message déplace\n");
+		}
+	}
+
+	logs[0] = malloc(sizeof(char) * strlen(message));
+	strcpy(logs[0], message);
+
+	printf("Log ajoutee ! Log : %s\n", logs[0]);
+}
+
+
+void displayLog(SDL_Renderer * renderer, Coord pos)
+// Display logs
+{
+	int x = pos.x;
+	int y = pos.y;
+	int logsSize;
+
+	for (logsSize = 0; logs[logsSize]; logsSize++);
+
+	if (logsSize > 0)
+	{
+		for (int i=0; logs[i]; i++)
+		{
+			displayText(renderer, x, y, 20, logs[i], "../inc/font/Pixels.ttf", 255, 255, 255);
+			y += 20;
+		}
+	}
 }
