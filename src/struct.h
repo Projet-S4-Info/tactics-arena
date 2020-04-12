@@ -27,6 +27,12 @@ typedef struct
     Uint32 end;
 } Timer;
 
+typedef struct
+{
+    char *message;
+    Uint32 time;
+} Log;
+
 
 /* ENTITY STRUCTURES */
 

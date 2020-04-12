@@ -296,7 +296,11 @@ int displayInterface(SDL_Renderer *renderer)
 	}
 
 	// Logs
-	Coord logPos = {20, 170};
+	Coord logPos;
+	logPos.x = 20;
+	if (tempEntity != NULL) logPos.y = 170;
+	else logPos.y = 20;
+	removeOldLogs(SDL_GetTicks());
 	displayLog(renderer, logPos);
 
 	// Turn end icon

@@ -27,8 +27,9 @@
 #define _X_SIZE_ 30                         // | Size of the grid
 #define _Y_SIZE_ 30                         // |
 #define _FPS_ 60							// Define at which frequency the game has to refresh
-#define _NB_MAX_LOGS_ 10					// Define how many logs the screen can display
+#define _NB_MAX_LOGS_ 11					// Define how many logs the screen can display (-1)
 #define _MAX_SIZE_LOGS_ 50					// Max length of a log message
+#define _LOG_DURATION_ 10					// Duration a log is displayed (in seconds)
 
 
 /* =============== VARIABLES ================ */
@@ -39,7 +40,7 @@ const int camSpeed = 5;						// Speed of the camera movements
 
 int xWinSize, yWinSize;						// x and y sizes of the window
 Coord mouse_position;
-char *logs[_NB_MAX_LOGS_];
+Log logs[_NB_MAX_LOGS_];
 
 
 /* =============== FONCTIONS ================ */
@@ -153,37 +154,44 @@ void addLog(char * message)
 {
 	int logsSize;
 
-	for (logsSize = 0; logs[logsSize]; logsSize++);
-
-	printf("Ajout d'une log...\n");
+	for (logsSize = 0; logs[logsSize].message; logsSize++);
 
 	if (verbose) printf("[LOGS] %d messages dans les logs.\n", logsSize);
 	
 	if (strlen(message) >= _MAX_SIZE_LOGS_)
 	{
 		if (verbose) printf("[LOGS] La log %s ne peut être ajoutée car sa taille est trop importante (max : %d caracteres).\n", message, _MAX_SIZE_LOGS_);
-		exit(EXIT_FAILURE);
 	}
-
-	if (logsSize > 0)
+	else
 	{
-		for (int i = logsSize; i >= 0; i--)
+		if (logsSize > 0)
+	{
+		for (int i = logsSize-1; i >= 0; i--)
 		{
-			if (i == _NB_MAX_LOGS_-1) logs[_NB_MAX_LOGS_-1] = NULL;
+			if (i == _NB_MAX_LOGS_-2)
+			{
+				free(logs[_NB_MAX_LOGS_-2].message);
+				logs[_NB_MAX_LOGS_-2].message = NULL;
+			}
 			else
 			{
-				logs[i+1] = logs[i];
-				logs[i] = NULL;
+				free(logs[i+1].message);
+				logs[i+1].message = NULL;
+				logs[i+1].message = malloc(sizeof(char)*strlen(logs[i].message));
+				strcpy(logs[i+1].message, logs[i].message);
+				logs[i+1].time = logs[i].time;
+				free(logs[i].message);
+				logs[i].message = NULL;
 			}
-			printf("Message déplace\n");
 		}
 	}
 
-	logs[0] = malloc(sizeof(char) * strlen(message));
-	strcpy(logs[0], message);
-
-	printf("Log ajoutee ! Log : %s\n", logs[0]);
+	logs[0].message = malloc(sizeof(char) * strlen(message));
+	logs[0].time = SDL_GetTicks();
+	strcpy(logs[0].message, message);
+	}
 }
+
 
 
 void displayLog(SDL_Renderer * renderer, Coord pos)
@@ -193,14 +201,37 @@ void displayLog(SDL_Renderer * renderer, Coord pos)
 	int y = pos.y;
 	int logsSize;
 
-	for (logsSize = 0; logs[logsSize]; logsSize++);
+	for (logsSize = 0; logs[logsSize].message; logsSize++);
 
 	if (logsSize > 0)
 	{
-		for (int i=0; logs[i]; i++)
+		for (int i=0; logs[i].message; i++)
 		{
-			displayText(renderer, x, y, 20, logs[i], "../inc/font/Pixels.ttf", 255, 255, 255);
+			displayText(renderer, x, y, 20, logs[i].message, "../inc/font/Pixels.ttf", 255, 255, 255);
 			y += 20;
+		}
+	}
+}
+
+
+
+void removeOldLogs(Uint32 time)
+// Remove the logs to old to be still displayed
+{
+	int logsSize;
+
+	for (logsSize = 0; logs[logsSize].message; logsSize++);
+	
+	if (logsSize > 0)
+	{
+		for (int i = logsSize-1; i >= 0; i--)
+		{
+			printf("Time log : %d | Time : %d\n", logs[i].time, time);
+			if (logs[i].time < (time - (_LOG_DURATION_*1000)) || logs[i].time > time)
+			{
+				free(logs[i].message);
+				logs[i].message = NULL;
+			}
 		}
 	}
 }

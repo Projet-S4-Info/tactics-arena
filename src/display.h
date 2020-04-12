@@ -13,7 +13,7 @@
 extern int xWinSize, yWinSize;              // x and y sizes of the window
 extern const int camSpeed;
 extern Coord mouse_position;
-extern char *logs[];
+extern Log logs[];
 
 
 /* =============== FONCTIONS ================ */
@@ -21,14 +21,16 @@ extern char *logs[];
 
 void setRendererDriver(SDL_Renderer *renderer);
 
-void addLog(char * message);
-
-void displayLog(SDL_Renderer * renderer, Coord pos);
-
 void displayText(SDL_Renderer *renderer, int x, int y, int size, const char *content, const char *text_police, int r, int g, int b);
 
 int displaySprite(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y);
 
 int closeWindow(SDL_Window *pWindow);
+
+void addLog(char * message);
+
+void displayLog(SDL_Renderer * renderer, Coord pos);
+
+void removeOldLogs(Uint32 time);
 
 #endif
