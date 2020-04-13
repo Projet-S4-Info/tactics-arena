@@ -4,7 +4,7 @@
 
 Entity * e_from_id(int Id);
 err_t get_team(Entity *e, Entity **all, bool same);
-bool game_over();
+winId game_over();
 int get_range(int vision, int range_mod);
 char * get_desc(Entity * e, abilityId ab_id);
 char * get_name(Entity * e, abilityId ab_id);

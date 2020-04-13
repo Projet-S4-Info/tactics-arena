@@ -5,6 +5,7 @@
 #include "game_window.h"
 #include "characters.h"
 #include "display.h"
+#include "deplacement.h"
 
 int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
 {
@@ -339,6 +340,8 @@ int Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list)
     int i;
 
     Status s = {0, Summoned, 1};
+    Coord spawn;
+    Tile * t;
 
     for(i=0; i<NUM_CLASS; i++)
     {
@@ -346,7 +349,10 @@ int Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list)
         {
             apply_status(s,all+i, list, e->cha_id);
             (all+i)->active = Alive;
-
+            spawn = closest_free_tile((all+i)->coords);
+            (all+i)->coords = spawn;
+            t = getTile(spawn);
+            t->entity = all+i;
         }
     }
 

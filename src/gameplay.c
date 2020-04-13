@@ -4,6 +4,7 @@
 #include "grid.h"
 #include "game_window.h"
 #include "display.h"
+#include "gameplay.h"
 
 Entity * e_from_id(int Id)
 {
@@ -218,6 +219,11 @@ err_t remove_mod(Status * stat, Entity * e)
         if(verbose)printf("Modifier to remove is a status effect!\n");
         e->status_effect[stat->stat] = 0;
         sprintf(log, "%s is no longer %s", e->cha_name, statusName[stat->stat]);
+        
+        if(stat->stat == Summoned)
+        {
+            new_death(e);
+        }
     }
     else
     {
