@@ -174,3 +174,31 @@ err_t print_Ability(Ability *a, char tab[STR_SHORT])
 
     return OK;
 }
+
+err_t print_StateList(StateList * list, char tab[STR_SHORT])
+{
+    if(list!=NULL)
+    {
+        if(!list_empty(list))
+        {
+            printf("\n%sStateList : \n\n", tab);
+
+            start_list(list);
+            while(!out_of_list(list))
+            {
+                printf("%sTarget : %s\n", tab, list->ec->entity->cha_name);
+                print_Status(*(list->ec->value), tab);
+                list_next(list);
+            }
+        }
+        else
+        {
+            printf("%sStateList Empty\n", tab);
+        }
+    }
+    else
+    {
+        printf("List is NULL\n");
+    }
+    return OK;
+}

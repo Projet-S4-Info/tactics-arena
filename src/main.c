@@ -112,6 +112,9 @@ int main(int argc, char * argv[])
 
     }
 
+    ent_init(Allies, "Friendly");
+    ent_init(Foes, "Ennemy");
+
     playMenuMusic(1);
     selection = displayMenu(1280, 720);
     
@@ -119,7 +122,6 @@ int main(int argc, char * argv[])
     // Lancement du jeu
     if (selection == 2)
     {
-        ent_init(Allies);
         if(verbose) printf("GAME START!\n");
         stopMenuMusic(1);
         createGameWindow(1920, 1080);
@@ -135,7 +137,6 @@ int main(int argc, char * argv[])
     // Multiplayer
     else if (selection == 4){
 
-        ent_init(Allies);
         stopMenuMusic(1);
         int res = 0;
         playMenuMusic(2);

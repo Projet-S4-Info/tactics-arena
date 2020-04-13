@@ -2,6 +2,7 @@
 #include "struct.h"
 #include "init_classes.h"
 #include "common.h"
+#include "print.h"
 
 StateList *stSent = NULL;
 StateList *stReceived = NULL;
@@ -12,20 +13,29 @@ Entity Foes[NUM_CLASS] = {};
 Ability Aura_ab;
 Ability Move_ab;
 
-err_t ent_init(Entity *e)
+err_t ent_init(Entity *e, char title[STR_SHORT])
 {
 
     int i,j;
     for(i=0; i<NUM_CLASS; i++)
     {
-        (e+i)->cha_id = i+1;
-        sprintf((e+i)->cha_name, "Friendly %s", classes[i].cla_name);
+        if(!strcmp(title, "Friendly"))
+        {
+            (e+i)->cha_id = i+1;
+            (e+i)->direction = N;
+        }
+        else
+        {
+            (e+i)->cha_id = (i+1)*-1;
+            (e+i)->direction = S;
+        }
+
+        sprintf((e+i)->cha_name, "%s %s", title, classes[i].cla_name);
         (e+i)->cha_class = &classes[i];
         (e+i)->active = Alive;
         (e+i)->coords.x = 0;
         (e+i)->coords.y = 0;
         (e+i)->act_points = 3;
-        (e+i)->direction = S;
 
         for(j=0;j<NUM_STATS;j++)
         {
@@ -42,7 +52,7 @@ err_t ent_init(Entity *e)
         if(verbose) printf("Allies : %s initialized!\n", (e+i)->cha_name);
     }
 
-    Allies[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
+    (e + Mage)->cha_class->cla_abilities = &mage_ab[rand()%3][0];
 
     return OK;
 }
@@ -59,8 +69,11 @@ err_t init_classes()
     printf("%s",error_message[init_valkyrie(&classes[Valkyrie])]);
     printf("%s",error_message[init_angel(&classes[Angel], &Aura_ab)]);  
     
-    printf("%s",error_message[init_list(stSent)]);
-    printf("%s",error_message[init_list(stReceived)]);
+    printf("%s",error_message[init_list(&stSent)]);
+    printf("%s",error_message[init_list(&stReceived)]);
+
+    print_StateList(stSent, "");
+    print_StateList(stReceived, "");
 
     if(verbose) printf("End of initialisation!\n");
 

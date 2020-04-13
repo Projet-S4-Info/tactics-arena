@@ -12,6 +12,7 @@
 #include "common.h"
 #include "display.h"
 #include "textures.h"
+#include "test.h"
 
 #ifdef _WIN32
 #  include <windows.h>
@@ -198,7 +199,7 @@ int displayMenu(int x, int y)
 						// Bouton test
 						if (e.motion.x >= 0 && e.motion.x < 569 && e.motion.y >= 394 && e.motion.y <= 443)
 						{
-							// METTRE FONCTION TEST ICI
+							test();
 						}
 
 						// Bouton "Map editor"
