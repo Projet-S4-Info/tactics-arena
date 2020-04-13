@@ -49,5 +49,9 @@ void freezeWater(Coord pos);
 
 Tile * getTile(Coord pos);
 
+void turnRight(Entity * entity);
+
+void turnLeft(Entity * entity);
+
 
 #endif

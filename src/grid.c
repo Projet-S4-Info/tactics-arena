@@ -164,3 +164,17 @@ Tile * getTile(Coord pos)
 {
     return (matrix+pos.x*_X_SIZE_+pos.y);
 }
+
+void turnRight(Entity * entity)
+// Turn the entity to the right
+{
+    if (entity->direction == W) entity->direction = N;
+    else entity->direction++;
+}
+
+void turnLeft(Entity * entity)
+// Turn the entity to the left
+{
+    if (entity->direction == N) entity->direction = W;
+    else entity->direction--;
+}

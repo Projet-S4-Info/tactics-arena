@@ -104,6 +104,18 @@ int loadMapTextures(SDL_Renderer * renderer)
 						NULL,
 						"attack");
 
+	// Clockwise turn icon
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/clockwise_icon_64.png")),
+						NULL,
+						"turn_right");
+					
+	// Anti-clockwise turn icon
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/anti_clockwise_icon_64.png")),
+						NULL,
+						"turn_left");
+
 	// Loading end of turn button
 	addTextureToTable(	textures,
 						loadTexture(renderer, loadImage("../inc/img/turn_end_grey.png")),
@@ -227,6 +239,8 @@ int displayAbilities(SDL_Renderer *renderer)
 	displaySprite(renderer, getTexture(textures, "attack"), 16+2*80, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "attack"), 16+3*80, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "attack"), 16+4*80, yWinSize-80);
+	displaySprite(renderer, getTexture(textures, "turn_right"), 16+5*80, yWinSize-80);
+	displaySprite(renderer, getTexture(textures, "turn_left"), 16+6*80, yWinSize-80);
 
 	return 0;
 }
@@ -265,8 +279,7 @@ int displayInterface(SDL_Renderer *renderer)
 		if (selected_ability != -1){
 			displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, selected_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
 		} else {
-			if (hover_ability == 10) displayText(renderer, xWinSize-280, yWinSize-110, 20, "Skip turn", "../inc/font/Pixels.ttf", 255, 255, 255);
-			if (hover_ability == 0) displayText(renderer, 16, yWinSize-110, 20, "Move", "../inc/font/Pixels.ttf", 255, 255, 255);
+			if (hover_ability == Mvt) displayText(renderer, 16, yWinSize-110, 20, "Move", "../inc/font/Pixels.ttf", 255, 255, 255);
 			if (hover_ability > 0) displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, hover_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
 		}
 
@@ -275,18 +288,23 @@ int displayInterface(SDL_Renderer *renderer)
 		displayText(renderer, 382, 128, 18, "?", "../inc/font/Pixels.ttf", 255, 255, 255);
 		displaySprite(renderer, getCharFrontTexture(tempEntity->cha_class->cla_name), 51, 52);
 		displayText(renderer, 170, 45, 20, tempEntity->cha_name, "../inc/font/Pixels.ttf", 255, 255, 255);
+
 		// -- entity health
 		displaySprite(renderer, getBigTexture(cSprites, "heart_icon"), 170, 70);
 		sprintf(pv_text, "%d", tempEntity->stat_mods[pv]);
 		displayText(renderer, 200, 70, 30, pv_text, "../inc/font/Pixels.ttf", 255, 0, 0);
+
 		// -- entity action points
 		displaySprite(renderer, getBigTexture(cSprites, "star_icon"), 165, 102);
 		sprintf(pa_text, "%d", tempEntity->act_points);
 		displayText(renderer, 202, 106, 30, pa_text, "../inc/font/Pixels.ttf", 49, 174, 196);
+
 		// -- entity mouvement points
 		displaySprite(renderer, getBigTexture(cSprites, "mv_icon"), 250, 102);
 		sprintf(pm_text, "%d", tempEntity->stat_mods[mv]);
 		displayText(renderer, 287, 106, 30, pm_text, "../inc/font/Pixels.ttf", 52, 169, 43);
+
+		// -- passive description if hovering info icon
 		if (hover_passive_help == 1)
 		{
 			sprintf(passive, "Passive : %s", tempEntity->cha_class->Passive.name);
@@ -303,8 +321,9 @@ int displayInterface(SDL_Renderer *renderer)
 	removeOldLogs(SDL_GetTicks());
 	displayLog(renderer, logPos);
 
-	// Turn end icon
+	// Next turn button
 	displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize-280, yWinSize-80);
+	if (hover_next_turn == TRUE) displayText(renderer, xWinSize-280, yWinSize-110, 20, "Skip turn", "../inc/font/Pixels.ttf", 255, 255, 255);
 
 	if(isChatActive){
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
