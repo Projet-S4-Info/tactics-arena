@@ -1,15 +1,19 @@
 #include <stdlib.h>
 #include "state.h"
+#include "print.h"
 
-err_t init_list(StateList * list)
+err_t init_list(StateList ** list)
 {
-    list = malloc(sizeof(StateList));
-    list->drapeau = malloc(sizeof(List_Elem));
-    if(list->drapeau == NULL) return POINTER_NULL;
-    list->drapeau->value = NULL;
-    list->drapeau->prec = list->drapeau;
-    list->drapeau->suiv = list->drapeau;
-    list->ec = list->drapeau;
+    *list = malloc(sizeof(StateList));
+    (*list)->drapeau = malloc(sizeof(List_Elem));
+    if((*list)->drapeau == NULL) return POINTER_NULL;
+    (*list)->drapeau->value = NULL;
+    (*list)->drapeau->prec = (*list)->drapeau;
+    (*list)->drapeau->suiv = (*list)->drapeau;
+    (*list)->ec = (*list)->drapeau;
+
+    print_StateList(*list, "");
+
     return OK;
 }
 

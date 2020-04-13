@@ -1,0 +1,204 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "struct.h"
+
+err_t print_abilityId(abilityId id, char tab[STR_SHORT])
+{
+    printf("%sId : %s\n", tab, IdNames[id]);
+    return OK;
+}
+
+err_t print_targetType(targetType target, char tab[STR_SHORT])
+{
+    printf("%sTarget : %s\n", tab, targetNames[target]);
+    return OK;
+}
+
+err_t print_statId(statId id, char tab[STR_SHORT])
+{
+    printf("%sStat : %s\n", tab, statName[id]);
+    return OK;
+}
+
+err_t print_statusId(statusId id, char tab[STR_SHORT])
+{
+    printf("%sStatus : %s\n", tab, statusName[id]);
+    return OK;
+}
+
+err_t print_fnid(fnid id,  char tab[STR_SHORT])
+{
+    printf("%sfnUse : %s\n", tab, fnNames[id]);
+    return OK;
+}
+
+err_t print_Damage(Damage **d, char tab[STR_SHORT])
+{
+    if(d!=NULL)
+    {
+        printf("%sDamage : \n", tab);
+        char tab2[STR_SHORT];
+        sprintf(tab2, "%s   ", tab);
+        printf("%sMultiplier : %.2f\n", tab2, (*d)->multiplier);
+        print_statId((*d)->type, tab2);
+    }
+    else
+    {
+        printf("%sDamage : NULL\n", tab);
+    }
+    
+    return OK;
+}
+
+err_t print_Coord(Coord * c, char tab[STR_SHORT])
+{
+    if(c!=NULL)
+    {
+        printf("%sX : %d  Y : %d\n", tab, c->x, c->y);
+    }
+    else
+    {
+        printf("%sCoords : NULL\n", tab);
+    }
+    return OK;
+}
+
+err_t print_Coord_list(Coord ** c, int nb, char tab[STR_SHORT])
+{
+    if(c!=NULL)
+    {
+        printf("%sCoord_nb : %d\n", tab, nb);
+        char tab2[STR_SHORT];
+        sprintf(tab2, "%s   ", tab);
+
+        int i;
+        for(i=0; i<nb; i++)
+        {
+            print_Coord((*c)+i, tab2);
+        }
+    }
+    else
+    {
+        printf("%sCoords : NULL\n", tab);
+    }
+    
+    return OK;
+}
+
+err_t print_Status(Status s, char tab[STR_SHORT])
+{
+    char tab2[STR_SHORT];
+    sprintf(tab2, "%s   ", tab);
+
+    if(s.value!=0)
+    {
+        printf("%sStat Change : \n", tab);
+        printf("%sValue : %d\n", tab2, s.value);
+        print_statId(s.stat, tab2);
+    }
+    else
+    {
+        printf("%sStatus Effect : \n", tab);
+        print_statusId(s.stat, tab2);
+    }
+
+    printf("%sDuration : %d\n", tab2, s.duration);
+    
+    return OK;
+}
+
+err_t print_Modifier(Modifier *m, char tab[STR_SHORT])
+{
+    if(m!=NULL)
+    {
+        printf("%sModifier : \n", tab);
+        char tab2[STR_SHORT];
+        sprintf(tab2, "%s   ", tab);
+
+        print_Status(m->effect, tab2);
+        printf("%sChance : %f\n", tab2, m->chance);
+        print_targetType(m->t, tab2);
+    }
+    else
+    {
+        printf("%sModifier : NULL\n", tab);
+    }
+
+    return OK;
+}
+
+err_t print_Modifier_list(Modifier **m, int nb, char tab[STR_SHORT])
+{
+    if(m!=NULL)
+    {
+        printf("%sMod_nb : %d\n", tab, nb);
+        char tab2[STR_SHORT];
+        sprintf(tab2, "%s   ", tab);
+
+        int i;
+        for(i=0; i<nb; i++)
+        {
+            print_Modifier((*m)+i, tab2);
+        }
+    }
+    else
+    {
+        printf("%sModifiers : NULL\n", tab);
+    }
+    
+    return OK;
+}
+
+err_t print_Ability(Ability *a, char tab[STR_SHORT])
+{
+    if(a!=NULL)
+    {
+        printf("%s%s : \n", tab, a->eng.name);
+        char tab2[STR_SHORT];
+        sprintf(tab2, "%s   ", tab);
+
+        print_abilityId(a->ab_id, tab2);
+        printf("%sCost : %d\n", tab2, a->ab_cost);
+        printf("%sCooldown : %d\n", tab2, a->ab_cooldown);
+        printf("%sRange : %d\n", tab2, a->range);
+        print_Damage(a->damage, tab2);
+        print_Coord_list(a->coord, a->nb_coords, tab2);
+        print_Modifier_list(a->mods, a->nb_mods, tab2);
+        print_fnid(a->fn_use, tab2);
+        printf("%sDesc : %s\n", tab2, a->eng.desc);
+    }
+    else
+    {
+        printf("%sAbility : NULL\n", tab);
+    }
+
+    return OK;
+}
+
+err_t print_StateList(StateList * list, char tab[STR_SHORT])
+{
+    if(list!=NULL)
+    {
+        if(!list_empty(list))
+        {
+            printf("\n%sStateList : \n\n", tab);
+
+            start_list(list);
+            while(!out_of_list(list))
+            {
+                printf("%sTarget : %s\n", tab, list->ec->entity->cha_name);
+                print_Status(*(list->ec->value), tab);
+                list_next(list);
+            }
+        }
+        else
+        {
+            printf("%sStateList Empty\n", tab);
+        }
+    }
+    else
+    {
+        printf("List is NULL\n");
+    }
+    return OK;
+}

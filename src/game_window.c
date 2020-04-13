@@ -20,12 +20,13 @@
 #include "gameplay.h"
 #include "display.h"
 #include "textures.h"	
+#include "turn.h"
 
 
 /* =============== CONSTANTES ================ */
 
 
-#define _NB_MAX_MAPS_ 50
+#define _NB_MAX_MAPS_ 50					// Max number of maps being listed
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
 #define _FPS_ 60							// Define at which frequency the game have to refresh
@@ -92,10 +93,10 @@ int createGameWindow(int x, int y)
 		exit(EXIT_FAILURE);
 	}
 
-	setRendererDriver(renderer);
+	printf("%s", error_message[setRendererDriver(renderer)]);
 
 	// Launcher icon
-    SDL_SetWindowIcon(pWindow, loadImage("../inc/img/TacticsArena.png"));
+    SDL_SetWindowIcon(pWindow, loadImage("../inc/sprites/goliath/sprite_indiv/front/Sprite_frontview_64.png"));
 
 	if( pWindow )
 	{
@@ -178,18 +179,21 @@ int createGameWindow(int x, int y)
 						tempEntity = getEntity(getSelectedPos());
 						if (tempEntity != NULL)
 						{
-							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
+							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16 && your_turn())
 							{
-								if (e.motion.x >= 16 && e.motion.x <= 80)	selected_ability = Mvt;
-								else if (e.motion.x >= 96 && e.motion.x <= 160)	selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+								if (e.motion.x >= 16 && e.motion.x <= 80)			selected_ability = Mvt;
+								else if (e.motion.x >= 96 && e.motion.x <= 160)		selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
 								else if (e.motion.x >= 176 && e.motion.x <= 240)	selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
 								else if (e.motion.x >= 256 && e.motion.x <= 320)	selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
 								else if (e.motion.x >= 336 && e.motion.x <= 400)	selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
 								else if (e.motion.x >= 416 && e.motion.x <= 480) turnRight(tempEntity);
 								else if (e.motion.x >= 496 && e.motion.x <= 560) turnLeft(tempEntity);
 								else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
+
 								if(verbose)printf("Selected ability : %d\n", selected_ability);
+
 							} else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
+							
 						} else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 
 						if(e.motion.x >= 1653 && e.motion.x <= 1889 && e.motion.y >= 873 && e.motion.y <= 925){
@@ -238,18 +242,6 @@ int createGameWindow(int x, int y)
 									YPOS /= 2;
 								}
 								break;
-							case SDLK_z:		// "z" key
-								YPOS += (camSpeed*(PX/64));
-								break;
-							case SDLK_q:		// "q" key
-								XPOS += (camSpeed*(PX/64));
-								break;
-							case SDLK_s:		// "s" key
-								YPOS -= (camSpeed*(PX/64));
-								break;
-							case SDLK_d:		// "d" key
-								XPOS -= (camSpeed*(PX/64));
-								break;
 						}
 					break;
 					case SDL_MOUSEMOTION:
@@ -261,12 +253,12 @@ int createGameWindow(int x, int y)
 						{
 							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
 							{
-								if (e.motion.x >= 16 && e.motion.x <= 80)	hover_ability = Mvt;
-								if (e.motion.x >= 96 && e.motion.x <= 160)	hover_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
-								if (e.motion.x >= 176 && e.motion.x <= 240)	hover_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
-								if (e.motion.x >= 256 && e.motion.x <= 320)	hover_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
-								if (e.motion.x >= 336 && e.motion.x <= 400)	hover_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-								if (e.motion.x >= xWinSize-280 && e.motion.x <= xWinSize-24) hover_next_turn = TRUE;
+								if (e.motion.x >= 16 && e.motion.x <= 80)			hover_ability = Mvt;
+								else if (e.motion.x >= 96 && e.motion.x <= 160)		hover_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+								else if (e.motion.x >= 176 && e.motion.x <= 240)	hover_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
+								else if (e.motion.x >= 256 && e.motion.x <= 320)	hover_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
+								else if (e.motion.x >= 336 && e.motion.x <= 400)	hover_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
+								else if (e.motion.x >= xWinSize-280 && e.motion.x <= xWinSize-24) hover_next_turn = TRUE;
 							}
 							else if (e.motion.x >= 377 && e.motion.x <= 396 && e.motion.y >= 128 && e.motion.y <= 146)
 							{
@@ -310,7 +302,7 @@ int createGameWindow(int x, int y)
 		}
 		closeWindow(pWindow);
 	} else {
-		fprintf(stderr,"[GRAPHICS] Erreur de création de la fenêtre: %s\n",SDL_GetError());
+		fprintf(stderr,"[GRAPHICS] Erreur de création de la fenêtre: %s\n", SDL_GetError());
 	}
 
 	return 1;

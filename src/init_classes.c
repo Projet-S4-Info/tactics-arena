@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "abilities.h"
-#include "test.h"
+#include "print.h"
 
 #include "pointers.h"
 
@@ -61,7 +61,7 @@ err_t init_aoe()
     return OK;
 }
 
-err_t init_repetitives()
+err_t init_repetitives(Ability * Move)
 {
     one_c = malloc(sizeof(Coord));
     if(one_c==NULL) return POINTER_NULL;
@@ -77,6 +77,9 @@ err_t init_repetitives()
     *one_c = ctemp;
     *one_a = dtmp1;
     *one_m = dtmp2;
+
+    Ability ab_move = {Mvt,1,0,10,FREE_TILE,NULL,1,&one_c,0,NULL,NONE,NULL,{"Movement","Move to the selected tile"}};
+    *Move = ab_move;
 
     return init_aoe();
 }
@@ -101,8 +104,6 @@ err_t init_berserker(Class * c)
     *(ab+2) = abtemp3;
     Ability abtemp4 = {Frenzied_Dash,3,4,9,FREE_TILE,&FD,51,&aoe51,0,NULL,BEFORE,NULL,{"Frenzied Dash","Jump to a tile, dealing aoe damage when landing."}};
     *(ab+3) = abtemp4;
-    
-    print_Damage(&FD, "");
 
     Class temp = 
     {
@@ -397,7 +398,7 @@ err_t init_angel(Class * c, Ability *pass)
     *ab = abtemp1;
     Ability abtemp2 = {Holy_Storm,2,3,8,ANY_TILE,&one_m,51,&aoe51,1,&heal,NONE,NULL,{"Holy Storm","Deal magic damage to ennemies in an area and heal all allies in the area."}};
     *(ab+1) = abtemp2;
-    Ability abtemp3 = {Last_Sacrfice,2,5,0,ANY_TILE,NULL,0,NULL,0,NULL,ONLY,Last_Sacrfice_fn,{"Last Sacrfice","Kill self to resurrect an Ally."}};
+    Ability abtemp3 = {Last_Sacrifice,2,5,0,ANY_TILE,NULL,0,NULL,0,NULL,ONLY,Last_Sacrfice_fn,{"Last Sacrfice","Kill self to resurrect an Ally."}};
     *(ab+2) = abtemp3;
     Ability abtemp4 = {Gods_Blessing,3,5,8,ALLIES,NULL,1,&one_c,1,&bless,NONE,NULL,{"God's Blessing","Double an Ally's action points and apply no cooldowns for a turn."}};
     *(ab+3) = abtemp4;

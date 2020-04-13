@@ -4,6 +4,7 @@
 #include "grid.h"
 #include "game_window.h"
 #include "characters.h"
+#include "display.h"
 
 int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
 {
@@ -14,6 +15,9 @@ int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
     {
         if(t==Dead)
         {
+            char log[STR_LONG];
+            sprintf(log, "%s's Killing Blow was triggered", e->cha_name);
+            addLog(log);
             apply_stat_change(v, t, list);
             e->act_points+=1;
         }
@@ -109,7 +113,6 @@ int Focus_fn(Coord c, Entity * e, StateList * list)
 
 int Trap_fn(Coord c, Entity * e, StateList * list)
 {
-
     Trap_t t = {e->cha_id, same_team(e, Allies)};
     Set_Trap(t, c);
     return 0;
@@ -125,6 +128,21 @@ int Banner_fn(Coord c, Entity * e, StateList * list)
     {
         reset_cooldowns(all+i);
     }
+
+    char log[STR_LONG];
+    char log_2[STR_SHORT];
+
+    if(same_team(e, Allies))
+    {
+        sprintf(log_2, "ally");
+    }
+    else
+    {
+        sprintf(log_2, "ennemy");
+    }
+    
+    sprintf(log, "%s has reset all %s characters' cooldowns", e->cha_name, log_2);
+    addLog(log);
 
     return 0;
 }
@@ -149,6 +167,8 @@ int FlameCharge_fn(Coord c, Entity * e, StateList * list)
     Ability F = e->cha_class->cla_abilities[FlameCharge%NUM_AB];
     //Insert Pathfinding
     //Change F's zone to match pathfinding route
+    moveEntity(e->coords, c);
+    e->coords = c;
     return apply_to(F,e,list,e->coords);
 }
 
@@ -198,6 +218,10 @@ int Volt_Switch_fn(Coord c, Entity * e, StateList * list)
     t->coords = e->coords;
     e->coords = c;
 
+    char log[STR_LONG];
+    sprintf(log, "%s switched with %s", e->cha_name, t->cha_name);
+    addLog(log);
+
     return 0;
 }
 
@@ -242,12 +266,19 @@ int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
             ct = target->coords;
             closest.x = -99;
             target = NULL;
+
+            char log[STR_LONG];
+            sprintf(log, "The lightning bounced to %s", e->cha_name);
+            addLog(log);
         }
         else
         {
+            addLog("No one was close enough to bounce to");
             break;
         }
     }
+
+    addLog("The lighting died out");
 
     return d;
 }

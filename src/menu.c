@@ -12,6 +12,7 @@
 #include "common.h"
 #include "display.h"
 #include "textures.h"
+#include "test.h"
 
 #ifdef _WIN32
 #  include <windows.h>
@@ -156,7 +157,7 @@ int displayMenu(int x, int y)
 	setRendererDriver(renderer);
 
 	// Launcher icon
-    SDL_SetWindowIcon(pWindow, loadImage("../inc/img/TacticsArena.png"));
+    SDL_SetWindowIcon(pWindow, loadImage("../inc/sprites/goliath/sprite_indiv/front/Sprite_frontview_64.png"));
 
 	if( pWindow )
 	{
@@ -193,6 +194,12 @@ int displayMenu(int x, int y)
 							closeWindow(pWindow);
 							freeMenuTextures();
 							return 2;
+						}
+
+						// Bouton test
+						if (e.motion.x >= 0 && e.motion.x < 569 && e.motion.y >= 394 && e.motion.y <= 443)
+						{
+							test();
 						}
 
 						// Bouton "Map editor"

@@ -19,18 +19,18 @@ extern Log logs[];
 /* =============== FONCTIONS ================ */
 
 
-void setRendererDriver(SDL_Renderer *renderer);
+err_t setRendererDriver(SDL_Renderer *renderer);
 
-void displayText(SDL_Renderer *renderer, int x, int y, int size, const char *content, const char *text_police, int r, int g, int b);
+err_t displayText(SDL_Renderer *renderer, int x, int y, int size, const char *content, const char *text_police, int r, int g, int b);
 
-int displaySprite(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y);
+err_t displaySprite(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y);
 
-int closeWindow(SDL_Window *pWindow);
+err_t closeWindow(SDL_Window *pWindow);
 
-void addLog(char * message);
+err_t addLog(char * message);
 
-void displayLog(SDL_Renderer * renderer, Coord pos);
+err_t displayLog(SDL_Renderer * renderer, Coord pos);
 
-void removeOldLogs(Uint32 time);
+err_t removeOldLogs(Uint32 time);
 
 #endif
