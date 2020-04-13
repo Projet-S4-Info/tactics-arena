@@ -9,7 +9,7 @@
 #include "servFcnt.h"
 #include "display.h"
 
-bool turn_active = FALSE;
+bool turn_active = TRUE;
 const action turn_over = {0,{0,0},0};
 
 bool your_turn()

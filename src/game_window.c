@@ -20,6 +20,7 @@
 #include "gameplay.h"
 #include "display.h"
 #include "textures.h"	
+#include "turn.h"
 
 
 /* =============== CONSTANTES ================ */
@@ -178,7 +179,7 @@ int createGameWindow(int x, int y)
 						tempEntity = getEntity(getSelectedPos());
 						if (tempEntity != NULL)
 						{
-							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
+							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16 && your_turn())
 							{
 								if (e.motion.x >= 16 && e.motion.x <= 80)			selected_ability = Mvt;
 								else if (e.motion.x >= 96 && e.motion.x <= 160)		selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
@@ -240,18 +241,6 @@ int createGameWindow(int x, int y)
 									XPOS /= 2;
 									YPOS /= 2;
 								}
-								break;
-							case SDLK_z:		// "z" key
-								YPOS += (camSpeed*(PX/64));
-								break;
-							case SDLK_q:		// "q" key
-								XPOS += (camSpeed*(PX/64));
-								break;
-							case SDLK_s:		// "s" key
-								YPOS -= (camSpeed*(PX/64));
-								break;
-							case SDLK_d:		// "d" key
-								XPOS -= (camSpeed*(PX/64));
 								break;
 						}
 					break;

@@ -1,3 +1,7 @@
+
+/* =============== DEPENDENCES =============== */
+
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -12,13 +16,24 @@
 #include "display.h"
 #include "grid.h"
 
+
+/* =============== CONSTANTES =============== */
+
+
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
-
 #define _NB_CLASSES_ 6
 #define _NB_ANIM_ 6
 
+
+/* =============== VARIABLES =============== */
+
+
 int indexCharTable = 0;
+
+
+/* =============== FONCTIONS =============== */
+
 
 int addCharacterTexture(SDL_Renderer *renderer, char * name)
 // Add to the CharTexture table all the animation of a class and its given direction
@@ -60,6 +75,8 @@ int addCharacterTexture(SDL_Renderer *renderer, char * name)
 	return indexCharTable;
 }
 
+
+
 SDL_Texture * getCharTexture(char *name, Direction direction, int indexAnim)
 // Returns the texture of a given class in a given direction at a given animation index
 {
@@ -78,6 +95,8 @@ SDL_Texture * getCharTexture(char *name, Direction direction, int indexAnim)
     return result;
 }
 
+
+
 SDL_Texture * getCharFrontTexture(char *name)
 // Returns the front texture of a given class
 {
@@ -95,6 +114,8 @@ SDL_Texture * getCharFrontTexture(char *name)
 
     return result;
 }
+
+
 
 int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
 // Load all the textures needed for the characters
@@ -133,6 +154,8 @@ int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
     return nbSprites;
 }
 
+
+
 void setEntityToTile(Entity * entity, Coord tile)
 // Set an entity to a specific tile
 {    
@@ -150,6 +173,8 @@ void setEntityToTile(Entity * entity, Coord tile)
 
     matrix[tile.x*_X_SIZE_+tile.y].entity = entity;
 }
+
+
 
 void moveEntity(Coord from, Coord to)
 // Move an entity already set on a tile to a new one
@@ -170,6 +195,8 @@ void moveEntity(Coord from, Coord to)
     matrix[from.x*_X_SIZE_+from.y].entity = NULL;
 }
 
+
+
 void switchEntities(Coord pos1, Coord pos2)
 // Switch the positions of the 2 entities
 {
@@ -178,6 +205,8 @@ void switchEntities(Coord pos1, Coord pos2)
     (*(matrix+pos2.x*_X_SIZE_+pos2.y)).entity = temp;
 }
 
+
+
 void createCharacters(Coord pos, int pdv)
 // Create a new character at (x,y) pos
 {
@@ -185,6 +214,8 @@ void createCharacters(Coord pos, int pdv)
     entity->stat_mods[0] = pdv;
     matrix[pos.x*_X_SIZE_+pos.y].entity = entity;
 }
+
+
 
 int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Entity * entity, int x, int y, int pxBase)
 // Display the characters on the map

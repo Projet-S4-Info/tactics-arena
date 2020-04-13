@@ -195,6 +195,12 @@ int displayMenu(int x, int y)
 							return 2;
 						}
 
+						// Bouton test
+						if (e.motion.x >= 0 && e.motion.x < 569 && e.motion.y >= 394 && e.motion.y <= 443)
+						{
+							// METTRE FONCTION TEST ICI
+						}
+
 						// Bouton "Map editor"
 						else if (e.motion.x >= 585 && e.motion.x <= 710 && e.motion.y >= 467 && e.motion.y <= 518)
 						{

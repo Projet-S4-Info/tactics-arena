@@ -98,6 +98,18 @@ int loadMapTextures(SDL_Renderer * renderer)
 						loadTexture(renderer, loadImage("../inc/img/selection_128.png")),
 						"selection");
 
+	// Red team texture
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/red_team_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/red_team_128.png")),
+						"red_team");
+
+	// Blue team texture
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/blue_team_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blue_team_128.png")),
+						"blue_team");
+
 	// Loading attack logo
 	addTextureToTable(	textures,
 						loadTexture(renderer, loadImage("../inc/img/attack_logo_64.png")),
@@ -279,7 +291,7 @@ int displayInterface(SDL_Renderer *renderer)
 		if (selected_ability != -1){
 			displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, selected_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
 		} else {
-			if (hover_ability > 0) 
+			if (hover_ability >= 0) 
 			{
 				char abilityDesc[STR_LONG];
 				sprintf(abilityDesc, "%s : %s", strToUpper(get_name(tempEntity, hover_ability)), get_desc(tempEntity, hover_ability));
@@ -377,6 +389,7 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 			if (blockPos.x >= -pxBase && blockPos.x <= xWinSize && blockPos.y >= -pxBase && blockPos.y <= yWinSize)
 			{
 
+				// Affichage block
 				if ((*(matrix+i*_X_SIZE_+j)).tile_id == 1)
 				{
 					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
@@ -388,6 +401,21 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 				{
 					if (pxBase == 64)	displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].texture, blockPos.x, blockPos.y);
 					else 				displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].big_texture, blockPos.x, blockPos.y);
+				}
+
+				// Affichage équipe
+				if ((*(matrix+i*_X_SIZE_+j)).entity != NULL)
+				{
+					if (pxBase == 64)
+					{
+						if ((*(matrix+i*_X_SIZE_+j)).entity->cha_id > 0) displaySprite(renderer, getTexture(textures, "blue_team"), blockPos.x, blockPos.y);
+						else displaySprite(renderer, getTexture(textures, "red_team"), blockPos.x, blockPos.y);
+					}
+					else
+					{
+						if ((*(matrix+i*_X_SIZE_+j)).entity->cha_id > 0) displaySprite(renderer, getBigTexture(textures, "blue_team"), blockPos.x, blockPos.y);
+						else displaySprite(renderer, getBigTexture(textures, "red_team"), blockPos.x, blockPos.y);
+					}
 				}
 
 				// Affichage tuile de sélection
