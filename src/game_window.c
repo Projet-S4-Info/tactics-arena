@@ -25,7 +25,7 @@
 /* =============== CONSTANTES ================ */
 
 
-#define _NB_MAX_MAPS_ 50
+#define _NB_MAX_MAPS_ 50					// Max number of maps being listed
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
 #define _FPS_ 60							// Define at which frequency the game have to refresh
@@ -92,7 +92,7 @@ int createGameWindow(int x, int y)
 		exit(EXIT_FAILURE);
 	}
 
-	setRendererDriver(renderer);
+	printf("%s", error_message[setRendererDriver(renderer)]);
 
 	// Launcher icon
     SDL_SetWindowIcon(pWindow, loadImage("../inc/img/TacticsArena.png"));
@@ -313,7 +313,7 @@ int createGameWindow(int x, int y)
 		}
 		closeWindow(pWindow);
 	} else {
-		fprintf(stderr,"[GRAPHICS] Erreur de création de la fenêtre: %s\n",SDL_GetError());
+		fprintf(stderr,"[GRAPHICS] Erreur de création de la fenêtre: %s\n", SDL_GetError());
 	}
 
 	return 1;

@@ -4,9 +4,10 @@
 
 char error_message[NUM_ERROR][STR_LONG] = {"", 
                                             "ERROR: Pointer is Null\n", 
-                                            "ERROR : SDL\n", 
+                                            "ERROR : SDL error\n", 
                                             "ERROR : Coordinates out of limits\n", 
-                                            "ERROR : Ability coordinates were not initialised correctly.\n"};
+                                            "ERROR : String too long\n",
+                                            "ERROR : Ability coordinates were not initialised correctly\n"};
 
 
 char statName[NUM_STATS][STR_SHORT] = {"pv", "mv", "vis", "atk", "magic", "res_physic", "res_magic"};
