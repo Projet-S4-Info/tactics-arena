@@ -7,6 +7,7 @@
 #include "gameplay.h"
 #include "grid.h"
 #include "servFcnt.h"
+#include "display.h"
 
 bool turn_active = FALSE;
 const action turn_over = {0,{0,0},0};
@@ -22,6 +23,8 @@ err_t apply_action(action a)
     Ability active_ab;
     int death_count = 0;
     StateList * list;
+
+    char log[STR_LONG];
 
     if(a.char_id<0)
     {
@@ -47,6 +50,9 @@ err_t apply_action(action a)
     //ANIMATE THE ACTION
 
     if(verbose)printf("\n\n%s has chosen to %s at the following coordinates : %d,%d\n", active_ent->cha_name, active_ab.eng.name, a.c.x, a.c.y);
+
+    sprintf(log, "%s cast %s", active_ent->cha_name, active_ab.eng.name);
+    addLog(log);
 
     if(active_ab.fn_use==BEFORE)
     {
@@ -185,6 +191,7 @@ err_t action_set(action a)
 
 err_t local_turn()
 {   
+    addLog("It's your turn");
 
     turn_start(Allies);
 
@@ -193,6 +200,8 @@ err_t local_turn()
     while(turn_active);
 
     turn_end(Allies, stReceived);
+
+    addLog("Your turn is over");
 
     return OK;
 }

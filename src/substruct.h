@@ -56,4 +56,11 @@ typedef struct
     targetType t;
 }Modifier;
 
+//STRINGS OF ENUMERATIONS FOR PRINTING PURPOSES
+extern char statName[NUM_STATS][STR_SHORT];
+extern char IdNames[Aura+1][STR_SHORT];
+extern char statusName[NUM_STATUS][STR_SHORT];
+extern char targetNames[5][STR_SHORT];
+extern char fnNames[5][STR_SHORT];
+
 #endif

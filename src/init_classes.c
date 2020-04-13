@@ -61,7 +61,7 @@ err_t init_aoe()
     return OK;
 }
 
-err_t init_repetitives()
+err_t init_repetitives(Ability * Move)
 {
     one_c = malloc(sizeof(Coord));
     if(one_c==NULL) return POINTER_NULL;
@@ -77,6 +77,9 @@ err_t init_repetitives()
     *one_c = ctemp;
     *one_a = dtmp1;
     *one_m = dtmp2;
+
+    Ability ab_move = {Mvt,1,0,10,FREE_TILE,NULL,1,&one_c,0,NULL,NONE,NULL,{"Movement","Move to the selected tile"}};
+    *Move = ab_move;
 
     return init_aoe();
 }

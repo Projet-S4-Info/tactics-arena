@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <string.h>
 #include "struct.h"
 #include "init_classes.h"
 #include "common.h"
@@ -11,6 +10,7 @@ Ability mage_ab[3][NUM_AB] = {};
 Entity Allies[NUM_CLASS] = {};
 Entity Foes[NUM_CLASS] = {};
 Ability Aura_ab;
+Ability Move_ab;
 
 err_t ent_init(Entity *e)
 {
@@ -19,7 +19,7 @@ err_t ent_init(Entity *e)
     for(i=0; i<NUM_CLASS; i++)
     {
         (e+i)->cha_id = i+1;
-        strcpy((e+i)->cha_name, classes[i].cla_name);
+        sprintf((e+i)->cha_name, "Friendly %s", classes[i].cla_name);
         (e+i)->cha_class = &classes[i];
         (e+i)->active = Alive;
         (e+i)->coords.x = 0;
@@ -50,7 +50,7 @@ err_t ent_init(Entity *e)
 err_t init_classes()
 {
 
-    printf("%s",error_message[init_repetitives()]);
+    printf("%s",error_message[init_repetitives(&Move_ab)]);
 
     printf("%s",error_message[init_berserker(&classes[Berserker])]);
     printf("%s",error_message[init_ranger(&classes[Ranger])]);
