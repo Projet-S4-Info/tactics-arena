@@ -17,7 +17,7 @@
 #include "multi_menu.h"
 #include "map_editor.h"
 #include "characters.h"
-#include "errt.h"
+#include "stringdb.h"
 #include "init.h"
 #include "test.h"
 
