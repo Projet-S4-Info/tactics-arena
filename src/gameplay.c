@@ -106,7 +106,8 @@ bool same_team(Entity *a, Entity *b)
     else if(a->cha_id>0&&b->cha_id>0)
     {
         return TRUE;
-    }else
+    }
+    else
     {
         return FALSE;
     }
@@ -347,9 +348,9 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id)
     if(s.duration!=0)
     {
         if(verbose)printf("The mod will last %d turns!\n", s.duration);
-        char log_t[STR_SHORT];
-        sprintf(log_t, " for %d turns", s.duration);
-        strcat(log, log_t);
+        char log_2[STR_SHORT];
+        sprintf(log_2, " for %d turns", s.duration);
+        strcat(log, log_2);
         addLog(log);
         return list_add(list, s, target);
     }
@@ -390,9 +391,9 @@ err_t apply_stat_change(Status s, Entity * target, StateList * list)
     if(s.duration!=0)
     {
         if(verbose)printf("The mod will last %d turns!\n", s.duration);
-        char log_t[STR_SHORT];
-        sprintf(log_t, " for %d turns", s.duration);
-        strcat(log, log_t);
+        char log_2[STR_SHORT];
+        sprintf(log_2, " for %d turns", s.duration);
+        strcat(log, log_2);
         addLog(log);
         return list_add(list, s, target);
     }
@@ -627,3 +628,4 @@ int setActionZone(Coord perso, int actionRange, Coord coorTab[]){
 
     return res;
 }
+

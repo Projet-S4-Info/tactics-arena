@@ -8,6 +8,7 @@
 #include "grid.h"
 #include "servFcnt.h"
 #include "display.h"
+#include "characters.h"
 
 bool turn_active = FALSE;
 const action turn_over = {0,{0,0},0};
@@ -15,6 +16,26 @@ const action turn_over = {0,{0,0},0};
 bool your_turn()
 {
     return turn_active;
+}
+
+
+err_t apply_movement(action a)
+{
+    Entity * e;
+
+    if(a.char_id<0)
+    {
+        e = &Foes[(a.char_id*-1)-1];
+    }
+    else
+    {
+        e = &Allies[a.char_id-1];
+    }
+
+    moveEntity(e->coords, a.c);
+    e->coords = a.c;
+
+    return OK;
 }
 
 err_t apply_action(action a)
@@ -101,6 +122,7 @@ err_t turn_start(Entity *e)
     }
 
     Bloodlust_counter = 0;
+    Sentinel_counter = TRUE;
 
     if(e[Angel].active!=Dead)
     {

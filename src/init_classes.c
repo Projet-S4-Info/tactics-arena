@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "abilities.h"
-#include "test.h"
+#include "print.h"
 
 #include "pointers.h"
 
@@ -104,8 +104,6 @@ err_t init_berserker(Class * c)
     *(ab+2) = abtemp3;
     Ability abtemp4 = {Frenzied_Dash,3,4,9,FREE_TILE,&FD,51,&aoe51,0,NULL,BEFORE,NULL,{"Frenzied Dash","Jump to a tile, dealing aoe damage when landing."}};
     *(ab+3) = abtemp4;
-    
-    print_Damage(&FD, "");
 
     Class temp = 
     {

@@ -19,7 +19,7 @@
 #include "characters.h"
 #include "stringdb.h"
 #include "init.h"
-#include "test.h"
+#include "print.h"
 
 #define X 30
 #define Y 30
