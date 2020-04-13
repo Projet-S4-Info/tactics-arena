@@ -280,7 +280,12 @@ int displayInterface(SDL_Renderer *renderer)
 			displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, selected_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
 		} else {
 			if (hover_ability == Mvt) displayText(renderer, 16, yWinSize-110, 20, "Move", "../inc/font/Pixels.ttf", 255, 255, 255);
-			if (hover_ability > 0) displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, hover_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
+			if (hover_ability > 0) 
+			{
+				char abilityDesc[100];
+				sprintf(abilityDesc, "%s : %s", strToUpper(get_name(tempEntity, hover_ability)), get_desc(tempEntity, hover_ability));
+				displayText(renderer, 16, yWinSize-110, 20, abilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255);
+			}
 		}
 
 		// Display the ID card of the selected entity
