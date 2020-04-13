@@ -5,6 +5,18 @@
 #include "game_window.h"
 #include "display.h"
 
+Entity * e_from_id(int Id)
+{
+    if(Id<0)
+    {
+        return &Foes[(Id*-1)-1];
+    }
+    else
+    {
+        return &Allies[Id-1];
+    }
+}
+
 err_t get_team(Entity *e, Entity **all, bool same)
 {
     if(same)
@@ -97,6 +109,18 @@ bool able_ability(Entity *e, abilityId ab_id)
     return e->act_points >= e->cha_class->cla_abilities[ab_id%NUM_AB].ab_cost;
 }
 
+bool show(Entity * e)
+{
+    if(e!=NULL)
+    {
+        return e->active && e->status_effect[Detained] != 1;
+    }
+    else
+    {
+        return FALSE;
+    }
+}
+
 bool same_team(Entity *a, Entity *b)
 {
     if(a->cha_id<0&&b->cha_id<0)
@@ -111,6 +135,40 @@ bool same_team(Entity *a, Entity *b)
     {
         return FALSE;
     }
+}
+
+bool tile_type(Coord c, targetType targeting, Entity * e)
+{
+    if(targeting!=ANY_TILE)
+    {
+        Tile * t = getTile(c);
+
+        if(t->entity==NULL)
+        {
+            if(targeting == FREE_TILE && t->walkable)
+            {
+                return TRUE;
+            }
+        }
+        else if(targeting==BOTH)
+        {
+            return TRUE;
+        }
+        else if(same_team(e,t->entity) && targeting == ALLIES)
+        {
+            return TRUE;
+        }
+        else if((!same_team(e,t->entity)) && targeting == FOES)
+        {
+            return TRUE;
+        }
+    }
+    else
+    {
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 err_t reset_cooldowns(Entity * e)
@@ -177,7 +235,7 @@ err_t remove_mod(Status * stat, Entity * e)
 
 Status * renew_mod(Entity * e, statusId status)
 {
-    Status * v;
+    List_Elem * v;
 
     start_list(stReceived);
     v = list_search(stReceived,e,-status);
@@ -190,7 +248,7 @@ Status * renew_mod(Entity * e, statusId status)
         list_remove(stSent);
     }
 
-    return v;
+    return v->value;
 }
 
 err_t new_death(Entity * e)
@@ -200,12 +258,12 @@ err_t new_death(Entity * e)
     e->active = Dead;
     e->stat_mods[pv]=20;
 
-    Status * v;
+    List_Elem * v;
 
     start_list(stSent);
     while((v = list_search(stSent,e,-1))!=NULL)
     {
-        remove_mod(v, e);
+        remove_mod(v->value, e);
         list_remove(stSent);
         list_next(stSent);
     }
@@ -213,9 +271,30 @@ err_t new_death(Entity * e)
     start_list(stReceived);
     while((v = list_search(stReceived,e,-1))!=NULL)
     {
-        remove_mod(v, e);
+        remove_mod(v->value, e);
         list_remove(stReceived);
         list_next(stReceived);
+    }
+
+    if(e->cha_class->cla_id == Goliath)
+    {
+        StateList * list;
+        if(same_team(e, Allies))
+        {
+            list = stSent;
+        }
+        else
+        {
+            list = stReceived;
+        }
+
+        start_list(list);
+        while((v = list_search(list, NULL, Detained))!=NULL)
+        {
+            remove_mod(v->value, v->entity);
+            list_remove(list);
+            list_next(list);
+        }
     }
 
     char log[STR_LONG];
@@ -223,7 +302,8 @@ err_t new_death(Entity * e)
     addLog(log);
 
     //PLAY DEATH ANIMATION
-
+    Tile * t = getTile(e->coords);
+    t->entity = NULL;
 
     if(verbose)printf("%s has been killed!\n", e->cha_name);
 
@@ -266,13 +346,19 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target)
         {
             if(verbose)printf("Block Failed!\n");
         }
-        
     }
+
+
+
+    int frozen = target->status_effect[Freezing] == 1 ? 6 : 0;
 
     float crippled = target->status_effect[Cripple] == 1 ? 1.75 : 1;
 
     if(crippled==1.75)
         if(verbose)printf("%s is crippled!\n", target->cha_name);
+
+    if(frozen==6)
+        if(verbose)printf("%s is frozen and has increased resistances!\n", target->cha_name);
 
     if(verbose)printf("%s's health before the attack : %d\n", target->cha_name, target->stat_mods[pv]);
 
@@ -281,12 +367,12 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target)
     if(caster->status_effect[Piercing])
     {
         if(verbose)printf("%s has piercing!\n", caster->cha_name);
-        target->stat_mods[pv] -= d_value = (caster->stat_mods[d->type] * d->multiplier * crippled)+0.4;
+        target->stat_mods[pv] -= d_value = (caster->stat_mods[d->type] * d->multiplier * crippled) + 0.4;
         sprintf(log, "%s pierced %s's defence and dealt %d damage", caster->cha_name, target->cha_name, d_value);
     }
     else
     {
-        target->stat_mods[pv] -= d_value = (caster->stat_mods[d->type]/(1+(target->stat_mods[d->type+2]/15)) * d->multiplier * crippled)+0.4;
+        target->stat_mods[pv] -= d_value = (caster->stat_mods[d->type]/(1+((target->stat_mods[d->type+2]+frozen)/15)) * d->multiplier * crippled) + 0.4;
         sprintf(log, "%s dealt %d damage to %s", caster->cha_name, d_value, target->cha_name);
     }
 
@@ -315,7 +401,7 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id)
     {
         target->status_effect[s.stat] = caster_id;
 
-        Entity * caster = caster_id<0 ? &Foes[abs(caster_id)-1] : &Allies[abs(caster_id)-1];
+        Entity * caster = e_from_id(caster_id);
 
         sprintf(log, "%s is provoked by %s", target->cha_name, caster->cha_name);
     }
@@ -329,12 +415,20 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id)
         return OK;
     }
 
-    else if(s.stat==Freezing && target->status_effect[Burning])
+    else if(s.stat==Freezing)
     {
-        if(verbose)printf("Target is burning, cannot be frozen!\n");
-        sprintf(log, "%s is burning and cannot be frozen", target->cha_name);
-        addLog(log);
-        return OK;
+        if(target->status_effect[Burning])
+        {
+            if(verbose)printf("Target is burning, cannot be frozen!\n");
+            sprintf(log, "%s is burning and cannot be frozen", target->cha_name);
+            addLog(log);
+            return OK;
+        }
+        else
+        {
+            target->status_effect[s.stat] = 1;
+            sprintf(log, "%s is %s", target->cha_name, statusName[s.stat]);
+        }
     }
 
     else
@@ -580,7 +674,7 @@ int actionZone(int posX, int posY, int actionRange, Coord coorTab[]){
 }
 
 
-int isInRange(Coord coorTab[], Coord attack){
+bool isInRange(Coord coorTab[], Coord attack){
     
     int cursY = attack.y;
     int touchLine = 0;
@@ -597,9 +691,9 @@ int isInRange(Coord coorTab[], Coord attack){
         if(verbose)printf("\n");
     }
     if(touchLine == 1){
-        return 1;
+        return TRUE;
     }else{
-        return 0;
+        return FALSE;
     }
 }
 
@@ -629,3 +723,64 @@ int setActionZone(Coord perso, int actionRange, Coord coorTab[]){
     return res;
 }
 
+
+bool Cast_check(action a, Coord coorTab[])
+{
+    Ability ab;
+    int var;
+    Entity * e = e_from_id(a.char_id);
+    char log[STR_LONG];
+
+    if(e->status_effect[Freezing])
+    {
+        sprintf(log, "%s is frozen and cannot do anything", e->cha_name);
+        addLog(log);
+        return FALSE;
+    }
+
+    if(a.act != Mvt)
+    {
+
+        ab = e->cha_class->cla_abilities[a.act%NUM_AB];
+    }
+    else
+    {
+        if(e->status_effect[Cripple])
+        {
+            sprintf(log, "%s is crippled and cannot move", e->cha_name);
+            addLog(log);
+            return FALSE;
+        }
+
+    }
+
+    if((var = e->status_effect[Provoked]))
+    {
+        Entity * t = getEntity(a.c);
+        if(t->cha_id != var)
+        {
+            Entity * g = e_from_id(var);
+            sprintf(log, "%s is provoked by %s and can't do anything other than attack him", e->cha_name, g->cha_name);
+            addLog(log);
+            return FALSE;
+        }
+    }
+
+    if(tile_type(a.c, ab.target, e))
+    {
+        if(isInRange(coorTab, a.c))
+        {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+/*ALGORITHM CAST CHECK
+    WHEN ABILITY SELECTED CALL SHOW BORDER
+    IF MVT SHOW LOUIS BORDER
+    IF AB SHOW LUCIEN BORDER
+    COLLECT BORDER
+    ONCE COORD SELECTED CALL CAST CHECK 
+    */

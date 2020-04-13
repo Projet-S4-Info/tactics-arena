@@ -23,5 +23,6 @@ int Life_Transfer_fn(Coord c, Entity * e, StateList * list);
 int Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list);
 
 int Last_Sacrfice_fn(Coord c, Entity * e, StateList * list);
+int Gods_Blessing_fn(Coord c, Entity *e, StateList * list);
 
 #endif

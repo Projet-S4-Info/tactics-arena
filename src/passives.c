@@ -41,15 +41,15 @@ err_t sentinel_check(Entity *e)
         Entity * r;
         StateList * list;
 
-        if(e->cha_id<0)
-        {
-            r = &Allies[Ranger];
-            list = stSent;
-        }
-        else
+        if(same_team(e,Allies))
         {
             r = &Foes[Ranger];
             list = stReceived;
+        }
+        else
+        {
+            r = &Allies[Ranger];
+            list = stSent;
         }
 
         int sight = get_range(r->stat_mods[vis], r->cha_class->cla_abilities->range);

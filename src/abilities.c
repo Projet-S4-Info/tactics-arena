@@ -28,15 +28,15 @@ int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
 int Fury_fn(Coord c, Entity * e, StateList * list)
 {
     int turns = 0;
-    Status * v;
+    List_Elem * v;
 
     start_list(stSent);
     while((v = list_search(stSent, e, -1)) !=NULL)
     {
         if(!list_check(stSent))
         {
-            turns += v->duration;
-            remove_mod(v,e);
+            turns += v->value->duration;
+            remove_mod(v->value,e);
             list_remove(stSent);
         }
         list_next(stSent);
@@ -47,8 +47,8 @@ int Fury_fn(Coord c, Entity * e, StateList * list)
     {
         if(!list_check(stReceived))
         {
-            turns += v->duration;
-            remove_mod(v,e);
+            turns += v->value->duration;
+            remove_mod(v->value,e);
             list_remove(stReceived);
         }
         list_next(stReceived);
@@ -70,7 +70,7 @@ int Frenzied_Dash_fn(Coord c, Entity * e, StateList * list)
 
 int Focus_fn(Coord c, Entity * e, StateList * list)
 {
-    Status * v;
+    List_Elem * v;
 
     start_list(stSent);
     while((v = list_search(stSent, e, -1)) !=NULL)
@@ -83,7 +83,7 @@ int Focus_fn(Coord c, Entity * e, StateList * list)
         {
             if(list_change(stSent, -1)!=NULL)
             {
-                remove_mod(v,e);
+                remove_mod(v->value,e);
                 list_remove(stSent);
             }
         }
@@ -101,7 +101,7 @@ int Focus_fn(Coord c, Entity * e, StateList * list)
         {
             if(list_change(stReceived, -1)!=NULL)
             {
-                remove_mod(v,e);
+                remove_mod(v->value,e);
                 list_remove(stReceived);
             }
         }
@@ -332,10 +332,44 @@ int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
 
 int Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list)
 {
+    Entity * all;
+
+    get_team(e, &all, TRUE);
+
+    int i;
+
+    Status s = {0, Summoned, 1};
+
+    for(i=0; i<NUM_CLASS; i++)
+    {
+        if((all + i)->active != Alive)
+        {
+            apply_status(s,all+i, list, e->cha_id);
+            (all+i)->active = Alive;
+
+        }
+    }
+
     return 0;
 }
 
 int Last_Sacrfice_fn(Coord c, Entity * e, StateList * list)
 {
+    return 0;
+}
+
+int Gods_Blessing_fn(Coord c, Entity *e, StateList * list)
+{
+    Entity * t = getEntity(c);
+
+    if(t->status_effect[Paralyzed])
+    {
+        t->act_points += 1;
+    }
+    else
+    {
+        t->act_points += 3;
+    }
+
     return 0;
 }

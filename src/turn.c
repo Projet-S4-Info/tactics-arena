@@ -21,16 +21,7 @@ bool your_turn()
 
 err_t apply_movement(action a)
 {
-    Entity * e;
-
-    if(a.char_id<0)
-    {
-        e = &Foes[(a.char_id*-1)-1];
-    }
-    else
-    {
-        e = &Allies[a.char_id-1];
-    }
+    Entity * e = e_from_id(a.char_id);
 
     moveEntity(e->coords, a.c);
     e->coords = a.c;
@@ -59,17 +50,6 @@ err_t apply_action(action a)
     }
     active_ab = active_ent->cha_class->cla_abilities[a.act%NUM_AB];
 
-    if(!active_ent->status_effect[Blessed])
-    {
-        active_ent->ab_cooldown[a.act%NUM_AB] = active_ab.ab_cooldown;
-    }
-    else
-    {
-        if(verbose)printf("%s is Blessed!\n", active_ent->cha_name);
-    }
-
-    //ANIMATE THE ACTION
-
     if(verbose)printf("\n\n%s has chosen to %s at the following coordinates : %d,%d\n", active_ent->cha_name, active_ab.eng.name, a.c.x, a.c.y);
 
     sprintf(log, "%s cast %s", active_ent->cha_name, active_ab.eng.name);
@@ -78,6 +58,15 @@ err_t apply_action(action a)
     if(active_ab.fn_use==BEFORE)
     {
         death_count += active_ab.function(a.c, active_ent, list);
+    }
+
+    if(!active_ent->status_effect[Blessed])
+    {
+        active_ent->ab_cooldown[a.act%NUM_AB] = active_ab.ab_cooldown;
+    }
+    else
+    {
+        if(verbose)printf("%s is Blessed!\n", active_ent->cha_name);
     }
     
     if(active_ab.fn_use!=ONLY)
