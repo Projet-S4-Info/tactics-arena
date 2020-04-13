@@ -1,6 +1,7 @@
 #include "gameplay.h"
 #include "init_classes.h"
 #include "init.h"
+#include "display.h"
 
 int Bloodlust_counter;
 

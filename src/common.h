@@ -3,7 +3,7 @@
 
 #define STR_SHORT 50
 #define STR_LONG 256
-#define NUM_ERROR 5
+#define NUM_ERROR 12
 #define MAXRANGE 101
 #define taille 30
 
