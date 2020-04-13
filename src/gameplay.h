@@ -11,16 +11,10 @@ char * get_name(Entity * e, abilityId ab_id);
 bool able_ability(Entity *e, abilityId ab_id);
 bool show(Entity * e);
 bool same_team(Entity *a, Entity *b);
-<<<<<<< HEAD
-bool closer_coords(Coord a, Coord b); //Utile : return true si a est plus proche de 0,0 que de la coordonnées b
-Coord add_coords(Coord a, Coord b);  //Utile : Additionne les coordonneés
-Coord compare_coords(Coord a, Coord b); //Utile : Soustrait les coordonées 
-=======
 bool tile_type(Coord c, targetType targeting, Entity * e);
 bool closer_coords(Coord a, Coord b);
 Coord add_coords(Coord a, Coord b);
 Coord compare_coords(Coord a, Coord b);
->>>>>>> 40bb4552e9256c097cbf56e2ec21bc89f7167587
 bool death_check(Entity * e);
 err_t reset_cooldowns(Entity * e);
 

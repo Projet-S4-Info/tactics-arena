@@ -6,7 +6,7 @@
 #include "grid.h"
 
 
-Coord closes_free_tile(Coord c)
+Coord closest_free_tile(Coord c)
 {
     Coord active;
     File *maFile = initialiser();
