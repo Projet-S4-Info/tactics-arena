@@ -52,14 +52,16 @@ ANGEL
 3: God's Blessing : Double an Ally's action points and apply no cooldowns for a turn.
 
 
-Cripple : Can't move and takes increased damage from all sources
+Cripple : Can't move and takes increased damage from all sources.
 Detained : Captured by an ennemy, unable to do anything, can be freed by killing the ennemy.
-Provoked : Can only apply spells on to a specific target.
+Provoked : Can only cast spells on to a specific target.
 Burning : Take damage over time, a burning target is unable to be frozen.
 Freezing : Become unable to do anything, increases resistances, setting a frozen target ablaze thaws them out.
 Paralyzed : Reduces your action points to 1 per turn.
 Blessed : Under God's Blessing.
-Deadeye : Attacks ignore armor.
+Piercing : Attacks ignore armor.
+Guarding : Has increased block chance
+Summoned : Revived for a turn.
 
 damage = atk/(1+(def/15))
 range=range_modifier * (vision/10) if range = 0 then range = 1

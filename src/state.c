@@ -103,23 +103,43 @@ err_t list_add(StateList * list, Status v, struct entity_t * entity)
     return OK;
 }
 
-Status * list_search(StateList * list, struct entity_t * entity, statusId status)
+List_Elem * list_search(StateList * list, struct entity_t * entity, statusId status)
 {
-    while(!out_of_list(list))
+    if(entity == NULL)
     {
-        if(list->ec->entity == entity)
+        while(!out_of_list(list))
         {
-            if(status==-1)
+            if(list->ec->value->value == 0 && list->ec->value->stat == status)
             {
-                return list->ec->value;
+                return list->ec;
             }
-            else if(list->ec->value->value == 0 && list->ec->value->stat == status)
-            {
-                return list->ec->value;
-            }
+            list_next(list);
         }
-        list_next(list);
     }
+    else if(status == -1)
+    {
+        while(!out_of_list(list))
+        {
+            if(list->ec->entity == entity)
+            {
+                return list->ec;
+            }
+            list_next(list);
+        }
+    }
+    else
+    {
+        while(!out_of_list(list))
+        {
+            if(list->ec->entity == entity && list->ec->value->value == 0 && list->ec->value->stat == status)
+            {
+                return list->ec;
+            }
+            list_next(list);
+        }
+    }
+
+
     return NULL;
 }
 
