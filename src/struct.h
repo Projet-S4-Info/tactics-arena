@@ -40,7 +40,7 @@ typedef struct {
     int char_id;
     Coord c;
     abilityId act; //Mvt if movement
-}action;
+} action;
 
 typedef struct
 {

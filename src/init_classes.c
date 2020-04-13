@@ -398,7 +398,7 @@ err_t init_angel(Class * c, Ability *pass)
     *ab = abtemp1;
     Ability abtemp2 = {Holy_Storm,2,3,8,ANY_TILE,&one_m,51,&aoe51,1,&heal,NONE,NULL,{"Holy Storm","Deal magic damage to ennemies in an area and heal all allies in the area."}};
     *(ab+1) = abtemp2;
-    Ability abtemp3 = {Last_Sacrfice,2,5,0,ANY_TILE,NULL,0,NULL,0,NULL,ONLY,Last_Sacrfice_fn,{"Last Sacrfice","Kill self to resurrect an Ally."}};
+    Ability abtemp3 = {Last_Sacrifice,2,5,0,ANY_TILE,NULL,0,NULL,0,NULL,ONLY,Last_Sacrfice_fn,{"Last Sacrfice","Kill self to resurrect an Ally."}};
     *(ab+2) = abtemp3;
     Ability abtemp4 = {Gods_Blessing,3,5,8,ALLIES,NULL,1,&one_c,1,&bless,NONE,NULL,{"God's Blessing","Double an Ally's action points and apply no cooldowns for a turn."}};
     *(ab+3) = abtemp4;
