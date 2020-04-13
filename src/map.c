@@ -279,10 +279,9 @@ int displayInterface(SDL_Renderer *renderer)
 		if (selected_ability != -1){
 			displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, selected_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
 		} else {
-			if (hover_ability == Mvt) displayText(renderer, 16, yWinSize-110, 20, "Move", "../inc/font/Pixels.ttf", 255, 255, 255);
 			if (hover_ability > 0) 
 			{
-				char abilityDesc[100];
+				char abilityDesc[STR_LONG];
 				sprintf(abilityDesc, "%s : %s", strToUpper(get_name(tempEntity, hover_ability)), get_desc(tempEntity, hover_ability));
 				displayText(renderer, 16, yWinSize-110, 20, abilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255);
 			}

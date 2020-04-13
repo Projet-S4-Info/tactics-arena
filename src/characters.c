@@ -25,8 +25,8 @@ int addCharacterTexture(SDL_Renderer *renderer, char * name)
 {
     int dirIndex = N;
     int animIndex = 1;
-    char path[100];
-    char temp[100];
+    char path[STR_LONG];
+    char temp[STR_LONG];
     char *dirFolder;
 
     sprintf(path, "../inc/sprites/%s/sprite_indiv/", name);
@@ -194,7 +194,7 @@ int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Entity * e
     //else                displaySprite(renderer, getBigTexture(cSprites, "base_model"), x, y);
 
     // Display character's life points
-    char temp[20];
+    char temp[STR_SHORT];
     sprintf(temp, "%d", entity->stat_mods[pv]);
     if (pxBase == 64)   displaySprite(renderer, getTexture(cSprites, "heart_icon"), x+(pxBase/4), y-(pxBase/4));
     else                displaySprite(renderer, getBigTexture(cSprites, "heart_icon"), x+(pxBase/4), y-(pxBase/4));

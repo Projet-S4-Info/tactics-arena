@@ -149,7 +149,7 @@ int closeWindow(SDL_Window *pWindow)
 
 
 
-void addLog(char * message)
+err_t addLog(char * message)
 // Add a new message to display as log
 {
 	int logsSize;
@@ -161,6 +161,7 @@ void addLog(char * message)
 	if (strlen(message) >= _MAX_SIZE_LOGS_)
 	{
 		if (verbose) printf("[LOGS] La log %s ne peut être ajoutée car sa taille est trop importante (max : %d caracteres).\n", message, _MAX_SIZE_LOGS_);
+		return 
 	}
 	else
 	{
@@ -190,11 +191,13 @@ void addLog(char * message)
 	logs[0].time = SDL_GetTicks();
 	strcpy(logs[0].message, message);
 	}
+
+	return OK;
 }
 
 
 
-void displayLog(SDL_Renderer * renderer, Coord pos)
+err_t displayLog(SDL_Renderer * renderer, Coord pos)
 // Display logs
 {
 	int x = pos.x;
@@ -211,11 +214,13 @@ void displayLog(SDL_Renderer * renderer, Coord pos)
 			y += 20;
 		}
 	}
+
+	return OK;
 }
 
 
 
-void removeOldLogs(Uint32 time)
+err_t removeOldLogs(Uint32 time)
 // Remove the logs to old to be still displayed
 {
 	int logsSize;
@@ -234,4 +239,6 @@ void removeOldLogs(Uint32 time)
 			}
 		}
 	}
+
+	return OK;
 }
