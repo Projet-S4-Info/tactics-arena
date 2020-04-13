@@ -17,4 +17,6 @@ extern int isChatActive;
 
 extern char error_message[NUM_ERROR][STR_LONG];
 
+char * strToUpper(char *chaine);
+
 #endif
