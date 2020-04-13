@@ -73,7 +73,7 @@ void afficherFile(File *f)
 
     while (element != NULL)
     {
-        printf("%d ", element->nombre);
+        printf("x : %d y : %d ", element->nombre.x, element->nombre.y);
         element = element->suivant;
     }
 
