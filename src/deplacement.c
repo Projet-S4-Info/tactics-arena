@@ -67,7 +67,7 @@ err_t fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_])
         {
             active_2 = add_coords(active, add[i]);
             printf("    Active_2 : %d %d\n", active_2.x, active_2.y);
-            if(active_2.x < _X_SIZE_ && active_2.y < _Y_SIZE_)
+            if(active_2.x < _X_SIZE_ && active_2.y < _Y_SIZE_ && active_2.x > 0 && active_2.y > 0)
             {
                 printf("        In Grid\n");
                 t = getTile(active_2);
