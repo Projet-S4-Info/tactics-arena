@@ -38,6 +38,7 @@
 int selected_ability = -1;					// Selected ability
 int hover_ability = -1;						// Hover ability button
 bool hover_next_turn = FALSE;				// Hover skip turn button
+int hover_tchat = 0;						// Hover tchat button
 int hover_passive_help = 0;					// Hover passive help in ID card (with mouse position)
 int end_of_turn = 0;						// Fin de tour
 int isChatActive = 0;						// Chat button
@@ -196,11 +197,16 @@ int createGameWindow(int x, int y)
 							
 						} else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 
-						if(e.motion.x >= 1653 && e.motion.x <= 1889 && e.motion.y >= 873 && e.motion.y <= 925){
-							isChatActive = 1;
-						}
-						else if(e.motion.x >= 1863 && e.motion.x <= 1894 && e.motion.y >= 527 && e.motion.y <= 556 && isChatActive == 1){
-							isChatActive = 0;
+						if(e.motion.x >= xWinSize-360 && e.motion.x <= xWinSize-296 && e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16){
+							if (isChatActive == 1){
+								isChatActive = 0;
+								addLog("Tchat desactive");
+							}
+							else
+							{
+								isChatActive = 1;
+								addLog("Tchat active");
+							}
 						}
 
 
@@ -247,6 +253,11 @@ int createGameWindow(int x, int y)
 					case SDL_MOUSEMOTION:
 						hover_ability = -1;
 						hover_next_turn = FALSE;
+						hover_tchat = 0;
+
+						// Hover skip turn button
+						if (e.motion.x >= xWinSize-280 && e.motion.x <= xWinSize-24 && e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16) hover_next_turn = TRUE;
+
 						// Compétences et actions
 						tempEntity = getEntity(getSelectedPos());
 						if (tempEntity != NULL)
@@ -258,7 +269,6 @@ int createGameWindow(int x, int y)
 								else if (e.motion.x >= 176 && e.motion.x <= 240)	hover_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
 								else if (e.motion.x >= 256 && e.motion.x <= 320)	hover_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
 								else if (e.motion.x >= 336 && e.motion.x <= 400)	hover_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-								else if (e.motion.x >= xWinSize-280 && e.motion.x <= xWinSize-24) hover_next_turn = TRUE;
 							}
 							else if (e.motion.x >= 377 && e.motion.x <= 396 && e.motion.y >= 128 && e.motion.y <= 146)
 							{
@@ -267,6 +277,17 @@ int createGameWindow(int x, int y)
 								mouse_position.y = e.motion.y;
 							} else {
 								hover_passive_help = 0;
+							}
+						}
+
+						// Hover tchat button
+						if(e.motion.x >= xWinSize-360 && e.motion.x <= xWinSize-296 && e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16){
+							if (isChatActive == 1){
+								hover_tchat = 1;
+							}
+							else
+							{
+								hover_tchat = 2;
 							}
 						}
 					break;

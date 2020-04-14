@@ -133,14 +133,30 @@ int loadMapTextures(SDL_Renderer * renderer)
 						loadTexture(renderer, loadImage("../inc/img/turn_end_grey.png")),
 						NULL,
 						"end_turn");
-	
-	// Loading close btn
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/close.png")),
-						NULL,
-						"close_btn");
 
+	// Loading end of turn button (hover)
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/turn_end_hover.png")),
+						NULL,
+						"end_turn_hover");
 	
+	// Loading tchat button
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/tchat_icon_64.png")),
+						NULL,
+						"tchat_button");
+
+	// Loading tchat button (hover)
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/tchat_icon_hover_64.png")),
+						NULL,
+						"tchat_button_hover");
+
+	// Loading tchat  (selected)
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/tchat_icon_selected_64.png")),
+						NULL,
+						"tchat_button_selected");
 
 	// Loading ID card texture
 	index = addTextureToTable(	textures,
@@ -338,9 +354,23 @@ int displayInterface(SDL_Renderer *renderer)
 	displayLog(renderer, logPos);
 
 	// Next turn button
-	displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize-280, yWinSize-80);
-	if (hover_next_turn == TRUE) displayText(renderer, xWinSize-280, yWinSize-110, 20, "Skip turn", "../inc/font/Pixels.ttf", 255, 255, 255);
+	if (hover_next_turn == TRUE)
+	{
+		displayText(renderer, xWinSize-280, yWinSize-110, 20, "Skip turn", "../inc/font/Pixels.ttf", 255, 255, 255);
+		displaySprite(renderer, getTexture(textures, "end_turn_hover"), xWinSize-280, yWinSize-80);
+	}
+	else
+	{
+		displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize-280, yWinSize-80);
+	}
 
+
+	// Tchat window
+	if (isChatActive) displaySprite(renderer, getTexture(textures, "tchat_button_selected"), xWinSize-360, yWinSize-80);
+	else displaySprite(renderer, getTexture(textures, "tchat_button"), xWinSize-360, yWinSize-80);
+	if (hover_tchat == 1 || hover_tchat == 2) displaySprite(renderer, getTexture(textures, "tchat_button_hover"), xWinSize-360, yWinSize-80);
+	if (hover_tchat == 1)displayText(renderer, xWinSize-360, yWinSize-110, 20, "Hide tchat", "../inc/font/Pixels.ttf", 255, 255, 255);
+	else if (hover_tchat == 2) displayText(renderer, xWinSize-360, yWinSize-110, 20, "Display tchat", "../inc/font/Pixels.ttf", 255, 255, 255);
 	if(isChatActive){
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
@@ -350,16 +380,13 @@ int displayInterface(SDL_Renderer *renderer)
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 		SDL_RenderFillRect(renderer, &chatScreen);
 		displayText(renderer, chatBox.x + (chatBox.w /2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255);
-		displaySprite(renderer, getTexture(textures,"close_btn"), chatScreen.w + chatScreen.x - 38 , chatScreen.y - 30);
+		//displaySprite(renderer, getTexture(textures,"close_btn"), chatScreen.w + chatScreen.x - 38 , chatScreen.y - 30);
 		
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
 		SDL_SetRenderDrawColor(renderer, 85, 34, 0, 255);
 		SDL_RenderFillRect(renderer, &chatMsg);
 
 		displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , "Chat :", "../inc/font/PixelOperator.ttf", 255, 255, 255);
-
-	}else{
-		displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize-280, yWinSize - 150);
 	}
 	
 	
