@@ -452,7 +452,10 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 					else				displaySprite(renderer, getBigTexture(textures, "selection"), blockPos.x, blockPos.y);
 				}
 
-				if ((*(matrix+i*_X_SIZE_+j)).entity != NULL)	displayCharacters(renderer, cSprites, (*(matrix+i*_X_SIZE_+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
+				if ((*(matrix+i*_X_SIZE_+j)).entity != NULL)
+				{
+					displayCharacters(renderer, cSprites, (*(matrix+i*_X_SIZE_+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
+				}
 
 				/*/ -- DEBUG Affichage des indices des tuiles --
 				char pos[6];
