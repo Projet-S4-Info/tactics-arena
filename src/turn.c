@@ -26,6 +26,8 @@ err_t apply_movement(action a)
     moveEntity(e->coords, a.c);
     e->coords = a.c;
 
+    sentinel_check(e);
+
     return OK;
 }
 

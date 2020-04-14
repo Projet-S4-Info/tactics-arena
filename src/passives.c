@@ -52,7 +52,7 @@ err_t sentinel_check(Entity *e)
             list = stSent;
         }
 
-        int sight = get_range(r->stat_mods[vis], r->cha_class->cla_abilities->range);
+        int sight = get_range(r, Bolt);
 
         Coord t[MAXRANGE];
 
