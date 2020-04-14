@@ -3,5 +3,6 @@
 #include "struct.h"
 
 Coord closest_free_tile(Coord c);
+err_t fill_tiles(Coord c, int matrix[_X_SIZE_][_Y_SIZE_]);
 
 #endif

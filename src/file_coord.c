@@ -11,6 +11,10 @@ File *initialiser()
     return f;
 }
 
+bool file_vide(File *f)
+{
+    return (f->premier == NULL);
+}
 
 void enfiler(File *f, Coord nvNombre)
 {
@@ -23,7 +27,7 @@ void enfiler(File *f, Coord nvNombre)
     nouveau->nombre = nvNombre;
     nouveau->suivant = NULL;
 
-    if (f->premier != NULL) /* La f n'est pas vide */
+    if (!filevide(f))
     {
         /* On se positionne ‡ la fin de la f */
         Element *elementActuel = f->premier;
@@ -50,7 +54,7 @@ Coord defiler(File *f)
     Coord nombreDefile = {0,0};
 
     /* On vÈrifie s'il y a quelque chose ‡ dÈfiler */
-    if (f->premier != NULL)
+    if (!file_vide(f))
     {
         Element *elementDefile = f->premier;
 
@@ -82,5 +86,9 @@ void afficherFile(File *f)
 
 void detruire_file(File *f)
 {
+    while(!file_vide(f))
+    {
+        defiler(f);
+    }
     free(f);
 }
