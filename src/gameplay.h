@@ -5,15 +5,17 @@
 Entity * e_from_id(int Id);
 err_t get_team(Entity *e, Entity **all, bool same);
 winId game_over();
-int get_range(int vision, int range_mod);
+int get_range(Entity *e, abilityId ab);
 char * get_desc(Entity * e, abilityId ab_id);
 char * get_name(Entity * e, abilityId ab_id);
 bool able_ability(Entity *e, abilityId ab_id);
 bool show(Entity * e);
 bool same_team(Entity *a, Entity *b);
+err_t end_Detain(Entity *e);
 bool tile_type(Coord c, targetType targeting, Entity * e);
 bool closer_coords(Coord a, Coord b);
 Coord add_coords(Coord a, Coord b);
+err_t free_spawn(Entity *e);
 Coord compare_coords(Coord a, Coord b);
 bool death_check(Entity * e);
 err_t reset_cooldowns(Entity * e);

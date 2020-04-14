@@ -56,6 +56,7 @@ void createGrid(Tile * grid, int seed, int x, int y)
         grid[i].selected = 0;
         grid[i].entity = NULL;
         grid[i].trap = trap;
+        grid[i].walkable = grid[i].tile_id == 4 ? FALSE : TRUE;
     }
 }
 

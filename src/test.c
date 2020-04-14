@@ -1,28 +1,36 @@
 #include "init.h"
 #include "print.h"
+#include "deplacement.h"
+#include "grid.h"
 #include <stdio.h>
 
 err_t test()
 {
-    if(stSent!=NULL)
+    Coord c = {0,0};
+    createGrid(matrix, 5, _X_SIZE_, _Y_SIZE_);
+    int matrice[_X_SIZE_][_Y_SIZE_];
+    fill_tiles(c, matrice);
+
+    int i,j;
+
+    printf("\n\nWALKABILITY\n");
+    for(i=0; i<_X_SIZE_; i++)
     {
-        print_StateList(stSent, "");
-
-        list_add(stSent, (*(classes[Valkyrie].cla_abilities->mods))->effect, &Foes[Berserker]);
-        list_add(stSent, (*(mage_ab[1]->mods))->effect, &Foes[Goliath]);
-
-        print_StateList(stSent, "");
-
-        start_list(stSent);
-        list_search(stSent, &Foes[Goliath], -1);
-        list_remove(stSent);
-
-        print_StateList(stSent, "");
-    }
-    else
-    {
-        printf("List is NULL\n");
+        for(j=0; j<_Y_SIZE_; j++)
+        {
+            printf("%d ", (matrix + j + (i*_X_SIZE_))->walkable);
+        }
+        printf("\n");
     }
 
+    printf("\n\nFill Tiles\n");
+    for(i=0; i<_X_SIZE_; i++)
+    {
+        for(j=0; j<_Y_SIZE_; j++)
+        {
+            printf("%d ", matrice[i][j]);
+        }
+        printf("\n");
+    }
     return OK;
 }

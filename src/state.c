@@ -12,8 +12,6 @@ err_t init_list(StateList ** list)
     (*list)->drapeau->suiv = (*list)->drapeau;
     (*list)->ec = (*list)->drapeau;
 
-    print_StateList(*list, "");
-
     return OK;
 }
 

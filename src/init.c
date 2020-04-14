@@ -72,9 +72,6 @@ err_t init_classes()
     printf("%s",error_message[init_list(&stSent)]);
     printf("%s",error_message[init_list(&stReceived)]);
 
-    print_StateList(stSent, "");
-    print_StateList(stReceived, "");
-
     if(verbose) printf("End of initialisation!\n");
 
     return OK;

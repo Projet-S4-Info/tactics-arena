@@ -47,6 +47,7 @@ err_t fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_])
             matrice[i][j] = -1;
         }
     }
+
     File *maFile = initialiser();
     enfiler(maFile, c);
     matrice[c.x][c.y] = 0;
@@ -54,25 +55,36 @@ err_t fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_])
     Coord active_2;
     Coord add[4] = {{1,0},{-1,0},{0,1},{0,-1}};
     Tile * t;
+
+    printf("\n");
     while(!file_vide(maFile))
     {
-
         active = defiler(maFile);
-        
+
+        printf("Active : %d %d\n", active.x, active.y);
+
         for(i=0; i<4; i++)
         {
             active_2 = add_coords(active, add[i]);
-
-            t = getTile(active_2);
-
-            if(matrice[active_2.x][active_2.y]==-1 && !(t->walkable) && t->entity == NULL)
+            printf("    Active_2 : %d %d\n", active_2.x, active_2.y);
+            if(active_2.x < _X_SIZE_ && active_2.y < _Y_SIZE_)
             {
-                matrice[active_2.x][active_2.y] = matrice[active.x][active.y] + 1;
-                enfiler(maFile, active_2);
+                printf("        In Grid\n");
+                t = getTile(active_2);
+
+                if(matrice[active_2.x][active_2.y]==-1 && t->walkable && t->entity == NULL)
+                {
+                    printf("        Adding\n");
+                    matrice[active_2.x][active_2.y] = matrice[active.x][active.y] + 1;
+                    enfiler(maFile, active_2);
+                }
+                else
+                {
+                    printf("        Not Adding\n");
+                }
             }
         }
     }
-
     return OK;
 }
 

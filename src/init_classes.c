@@ -190,7 +190,7 @@ err_t init_goliath(Class * c)
     *ab = abtemp1;
     Ability abtemp2 = {Shields_Up,2,1,0,ANY_TILE,NULL,1,&one_c,1,&SU,NONE,NULL,{"Shields Up","Increase passive block chance to 70% for one turn."}};
     *(ab+1) = abtemp2;
-    Ability abtemp3 = {Detain,2,4,2,FOES,NULL,1,&one_c,1,&D,NONE,NULL,{"Detain","Capture an Ennemy for three turns."}};
+    Ability abtemp3 = {Detain,2,4,2,FOES,NULL,1,&one_c,1,&D,AFTER,Detain_fn,{"Detain","Capture an Ennemy for three turns."}};
     *(ab+2) = abtemp3;
     Ability abtemp4 = {Banner,3,5,0,ANY_TILE,NULL,103,&aoe103,1,&P,BEFORE,Banner_fn,{"Banner","Provoke all ennemies in a zone for one turn and reset all allies' cooldowns."}};
     *(ab+3) = abtemp4;

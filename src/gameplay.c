@@ -5,6 +5,7 @@
 #include "game_window.h"
 #include "display.h"
 #include "gameplay.h"
+#include "deplacement.h"
 
 Entity * e_from_id(int Id)
 {
@@ -68,8 +69,11 @@ winId game_over()
     return all_dead;
 }
 
-int get_range(int vision, int range_mod)
+int get_range(Entity *e, abilityId ab)
 {
+    int vision = e->stat_mods[vis];
+    int range_mod = e->cha_class->cla_abilities[ab%NUM_AB].range;
+
     int range = range_mod * (vision/10);
 
     if(range<=0)
@@ -110,18 +114,6 @@ bool able_ability(Entity *e, abilityId ab_id)
     return e->act_points >= e->cha_class->cla_abilities[ab_id%NUM_AB].ab_cost;
 }
 
-bool show(Entity * e)
-{
-    if(e!=NULL)
-    {
-        return e->active && e->status_effect[Detained] != 1;
-    }
-    else
-    {
-        return FALSE;
-    }
-}
-
 bool same_team(Entity *a, Entity *b)
 {
     if(a->cha_id<0&&b->cha_id<0)
@@ -136,6 +128,15 @@ bool same_team(Entity *a, Entity *b)
     {
         return FALSE;
     }
+}
+
+err_t end_Detain(Entity *e)
+{
+    Entity * all;
+    get_team(e, &all, FALSE);
+    e->coords = (all + Goliath)->coords;
+    free_spawn(e);
+    return OK;
 }
 
 bool tile_type(Coord c, targetType targeting, Entity * e)
@@ -210,6 +211,25 @@ Coord add_coords(Coord a, Coord b)
     return c;
 }
 
+err_t free_spawn(Entity *e)
+{
+    if(e != NULL)
+    {   
+        Coord spawn = closest_free_tile(e->coords);
+        e->coords = spawn;
+        Tile *t = getTile(spawn);
+        t->entity = e;
+
+    return OK;
+    }
+    else
+    {
+        return POINTER_NULL;
+    }
+
+
+}
+
 err_t remove_mod(Status * stat, Entity * e)
 {
     char log[STR_LONG];
@@ -223,6 +243,10 @@ err_t remove_mod(Status * stat, Entity * e)
         if(stat->stat == Summoned)
         {
             new_death(e);
+        }
+        else if(stat->stat == Detained)
+        {
+            end_Detain(e);
         }
     }
     else
@@ -729,6 +753,22 @@ int setActionZone(Coord perso, int actionRange, Coord coorTab[]){
     return res;
 }
 
+err_t get_border(int cha_id, abilityId Id, Coord coorTab[])
+{
+    Entity * e = e_from_id(cha_id);
+
+
+    if(Id == Mvt)
+    {
+        //fn Louis
+    }
+    else
+    {
+        setActionZone(e->coords, get_range(e, Id), coorTab);
+    }
+
+    return OK;
+}
 
 bool Cast_check(action a, Coord coorTab[])
 {
@@ -783,10 +823,10 @@ bool Cast_check(action a, Coord coorTab[])
     return FALSE;
 }
 
-/*ALGORITHM CAST CHECK
-    WHEN ABILITY SELECTED CALL SHOW BORDER
+/*ALGORITHM
+    WHEN ABILITY SELECTED CALL GET BORDER
     IF MVT SHOW LOUIS BORDER
     IF AB SHOW LUCIEN BORDER
     COLLECT BORDER
     ONCE COORD SELECTED CALL CAST CHECK 
-    */
+*/

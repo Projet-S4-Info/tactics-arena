@@ -119,6 +119,14 @@ int Trap_fn(Coord c, Entity * e, StateList * list)
     return 0;
 }
 
+int Detain_fn(Coord c, Entity *e, StateList * list)
+{
+    Tile * t= getTile(c);
+    t->entity = NULL;
+
+    return 0;
+}
+
 int Banner_fn(Coord c, Entity * e, StateList * list)
 {
     Entity * all;
@@ -340,8 +348,6 @@ int Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list)
     int i;
 
     Status s = {0, Summoned, 1};
-    Coord spawn;
-    Tile * t;
 
     for(i=0; i<NUM_CLASS; i++)
     {
@@ -349,10 +355,7 @@ int Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list)
         {
             apply_status(s,all+i, list, e->cha_id);
             (all+i)->active = Alive;
-            spawn = closest_free_tile((all+i)->coords);
-            (all+i)->coords = spawn;
-            t = getTile(spawn);
-            t->entity = all+i;
+            free_spawn(all+i);
         }
     }
 

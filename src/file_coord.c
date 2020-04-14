@@ -27,7 +27,7 @@ void enfiler(File *f, Coord nvNombre)
     nouveau->nombre = nvNombre;
     nouveau->suivant = NULL;
 
-    if (!filevide(f))
+    if (!file_vide(f))
     {
         /* On se positionne ‡ la fin de la f */
         Element *elementActuel = f->premier;

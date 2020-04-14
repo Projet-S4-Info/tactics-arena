@@ -16,6 +16,7 @@ struct File
 };
 
 File *initialiser();
+bool file_vide(File *f);
 void enfiler(File *file, Coord nvNombre);
 Coord defiler(File *file);
 void afficherFile(File *file);
