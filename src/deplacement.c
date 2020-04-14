@@ -36,7 +36,7 @@ Coord closest_free_tile(Coord c)
 }
 
 
-err_t fill_tiles(Coord c, int matrix[_X_SIZE_][_Y_SIZE_])
+err_t fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_])
 {
     //On initialise la matrice à -1
     int i, j;
@@ -44,12 +44,12 @@ err_t fill_tiles(Coord c, int matrix[_X_SIZE_][_Y_SIZE_])
     {
         for(j = 0; j < _Y_SIZE_; j ++)
         {
-            matrix[i][j] = -1;
+            matrice[i][j] = -1;
         }
     }
     File *maFile = initialiser();
     enfiler(maFile, c);
-    matrix[c.x][c.y] = 0;
+    matrice[c.x][c.y] = 0;
     Coord active;
     Coord active_2;
     Coord add[4] = {{1,0},{-1,0},{0,1},{0,-1}};
@@ -65,9 +65,9 @@ err_t fill_tiles(Coord c, int matrix[_X_SIZE_][_Y_SIZE_])
 
             t = getTile(active_2);
 
-            if(matrix[active_2.x][active_2.y]==-1 && !(t->walkable) && t->entity == NULL)
+            if(matrice[active_2.x][active_2.y]==-1 && !(t->walkable) && t->entity == NULL)
             {
-                matrix[active_2.x][active_2.y] = matrix[active.x][active.y] + 1;
+                matrice[active_2.x][active_2.y] = matrice[active.x][active.y] + 1;
                 enfiler(maFile, active_2);
             }
         }
