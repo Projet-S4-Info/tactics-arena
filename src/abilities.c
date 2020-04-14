@@ -4,6 +4,8 @@
 #include "grid.h"
 #include "game_window.h"
 #include "characters.h"
+#include "display.h"
+#include "deplacement.h"
 
 int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
 {
@@ -14,6 +16,9 @@ int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
     {
         if(t==Dead)
         {
+            char log[STR_LONG];
+            sprintf(log, "%s's Killing Blow was triggered", e->cha_name);
+            addLog(log);
             apply_stat_change(v, t, list);
             e->act_points+=1;
         }
@@ -24,15 +29,15 @@ int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
 int Fury_fn(Coord c, Entity * e, StateList * list)
 {
     int turns = 0;
-    Status * v;
+    List_Elem * v;
 
     start_list(stSent);
     while((v = list_search(stSent, e, -1)) !=NULL)
     {
         if(!list_check(stSent))
         {
-            turns += v->duration;
-            remove_mod(v,e);
+            turns += v->value->duration;
+            remove_mod(v->value,e);
             list_remove(stSent);
         }
         list_next(stSent);
@@ -43,8 +48,8 @@ int Fury_fn(Coord c, Entity * e, StateList * list)
     {
         if(!list_check(stReceived))
         {
-            turns += v->duration;
-            remove_mod(v,e);
+            turns += v->value->duration;
+            remove_mod(v->value,e);
             list_remove(stReceived);
         }
         list_next(stReceived);
@@ -66,7 +71,7 @@ int Frenzied_Dash_fn(Coord c, Entity * e, StateList * list)
 
 int Focus_fn(Coord c, Entity * e, StateList * list)
 {
-    Status * v;
+    List_Elem * v;
 
     start_list(stSent);
     while((v = list_search(stSent, e, -1)) !=NULL)
@@ -79,7 +84,7 @@ int Focus_fn(Coord c, Entity * e, StateList * list)
         {
             if(list_change(stSent, -1)!=NULL)
             {
-                remove_mod(v,e);
+                remove_mod(v->value,e);
                 list_remove(stSent);
             }
         }
@@ -97,7 +102,7 @@ int Focus_fn(Coord c, Entity * e, StateList * list)
         {
             if(list_change(stReceived, -1)!=NULL)
             {
-                remove_mod(v,e);
+                remove_mod(v->value,e);
                 list_remove(stReceived);
             }
         }
@@ -109,7 +114,6 @@ int Focus_fn(Coord c, Entity * e, StateList * list)
 
 int Trap_fn(Coord c, Entity * e, StateList * list)
 {
-
     Trap_t t = {e->cha_id, same_team(e, Allies)};
     Set_Trap(t, c);
     return 0;
@@ -125,6 +129,21 @@ int Banner_fn(Coord c, Entity * e, StateList * list)
     {
         reset_cooldowns(all+i);
     }
+
+    char log[STR_LONG];
+    char log_2[STR_SHORT];
+
+    if(same_team(e, Allies))
+    {
+        sprintf(log_2, "ally");
+    }
+    else
+    {
+        sprintf(log_2, "ennemy");
+    }
+    
+    sprintf(log, "%s has reset all %s characters' cooldowns", e->cha_name, log_2);
+    addLog(log);
 
     return 0;
 }
@@ -149,6 +168,8 @@ int FlameCharge_fn(Coord c, Entity * e, StateList * list)
     Ability F = e->cha_class->cla_abilities[FlameCharge%NUM_AB];
     //Insert Pathfinding
     //Change F's zone to match pathfinding route
+    moveEntity(e->coords, c);
+    e->coords = c;
     return apply_to(F,e,list,e->coords);
 }
 
@@ -198,6 +219,10 @@ int Volt_Switch_fn(Coord c, Entity * e, StateList * list)
     t->coords = e->coords;
     e->coords = c;
 
+    char log[STR_LONG];
+    sprintf(log, "%s switched with %s", e->cha_name, t->cha_name);
+    addLog(log);
+
     return 0;
 }
 
@@ -242,12 +267,19 @@ int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
             ct = target->coords;
             closest.x = -99;
             target = NULL;
+
+            char log[STR_LONG];
+            sprintf(log, "The lightning bounced to %s", e->cha_name);
+            addLog(log);
         }
         else
         {
+            addLog("No one was close enough to bounce to");
             break;
         }
     }
+
+    addLog("The lighting died out");
 
     return d;
 }
@@ -301,10 +333,49 @@ int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
 
 int Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list)
 {
+    Entity * all;
+
+    get_team(e, &all, TRUE);
+
+    int i;
+
+    Status s = {0, Summoned, 1};
+    Coord spawn;
+    Tile * t;
+
+    for(i=0; i<NUM_CLASS; i++)
+    {
+        if((all + i)->active != Alive)
+        {
+            apply_status(s,all+i, list, e->cha_id);
+            (all+i)->active = Alive;
+            spawn = closest_free_tile((all+i)->coords);
+            (all+i)->coords = spawn;
+            t = getTile(spawn);
+            t->entity = all+i;
+        }
+    }
+
     return 0;
 }
 
 int Last_Sacrfice_fn(Coord c, Entity * e, StateList * list)
 {
+    return 0;
+}
+
+int Gods_Blessing_fn(Coord c, Entity *e, StateList * list)
+{
+    Entity * t = getEntity(c);
+
+    if(t->status_effect[Paralyzed])
+    {
+        t->act_points += 1;
+    }
+    else
+    {
+        t->act_points += 3;
+    }
+
     return 0;
 }

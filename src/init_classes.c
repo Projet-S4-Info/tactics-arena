@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "abilities.h"
-#include "test.h"
+#include "print.h"
 
 #include "pointers.h"
 
@@ -104,8 +104,6 @@ err_t init_berserker(Class * c)
     *(ab+2) = abtemp3;
     Ability abtemp4 = {Frenzied_Dash,3,4,9,FREE_TILE,&FD,51,&aoe51,0,NULL,BEFORE,NULL,{"Frenzied Dash","Jump to a tile, dealing aoe damage when landing."}};
     *(ab+3) = abtemp4;
-    
-    print_Damage(&FD, "");
 
     Class temp = 
     {
@@ -194,7 +192,7 @@ err_t init_goliath(Class * c)
     *(ab+1) = abtemp2;
     Ability abtemp3 = {Detain,2,4,2,FOES,NULL,1,&one_c,1,&D,NONE,NULL,{"Detain","Capture an Ennemy for three turns."}};
     *(ab+2) = abtemp3;
-    Ability abtemp4 = {Banner,3,5,0,ANY_TILE,NULL,103,&aoe103,1,&P,AFTER,Banner_fn,{"Banner","Provoke all ennemies in a zone for one turn and reset all allies' cooldowns."}};
+    Ability abtemp4 = {Banner,3,5,0,ANY_TILE,NULL,103,&aoe103,1,&P,BEFORE,Banner_fn,{"Banner","Provoke all ennemies in a zone for one turn and reset all allies' cooldowns."}};
     *(ab+3) = abtemp4;
 
 
@@ -402,7 +400,7 @@ err_t init_angel(Class * c, Ability *pass)
     *(ab+1) = abtemp2;
     Ability abtemp3 = {Last_Sacrifice,2,5,0,ANY_TILE,NULL,0,NULL,0,NULL,ONLY,Last_Sacrfice_fn,{"Last Sacrfice","Kill self to resurrect an Ally."}};
     *(ab+2) = abtemp3;
-    Ability abtemp4 = {Gods_Blessing,3,5,8,ALLIES,NULL,1,&one_c,1,&bless,NONE,NULL,{"God's Blessing","Double an Ally's action points and apply no cooldowns for a turn."}};
+    Ability abtemp4 = {Gods_Blessing,3,5,8,ALLIES,NULL,1,&one_c,1,&bless,DURING,Gods_Blessing_fn,{"God's Blessing","Double an Ally's action points and apply no cooldowns for a turn."}};
     *(ab+3) = abtemp4;
 
     Ability abpass = {Aura,0,0,0,ANY_TILE,NULL,103,&aoe103,1,&passive,NONE,NULL,{"Aura",""}};

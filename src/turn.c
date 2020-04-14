@@ -8,6 +8,7 @@
 #include "grid.h"
 #include "servFcnt.h"
 #include "display.h"
+#include "characters.h"
 
 bool turn_active = TRUE;
 const action turn_over = {0,{0,0},0};
@@ -15,6 +16,17 @@ const action turn_over = {0,{0,0},0};
 bool your_turn()
 {
     return turn_active;
+}
+
+
+err_t apply_movement(action a)
+{
+    Entity * e = e_from_id(a.char_id);
+
+    moveEntity(e->coords, a.c);
+    e->coords = a.c;
+
+    return OK;
 }
 
 err_t apply_action(action a)
@@ -38,17 +50,6 @@ err_t apply_action(action a)
     }
     active_ab = active_ent->cha_class->cla_abilities[a.act%NUM_AB];
 
-    if(!active_ent->status_effect[Blessed])
-    {
-        active_ent->ab_cooldown[a.act%NUM_AB] = active_ab.ab_cooldown;
-    }
-    else
-    {
-        if(verbose)printf("%s is Blessed!\n", active_ent->cha_name);
-    }
-
-    //ANIMATE THE ACTION
-
     if(verbose)printf("\n\n%s has chosen to %s at the following coordinates : %d,%d\n", active_ent->cha_name, active_ab.eng.name, a.c.x, a.c.y);
 
     sprintf(log, "%s cast %s", active_ent->cha_name, active_ab.eng.name);
@@ -57,6 +58,15 @@ err_t apply_action(action a)
     if(active_ab.fn_use==BEFORE)
     {
         death_count += active_ab.function(a.c, active_ent, list);
+    }
+
+    if(!active_ent->status_effect[Blessed])
+    {
+        active_ent->ab_cooldown[a.act%NUM_AB] = active_ab.ab_cooldown;
+    }
+    else
+    {
+        if(verbose)printf("%s is Blessed!\n", active_ent->cha_name);
     }
     
     if(active_ab.fn_use!=ONLY)
@@ -101,6 +111,7 @@ err_t turn_start(Entity *e)
     }
 
     Bloodlust_counter = 0;
+    Sentinel_counter = TRUE;
 
     if(e[Angel].active!=Dead)
     {

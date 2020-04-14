@@ -14,7 +14,7 @@ typedef struct {
   List_Elem * ec;
 } StateList;
 
-err_t init_list(StateList * list);
+err_t init_list(StateList ** list);
 bool out_of_list(StateList * list);
 bool list_empty(StateList * list);
 err_t start_list(StateList * list);
@@ -23,7 +23,7 @@ err_t list_next(StateList * list);
 List_Elem * list_change(StateList * list, int d);
 err_t list_remove(StateList * list);
 err_t list_add(StateList * list, Status v, struct entity_t * entity);
-Status * list_search(StateList * list, struct entity_t * entity, statusId status);
+List_Elem * list_search(StateList * list, struct entity_t * entity, statusId status); //Set status to -1 for any status
 bool list_check(StateList * list);
 err_t list_destroy(StateList * list);
 

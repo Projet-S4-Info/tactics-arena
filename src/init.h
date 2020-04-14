@@ -11,7 +11,7 @@ extern Entity Foes[NUM_CLASS];
 extern Ability Aura_ab;
 Ability Move_ab;
 
-err_t ent_init(Entity *e);
+err_t ent_init(Entity *e, char title[STR_SHORT]);
 err_t init_classes();
 err_t destroy_game();
 

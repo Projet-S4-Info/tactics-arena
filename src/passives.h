@@ -3,6 +3,7 @@
 #include "common.h"
 
 extern int Bloodlust_counter;
+extern bool Sentinel_counter;
 
 err_t activate_bloodlust(Entity *e, StateList * list);
 
