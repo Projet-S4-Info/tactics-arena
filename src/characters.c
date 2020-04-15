@@ -128,18 +128,18 @@ int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
     if(verbose)printf("Chargement des textures des personnages...\n");
 
     addTextureToTable(  cSprites,
-                        loadTexture(renderer, loadImage("../inc/img/heart_16.png")),
-                        loadTexture(renderer, loadImage("../inc/img/heart_32.png")),
+                        loadTexture(renderer, loadImage("../inc/img/icons/heart_16.png")),
+                        loadTexture(renderer, loadImage("../inc/img/icons/heart_32.png")),
                         "heart_icon");
 
     addTextureToTable(  cSprites,
-                        loadTexture(renderer, loadImage("../inc/img/mv_icon_16.png")),
-                        loadTexture(renderer, loadImage("../inc/img/mv_icon_32.png")),
+                        loadTexture(renderer, loadImage("../inc/img/icons/mv_icon_16.png")),
+                        loadTexture(renderer, loadImage("../inc/img/icons/mv_icon_32.png")),
                         "mv_icon");
 
     nbSprites = addTextureToTable(  cSprites,
-                        loadTexture(renderer, loadImage("../inc/img/star_icon_16.png")),
-                        loadTexture(renderer, loadImage("../inc/img/star_icon_32.png")),
+                        loadTexture(renderer, loadImage("../inc/img/icons/star_icon_16.png")),
+                        loadTexture(renderer, loadImage("../inc/img/icons/star_icon_32.png")),
                         "star_icon");
 
     addCharacterTexture(renderer, "angel");

@@ -8,31 +8,39 @@
 
 Coord closest_free_tile(Coord c)
 {
-    Coord active;
+    Coord active = {-1,-1};
     File *maFile = initialiser();
     enfiler(maFile, c);
     Tile * t;
     int i;
     Coord add[4] = {{1,0},{-1,0},{0,1},{0,-1}};
-    while (1)
+
+    while (!file_vide(maFile))
     {
         active = defiler(maFile);
         t = getTile(active);
+        printf("x : %d    y : %d\n", active.x, active.y);
+        printf("Null : %d    Walk : %d\n", t->entity == NULL, t->walkable);
+
         if(t->entity == NULL && t->walkable)
         {
             detruire_file(maFile);
-            return active;
+            break;
         }
         else
         {
             for(i=0; i<4; i++)
             {
-                enfiler(maFile, add_coords(active, add[i]));
+                Coord a = add_coords(active, add[i]);
+                if(isInGrid(a))
+                {
+                    enfiler(maFile, a);
+                }
             }
         }
-        
-
     }
+
+    return active;
 }
 
 
@@ -67,7 +75,7 @@ err_t fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_])
         {
             active_2 = add_coords(active, add[i]);
             printf("    Active_2 : %d %d\n", active_2.x, active_2.y);
-            if(active_2.x < _X_SIZE_ && active_2.y < _Y_SIZE_ && active_2.x > 0 && active_2.y > 0)
+            if(isInGrid(active_2))
             {
                 printf("        In Grid\n");
                 t = getTile(active_2);

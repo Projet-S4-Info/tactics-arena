@@ -145,6 +145,6 @@ typedef struct {
     classId cha_class;
     int base_stats[NUM_STATS];
     Coord starting_position;
-}init_ent; 
+}init_ent;
 
 #endif

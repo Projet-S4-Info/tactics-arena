@@ -72,7 +72,8 @@ void debugGrid(Tile * grid, int x, int y)
 {
     for (int i = 0; i < x; i++){
         for (int j = 0; j < y; j++){
-            if(verbose)printf("%d ", (*(grid+i*x+j)).tile_id);
+            if(verbose)printf("%d|", (*(grid+i*x+j)).tile_id);
+            if(verbose)printf("%d ", (*(grid+i*x+j)).walkable);
             if ((*(grid+i*x+j)).entity != NULL && verbose == TRUE) printf("X");
         }
         if(verbose)printf("\n");
@@ -122,17 +123,22 @@ Tile getSelected()
 Coord getSelectedPos()
 // Return the coordinates of the selected tile
 {
+    Coord result = {-1, -1};
+
     for (int i=0; i < _X_SIZE_; i++)
     {
         for (int j=0; j < _Y_SIZE_; j++)
         {
             if ((*(matrix+i*_X_SIZE_+j)).selected == 1)
             {
-                Coord result = {i, j};
-                return result;
+                result.x = i;
+                result.y = j;
+                break;
             }
         }
     }
+
+    return result;
 }
 
 void unselect()
@@ -178,4 +184,10 @@ void turnLeft(Entity * entity)
 {
     if (entity->direction == N) entity->direction = W;
     else entity->direction--;
+}
+
+bool isInGrid(Coord pos)
+// Return true if the given coord is in the grid
+{
+    return (pos.x < _X_SIZE_ && pos.x >= 0 && pos.y < _Y_SIZE_ && pos.y >= 0);
 }
