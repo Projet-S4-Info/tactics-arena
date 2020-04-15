@@ -43,11 +43,8 @@ int hover_tchat = 0;						// Hover tchat button
 int hover_passive_help = 0;					// Hover passive help in ID card (with mouse position)
 int end_of_turn = 0;						// Fin de tour
 int isChatActive = 0;						// Chat button
-<<<<<<< HEAD
 int chatTabIndex = 0;						// Index of Chat Array;
-=======
 Direction camMove = -1;
->>>>>>> 5e2e708aaf78ac975f52d7831233997ab2bd4503
 
 int xWinSize, yWinSize;						// x and y sizes of the window
 Coord mouse_position;

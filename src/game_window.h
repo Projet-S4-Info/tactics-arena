@@ -23,13 +23,10 @@ extern int hover_passive_help;
 extern Coord mouse_position;
 extern char description[100];
 extern int isChatActive;
-<<<<<<< HEAD
 extern int chatTabIndex;
+extern Direction camMove;
 
 extern char chat[STR_LONG];
-=======
-extern Direction camMove;
->>>>>>> 5e2e708aaf78ac975f52d7831233997ab2bd4503
 
 
 /* =============== FONCTIONS =============== */
