@@ -7,6 +7,13 @@
 #include "gameplay.h"
 #include "deplacement.h"
 
+err_t rec_id_swap(action * a)
+{
+    a->char_id *= -1;
+
+    return OK;
+}
+
 Entity * e_from_id(int Id)
 {
     if(Id<0)
@@ -214,13 +221,17 @@ Coord add_coords(Coord a, Coord b)
 err_t free_spawn(Entity *e)
 {
     if(e != NULL)
-    {   
+    {
+        if(verbose)printf("\n%s : \n", e->cha_name);
+        if(verbose)printf("    before : x : %d y : %d\n", e->coords.x, e->coords.y);
         Coord spawn = closest_free_tile(e->coords);
+        if(verbose)printf("    return : x : %d y : %d\n", spawn.x, spawn.y);
         e->coords = spawn;
+        if(verbose)printf("    after : x : %d y : %d\n", e->coords.x, e->coords.y);
         Tile *t = getTile(spawn);
         t->entity = e;
 
-    return OK;
+        return OK;
     }
     else
     {

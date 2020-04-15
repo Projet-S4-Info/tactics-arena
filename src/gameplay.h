@@ -2,6 +2,7 @@
 #define gameplay_h
 #include "struct.h"
 
+err_t rec_id_swap(action * a);
 Entity * e_from_id(int Id);
 err_t get_team(Entity *e, Entity **all, bool same);
 winId game_over();

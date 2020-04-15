@@ -46,104 +46,104 @@ int loadEditorTextures(SDL_Renderer * renderer, TabTexture * textures)
 
     // Loading blank pattern textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blank_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blank_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/blank_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/blank_128.png")),
 						"blank");
 
 	// Loading non-selected pattern textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/block_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/block_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_128.png")),
 						"block");
 
 	// Loading blue selected pattern textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/block_blue_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/block_blue_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_blue_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_blue_128.png")),
 						"blue_selected");
 
 	// Loading red selected pattern textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/block_red_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/block_red_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_red_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_red_128.png")),
 						"red_selected");
 
 	// Loading water block textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/water_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/water_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/water_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/water_128.png")),
 						"water");
 
 	// Loading sand block textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/sand_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/sand_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/sand_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/sand_128.png")),
 						"sand");
 
 	// Loading ice block textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/ice_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/ice_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/ice_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/ice_128.png")),
 						"ice");
 	
 	// Loading snow block textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/block_snow_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/block_snow_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_128.png")),
 						"snow");
 						
 
 	// Loading interface texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/block_interface.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/block_interface.png")),
 						NULL,
 						"interface");
 
 	// Loading eraser texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/eraser_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/eraser_64.png")),
 						NULL,
 						"eraser");
 
 	// Loading selection hover texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/editor_selection.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/editor_selection.png")),
 						NULL,
 						"selection");
 
 	// Loading green button texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/ok_button.png")),
+						loadTexture(renderer, loadImage("../inc/img/buttons/ok_button.png")),
 						NULL,
 						"ok_button");
 
 	// Loading orange button texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/load_button.png")),
+						loadTexture(renderer, loadImage("../inc/img/buttons/load_button.png")),
 						NULL,
 						"load_button");
 
 	// Loading red button texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/cancel_button.png")),
+						loadTexture(renderer, loadImage("../inc/img/buttons/cancel_button.png")),
 						NULL,
 						"cancel_button");
 
 	// Loading blue button texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/fill_button.png")),
+						loadTexture(renderer, loadImage("../inc/img/buttons/fill_button.png")),
 						NULL,
 						"fill_button");
 
 	// Loading blur effect texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blur.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/blur.png")),
 						NULL,
 						"blur");
 
 	// Loading save menu texture
 	index = addTextureToTable(	textures,
-								loadTexture(renderer, loadImage("../inc/img/saveMenu.png")),
+								loadTexture(renderer, loadImage("../inc/img/interface/saveMenu.png")),
 								NULL,
 								"save_menu");
 
@@ -231,7 +231,7 @@ int saveMap(Tile * grid, const char * name)
 
 	FILE * map;
 	map = fopen(mapName, "wb");
-	fwrite(grid, sizeof(Tile)*30*30, 1, map);
+	fwrite(grid, sizeof(Tile)*_X_SIZE_*_Y_SIZE_, 1, map);
 
 	fclose(map);
 
@@ -248,7 +248,7 @@ int loadMap(Tile * grid, const char * name)
 
 	FILE * map;
 	map = fopen(mapName, "rb");
-	fread(grid, sizeof(Tile)*30*30, 1, map);
+	fread(grid, sizeof(Tile)*_X_SIZE_*_Y_SIZE_, 1, map);
 
 	fclose(map);
 
@@ -321,6 +321,8 @@ int changeTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 
 	// DEBUG printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
 	(*(grid+xIndex*_X_SIZE_+yIndex)).tile_id = toTile;
+	if (toTile == 4) (*(grid+xIndex*_X_SIZE_+yIndex)).walkable = 0;
+	else (*(grid+xIndex*_X_SIZE_+yIndex)).walkable = 1;
 
 	return 1;
 }
@@ -333,6 +335,8 @@ void fillMap(Tile * grid, int block_id)
 		for (int j = 0; j < _Y_SIZE_; j++)
 		{
 			(*(grid+i*_X_SIZE_+j)).tile_id = block_id;
+			if (block_id == 4) (*(grid+i*_X_SIZE_+j)).walkable = 0;
+			else (*(grid+i*_X_SIZE_+j)).walkable = 1;
 		}
 	}
 	if(verbose)printf("[EDITOR] Map remplie avec le bloc [%s] id %d\n", textures[block_id].texture_name, block_id);

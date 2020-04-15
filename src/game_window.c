@@ -43,9 +43,17 @@ int hover_tchat = 0;						// Hover tchat button
 int hover_passive_help = 0;					// Hover passive help in ID card (with mouse position)
 int end_of_turn = 0;						// Fin de tour
 int isChatActive = 0;						// Chat button
+int chatTabIndex = 0;						// Index of Chat Array;
+Direction camMove = -1;
 
 int xWinSize, yWinSize;						// x and y sizes of the window
 Coord mouse_position;
+
+char chat[STR_LONG] = "Chat : ";
+char *compo;
+
+extern Sint32 cursor;
+extern Sint32 selection_len;
 
 
 /* =============== FONCTIONS ================ */
@@ -57,10 +65,7 @@ int createGameWindow(int x, int y)
     // Le pointeur vers la fenetre
 	SDL_Window* pWindow = NULL;
 	SDL_Renderer *renderer=NULL;
-
-	// Resolution of a bloc texture (can be 64 or 128)
-	int PX = 64;
-
+	
 	// x and y pos where map is displayed
 	int XPOS = 50;
 	int YPOS = 50;
@@ -130,22 +135,14 @@ int createGameWindow(int x, int y)
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
 
-		loadMap(matrix, "map_plains");
+		loadMap(matrix, "map_test");
+
+		debugGrid(matrix, _X_SIZE_, _Y_SIZE_);
+
+		ent_init_test(Allies, "Friendly");
+        ent_init_test(Foes, "Ennemy");
 
 		SDL_Delay(1);
-
-		Coord testCoord = {rand()%30,rand()%30};
-		setEntityToTile(&Allies[0], testCoord);
-		Coord testCoord2 = {rand()%30,rand()%30};
-		setEntityToTile(&Allies[1], testCoord2);
-		Coord testCoord3 = {rand()%30,rand()%30};
-		setEntityToTile(&Allies[2], testCoord3);
-		Coord testCoord4 = {rand()%30,rand()%30};
-		setEntityToTile(&Allies[3], testCoord4);
-		Coord testCoord5 = {rand()%30,rand()%30};
-		setEntityToTile(&Allies[4], testCoord5);
-		Coord testCoord6 = {rand()%30,rand()%30};
-		setEntityToTile(&Allies[5], testCoord6);
 
 		displayMap(renderer, XPOS, YPOS);
 
@@ -181,26 +178,29 @@ int createGameWindow(int x, int y)
 						tempEntity = getEntity(getSelectedPos());
 						if (tempEntity != NULL)
 						{
-							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16 && your_turn())
+							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
 							{
-								if (e.motion.x >= 16 && e.motion.x <= 80)			selected_ability = Mvt;
-								else if (e.motion.x >= 96 && e.motion.x <= 160)
-									if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
-									else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
-								else if (e.motion.x >= 176 && e.motion.x <= 240)
-									if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
-									else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
-								else if (e.motion.x >= 256 && e.motion.x <= 320)
-									if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
-									else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
-								else if (e.motion.x >= 336 && e.motion.x <= 400)
-									if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-									else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
-								else if (e.motion.x >= 416 && e.motion.x <= 480) turnRight(tempEntity);
-								else if (e.motion.x >= 496 && e.motion.x <= 560) turnLeft(tempEntity);
-								else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
+								if (your_turn())
+								{
+									if (e.motion.x >= 16 && e.motion.x <= 80)			selected_ability = Mvt;
+									else if (e.motion.x >= 96 && e.motion.x <= 160)
+										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+										else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
+									else if (e.motion.x >= 176 && e.motion.x <= 240)
+										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
+										else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
+									else if (e.motion.x >= 256 && e.motion.x <= 320)
+										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
+										else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
+									else if (e.motion.x >= 336 && e.motion.x <= 400)
+										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
+										else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
+									else if (e.motion.x >= 416 && e.motion.x <= 480) turnRight(tempEntity);
+									else if (e.motion.x >= 496 && e.motion.x <= 560) turnLeft(tempEntity);
+									else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 
-								if(verbose)printf("Selected ability : %d\n", selected_ability);
+									if(verbose)printf("Selected ability : %d\n", selected_ability);
+								}
 
 							} else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 							
@@ -223,15 +223,15 @@ int createGameWindow(int x, int y)
 					case SDL_MOUSEWHEEL:
 						if (e.wheel.y > 0)		// Scroll UP
 						{
-							if (PX == 64){
-								PX = 128;
+							if (pxBase == 64){
+								pxBase = 128;
 								if(verbose)printf("[GRAPHICS] Zoom In\n");
 								XPOS *= 2;
 								YPOS *= 2;
 							}
 						} else {				// Scroll DOWN
-							if (PX == 128){
-								PX = 64;
+							if (pxBase == 128){
+								pxBase = 64;
 								if(verbose)printf("[GRAPHICS] Zoom Out\n");
 								XPOS /= 2;
 								YPOS /= 2;
@@ -242,21 +242,35 @@ int createGameWindow(int x, int y)
 						switch(e.key.keysym.sym)
 						{
 							case SDLK_KP_PLUS: 	// "+" key
-								if (PX == 64){
-									PX = 128;
+								if (pxBase == 64){
+									pxBase = 128;
+									addLog("PX 128");
 									if(verbose)printf("[GRAPHICS] Zoom In\n");
 									XPOS *= 2;
 									YPOS *= 2;	
 								}
 								break;
 							case SDLK_KP_MINUS:	// "-" key
-								if (PX == 128){
-									PX = 64;
+								if (pxBase == 128){
+									pxBase = 64;
+									addLog("PX 64");
 									if(verbose)printf("[GRAPHICS] Zoom Out\n");
 									XPOS /= 2;
 									YPOS /= 2;
 								}
 								break;
+							case SDLK_BACKSPACE:
+								if(isChatActive == 1){
+									if (strlen(chat) > 7){
+										chat[strlen(chat)-1] = '\0';
+									}
+								}
+								break;
+							case SDLK_RETURN:
+								if(isChatActive == 1){
+									sprintf(chatTab[chatTabIndex], "%s",chat);
+									chatTabIndex += 1;
+								}
 						}
 					break;
 					case SDL_MOUSEMOTION:
@@ -300,29 +314,50 @@ int createGameWindow(int x, int y)
 							}
 						}
 					break;
+					
+					case SDL_TEXTINPUT:
+						if(isChatActive == 1){
+							strcat(chat,e.text.text);
+						}
+					break;
+
+					case SDL_TEXTEDITING:
+						if(isChatActive == 1){
+							compo = e.edit.text;
+							cursor = e.edit.start;
+							selection_len = e.edit.length;
+						}	
+					break;
 				}
 			}
 
 			if (SDL_GetMouseFocus() == pWindow)
 			{
+				camMove = -1;
 				// Déplacement de la caméra grâce aux bords de l'écran
 				if (e.motion.x <= xWinSize && e.motion.x >= xWinSize-20){
-					XPOS -= (camSpeed*(PX/64));
+					XPOS -= (camSpeed*(pxBase/64));
+					camMove = E;
 				}
 				if (e.motion.x >= 0 && e.motion.x <= 20){
-					XPOS += (camSpeed*(PX/64));
+					XPOS += (camSpeed*(pxBase/64));
+					camMove = W;
 				}
 				if (e.motion.y <= yWinSize && e.motion.y >= yWinSize-20){
-					YPOS -= (camSpeed*(PX/64));
+					YPOS -= (camSpeed*(pxBase/64));
+					camMove = S;
 				}
-				if (e.motion.y <= 20){
-					YPOS += (camSpeed*(PX/64));
+				if (e.motion.y <= 20 && e.motion.y >= 0){
+					YPOS += (camSpeed*(pxBase/64));
+					camMove = N;
 				}
+				mouse_position.x = e.motion.x;
+				mouse_position.y = e.motion.y;
 				// Vérification pour ne pas dépasser des "border" avec la caméra
-				if (XPOS > 500*(PX/64)) 	XPOS = 500*(PX/64);
-				if (XPOS < -1000*(PX/64)) 	XPOS = -1000*(PX/64);
-				if (YPOS > 300*(PX/64))		YPOS = 300*(PX/64);
-				if (YPOS < -500*(PX/64)) 	YPOS = -500*(PX/64);
+				if (XPOS > 500*(pxBase/64)) 	XPOS = 500*(pxBase/64);
+				if (XPOS < -1000*(pxBase/64)) 	XPOS = -1000*(pxBase/64);
+				if (YPOS > 300*(pxBase/64))		YPOS = 300*(pxBase/64);
+				if (YPOS < -500*(pxBase/64)) 	YPOS = -500*(pxBase/64);
 
 				displayMap(renderer, XPOS, YPOS);
 			}

@@ -17,6 +17,8 @@ extern bool verbose;
 
 extern int isChatActive;
 
+extern int isAServer;
+
 extern char error_message[NUM_ERROR][STR_LONG];
 
 extern char chatTab[STR_LONG][_NB_MAX_ChAT_];

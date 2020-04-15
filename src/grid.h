@@ -53,5 +53,7 @@ void turnRight(Entity * entity);
 
 void turnLeft(Entity * entity);
 
+bool isInGrid(Coord pos);
+
 
 #endif

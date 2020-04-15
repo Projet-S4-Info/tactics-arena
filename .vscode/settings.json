@@ -9,6 +9,7 @@
         "sdl_mixer.h": "c",
         "graphics.h": "c",
         "passives.h": "c",
-        "init_classes.h": "c"
+        "init_classes.h": "c",
+        "time.h": "c"
     }
 }
