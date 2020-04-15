@@ -22,7 +22,6 @@
 #include "textures.h"	
 #include "turn.h"
 #include "gameplay.h"
-#include "test.h"
 
 
 /* =============== CONSTANTES ================ */
@@ -136,7 +135,7 @@ int createGameWindow(int x, int y)
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
 
-		loadMap(matrix, "map_snowplains");
+		loadMap(matrix, "map_test");
 
 		debugGrid(matrix, _X_SIZE_, _Y_SIZE_);
 
@@ -150,8 +149,6 @@ int createGameWindow(int x, int y)
 		SDL_RenderPresent(renderer);
 
 		Entity * tempEntity = NULL;
-
-		test();
 
 		int running = 1;
 		while(running) {
