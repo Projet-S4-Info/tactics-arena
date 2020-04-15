@@ -151,6 +151,18 @@ int createGameWindow(int x, int y)
 		setEntityToTile(&Allies[4], testCoord5);
 		Coord testCoord6 = {rand()%30,rand()%30};
 		setEntityToTile(&Allies[5], testCoord6);
+		Coord testCoord7 = {rand()%30,rand()%30};
+		setEntityToTile(&Foes[0], testCoord7);
+		Coord testCoord8 = {rand()%30,rand()%30};
+		setEntityToTile(&Foes[1], testCoord8);
+		Coord testCoord9 = {rand()%30,rand()%30};
+		setEntityToTile(&Foes[2], testCoord9);
+		Coord testCoord10 = {rand()%30,rand()%30};
+		setEntityToTile(&Foes[3], testCoord10);
+		Coord testCoord11 = {rand()%30,rand()%30};
+		setEntityToTile(&Foes[4], testCoord11);
+		Coord testCoord12 = {rand()%30,rand()%30};
+		setEntityToTile(&Foes[5], testCoord12);
 
 		displayMap(renderer, XPOS, YPOS);
 
