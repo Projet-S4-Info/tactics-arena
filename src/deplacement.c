@@ -14,10 +14,11 @@ Coord closest_free_tile(Coord c)
     Tile * t;
     int i;
     Coord add[4] = {{1,0},{-1,0},{0,1},{0,-1}};
-    while (1)
+    while (!file_vide(maFile))
     {
         active = defiler(maFile);
         t = getTile(active);
+        if(verbose)printf("NUll : %d    Walk : %d\n", );
         if(t->entity == NULL && t->walkable)
         {
             detruire_file(maFile);
@@ -27,11 +28,13 @@ Coord closest_free_tile(Coord c)
         {
             for(i=0; i<4; i++)
             {
-                enfiler(maFile, add_coords(active, add[i]));
+                active = add_coords(active, add[i]);
+                if()
+                {
+                    enfiler(maFile, active);
+                }
             }
         }
-        
-
     }
 }
 

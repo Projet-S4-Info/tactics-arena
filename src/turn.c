@@ -269,14 +269,20 @@ winId game_loop(err_t (*turn1)(void), err_t (*turn2)(void))
 
 winId init_client()
 {
-    init_Allies();
+    Coord spawn[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
+
     init_Foes();
+    init_Allies(spawn);
+
     return game_loop(opposing_turn,local_turn);
 }
 
 winId init_server()
 {
+    Coord spawn[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
+
+    init_Allies(spawn);
     init_Foes();
-    init_Allies();
+    
     return game_loop(local_turn,opposing_turn);
 }

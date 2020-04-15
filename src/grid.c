@@ -122,17 +122,22 @@ Tile getSelected()
 Coord getSelectedPos()
 // Return the coordinates of the selected tile
 {
+    Coord result = {-1, -1};
+
     for (int i=0; i < _X_SIZE_; i++)
     {
         for (int j=0; j < _Y_SIZE_; j++)
         {
             if ((*(matrix+i*_X_SIZE_+j)).selected == 1)
             {
-                Coord result = {i, j};
-                return result;
+                result.x = i;
+                result.y = j;
+                break;
             }
         }
     }
+
+    return result;
 }
 
 void unselect()
