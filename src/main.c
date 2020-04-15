@@ -120,8 +120,8 @@ int main(int argc, char * argv[])
     // Lancement du jeu
     if (selection == 2)
     {
-        ent_init_test(Allies, "Friendly");
-        ent_init_test(Foes, "Ennemy");
+        /*ent_init_test(Allies, "Friendly");
+        ent_init_test(Foes, "Ennemy");*/
         if(verbose) printf("GAME START!\n");
         stopMenuMusic(1);
         createGameWindow(1920, 1080);

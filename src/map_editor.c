@@ -321,6 +321,8 @@ int changeTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 
 	// DEBUG printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
 	(*(grid+xIndex*_X_SIZE_+yIndex)).tile_id = toTile;
+	if (toTile == 4) (*(grid+xIndex*_X_SIZE_+yIndex)).walkable = 0;
+	else (*(grid+xIndex*_X_SIZE_+yIndex)).walkable = 1;
 
 	return 1;
 }
@@ -333,6 +335,8 @@ void fillMap(Tile * grid, int block_id)
 		for (int j = 0; j < _Y_SIZE_; j++)
 		{
 			(*(grid+i*_X_SIZE_+j)).tile_id = block_id;
+			if (block_id == 4) (*(grid+i*_X_SIZE_+j)).walkable = 0;
+			else (*(grid+i*_X_SIZE_+j)).walkable = 1;
 		}
 	}
 	if(verbose)printf("[EDITOR] Map remplie avec le bloc [%s] id %d\n", textures[block_id].texture_name, block_id);

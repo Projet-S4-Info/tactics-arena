@@ -135,7 +135,10 @@ int createGameWindow(int x, int y)
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
 
-		loadMap(matrix, "map_plains");
+		loadMap(matrix, "map_test");
+
+		ent_init_test(Allies, "Friendly");
+        ent_init_test(Foes, "Ennemy");
 
 		SDL_Delay(1);
 
