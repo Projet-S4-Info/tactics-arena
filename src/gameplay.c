@@ -7,6 +7,13 @@
 #include "gameplay.h"
 #include "deplacement.h"
 
+err_t rec_id_swap(action * a)
+{
+    a->char_id *= -1;
+
+    return OK;
+}
+
 Entity * e_from_id(int Id)
 {
     if(Id<0)
@@ -220,7 +227,7 @@ err_t free_spawn(Entity *e)
         Tile *t = getTile(spawn);
         t->entity = e;
 
-    return OK;
+        return OK;
     }
     else
     {

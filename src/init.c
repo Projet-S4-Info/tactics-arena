@@ -1,8 +1,11 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "struct.h"
 #include "init_classes.h"
 #include "common.h"
 #include "print.h"
+#include "gameplay.h"
+#include "servFcnt.h"
 
 StateList *stSent = NULL;
 StateList *stReceived = NULL;
@@ -13,21 +16,110 @@ Entity Foes[NUM_CLASS] = {};
 Ability Aura_ab;
 Ability Move_ab;
 
-err_t ent_init(Entity *e, char title[STR_SHORT])
+err_t init_spawn(Entity * e, Coord c[NUM_CLASS], int i)
 {
+    classId spawn_order[NUM_CLASS] = {Ranger, Mage, Angel, Valkyrie, Goliath, Berserker};
+
+    (e+spawn_order[i])->coords = c[i];
+    free_spawn(e+spawn_order[i]);
+    
+    return OK;
+}
+
+err_t send_ent(Entity *e)
+{
+    //init_ent ie = {e->cha_id, e->cha_name, e->cha_class->cla_id, e->base_stats, e->coords};
+
+    //sendStruct(&ie, sizeof(init_ent), socketConnected);
+    return OK;
+}
+
+err_t ent_common_init(Entity *e)
+{
+    e->active = Alive;
+    e->act_points = 3;
+    
+    int i;
+    for(i=0; i<NUM_AB; i++)
+    {
+        e->ab_cooldown[i] = 0;
+    }
+    for(i=0; i<NUM_STATUS; i++)
+    {
+        e->status_effect[i] = 0;
+    }
+
+    return OK;
+}
+
+err_t init_Foes()
+{
+    init_ent e;
+    int i,j;
+    for(i=0; i<NUM_CLASS; i++)
+    {
+        rec_id_swap(recep(&e,sizeof(init_ent),socketConnected));
+        Foes[e.cha_class].cha_id = e.char_id;
+        sprintf(Foes[e.cha_class].cha_name, "Ennemy %s", e.cha_name);
+        Foes[e.cha_class].cha_class = &classes[e.cha_class];
+        
+        for(j=0; j<NUM_STATS; j++)
+        {
+            Foes[e.cha_class].base_stats[j] = Foes[e.cha_class].stat_mods[j] = e.base_stats[j];
+        }
+
+        ent_common_init(&Foes[e.cha_class]);     
+    }
+
+    Foes[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
+
+    return OK;
+}
+
+err_t init_Allies()
+{
+    int i,j;
+    for(i=0; i<NUM_CLASS; i++)
+    {
+        Allies[i].cha_id = i+1;
+        sprintf(Allies[i].cha_name, "%s", classes[i].cla_name);
+        Allies[i].cha_class = &classes[i];
+        
+        for(j=0; j<NUM_STATS; j++)
+        {
+            Allies[i].base_stats[j] = Allies[i].stat_mods[j] = classes[i].basic_stats[j];
+        }
+
+        ent_common_init(&Allies[i]);
+
+        send_ent(&Allies[i]);
+        sprintf(Allies[i].cha_name, "Friendly %s", classes[i].cla_name);
+    }
+
+    Allies[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
+
+    return OK;
+}
+
+err_t ent_init_test(Entity *e, char title[STR_SHORT])
+{
+    Coord ally_spawn[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
+    Coord foe_spawn[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
 
     int i,j;
     for(i=0; i<NUM_CLASS; i++)
     {
-        if(!strcmp(title, "Friendly"))
+        if(e==Allies)
         {
             (e+i)->cha_id = i+1;
             (e+i)->direction = N;
+            init_spawn(e, ally_spawn, i);
         }
         else
         {
             (e+i)->cha_id = (i+1)*-1;
             (e+i)->direction = S;
+            init_spawn(e, foe_spawn, i);
         }
 
         sprintf((e+i)->cha_name, "%s %s", title, classes[i].cla_name);

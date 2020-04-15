@@ -64,6 +64,7 @@ int main(int argc, char * argv[])
     srand(time(NULL));
 
     printf("%s", error_message[ init_classes() ] );
+    
     if(verbose)
     {
         printf("Initiation Check!\n\n");
@@ -112,9 +113,6 @@ int main(int argc, char * argv[])
 
     }
 
-    ent_init(Allies, "Friendly");
-    ent_init(Foes, "Ennemy");
-
     playMenuMusic(1);
     selection = displayMenu(1280, 720);
     
@@ -122,6 +120,8 @@ int main(int argc, char * argv[])
     // Lancement du jeu
     if (selection == 2)
     {
+        ent_init_test(Allies, "Friendly");
+        ent_init_test(Foes, "Ennemy");
         if(verbose) printf("GAME START!\n");
         stopMenuMusic(1);
         createGameWindow(1920, 1080);
@@ -148,9 +148,9 @@ int main(int argc, char * argv[])
         }
     }
 
-    //getchar();  // Wait for the user to press a key to end the program
-
     printf("%s",error_message[destroy_game()]);
+
+    //getchar();  // Wait for the user to press a key to end the program
 
     return 0;
 }

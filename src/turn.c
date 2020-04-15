@@ -11,7 +11,7 @@
 #include "characters.h"
 
 bool turn_active = TRUE;
-const action turn_over = {0,{0,0},0};
+action turn_over = {0,{0,0},0};
 
 bool your_turn()
 {
@@ -125,7 +125,7 @@ err_t turn_start(Entity *e)
 
 err_t turn_end(Entity *e, StateList * list)
 {
-    //sendStruct(&turn_over, sizeof(action), );
+    sendStruct(&turn_over, sizeof(action), socketConnected);
 
     int i,j;
     for(i=0; i<NUM_CLASS; i++)
@@ -186,11 +186,11 @@ Entity * play_check(Entity *E)
 
 err_t action_set(action a)
 {
-    //sendStruct(&a, sizeof(action), );
+    sendStruct(&a, sizeof(action), socketConnected);
 
     if(a.act == Mvt)
     {
-        //Mvt function
+        apply_movement(a);
     }
     else
     {
@@ -226,20 +226,20 @@ err_t opposing_turn()
     
     action a;
 
-    //recep(&a, sizeof(action), );
+    rec_id_swap(recep(&a, sizeof(action), socketConnected));
 
     while(a.char_id != 0)
     {
         if(a.act == Mvt)
         {
-            //Mvt function
+            apply_movement(a);
         }
         else
         {
             apply_action(a);
         }
         
-        //recep(&a, sizeof(action), );
+        rec_id_swap(recep(&a, sizeof(action), socketConnected));
     }
 
     turn_end(Foes, stSent);
@@ -269,10 +269,14 @@ winId game_loop(err_t (*turn1)(void), err_t (*turn2)(void))
 
 winId init_client()
 {
+    init_Allies();
+    init_Foes();
     return game_loop(opposing_turn,local_turn);
 }
 
 winId init_server()
 {
+    init_Foes();
+    init_Allies();
     return game_loop(local_turn,opposing_turn);
 }
