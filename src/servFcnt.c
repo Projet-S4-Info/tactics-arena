@@ -138,7 +138,7 @@ err_t sendStruct(void * structure, int size, int socket){
 
   sockSendError = send(socket,structure, size, 0);
   if(sockSendError != SOCKET_ERROR){
-    return SEND_OK;
+    return OK;
   }else{
     return SEND_ERROR;
   }
@@ -167,7 +167,7 @@ err_t sendMsg(int socket, char pseudo[128], t_msgChat monMsg){
   sockCli = send(socket,(void *)&monMsg, sizeof(monMsg), 0);
   if(sockCli != SOCKET_ERROR){
     if(verbose)printf("Message envoyé avec succes ! \n");
-    return SEND_OK;
+    return OK;
   }
   else{
     printf("Send MSG error ... \n");
@@ -228,7 +228,7 @@ void silentChat(int sock, char pseudo[128], t_msgChat monMsg){
  * \brief Generic function to receive structures
 */
 
-err_t recep(void * container, int size, int socket){
+void * recep(void * container, int size, int socket){
   if(verbose)printf("bienvenue dans recep \n");
   int flag = 0;
   while(flag == 0){
@@ -237,5 +237,5 @@ err_t recep(void * container, int size, int socket){
       flag = 1;
     }
   }
-  return RECV_OK;
+  return container;
 }

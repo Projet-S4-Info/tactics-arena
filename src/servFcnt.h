@@ -24,6 +24,7 @@ extern char ipSrv[85];
 extern char pseudoUser[50];
 extern char MapMultiSelected[50];
 extern int socketConnected;
+extern int socketConnectedCli;
 
 err_t startTCPSocketServ();
 err_t startTCPSocketCli();
@@ -39,7 +40,7 @@ void startChat(int sock, char pseudo[128], t_msgChat monMsg);
 const char * setServIP();
 void silentChat(int sock, char pseudo[128], t_msgChat monMsg);
 char * flushMsg(char * monMsg);
-err_t recep(void * container, int size, int socket);
+void * recep(void * container, int size, int socket);
 
 
 

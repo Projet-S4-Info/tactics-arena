@@ -48,7 +48,6 @@
 #endif
 
 int socketCli = 0;
-int socketConnectedCli = 0;
 
 /**
  * \fn err_t stopTCPSocketCli(int socket)
@@ -61,7 +60,7 @@ err_t stopTCPSocketCli(int socketCli){
   if(verbose)printf("Fermeture du socket Client ... \n");
   shutdown(socketCli, 2);
   closesocket(socketCli);
-  return CLI_OK;
+  return OK;
 }
 
 /**
@@ -98,6 +97,8 @@ err_t startTCPSocketCli(int socketCli){
   t_user infoMoi;
     infoMoi.id = 111;
     sprintf(infoMoi.pseudo,"LucienCh2424");
+
+  int socketConnectedCli;
       
   if(!windWSAError){
     servIP = ipSrv;
@@ -121,15 +122,15 @@ err_t startTCPSocketCli(int socketCli){
       // -- Tentative de connection vers le serveur
       if(connect(sock, (SOCKADDR*)&sockIn, sizeof(sockIn)) != SOCKET_ERROR){
         if(verbose)printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
-        socketConnected = sock;
+        socketConnectedCli = sock;
         if(verbose)printf("\nVous vous appelez : %s", pseudoUser);
         sprintf(infoMoi.pseudo, "%s", pseudoUser);
         if(verbose)printf("\nDébut de la communication : \n");
-        if(verbose)printf("socketConnectedCli = %d\n", socketConnected);
+        if(verbose)printf("socketConnectedCli = %d\n", socketConnectedCli);
 
-        sendStruct(&infoMoi, sizeof(infoMoi), socketConnected);
+        sendStruct(&infoMoi, sizeof(infoMoi), socketConnectedCli);
         if(verbose)printf("Conexion établie sans soucis fermeture de la fonction... \n");
-        return CLI_OK;
+        return OK;
       }
       else{
         printf("Impossble de se connecter au serveur... :( \n");

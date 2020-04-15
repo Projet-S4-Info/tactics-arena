@@ -19,12 +19,12 @@ int playMenuMusic(int nb)
 
     if(verbose)printf("[SDL] Audio driver: %s\n", SDL_GetCurrentAudioDriver());
     
-    //int i, count = SDL_GetNumAudioDevices(0);
+    int i, count = SDL_GetNumAudioDevices(0);
     
-    /* -- Boucle debug audio --*/
-    // for (i = 0; i < count; ++i) {
-    //     printf("Audio device %d: %s\n", i, SDL_GetAudioDeviceName(i, 0));
-    // }
+     /*-- Boucle debug audio --*/
+     for (i = 0; i < count; ++i) {
+         printf("Audio device %d: %s\n", i, SDL_GetAudioDeviceName(i, 0));
+    }
 
 
     /* On ouvre le device audio */

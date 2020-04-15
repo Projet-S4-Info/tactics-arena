@@ -25,9 +25,10 @@
 #define _NB_MAX_TEXTURES_ 50
 
 
+
 /* =============== VARIABLES =============== */
 
-
+char chatTab[STR_LONG][_NB_MAX_ChAT_];
 
 
 
@@ -273,6 +274,12 @@ int displayAbilities(SDL_Renderer *renderer)
 	return 0;
 }
 
+err_t setChatTab(char chatTab[STR_LONG][_NB_MAX_ChAT_])
+// Set-up the chat array
+{
+	return OK;
+}
+
 int displayInterface(SDL_Renderer *renderer)
 // Display the UI
 {
@@ -380,8 +387,7 @@ int displayInterface(SDL_Renderer *renderer)
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 		SDL_RenderFillRect(renderer, &chatScreen);
 		displayText(renderer, chatBox.x + (chatBox.w /2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255);
-		//displaySprite(renderer, getTexture(textures,"close_btn"), chatScreen.w + chatScreen.x - 38 , chatScreen.y - 30);
-		
+
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
 		SDL_SetRenderDrawColor(renderer, 85, 34, 0, 255);
 		SDL_RenderFillRect(renderer, &chatMsg);

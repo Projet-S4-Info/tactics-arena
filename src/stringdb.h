@@ -7,7 +7,10 @@ char error_message[NUM_ERROR][STR_LONG] = {"",
                                             "ERROR : SDL error\n", 
                                             "ERROR : Coordinates out of limits\n", 
                                             "ERROR : String too long\n",
-                                            "ERROR : Ability coordinates were not initialised correctly\n"};
+                                            "ERROR : Ability coordinates were not initialised correctly\n"
+                                            "Error : Client not initialised  correctly\n"
+                                            "Error : Server not initialised correctly\n"
+                                            "Error : Structure not send correctly\n"};
 
 
 char statName[NUM_STATS][STR_SHORT] = {"pv", "mv", "vis", "atk", "magic", "res_physic", "res_magic"};
