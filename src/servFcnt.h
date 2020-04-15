@@ -24,7 +24,7 @@ extern char ipSrv[85];
 extern char pseudoUser[50];
 extern char MapMultiSelected[50];
 extern int socketConnected;
-extern int socketConnectedCli;
+extern int nbPlayer;
 
 err_t startTCPSocketServ();
 err_t startTCPSocketCli();

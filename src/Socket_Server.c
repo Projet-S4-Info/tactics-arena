@@ -51,8 +51,6 @@
   typedef struct sockaddr SOCKADDR;
 #endif
 
-int socketConnected = 0;
-
 unsigned int logFlag = 0;
 char pseudoCli[128];
 

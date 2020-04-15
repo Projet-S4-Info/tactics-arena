@@ -57,6 +57,9 @@
 char monStr[80];
 char monIP[85];
 
+int nbPlayer = 0;
+int socketConnected = 0;
+
 
 
 /**
