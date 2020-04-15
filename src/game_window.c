@@ -43,6 +43,7 @@ int hover_tchat = 0;						// Hover tchat button
 int hover_passive_help = 0;					// Hover passive help in ID card (with mouse position)
 int end_of_turn = 0;						// Fin de tour
 int isChatActive = 0;						// Chat button
+Direction camMove = -1;
 
 int xWinSize, yWinSize;						// x and y sizes of the window
 Coord mouse_position;
@@ -304,19 +305,26 @@ int createGameWindow(int x, int y)
 
 			if (SDL_GetMouseFocus() == pWindow)
 			{
+				camMove = -1;
 				// Déplacement de la caméra grâce aux bords de l'écran
 				if (e.motion.x <= xWinSize && e.motion.x >= xWinSize-20){
 					XPOS -= (camSpeed*(pxBase/64));
+					camMove = E;
 				}
 				if (e.motion.x >= 0 && e.motion.x <= 20){
 					XPOS += (camSpeed*(pxBase/64));
+					camMove = W;
 				}
 				if (e.motion.y <= yWinSize && e.motion.y >= yWinSize-20){
 					YPOS -= (camSpeed*(pxBase/64));
+					camMove = S;
 				}
-				if (e.motion.y <= 20){
+				if (e.motion.y <= 20 && e.motion.y >= 0){
 					YPOS += (camSpeed*(pxBase/64));
+					camMove = N;
 				}
+				mouse_position.x = e.motion.x;
+				mouse_position.y = e.motion.y;
 				// Vérification pour ne pas dépasser des "border" avec la caméra
 				if (XPOS > 500*(pxBase/64)) 	XPOS = 500*(pxBase/64);
 				if (XPOS < -1000*(pxBase/64)) 	XPOS = -1000*(pxBase/64);

@@ -99,6 +99,30 @@ int loadMapTextures(SDL_Renderer * renderer)
 						loadTexture(renderer, loadImage("../inc/img/selection_128.png")),
 						"selection");
 
+	// Loading arrow right texture
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/arrow_right_64.png")),
+						NULL,
+						"arrow_right");
+
+	// Loading arrow left texture
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/arrow_left_64.png")),
+						NULL,
+						"arrow_left");
+
+	// Loading arrow up texture
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/arrow_up_64.png")),
+						NULL,
+						"arrow_up");
+					
+	// Loading arrow down texture
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/arrow_down_64.png")),
+						NULL,
+						"arrow_down");
+
 	// Red team texture
 	addTextureToTable(	textures,
 						loadTexture(renderer, loadImage("../inc/img/red_team_64.png")),
@@ -461,6 +485,22 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 				if ((*(matrix+i*_X_SIZE_+j)).entity != NULL)
 				{
 					displayCharacters(renderer, cSprites, (*(matrix+i*_X_SIZE_+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
+				}
+
+				if (camMove != -1)
+				{
+					if (mouse_position.x <= xWinSize && mouse_position.x >= xWinSize-20){
+						displaySprite(renderer, getTexture(textures, "arrow_right"), xWinSize-64, mouse_position.y-32);
+					}
+					if (mouse_position.x >= 0 && mouse_position.x <= 20){
+						displaySprite(renderer, getTexture(textures, "arrow_left"), 0, mouse_position.y-32);
+					}
+					if (mouse_position.y <= yWinSize && mouse_position.y >= yWinSize-20){
+						displaySprite(renderer, getTexture(textures, "arrow_down"), mouse_position.x-32, yWinSize-64);
+					}
+					if (mouse_position.y <= 20 && mouse_position.y >= 0){
+						displaySprite(renderer, getTexture(textures, "arrow_up"), mouse_position.x-32, 0);
+					}
 				}
 
 				/*/ -- DEBUG Affichage des indices des tuiles --
