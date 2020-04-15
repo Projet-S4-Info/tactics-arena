@@ -17,6 +17,7 @@
 #include "turn.h"
 #include "display.h"
 #include "textures.h"
+#include "init.h"
 
 
 /* =============== CONSTANTES =============== */
@@ -297,6 +298,18 @@ int displayAbilities(SDL_Renderer *renderer)
 	displaySprite(renderer, getTexture(textures, "turn_left"), 16+6*80, yWinSize-80);
 
 	return 0;
+}
+
+err_t setEntitiesOnMap()
+// Set the initialized on the map
+{
+	for (int i = 0; i < NUM_CLASS; i++)
+	{
+		setEntityToTile(&Allies[i], Allies[i].coords);
+		setEntityToTile(&Foes[i], Foes[i].coords);
+	}
+
+	return OK;
 }
 
 err_t setChatTab(char chatTab[STR_LONG][_NB_MAX_ChAT_])
