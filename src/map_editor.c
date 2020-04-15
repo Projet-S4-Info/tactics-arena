@@ -231,7 +231,7 @@ int saveMap(Tile * grid, const char * name)
 
 	FILE * map;
 	map = fopen(mapName, "wb");
-	fwrite(grid, sizeof(Tile)*30*30, 1, map);
+	fwrite(grid, sizeof(Tile)*_X_SIZE_*_Y_SIZE_, 1, map);
 
 	fclose(map);
 
@@ -248,7 +248,7 @@ int loadMap(Tile * grid, const char * name)
 
 	FILE * map;
 	map = fopen(mapName, "rb");
-	fread(grid, sizeof(Tile)*30*30, 1, map);
+	fread(grid, sizeof(Tile)*_X_SIZE_*_Y_SIZE_, 1, map);
 
 	fclose(map);
 
