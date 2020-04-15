@@ -22,6 +22,7 @@
 #include "textures.h"	
 #include "turn.h"
 #include "gameplay.h"
+#include "test.h"
 
 
 /* =============== CONSTANTES ================ */
@@ -152,6 +153,8 @@ int createGameWindow(int x, int y)
 		SDL_RenderPresent(renderer);
 
 		Entity * tempEntity = NULL;
+
+		test();
 
 		int running = 1;
 		while(running) {

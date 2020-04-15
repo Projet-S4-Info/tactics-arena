@@ -36,7 +36,6 @@ Coord closest_free_tile(Coord c)
             }
         }
     }
-
     return active;
 }
 
