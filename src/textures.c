@@ -30,7 +30,7 @@ CharTexture charTextures[_NB_CLASSES_];
 /* =============== VARIABLES =============== */
 
 
-int pxBase = 64;
+int pxBase = 64;							// Resolution of a bloc texture (can be 64 or 128)
 
 
 /* =============== FONCTIONS =============== */
