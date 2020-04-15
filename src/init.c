@@ -16,10 +16,9 @@ Entity Foes[NUM_CLASS] = {};
 Ability Aura_ab;
 Ability Move_ab;
 
-err_t init_spawn(Entity * e, Coord c[NUM_CLASS])
+err_t init_spawn(Entity * e, Coord c)
 {
-
-    e->coords = c[e->cha_class->cla_id];
+    e->coords = c;
     if(verbose)printf("Spawning %s\n", e->cha_name);
 
     free_spawn(e);
@@ -29,9 +28,17 @@ err_t init_spawn(Entity * e, Coord c[NUM_CLASS])
 
 err_t send_ent(Entity *e)
 {
-    //init_ent ie = {e->cha_id, e->cha_name, e->cha_class->cla_id, e->base_stats, e->coords};
+    /*init_ent ie;
 
-    //sendStruct(&ie, sizeof(init_ent), socketConnected);
+    ie.char_id = e->cha_id;
+    sprintf(ie.cha_name,"%s",e->cha_name);
+    ie.cha_class = e->cha_class->cla_id;
+    
+    int i;
+
+    for(i=0;)
+
+    sendStruct(&ie, sizeof(init_ent), socketConnected);*/
     return OK;
 }
 
@@ -94,7 +101,7 @@ err_t init_Allies(Coord spawn[NUM_CLASS])
         }
 
         ent_common_init(&Allies[i]);
-        init_spawn(&Allies[i], spawn);
+        init_spawn(&Allies[i], spawn[s]);
 
         send_ent(&Allies[i]);
         sprintf(Allies[i].cha_name, "Friendly %s", classes[i].cla_name);
@@ -123,13 +130,13 @@ err_t ent_init_test(Entity *e, char title[STR_SHORT])
         {
             (e+i)->cha_id = i+1;
             (e+i)->direction = N;
-            init_spawn(e+i, ally_spawn);
+            init_spawn(e+i, ally_spawn[s]);
         }
         else
         {
             (e+i)->cha_id = (i+1)*-1;
             (e+i)->direction = S;
-            init_spawn(e+i, foe_spawn);
+            init_spawn(e+i, foe_spawn[s]);
         }
 
         (e+i)->active = Alive;

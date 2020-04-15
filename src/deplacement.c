@@ -18,7 +18,7 @@ Coord closest_free_tile(Coord c)
     {
         active = defiler(maFile);
         t = getTile(active);
-        if(verbose)printf("NUll : %d    Walk : %d\n", t->entity == NULL, t->walkable);
+        if(verbose)printf("Null : %d    Walk : %d\n", t->entity == NULL, t->walkable);
         if(t->entity == NULL && t->walkable)
         {
             detruire_file(maFile);
