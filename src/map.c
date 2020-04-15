@@ -28,6 +28,7 @@
 
 /* =============== VARIABLES =============== */
 
+
 char chatTab[STR_LONG][_NB_MAX_ChAT_];
 
 
@@ -47,121 +48,145 @@ int loadMapTextures(SDL_Renderer * renderer)
 
     // Loading blank pattern textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blank_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blank_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/blank_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/blank_128.png")),
 						"blank");
 
 	// Loading non-selected pattern textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/block_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/block_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_128.png")),
 						"block");
 
 	// Loading blue selected pattern textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/block_blue_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/block_blue_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_blue_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_blue_128.png")),
 						"blue_selected");
 
 	// Loading red selected pattern textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/block_red_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/block_red_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_red_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_red_128.png")),
 						"red_selected");
 
 	// Loading water block textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/water_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/water_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/water_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/water_128.png")),
 						"water");
 
 	// Loading sand block textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/sand_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/sand_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/sand_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/sand_128.png")),
 								"sand");
 
 	// Loading ice block textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/ice_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/ice_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/ice_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/ice_128.png")),
 								"ice");
 
 	// Loading snow block textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/block_snow_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/block_snow_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_128.png")),
 						"snow");
 
 	// Loading sand block textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/selection_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/selection_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/selection_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/selection_128.png")),
 						"selection");
+
+	// Loading arrow right texture
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/icons/arrow_right_64.png")),
+						NULL,
+						"arrow_right");
+
+	// Loading arrow left texture
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/icons/arrow_left_64.png")),
+						NULL,
+						"arrow_left");
+
+	// Loading arrow up texture
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/icons/arrow_up_64.png")),
+						NULL,
+						"arrow_up");
+					
+	// Loading arrow down texture
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/icons/arrow_down_64.png")),
+						NULL,
+						"arrow_down");
 
 	// Red team texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/red_team_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/red_team_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/red_team_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/red_team_128.png")),
 						"red_team");
 
 	// Blue team texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blue_team_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blue_team_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/blue_team_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/blue_team_128.png")),
 						"blue_team");
 
 	// Loading attack logo
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/attack_logo_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/attack_logo_64.png")),
 						NULL,
 						"attack");
 
 	// Clockwise turn icon
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/clockwise_icon_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/clockwise_icon_64.png")),
 						NULL,
 						"turn_right");
 					
 	// Anti-clockwise turn icon
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/anti_clockwise_icon_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/anti_clockwise_icon_64.png")),
 						NULL,
 						"turn_left");
 
 	// Loading end of turn button
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/turn_end_grey.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/turn_end_grey.png")),
 						NULL,
 						"end_turn");
 
 	// Loading end of turn button (hover)
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/turn_end_hover.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/turn_end_hover.png")),
 						NULL,
 						"end_turn_hover");
 	
 	// Loading tchat button
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/tchat_icon_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_64.png")),
 						NULL,
 						"tchat_button");
 
 	// Loading tchat button (hover)
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/tchat_icon_hover_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_hover_64.png")),
 						NULL,
 						"tchat_button_hover");
 
 	// Loading tchat  (selected)
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/tchat_icon_selected_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_selected_64.png")),
 						NULL,
 						"tchat_button_selected");
 
 	// Loading ID card texture
 	index = addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/id_card.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/id_card.png")),
 						NULL,
 						"id_card");
 
@@ -276,7 +301,8 @@ int displayAbilities(SDL_Renderer *renderer)
 
 err_t setChatTab(char chatTab[STR_LONG][_NB_MAX_ChAT_])
 // Set-up the chat array
-{
+{	
+
 	return OK;
 }
 
@@ -388,11 +414,19 @@ int displayInterface(SDL_Renderer *renderer)
 		SDL_RenderFillRect(renderer, &chatScreen);
 		displayText(renderer, chatBox.x + (chatBox.w /2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255);
 
+		if(chatTabIndex > 0){
+			displayText(renderer, chatScreen.x+2, chatScreen.y + 2, 15 , chatTab[0] , "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		}
+
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
 		SDL_SetRenderDrawColor(renderer, 85, 34, 0, 255);
 		SDL_RenderFillRect(renderer, &chatMsg);
-
-		displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , "Chat :", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		if(strlen(chat) > 33){
+			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , chat + (strlen(chat) - 33), "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		}else{
+			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , chat, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		}
+			
 	}
 	
 	
@@ -461,6 +495,22 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 				if ((*(matrix+i*_X_SIZE_+j)).entity != NULL)
 				{
 					displayCharacters(renderer, cSprites, (*(matrix+i*_X_SIZE_+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
+				}
+
+				if (camMove != -1)
+				{
+					if (mouse_position.x <= xWinSize && mouse_position.x >= xWinSize-20){
+						displaySprite(renderer, getTexture(textures, "arrow_right"), xWinSize-64, mouse_position.y-32);
+					}
+					if (mouse_position.x >= 0 && mouse_position.x <= 20){
+						displaySprite(renderer, getTexture(textures, "arrow_left"), 0, mouse_position.y-32);
+					}
+					if (mouse_position.y <= yWinSize && mouse_position.y >= yWinSize-20){
+						displaySprite(renderer, getTexture(textures, "arrow_down"), mouse_position.x-32, yWinSize-64);
+					}
+					if (mouse_position.y <= 20 && mouse_position.y >= 0){
+						displaySprite(renderer, getTexture(textures, "arrow_up"), mouse_position.x-32, 0);
+					}
 				}
 
 				/*/ -- DEBUG Affichage des indices des tuiles --
