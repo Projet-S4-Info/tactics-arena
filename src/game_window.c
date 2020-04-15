@@ -135,7 +135,9 @@ int createGameWindow(int x, int y)
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
 
-		loadMap(matrix, "map_test");
+		loadMap(matrix, "map_snowplains");
+
+		debugGrid(matrix, _X_SIZE_, _Y_SIZE_);
 
 		ent_init_test(Allies, "Friendly");
         ent_init_test(Foes, "Ennemy");
