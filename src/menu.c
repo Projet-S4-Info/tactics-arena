@@ -50,25 +50,25 @@ void loadMenuTextures(SDL_Renderer *renderer)
 	if(verbose)printf("Chargement des textures du menu...\n");
 
 	// == Loading background ==
-	background = loadTexture(renderer, loadImage("../inc/img/menu2_720p.png"));
+	background = loadTexture(renderer, loadImage("../inc/img/wallpapers/menu2_720p.png"));
 
 	// == Loading start button ==
-	start_button = loadTexture(renderer, loadImage("../inc/img/start_button_256.png"));
+	start_button = loadTexture(renderer, loadImage("../inc/img/buttons/start_button_256.png"));
 
 	// == Loading quit button ==
-	quit_button = loadTexture(renderer, loadImage("../inc/img/quit_button_256.png"));
+	quit_button = loadTexture(renderer, loadImage("../inc/img/buttons/quit_button_256.png"));
 
 	// == Loading music ON switch ==
-	music_on = loadTexture(renderer, loadImage("../inc/img/music_on.png"));
+	music_on = loadTexture(renderer, loadImage("../inc/img/icons/music_on.png"));
 
 	// == Loading music OFF switch ==
-	music_off = loadTexture(renderer, loadImage("../inc/img/music_off.png"));
+	music_off = loadTexture(renderer, loadImage("../inc/img/icons/music_off.png"));
 
 	// == Loading map editor button ==
-	map_editor_button = loadTexture(renderer, loadImage("../inc/img/map_editor_button_256.png"));
+	map_editor_button = loadTexture(renderer, loadImage("../inc/img/buttons/map_editor_button_256.png"));
 	
 	// == Loading Multi switch ==
-	multi_button = loadTexture(renderer, loadImage("../inc/img/multi_button_256.png"));
+	multi_button = loadTexture(renderer, loadImage("../inc/img/buttons/multi_button_256.png"));
 }
 
 void freeMenuTextures()

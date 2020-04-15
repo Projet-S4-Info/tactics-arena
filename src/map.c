@@ -48,145 +48,145 @@ int loadMapTextures(SDL_Renderer * renderer)
 
     // Loading blank pattern textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blank_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blank_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/blank_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/blank_128.png")),
 						"blank");
 
 	// Loading non-selected pattern textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/block_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/block_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_128.png")),
 						"block");
 
 	// Loading blue selected pattern textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/block_blue_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/block_blue_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_blue_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_blue_128.png")),
 						"blue_selected");
 
 	// Loading red selected pattern textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/block_red_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/block_red_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_red_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_red_128.png")),
 						"red_selected");
 
 	// Loading water block textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/water_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/water_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/water_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/water_128.png")),
 						"water");
 
 	// Loading sand block textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/sand_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/sand_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/sand_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/sand_128.png")),
 								"sand");
 
 	// Loading ice block textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/ice_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/ice_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/ice_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/ice_128.png")),
 								"ice");
 
 	// Loading snow block textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/block_snow_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/block_snow_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_128.png")),
 						"snow");
 
 	// Loading sand block textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/selection_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/selection_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/selection_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/selection_128.png")),
 						"selection");
 
 	// Loading arrow right texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/arrow_right_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/icons/arrow_right_64.png")),
 						NULL,
 						"arrow_right");
 
 	// Loading arrow left texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/arrow_left_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/icons/arrow_left_64.png")),
 						NULL,
 						"arrow_left");
 
 	// Loading arrow up texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/arrow_up_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/icons/arrow_up_64.png")),
 						NULL,
 						"arrow_up");
 					
 	// Loading arrow down texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/arrow_down_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/icons/arrow_down_64.png")),
 						NULL,
 						"arrow_down");
 
 	// Red team texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/red_team_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/red_team_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/red_team_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/red_team_128.png")),
 						"red_team");
 
 	// Blue team texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blue_team_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blue_team_128.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/blue_team_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/blue_team_128.png")),
 						"blue_team");
 
 	// Loading attack logo
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/attack_logo_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/attack_logo_64.png")),
 						NULL,
 						"attack");
 
 	// Clockwise turn icon
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/clockwise_icon_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/clockwise_icon_64.png")),
 						NULL,
 						"turn_right");
 					
 	// Anti-clockwise turn icon
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/anti_clockwise_icon_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/anti_clockwise_icon_64.png")),
 						NULL,
 						"turn_left");
 
 	// Loading end of turn button
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/turn_end_grey.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/turn_end_grey.png")),
 						NULL,
 						"end_turn");
 
 	// Loading end of turn button (hover)
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/turn_end_hover.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/turn_end_hover.png")),
 						NULL,
 						"end_turn_hover");
 	
 	// Loading tchat button
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/tchat_icon_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_64.png")),
 						NULL,
 						"tchat_button");
 
 	// Loading tchat button (hover)
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/tchat_icon_hover_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_hover_64.png")),
 						NULL,
 						"tchat_button_hover");
 
 	// Loading tchat  (selected)
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/tchat_icon_selected_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_selected_64.png")),
 						NULL,
 						"tchat_button_selected");
 
 	// Loading ID card texture
 	index = addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/id_card.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/id_card.png")),
 						NULL,
 						"id_card");
 
