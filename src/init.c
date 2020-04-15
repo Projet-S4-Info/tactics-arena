@@ -19,7 +19,7 @@ Ability Move_ab;
 err_t init_spawn(Entity * e, Coord c)
 {
     e->coords = c;
-    if(verbose)printf("Spawning %s\n", e->cha_name);
+    if(verbose)printf("Setting %s Spawn at %d %d\n", e->cha_name, c.x, c.y);
 
     free_spawn(e);
     
@@ -60,7 +60,7 @@ err_t ent_common_init(Entity *e)
     return OK;
 }
 
-err_t init_Foes()
+err_t init_Foes(Direction d)
 {
     init_ent e;
     int i,j;
@@ -70,6 +70,7 @@ err_t init_Foes()
         Foes[e.cha_class].cha_id = e.char_id;
         sprintf(Foes[e.cha_class].cha_name, "Ennemy %s", e.cha_name);
         Foes[e.cha_class].cha_class = &classes[e.cha_class];
+        Foes[e.cha_class].direction = d;
         
         for(j=0; j<NUM_STATS; j++)
         {
@@ -84,7 +85,7 @@ err_t init_Foes()
     return OK;
 }
 
-err_t init_Allies(Coord spawn[NUM_CLASS])
+err_t init_Allies(Coord spawn[NUM_CLASS], Direction d)
 {
     classId spawn_order[NUM_CLASS] = {Ranger, Mage, Angel, Valkyrie, Goliath, Berserker};
     int s,i,j;
@@ -94,6 +95,7 @@ err_t init_Allies(Coord spawn[NUM_CLASS])
         Allies[i].cha_id = i+1;
         sprintf(Allies[i].cha_name, "%s", classes[i].cla_name);
         Allies[i].cha_class = &classes[i];
+        Allies[i].direction = d;
         
         for(j=0; j<NUM_STATS; j++)
         {
@@ -129,7 +131,7 @@ err_t ent_init_test(Entity *e, char title[STR_SHORT])
         if(e==Allies)
         {
             (e+i)->cha_id = i+1;
-            (e+i)->direction = N;
+            (e+i)->direction = W;
             init_spawn(e+i, ally_spawn[s]);
         }
         else
