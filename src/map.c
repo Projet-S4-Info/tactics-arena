@@ -300,18 +300,6 @@ int displayAbilities(SDL_Renderer *renderer)
 	return 0;
 }
 
-err_t setEntitiesOnMap()
-// Set the initialized on the map
-{
-	for (int i = 0; i < NUM_CLASS; i++)
-	{
-		setEntityToTile(&Allies[i], Allies[i].coords);
-		setEntityToTile(&Foes[i], Foes[i].coords);
-	}
-
-	return OK;
-}
-
 err_t setChatTab(char chatTab[STR_LONG][_NB_MAX_ChAT_])
 // Set-up the chat array
 {	

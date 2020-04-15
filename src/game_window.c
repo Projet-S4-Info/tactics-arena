@@ -144,9 +144,6 @@ int createGameWindow(int x, int y)
 
 		SDL_Delay(1);
 
-		// Set the initalized entities on the map
-		setEntitiesOnMap();
-
 		displayMap(renderer, XPOS, YPOS);
 
 		SDL_RenderPresent(renderer);
@@ -181,26 +178,29 @@ int createGameWindow(int x, int y)
 						tempEntity = getEntity(getSelectedPos());
 						if (tempEntity != NULL)
 						{
-							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16 && your_turn())
+							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
 							{
-								if (e.motion.x >= 16 && e.motion.x <= 80)			selected_ability = Mvt;
-								else if (e.motion.x >= 96 && e.motion.x <= 160)
-									if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
-									else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
-								else if (e.motion.x >= 176 && e.motion.x <= 240)
-									if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
-									else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
-								else if (e.motion.x >= 256 && e.motion.x <= 320)
-									if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
-									else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
-								else if (e.motion.x >= 336 && e.motion.x <= 400)
-									if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-									else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
-								else if (e.motion.x >= 416 && e.motion.x <= 480) turnRight(tempEntity);
-								else if (e.motion.x >= 496 && e.motion.x <= 560) turnLeft(tempEntity);
-								else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
+								if (your_turn())
+								{
+									if (e.motion.x >= 16 && e.motion.x <= 80)			selected_ability = Mvt;
+									else if (e.motion.x >= 96 && e.motion.x <= 160)
+										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+										else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
+									else if (e.motion.x >= 176 && e.motion.x <= 240)
+										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
+										else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
+									else if (e.motion.x >= 256 && e.motion.x <= 320)
+										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
+										else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
+									else if (e.motion.x >= 336 && e.motion.x <= 400)
+										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
+										else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
+									else if (e.motion.x >= 416 && e.motion.x <= 480) turnRight(tempEntity);
+									else if (e.motion.x >= 496 && e.motion.x <= 560) turnLeft(tempEntity);
+									else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 
-								if(verbose)printf("Selected ability : %d\n", selected_ability);
+									if(verbose)printf("Selected ability : %d\n", selected_ability);
+								}
 
 							} else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 							
