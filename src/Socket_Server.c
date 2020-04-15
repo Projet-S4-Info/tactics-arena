@@ -65,6 +65,7 @@ err_t stopTcpSocketServ(int socketConnected){
   shutdown(socketConnected, 2);
   printf("Close socket : socketConnected...\n");
   closesocket(socketConnected);
+  nbPlayer -= 1; 
   return OK;
 }
 
@@ -175,7 +176,7 @@ err_t startTCPSocketServ(){
               if(verbose)printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
               sprintf(pseudoCli, "%s s'est connecté !", infoClient.pseudo);
               if(verbose)printf("SocketServer pseudoCli : %s\n", pseudoCli);
-              logFlag = 5; 
+              logFlag = 5;
             }
             
             
@@ -217,5 +218,6 @@ err_t startTCPSocketServ(){
     printf("Un problème est survenu avec Windows :( \n");
     return SERV_ERROR;
   }
+  nbPlayer = 2; 
   return OK;
 }

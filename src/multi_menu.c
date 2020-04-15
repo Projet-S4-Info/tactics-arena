@@ -606,7 +606,7 @@ int displayMenuMulti(int x, int y)
 						}
 						
 						// Nouveau boutton "QUIT" 
-						else if (u.motion.x >= 1000 && u.motion.x <= 1190 && u.motion.y >= 627 && u.motion.y <= 680 ){
+						else if (u.motion.x >= 1000 && u.motion.x <= 1190 && u.motion.y >= 627 && u.motion.y <= 680 && (isHostMenu == 1 || isJoinMenu == 1)){
 							closeWindow(pWindow);
 							freeMultiMenuTextures();
 						}

@@ -60,6 +60,7 @@ err_t stopTCPSocketCli(int socketCli){
   if(verbose)printf("Fermeture du socket Client ... \n");
   shutdown(socketCli, 2);
   closesocket(socketCli);
+  nbPlayer -= 1; 
   return OK;
 }
 
@@ -127,7 +128,7 @@ err_t startTCPSocketCli(int socketCli){
         if(verbose)printf("socketConnectedCli = %d\n", socketConnected);
 
         sendStruct(&infoMoi, sizeof(infoMoi), socketConnected);
-        if(verbose)printf("Conexion établie sans soucis fermeture de la fonction... \n");
+        if(verbose)printf("Conexion établie sans soucis fermeture de la fonction... \n"); 
         return OK;
       }
       else{
