@@ -184,3 +184,9 @@ void turnLeft(Entity * entity)
     if (entity->direction == N) entity->direction = W;
     else entity->direction--;
 }
+
+bool isInGrid(Coord pos)
+// Return true if the given coord is in the grid
+{
+    return (pos.x < _X_SIZE_ && pos.x >= 0 && pos.y < _Y_SIZE_ && pos.y >= 0);
+}
