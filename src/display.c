@@ -43,11 +43,7 @@ int xWinSize, yWinSize;						// x and y sizes of the window
 Coord mouse_position;
 Log logs[_NB_MAX_LOGS_];
 
-chat_t chat = {
-	{},
-	-1,
-	-1
-};
+chat_t chat;
 
 
 /* =============== FONCTIONS ================ */
