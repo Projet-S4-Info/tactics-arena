@@ -57,10 +57,7 @@ int createGameWindow(int x, int y)
     // Le pointeur vers la fenetre
 	SDL_Window* pWindow = NULL;
 	SDL_Renderer *renderer=NULL;
-
-	// Resolution of a bloc texture (can be 64 or 128)
-	int PX = 64;
-
+	
 	// x and y pos where map is displayed
 	int XPOS = 50;
 	int YPOS = 50;
@@ -223,15 +220,15 @@ int createGameWindow(int x, int y)
 					case SDL_MOUSEWHEEL:
 						if (e.wheel.y > 0)		// Scroll UP
 						{
-							if (PX == 64){
-								PX = 128;
+							if (pxBase == 64){
+								pxBase = 128;
 								if(verbose)printf("[GRAPHICS] Zoom In\n");
 								XPOS *= 2;
 								YPOS *= 2;
 							}
 						} else {				// Scroll DOWN
-							if (PX == 128){
-								PX = 64;
+							if (pxBase == 128){
+								pxBase = 64;
 								if(verbose)printf("[GRAPHICS] Zoom Out\n");
 								XPOS /= 2;
 								YPOS /= 2;
@@ -242,16 +239,18 @@ int createGameWindow(int x, int y)
 						switch(e.key.keysym.sym)
 						{
 							case SDLK_KP_PLUS: 	// "+" key
-								if (PX == 64){
-									PX = 128;
+								if (pxBase == 64){
+									pxBase = 128;
+									addLog("PX 128");
 									if(verbose)printf("[GRAPHICS] Zoom In\n");
 									XPOS *= 2;
 									YPOS *= 2;	
 								}
 								break;
 							case SDLK_KP_MINUS:	// "-" key
-								if (PX == 128){
-									PX = 64;
+								if (pxBase == 128){
+									pxBase = 64;
+									addLog("PX 64");
 									if(verbose)printf("[GRAPHICS] Zoom Out\n");
 									XPOS /= 2;
 									YPOS /= 2;
@@ -307,22 +306,22 @@ int createGameWindow(int x, int y)
 			{
 				// Déplacement de la caméra grâce aux bords de l'écran
 				if (e.motion.x <= xWinSize && e.motion.x >= xWinSize-20){
-					XPOS -= (camSpeed*(PX/64));
+					XPOS -= (camSpeed*(pxBase/64));
 				}
 				if (e.motion.x >= 0 && e.motion.x <= 20){
-					XPOS += (camSpeed*(PX/64));
+					XPOS += (camSpeed*(pxBase/64));
 				}
 				if (e.motion.y <= yWinSize && e.motion.y >= yWinSize-20){
-					YPOS -= (camSpeed*(PX/64));
+					YPOS -= (camSpeed*(pxBase/64));
 				}
 				if (e.motion.y <= 20){
-					YPOS += (camSpeed*(PX/64));
+					YPOS += (camSpeed*(pxBase/64));
 				}
 				// Vérification pour ne pas dépasser des "border" avec la caméra
-				if (XPOS > 500*(PX/64)) 	XPOS = 500*(PX/64);
-				if (XPOS < -1000*(PX/64)) 	XPOS = -1000*(PX/64);
-				if (YPOS > 300*(PX/64))		YPOS = 300*(PX/64);
-				if (YPOS < -500*(PX/64)) 	YPOS = -500*(PX/64);
+				if (XPOS > 500*(pxBase/64)) 	XPOS = 500*(pxBase/64);
+				if (XPOS < -1000*(pxBase/64)) 	XPOS = -1000*(pxBase/64);
+				if (YPOS > 300*(pxBase/64))		YPOS = 300*(pxBase/64);
+				if (YPOS < -500*(pxBase/64)) 	YPOS = -500*(pxBase/64);
 
 				displayMap(renderer, XPOS, YPOS);
 			}

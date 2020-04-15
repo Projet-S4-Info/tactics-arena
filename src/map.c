@@ -28,8 +28,8 @@
 
 /* =============== VARIABLES =============== */
 
-char chatTab[STR_LONG][_NB_MAX_ChAT_];
 
+char chatTab[STR_LONG][_NB_MAX_ChAT_];
 
 
 /* =============== FONCTIONS =============== */
