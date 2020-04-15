@@ -49,7 +49,8 @@ Direction camMove = -1;
 int xWinSize, yWinSize;						// x and y sizes of the window
 Coord mouse_position;
 
-char chat[STR_LONG] = "Chat : ";
+char pseudoChat[STR_SHORT] = "Chat : ";
+
 char *compo;
 
 extern Sint32 cursor;
@@ -157,6 +158,15 @@ int createGameWindow(int x, int y)
 		SDL_RenderPresent(renderer);
 
 		Entity * tempEntity = NULL;
+
+		/*--------- to test -----------*/
+		char temp[50] = "THILOUROCIEN";
+
+		/*-----------------------------*/
+		if(isAServer != 1){
+			sprintf(pseudoUser, "%s", temp);
+		}
+		sprintf(chat, "%s : ", pseudoUser);
 
 		int running = 1;
 		while(running) {
@@ -266,15 +276,16 @@ int createGameWindow(int x, int y)
 								break;
 							case SDLK_BACKSPACE:
 								if(isChatActive == 1){
-									if (strlen(chat) > 7){
+									if (strlen(chat) > strlen(pseudoUser) + 3){
 										chat[strlen(chat)-1] = '\0';
 									}
 								}
 								break;
 							case SDLK_RETURN:
 								if(isChatActive == 1){
-									sprintf(chatTab[chatTabIndex], "%s",chat);
+									addMsgToChatTab(chat,chatTabIndex);
 									chatTabIndex += 1;
+									sprintf(chat, "%s : ",pseudoUser);
 								}
 						}
 					break;

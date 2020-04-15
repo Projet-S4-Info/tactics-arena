@@ -18,6 +18,7 @@
 #include "grid.h"
 #include "init.h"
 #include "gameplay.h"
+#include "game_window.h"
 
 
 /* =============== CONSTANTES ================ */
@@ -41,6 +42,12 @@ const int camSpeed = 5;						// Speed of the camera movements
 int xWinSize, yWinSize;						// x and y sizes of the window
 Coord mouse_position;
 Log logs[_NB_MAX_LOGS_];
+
+chat_t chat = {
+	{},
+	-1,
+	-1
+};
 
 
 /* =============== FONCTIONS ================ */
@@ -244,5 +251,39 @@ err_t removeOldLogs(Uint32 time)
 		}
 	}
 
+	return OK;
+}
+
+// err_t addMsgToChatTab(char * msg, int chatTabIndex){
+// 	if(chatTabIndex > 0){
+// 		if(chatTabIndex > _NB_MAX_CHAT_){
+// 			chatTabIndex = _NB_MAX_CHAT_;
+// 			for(int i = 0; i <= chatTabIndex -1; i++){
+// 				free(chatTab[i].chatMsg);
+// 				chatTab[i].chatMsg = malloc(sizeof(char) * strlen(chatTab[i+1].chatMsg));
+// 				strcpy(chatTab[i].chatMsg, chatTab[i + 1].chatMsg);
+// 			}
+// 			free(chatTab[chatTabIndex].chatMsg);
+// 			chatTab[chatTabIndex].chatMsg = malloc(sizeof(char) * strlen(msg));
+// 			strcpy(chatTab[chatTabIndex].chatMsg, msg);
+// 		}else{
+// 			chatTab[chatTabIndex].chatMsg = malloc(sizeof(char) * strlen(msg));
+// 			strcpy(chatTab[chatTabIndex].chatMsg, msg);
+// 		}
+// 	}else{
+// 		chatTab[0].chatMsg = malloc(sizeof(char) * strlen(msg));
+// 		strcpy(chatTab[0].chatMsg, msg);
+// 	}
+	
+// 	return OK;
+// }
+
+
+
+err_t addMsgToChatTab(char msg[STR_LONG]){
+	if(chat.first == -1){
+		strcpy(chat.chatTab[0], msg);
+	}
+	
 	return OK;
 }

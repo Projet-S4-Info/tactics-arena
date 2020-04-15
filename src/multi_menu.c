@@ -10,8 +10,8 @@
 #include "game_window.h"
 #include "display.h"
 #include "textures.h"
-#include "servFcnt.h"
 #include "multi_menu.h"
+#include "servFcnt.h"
 #include <unistd.h>
 #include <string.h>
 #include <pthread.h>
@@ -45,6 +45,7 @@ int indexMapMulti = 0;
 char pseudoSrv[50] = "Pseudo : ";
 char pseudoJoin[50] = "Pseudo : ";
 char pseudoUser[50];
+char pseudoClient[128];
 char ipSrv[85];
 char ipJoin[90] = "IP : ";
 char *compo;
@@ -165,7 +166,7 @@ void dispLog(SDL_Renderer *renderer, int consoleX, int consoleY){
 	for(int i = 0; i < logFlag; i++ ){
 		displayText(renderer, consoleX + 20, consoleY + (25 * i) , 22, tabLog[i], "../inc/font/PixelOperator.ttf", 255, 255, 255);
 		if(i == 4 ){
-			displayText(renderer, consoleX + 20, consoleY + (25 * i) , 22, pseudoCli, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+			displayText(renderer, consoleX + 20, consoleY + (25 * i) , 22, pseudoClient, "../inc/font/PixelOperator.ttf", 255, 255, 255);
 			displaySprite(renderer, ok_button_Multi, 530, 450);
 			displayText(renderer, 605, 540, 45, "Start", "../inc/font/PixelOperator.ttf", 255, 255, 255);
 			isClientCo = 1;

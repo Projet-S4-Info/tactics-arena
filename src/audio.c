@@ -23,7 +23,7 @@ int playMenuMusic(int nb)
     
      /*-- Boucle debug audio --*/
      for (i = 0; i < count; ++i) {
-         printf("Audio device %d: %s\n", i, SDL_GetAudioDeviceName(i, 0));
+         if(verbose)printf("Audio device %d: %s\n", i, SDL_GetAudioDeviceName(i, 0));
     }
 
 
