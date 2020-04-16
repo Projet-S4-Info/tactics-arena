@@ -115,11 +115,7 @@ bool isInRange(Coord coorTab[], Coord attack){
         }
         if(verbose)printf("\n");
     }
-    if(touchLine == 1){
-        return TRUE;
-    }else{
-        return FALSE;
-    }
+    return touchLine%2 == 1;
 }
 
 int setActionZone(Coord perso, int actionRange, Coord coorTab[]){
@@ -150,34 +146,53 @@ int setActionZone(Coord perso, int actionRange, Coord coorTab[]){
 
 Coord * setMovementZone(int matrice[_X_SIZE_][_Y_SIZE_], Coord tab[])
 {
-    int i,j;
+    int i,j,k,l = 0;
+    Coord add[4] = {{1,0},{-1,0},{0,1},{0,-1}};
+    Coord b,c;
 
     for(i=0; i<_X_SIZE_; i++)
     {
         for(j=0; j<_Y_SIZE_; j++)
         {
-            break;
+            if(matrice[i][j]!=-1)
+            {
+                b.x = i;
+                b.y = j;
+                for(k=0; k<4; k++)
+                {
+                    c = add_coords(b, add[k]);
+                    if( !isInGrid(c) || matrice[c.x][c.y]==-1 )
+                    {
+                        tab[l++] = b;
+                    }
+                }
+            }
         }
     }
+    
+    b.x = -99;
+    b.y = -99;
+    tab[l] = b;
 
-    return tab;
+    return (Coord *)tab;
 }
 
-err_t get_border(int cha_id, abilityId Id, Coord coorTab[])
+Coord * get_border(int cha_id, abilityId Id, Coord coorTab[])
 {
     Entity * e = e_from_id(cha_id);
 
+    int matrice[_X_SIZE_][_Y_SIZE_];
 
     if(Id == Mvt)
     {
-        //fn Louis
+        setMovementZone(fill_tiles(e->coords, matrice, e->stat_mods[mv]), coorTab);
     }
     else
     {
         setActionZone(e->coords, get_range(e, Id), coorTab);
     }
 
-    return OK;
+    return coorTab;
 }
 
 bool Cast_check(action a, Coord coorTab[])

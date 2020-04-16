@@ -22,6 +22,8 @@ err_t init_spawn(Entity * e, Coord c)
     if(verbose)printf("Setting %s Spawn at %d %d\n", e->cha_name, c.x, c.y);
 
     free_spawn(e);
+
+    if(verbose)printf("%s Spawn Set to %d %d\n", e->cha_name, e->coords.x, e->coords.y);
     
     return OK;
 }

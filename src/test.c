@@ -3,28 +3,50 @@
 #include "deplacement.h"
 #include "grid.h"
 #include "map_editor.h"
+#include "border.h"
 #include <stdio.h>
 
 void test()
 {
-    Entity * e;
+    /*loadMap(matrix, "map_sandy_pass");
 
-    int i;
-    for(i=0; i<NUM_CLASS; i++)
-    {
-        printf("\n");
-        printf("Allies[%d] : %s\n", i, Allies[i].cha_class->cla_name);
-        printf("x : %d y : %d\n", Allies[i].coords.x, Allies[i].coords.y);
-        e = getEntity(Allies[i].coords);
-        printf("Tile : %d\n", e == &Allies[i]);
+	debugGrid(matrix, _X_SIZE_, _Y_SIZE_);
 
-        printf("\n");
-        printf("Foes[%d] : %s\n", i, Foes[i].cha_class->cla_name);
-        printf("x : %d y : %d\n", Foes[i].coords.x, Foes[i].coords.y);
-        e = getEntity(Foes[i].coords);
-        printf("Tile : %d\n", e == &Foes[i]);
+	ent_init_test(Allies, "Friendly");
+    ent_init_test(Foes, "Ennemy");
 
-    }
+    int matrice[_X_SIZE_][_Y_SIZE_];
+    char m[_X_SIZE_][_Y_SIZE_];
 
-    printf("\nend of\n");
+    Coord coorTab[MAXRANGE];
+
+    Entity * e = &Foes[Ranger];
+
+   setMovementZone(fill_tiles(e->coords, matrice, e->stat_mods[mv]), coorTab);
+
+   int i,j;
+       
+   for(i=0; i<_X_SIZE_; i++)
+   {
+       for(j=0; j<_Y_SIZE_; j++)
+       {
+           m[i][j] = " ";
+       }
+   }
+
+   for(i=0; i<_X_SIZE_; i++)
+   {
+       m[coorTab[i].x][coorTab[i].y] = "X";
+   }
+
+   for(i=0; i<_X_SIZE_; i++)
+   {
+       printf("|");
+       for(j=0; j<_Y_SIZE_; j++)
+       {
+           printf("%c|", m[i][j]);
+       }
+       printf("\n");
+   }
+    */
 }
