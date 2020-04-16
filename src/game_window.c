@@ -23,6 +23,7 @@
 #include "turn.h"
 #include "gameplay.h"
 #include "chat.h"
+#include "print.h"
 
 
 /* =============== CONSTANTES ================ */
@@ -147,6 +148,15 @@ int createGameWindow(int x, int y)
         ent_init_test(Foes, "Ennemy");
 
 		SDL_Delay(1);
+
+		if (verbose)
+		{
+			for (int i=0; i < NUM_CLASS; i++)
+			{
+				print_Coord(&Allies[i].coords, "");
+				print_Coord(&Foes[i].coords, "");
+			}
+		}
 
 		displayMap(renderer, XPOS, YPOS);
 

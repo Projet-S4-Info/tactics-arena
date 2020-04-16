@@ -180,8 +180,10 @@ Coord * setMovementZone(int matrice[_X_SIZE_][_Y_SIZE_], Coord tab[])
 Coord * get_border(int cha_id, abilityId Id, Coord coorTab[])
 {
     Entity * e = e_from_id(cha_id);
-
     int matrice[_X_SIZE_][_Y_SIZE_];
+    
+    if(verbose)printf("Selected Entity : %s\n", e->cha_name);
+    if(verbose)printf("Selected Entity pos : %d, %d\n", e->coords.x, e->coords.y);
 
     if(Id == Mvt)
     {

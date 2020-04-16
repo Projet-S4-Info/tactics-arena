@@ -18,6 +18,7 @@
 #include "display.h"
 #include "textures.h"
 #include "init.h"
+#include "border.h"
 
 
 /* =============== CONSTANTES =============== */
@@ -29,6 +30,11 @@
 
 /* =============== VARIABLES =============== */
 
+
+char selectedAbilityDesc[STR_LONG];
+char hoverAbilityDesc[STR_LONG];
+Coord rangeTab[MAXRANGE];
+Coord drawPos = {-1, -1};
 
 
 /* =============== FONCTIONS =============== */
@@ -92,11 +98,17 @@ int loadMapTextures(SDL_Renderer * renderer)
 						loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_128.png")),
 						"snow");
 
-	// Loading sand block textures
+	// Loading selection textures
 	addTextureToTable(	textures,
 						loadTexture(renderer, loadImage("../inc/img/interface/selection_64.png")),
 						loadTexture(renderer, loadImage("../inc/img/interface/selection_128.png")),
 						"selection");
+
+	// Loading ability range textures
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/interface/ability_range_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/ability_range_128.png")),
+						"ability_range");
 
 	// Loading arrow right texture
 	addTextureToTable(	textures,
@@ -328,15 +340,18 @@ int displayInterface(SDL_Renderer *renderer)
 
 	if (tempEntity != NULL)
 	{
-		displayAbilities(renderer);
-		if (selected_ability != -1){
-			displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, selected_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
-		} else {
-			if (hover_ability >= 0) 
-			{
-				char abilityDesc[STR_LONG];
-				sprintf(abilityDesc, "%s : %s", strToUpper(get_name(tempEntity, hover_ability)), get_desc(tempEntity, hover_ability));
-				displayText(renderer, 16, yWinSize-110, 20, abilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255);
+		if (is_ally(tempEntity))
+		{
+			displayAbilities(renderer);
+			if (selected_ability != -1){
+				sprintf(selectedAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, selected_ability)), get_desc(tempEntity, selected_ability));
+				displayText(renderer, 16, yWinSize-110, 20, selectedAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255);
+			} else {
+				if (hover_ability >= 0) 
+				{
+					sprintf(hoverAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, hover_ability)), get_desc(tempEntity, hover_ability));
+					displayText(renderer, 16, yWinSize-110, 20, hoverAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255);
+				}
 			}
 		}
 
@@ -442,6 +457,11 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
     SDL_SetRenderDrawColor(renderer, 173, 216, 230, 255);
 	SDL_RenderClear(renderer);
 
+	if (selected_ability != -1)
+	{
+		get_border(getEntity(getSelectedPos())->cha_id, selected_ability, rangeTab);
+	}
+
     for (int i=0; i < _X_SIZE_; i++){
         for (int j=(_Y_SIZE_-1); j >= 0; j--){
 
@@ -463,6 +483,18 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 				{
 					if (pxBase == 64)	displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].texture, blockPos.x, blockPos.y);
 					else 				displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].big_texture, blockPos.x, blockPos.y);
+				}
+
+				// Affichage portée d'attaque (si compétence sélectionnée)
+				if (selected_ability != -1)
+				{
+					drawPos.x = i;
+					drawPos.y = j;
+					if (isInCoordTab(rangeTab, drawPos))
+					{
+						if (pxBase == 64) displaySprite(renderer, getTexture(textures, "ability_range"), blockPos.x, blockPos.y);
+						else displaySprite(renderer, getBigTexture(textures, "ability_range"), blockPos.x, blockPos.y);
+					}
 				}
 
 				// Affichage équipe
