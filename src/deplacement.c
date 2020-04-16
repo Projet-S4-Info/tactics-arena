@@ -44,7 +44,7 @@ Coord closest_free_tile(Coord c)
 }
 
 
-int * fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_])
+int * fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_], int max)
 {
     //On initialise la matrice à -1
     int i, j;
@@ -64,31 +64,34 @@ int * fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_])
     Coord add[4] = {{1,0},{-1,0},{0,1},{0,-1}};
     Tile * t;
 
-    printf("\n");
+    if(verbose)printf("\n");
     while(!file_vide(maFile))
     {
         active = defiler(maFile);
 
-        printf("Active : %d %d\n", active.x, active.y);
+        if(verbose)printf("Active : %d %d\n", active.x, active.y);
 
         for(i=0; i<4; i++)
         {
             active_2 = add_coords(active, add[i]);
-            printf("    Active_2 : %d %d\n", active_2.x, active_2.y);
+            if(verbose)printf("    Active_2 : %d %d\n", active_2.x, active_2.y);
             if(isInGrid(active_2))
             {
-                printf("        In Grid\n");
+                if(verbose)printf("        In Grid\n");
                 t = getTile(active_2);
 
                 if(matrice[active_2.x][active_2.y]==-1 && t->walkable && t->entity == NULL)
                 {
-                    printf("        Adding\n");
+                    if(verbose)printf("        Adding\n");
                     matrice[active_2.x][active_2.y] = matrice[active.x][active.y] + 1;
-                    enfiler(maFile, active_2);
+                    if(matrice[active_2.x][active_2.y] < max)
+                    {
+                        enfiler(maFile, active_2);
+                    }
                 }
                 else
                 {
-                    printf("        Not Adding\n");
+                    if(verbose)printf("        Not Adding\n");
                 }
             }
         }
@@ -96,9 +99,13 @@ int * fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_])
     return (int *)matrice;
 }
 
-Coord * pathfinding()
+Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goal)
 {
     //je me place à la coord de fin sur la matrice et je la met dans le tableau bis 
+    Coord tab_bis[MAXRANGE];
+    int t = 0;
+    tab_bis[t++] = goal;
+
     //je regarde les chiffres aux alentours 
     //je prends le plus petit (sauf -1)
     //ensuite je suis le chemin du plus petit au plus petit jusqu'a 0 
