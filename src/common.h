@@ -4,7 +4,7 @@
 #define STR_SHORT 50
 #define STR_LONG 256
 #define NUM_ERROR 8
-#define MAXRANGE 101
+#define MAXRANGE 256
 #define taille 30
 #define _NB_MAX_CHAT_ 10
 

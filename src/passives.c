@@ -2,6 +2,7 @@
 #include "init_classes.h"
 #include "init.h"
 #include "display.h"
+#include "border.h"
 
 int Bloodlust_counter;
 bool Sentinel_counter;
