@@ -20,6 +20,12 @@
 extern int pxBase;
 
 
+/* =============== STRUCTURES =============== */
+
+
+typedef enum {BLANK, BLOCK, BLUE, RED, WATER, SAND, ICE, SNOW} block_id;
+
+
 /* =============== DICTIONNAIRES DE TEXTURES =============== */
 
 

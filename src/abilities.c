@@ -6,6 +6,7 @@
 #include "characters.h"
 #include "display.h"
 #include "deplacement.h"
+#include "border.h"
 
 int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
 {
