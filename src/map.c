@@ -33,7 +33,8 @@
 
 char selectedAbilityDesc[STR_LONG];
 char hoverAbilityDesc[STR_LONG];
-Coord rangeTab[MAXRANGE];
+Coord borderTab[MAXRANGE];
+Coord rangeTab[_X_SIZE_*_Y_SIZE_];
 Coord drawPos = {-1, -1};
 
 
@@ -459,7 +460,7 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 
 	if (selected_ability != -1)
 	{
-		get_border(getEntity(getSelectedPos())->cha_id, selected_ability, rangeTab);
+		get_border(getEntity(getSelectedPos())->cha_id, selected_ability, borderTab, rangeTab);
 	}
 
     for (int i=0; i < _X_SIZE_; i++){
@@ -490,7 +491,7 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 				{
 					drawPos.x = i;
 					drawPos.y = j;
-					if (isInCoordTab(rangeTab, drawPos))
+					if (isInCoordTab(rangeTab, drawPos) || isInCoordTab(borderTab, drawPos))
 					{
 						if (pxBase == 64) displaySprite(renderer, getTexture(textures, "ability_range"), blockPos.x, blockPos.y);
 						else displaySprite(renderer, getBigTexture(textures, "ability_range"), blockPos.x, blockPos.y);
