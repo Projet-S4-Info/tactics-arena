@@ -157,19 +157,16 @@ int createGameWindow(int x, int y)
 			}
 		}
 
-		displayMap(renderer, XPOS, YPOS);
-
 		SDL_RenderPresent(renderer);
 
 		Entity * tempEntity = NULL;
-
 
 		init_chat(&chat);
 
 		/*--------- to test -----------*/
 		char temp[50] = "THILOUROCIEN";
-
 		/*-----------------------------*/
+
 		if(isAServer != 1){
 			sprintf(pseudoUser, "%s", temp);
 		}
@@ -180,8 +177,12 @@ int createGameWindow(int x, int y)
 			SDL_Event e;
 			while(SDL_PollEvent(&e)) {
 				switch(e.type) {
+
+
 					case SDL_QUIT: running = 0;
 					break;
+
+
 					case SDL_WINDOWEVENT:
 						switch(e.window.event){
 							case SDL_WINDOWEVENT_EXPOSED:
@@ -195,13 +196,15 @@ int createGameWindow(int x, int y)
 							break;
 						}
 					break;
+
+					/* ********** CLICS SOURIS ************ */
 					case SDL_MOUSEBUTTONDOWN:
 
 						if(verbose)printf("X: %d | Y: %d\n", e.motion.x, e.motion.y);		// Debug console pos x & y on term
 
 						// Compétences et actions
 						tempEntity = getEntity(getSelectedPos());
-						if (tempEntity != NULL)
+						if (tempEntity != NULL && is_ally(tempEntity))
 						{
 							if (e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
 							{
@@ -242,9 +245,9 @@ int createGameWindow(int x, int y)
 								addLog("Tchat active");
 							}
 						}
-
-
 					break;
+
+					/* ********** SCROLL SOURIS ************ */
 					case SDL_MOUSEWHEEL:
 						if (e.wheel.y > 0)		// Scroll UP
 						{
@@ -263,6 +266,8 @@ int createGameWindow(int x, int y)
 							}
 						}
 					break;
+
+					/* ********** APPUI TOUCHE CLAVIER ************ */
 					case SDL_KEYDOWN:
 						switch(e.key.keysym.sym)
 						{
@@ -299,15 +304,19 @@ int createGameWindow(int x, int y)
 								}
 						}
 					break;
+
+					/* ********** MOUVEMENTS SOURIS ************ */
 					case SDL_MOUSEMOTION:
 						hover_ability = -1;
 						hover_next_turn = FALSE;
 						hover_tchat = 0;
+						mouse_position.x = e.motion.x;
+						mouse_position.y = e.motion.y;
 
 						// Hover skip turn button
 						if (e.motion.x >= xWinSize-280 && e.motion.x <= xWinSize-24 && e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16) hover_next_turn = TRUE;
 
-						// Compétences et actions
+						// Hover compétences et actions
 						tempEntity = getEntity(getSelectedPos());
 						if (tempEntity != NULL)
 						{
@@ -341,11 +350,13 @@ int createGameWindow(int x, int y)
 						}
 					break;
 					
+
 					case SDL_TEXTINPUT:
 						if(isChatActive == 1){
 							strcat(pseudoChat,e.text.text);
 						}
 					break;
+
 
 					case SDL_TEXTEDITING:
 						if(isChatActive == 1){
@@ -357,28 +368,27 @@ int createGameWindow(int x, int y)
 				}
 			}
 
+			/* ********** MOUVEMENTS CAMERA ************ */
 			if (SDL_GetMouseFocus() == pWindow)
 			{
 				camMove = -1;
 				// Déplacement de la caméra grâce aux bords de l'écran
-				if (e.motion.x <= xWinSize && e.motion.x >= xWinSize-20){
+				if (mouse_position.x <= xWinSize && mouse_position.x >= xWinSize-20){
 					XPOS -= (camSpeed*(pxBase/64));
 					camMove = E;
 				}
-				if (e.motion.x >= 0 && e.motion.x <= 20){
+				if (mouse_position.x <= 20 && mouse_position.x >= 0){
 					XPOS += (camSpeed*(pxBase/64));
 					camMove = W;
 				}
-				if (e.motion.y <= yWinSize && e.motion.y >= yWinSize-20){
+				if (mouse_position.y <= yWinSize && mouse_position.y >= yWinSize-20){
 					YPOS -= (camSpeed*(pxBase/64));
 					camMove = S;
 				}
-				if (e.motion.y <= 20 && e.motion.y >= 0){
+				if (mouse_position.y <= 20 && mouse_position.y >= 0){
 					YPOS += (camSpeed*(pxBase/64));
 					camMove = N;
 				}
-				mouse_position.x = e.motion.x;
-				mouse_position.y = e.motion.y;
 				// Vérification pour ne pas dépasser des "border" avec la caméra
 				if (XPOS > 500*(pxBase/64)) 	XPOS = 500*(pxBase/64);
 				if (XPOS < -1000*(pxBase/64)) 	XPOS = -1000*(pxBase/64);
