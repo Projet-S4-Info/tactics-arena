@@ -38,60 +38,11 @@ int loadEditorTextures(SDL_Renderer * renderer, TabTexture * textures)
 {
 	int index;
 
-	if(verbose)printf("[GRAPHICS] Effacement des textures pré-existantes...\n");
+	/*if(verbose)printf("[GRAPHICS] Effacement des textures pré-existantes...\n");
 
-	freeTextures(textures);
+	freeTextures(textures);*/
 
-	if(verbose)printf("[GRAPHICS] Chargement des textures du jeu...\n");
-
-    // Loading blank pattern textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/blank_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/blank_128.png")),
-						"blank");
-
-	// Loading non-selected pattern textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_128.png")),
-						"block");
-
-	// Loading blue selected pattern textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_blue_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_blue_128.png")),
-						"blue_selected");
-
-	// Loading red selected pattern textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_red_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_red_128.png")),
-						"red_selected");
-
-	// Loading water block textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/water_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/water_128.png")),
-						"water");
-
-	// Loading sand block textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/sand_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/sand_128.png")),
-						"sand");
-
-	// Loading ice block textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/ice_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/ice_128.png")),
-						"ice");
-	
-	// Loading snow block textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_128.png")),
-						"snow");
-						
+	if(verbose)printf("[MAP EDITOR] Chargement des textures du jeu...\n");
 
 	// Loading interface texture
 	addTextureToTable(	textures,
@@ -109,7 +60,7 @@ int loadEditorTextures(SDL_Renderer * renderer, TabTexture * textures)
 	addTextureToTable(	textures,
 						loadTexture(renderer, loadImage("../inc/img/interface/editor_selection.png")),
 						NULL,
-						"selection");
+						"editor_selection");
 
 	// Loading green button texture
 	addTextureToTable(	textures,
@@ -321,7 +272,7 @@ int changeTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 
 	// DEBUG printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
 	(*(grid+xIndex*_X_SIZE_+yIndex)).tile_id = toTile;
-	if (toTile == 4) (*(grid+xIndex*_X_SIZE_+yIndex)).walkable = 0;
+	if (toTile == WATER) (*(grid+xIndex*_X_SIZE_+yIndex)).walkable = 0;
 	else (*(grid+xIndex*_X_SIZE_+yIndex)).walkable = 1;
 
 	return 1;
@@ -335,7 +286,7 @@ void fillMap(Tile * grid, int block_id)
 		for (int j = 0; j < _Y_SIZE_; j++)
 		{
 			(*(grid+i*_X_SIZE_+j)).tile_id = block_id;
-			if (block_id == 4) (*(grid+i*_X_SIZE_+j)).walkable = 0;
+			if (block_id == WATER) (*(grid+i*_X_SIZE_+j)).walkable = 0;
 			else (*(grid+i*_X_SIZE_+j)).walkable = 1;
 		}
 	}
@@ -400,7 +351,7 @@ int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, int selec
 	if (select%2 == 0)		selectionPos.x = 10;
 	else					selectionPos.x = 126;
 	selectionPos.y = ceil(select/2)*74+50;
-	displaySprite(renderer, getTexture(textures, "selection"), selectionPos.x, selectionPos.y);
+	displaySprite(renderer, getTexture(textures, "editor_selection"), selectionPos.x, selectionPos.y);
 
 	// Boutons
 	displaySprite(renderer, getTexture(textures, "fill_button"), 0, yWinSize-160);
@@ -490,17 +441,14 @@ int createMapEditorWindow(int x, int y)
 	if( pWindow )
 	{
 
-		if (loadEditorTextures(renderer, textures) == 0){
-			printf("Erreur lors du chargement des textures (0 chargée)\n");
-			return 0;
-		}
-
-		loadSprites(renderer, cSprites);
-
 		SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 
 		// Chargement des textures
 		loadMapTextures(renderer);
+		if (loadEditorTextures(renderer, textures) == 0){
+			printf("Erreur lors du chargement des textures (0 chargée)\n");
+			return 0;
+		}
 		int start_seconds = SDL_GetTicks()/1000;
 		int load_index = 0;
 		while((SDL_GetTicks()/1000)-start_seconds < 3)

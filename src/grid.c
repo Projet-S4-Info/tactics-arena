@@ -191,3 +191,24 @@ bool isInGrid(Coord pos)
 {
     return (pos.x < _X_SIZE_ && pos.x >= 0 && pos.y < _Y_SIZE_ && pos.y >= 0);
 }
+
+bool isInCoordTab(Coord tab[], Coord pos)
+// Return true if the given coord is in the coord table
+{
+    int index = 0;
+    bool result = FALSE;
+
+    while (tab[index].x != -99)
+    {
+        //if (verbose) printf("Range : %d | %d\n", tab[index].x, tab[index].y);
+
+        if (tab[index].x == pos.x && tab[index].y == pos.y)
+        {
+            result = TRUE;
+            break;
+        }
+        index++;
+    }
+
+    return result;
+}

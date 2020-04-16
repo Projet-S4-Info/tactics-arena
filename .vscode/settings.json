@@ -10,6 +10,8 @@
         "graphics.h": "c",
         "passives.h": "c",
         "init_classes.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "init.h": "c",
+        "grid.h": "c"
     }
 }

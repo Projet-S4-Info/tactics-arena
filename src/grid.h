@@ -55,5 +55,7 @@ void turnLeft(Entity * entity);
 
 bool isInGrid(Coord pos);
 
+bool isInCoordTab(Coord tab[], Coord pos);
+
 
 #endif
