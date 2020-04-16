@@ -121,6 +121,18 @@ bool able_ability(Entity *e, abilityId ab_id)
     return e->act_points >= e->cha_class->cla_abilities[ab_id%NUM_AB].ab_cost;
 }
 
+bool is_ally(Entity *e)
+{
+    if(e->cha_id>0)
+    {
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
+}
+
 bool same_team(Entity *a, Entity *b)
 {
     if(a->cha_id<0&&b->cha_id<0)
