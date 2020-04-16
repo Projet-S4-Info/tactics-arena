@@ -81,14 +81,16 @@ int get_range(Entity *e, abilityId ab)
     int vision = e->stat_mods[vis];
     int range_mod = e->cha_class->cla_abilities[ab%NUM_AB].range;
 
+
     int range = range_mod * (vision/10);
 
-    if(range<=0)
+    if(range<0)
     {
-        range = 1;
+        range = 0;
     }
 
     return range;
+    
 }
 
 char * get_name(Entity * e, abilityId ab_id)
@@ -203,6 +205,11 @@ err_t reset_cooldowns(Entity * e)
     return OK;
 }
 
+bool same_coord(Coord a, Coord b)
+{
+    return a.x == b.x && a.y == b.y;
+}
+
 bool closer_coords(Coord a, Coord b)
 {
     return sqrt(a.x*a.x+a.y+a.y) <= sqrt(b.x*b.x+b.y*b.y);
@@ -249,7 +256,6 @@ err_t free_spawn(Entity *e)
     {
         return POINTER_NULL;
     }
-
 
 }
 
