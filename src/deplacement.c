@@ -44,7 +44,7 @@ Coord closest_free_tile(Coord c)
 }
 
 
-err_t fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_])
+int * fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_])
 {
     //On initialise la matrice à -1
     int i, j;
@@ -93,6 +93,17 @@ err_t fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_])
             }
         }
     }
-    return OK;
+    return (int *)matrice;
 }
 
+Coord * pathfinding()
+{
+    //je me place à la coord de fin sur la matrice et je la met dans le tableau bis 
+    //je regarde les chiffres aux alentours 
+    //je prends le plus petit (sauf -1)
+    //ensuite je suis le chemin du plus petit au plus petit jusqu'a 0 
+    //je met toute les coordonnées passé dans le tableau bis sauf la derniere qui est 0 
+    //je remet les coord dans l'ordre dans le tableau donné en paramètre 
+    //j'ajoute -99,-99 à la fin
+    //je renvoie ce tableau
+}
