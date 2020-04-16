@@ -16,6 +16,7 @@
 #include <time.h>
 #include "servFcnt.h"
 #include "struct.h"
+#include "common.h"
 
 
 
@@ -52,7 +53,7 @@
 #endif
 
 unsigned int logFlag = 0;
-char pseudoCli[128];
+int isAServer = 0;
 
 /**
  * \fn err_t stopTCPSocketServ(int socket)
@@ -106,6 +107,7 @@ err_t startTCPSocketServ(){
 
   if(verbose)printf("\nLancement de la créatoin du serveur...\n");
   logFlag = 1;
+  isAServer = 1;
   /*
   * Setting up the socket for all systems
   */
@@ -174,8 +176,8 @@ err_t startTCPSocketServ(){
 
             if(recep(&infoClient, sizeof(infoClient), socketConnected) != NULL){
               if(verbose)printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
-              sprintf(pseudoCli, "%s s'est connecté !", infoClient.pseudo);
-              if(verbose)printf("SocketServer pseudoCli : %s\n", pseudoCli);
+              sprintf(pseudoClient, "%s s'est connecté !", infoClient.pseudo);
+              if(verbose)printf("SocketServer pseudoCli : %s\n", pseudoClient);
               logFlag = 5;
             }
             

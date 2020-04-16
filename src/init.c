@@ -26,22 +26,6 @@ err_t init_spawn(Entity * e, Coord c)
     return OK;
 }
 
-err_t send_ent(Entity *e)
-{
-    /*init_ent ie;
-
-    ie.char_id = e->cha_id;
-    sprintf(ie.cha_name,"%s",e->cha_name);
-    ie.cha_class = e->cha_class->cla_id;
-    
-    int i;
-
-    for(i=0;)
-
-    sendStruct(&ie, sizeof(init_ent), socketConnected);*/
-    return OK;
-}
-
 err_t ent_common_init(Entity *e)
 {
     e->active = Alive;
@@ -88,25 +72,32 @@ err_t init_Foes(Direction d)
 err_t init_Allies(Coord spawn[NUM_CLASS], Direction d)
 {
     classId spawn_order[NUM_CLASS] = {Ranger, Mage, Angel, Valkyrie, Goliath, Berserker};
+    init_ent ie;
+
     int s,i,j;
     for(s=0; s<NUM_CLASS; s++)
     {
-        i = spawn_order[s];
-        Allies[i].cha_id = i+1;
-        sprintf(Allies[i].cha_name, "%s", classes[i].cla_name);
+        ie.cha_class = i = spawn_order[s];
+
+        ie.char_id = Allies[i].cha_id = i+1;
+
+        sprintf(ie.cha_name, "%s", classes[i].cla_name);
+
+        sprintf(Allies[i].cha_name, "Friendly %s", classes[i].cla_name);
+
         Allies[i].cha_class = &classes[i];
         Allies[i].direction = d;
         
         for(j=0; j<NUM_STATS; j++)
         {
-            Allies[i].base_stats[j] = Allies[i].stat_mods[j] = classes[i].basic_stats[j];
+            ie.base_stats[i] = Allies[i].base_stats[j] = Allies[i].stat_mods[j] = classes[i].basic_stats[j];
         }
 
         ent_common_init(&Allies[i]);
         init_spawn(&Allies[i], spawn[s]);
+        ie.starting_position = Allies[i].coords;
 
-        send_ent(&Allies[i]);
-        sprintf(Allies[i].cha_name, "Friendly %s", classes[i].cla_name);
+        sendStruct(&ie, sizeof(init_ent), socketConnected);
     }
 
     Allies[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];

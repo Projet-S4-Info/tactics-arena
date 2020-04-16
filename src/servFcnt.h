@@ -18,11 +18,10 @@ typedef struct msgChat{
 extern unsigned int logFlag;
 extern int isPseudoValid;
 extern int isInfoJoinSet;
-extern char pseudoCli[128];
 extern char monIP[85];
 extern char ipSrv[85];
-extern char pseudoUser[50];
 extern char MapMultiSelected[50];
+extern char pseudoClient[128];
 extern int socketConnected;
 extern int nbPlayer;
 

@@ -26,7 +26,8 @@ extern int isChatActive;
 extern int chatTabIndex;
 extern Direction camMove;
 
-extern char chat[STR_LONG];
+extern char pseudoChat[STR_SHORT];
+extern chat_t *chat;
 
 
 /* =============== FONCTIONS =============== */

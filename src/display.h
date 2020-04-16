@@ -33,4 +33,6 @@ err_t displayLog(SDL_Renderer * renderer, Coord pos);
 
 err_t removeOldLogs(Uint32 time);
 
+err_t addMsgToChatTab(char * msg, int chatTabIndex);
+
 #endif

@@ -18,6 +18,7 @@
 #include "grid.h"
 #include "init.h"
 #include "gameplay.h"
+#include "game_window.h"
 
 
 /* =============== CONSTANTES ================ */
@@ -41,7 +42,6 @@ const int camSpeed = 5;						// Speed of the camera movements
 int xWinSize, yWinSize;						// x and y sizes of the window
 Coord mouse_position;
 Log logs[_NB_MAX_LOGS_];
-
 
 /* =============== FONCTIONS ================ */
 

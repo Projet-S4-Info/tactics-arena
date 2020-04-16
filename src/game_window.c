@@ -22,6 +22,7 @@
 #include "textures.h"	
 #include "turn.h"
 #include "gameplay.h"
+#include "chat.h"
 
 
 /* =============== CONSTANTES ================ */
@@ -49,7 +50,10 @@ Direction camMove = -1;
 int xWinSize, yWinSize;						// x and y sizes of the window
 Coord mouse_position;
 
-char chat[STR_LONG] = "Chat : ";
+char pseudoChat[STR_SHORT] = "Chat : ";
+chat_t chat;
+
+
 char *compo;
 
 extern Sint32 cursor;
@@ -149,6 +153,18 @@ int createGameWindow(int x, int y)
 		SDL_RenderPresent(renderer);
 
 		Entity * tempEntity = NULL;
+
+
+		init_chat(&chat);
+
+		/*--------- to test -----------*/
+		char temp[50] = "THILOUROCIEN";
+
+		/*-----------------------------*/
+		if(isAServer != 1){
+			sprintf(pseudoUser, "%s", temp);
+		}
+		sprintf(pseudoChat, "%s : ", pseudoUser);
 
 		int running = 1;
 		while(running) {
@@ -261,15 +277,15 @@ int createGameWindow(int x, int y)
 								break;
 							case SDLK_BACKSPACE:
 								if(isChatActive == 1){
-									if (strlen(chat) > 7){
-										chat[strlen(chat)-1] = '\0';
+									if (strlen(pseudoChat) > strlen(pseudoUser) + 3){
+										pseudoChat[strlen(pseudoChat)-1] = '\0';
 									}
 								}
 								break;
 							case SDLK_RETURN:
 								if(isChatActive == 1){
-									sprintf(chatTab[chatTabIndex], "%s",chat);
-									chatTabIndex += 1;
+									nouveau_Msg(&chat, pseudoChat);
+									sprintf(pseudoChat, "%s : ",pseudoUser);
 								}
 						}
 					break;
@@ -317,7 +333,7 @@ int createGameWindow(int x, int y)
 					
 					case SDL_TEXTINPUT:
 						if(isChatActive == 1){
-							strcat(chat,e.text.text);
+							strcat(pseudoChat,e.text.text);
 						}
 					break;
 

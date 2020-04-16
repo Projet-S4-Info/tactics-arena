@@ -30,9 +30,6 @@
 /* =============== VARIABLES =============== */
 
 
-char chatTab[STR_LONG][_NB_MAX_ChAT_];
-
-
 
 /* =============== FONCTIONS =============== */
 
@@ -300,12 +297,6 @@ int displayAbilities(SDL_Renderer *renderer)
 	return 0;
 }
 
-err_t setChatTab(char chatTab[STR_LONG][_NB_MAX_ChAT_])
-// Set-up the chat array
-{	
-
-	return OK;
-}
 
 int displayInterface(SDL_Renderer *renderer)
 // Display the UI
@@ -415,17 +406,20 @@ int displayInterface(SDL_Renderer *renderer)
 		SDL_RenderFillRect(renderer, &chatScreen);
 		displayText(renderer, chatBox.x + (chatBox.w /2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255);
 
-		if(chatTabIndex > 0){
-			displayText(renderer, chatScreen.x+2, chatScreen.y + 2, 15 , chatTab[0] , "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		if(chat->index >= 0){
+			for (int i = 0; i < chat->index; i++){
+				displayText(renderer, chatScreen.x+2, chatScreen.y + 2 + (i * 15), 15 , chat->chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255);
+				if(verbose)printf("%s \n", chat->chatTab[i]);
+			}
 		}
 
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
 		SDL_SetRenderDrawColor(renderer, 85, 34, 0, 255);
 		SDL_RenderFillRect(renderer, &chatMsg);
-		if(strlen(chat) > 33){
-			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , chat + (strlen(chat) - 33), "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		if(strlen(pseudoChat) > 33){
+			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , pseudoChat + (strlen(pseudoChat) - 33), "../inc/font/PixelOperator.ttf", 255, 255, 255);
 		}else{
-			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , chat, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , pseudoChat, "../inc/font/PixelOperator.ttf", 255, 255, 255);
 		}
 			
 	}

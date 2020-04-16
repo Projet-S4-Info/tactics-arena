@@ -33,6 +33,10 @@ typedef struct
     Uint32 time;
 } Log;
 
+typedef struct{
+    char chatTab[_NB_MAX_CHAT_][STR_LONG];
+    int index;
+}chat_t;
 
 /* ENTITY STRUCTURES */
 
