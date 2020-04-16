@@ -57,7 +57,7 @@ err_t sentinel_check(Entity *e)
 
         Coord t[MAXRANGE];
 
-        setActionZone(r->coords,sight,t);
+        setActionBorder(r->coords,sight,t);
         
         if(isInRange(t, e->coords))
         {
