@@ -18,6 +18,7 @@
 #include "display.h"
 #include "textures.h"
 #include "init.h"
+#include "string.h"
 
 
 /* =============== CONSTANTES =============== */
@@ -297,6 +298,45 @@ int displayAbilities(SDL_Renderer *renderer)
 	return 0;
 }
 
+char * clearStr(char * str){
+	for(int i = 0; i <= strlen(str); i++){
+		str[i] = '\0';
+	}
+
+	return str;
+}
+
+err_t displayChat(SDL_Renderer *renderer,int chatX, int chatY){
+	char temp[33];
+	int j = 0;
+	if( chat.index > -1){
+			for (int i = 0; i <= chat.index ; i++){
+				if(strlen(chat.chatTab[i]) > 33){
+					int k;
+					for(k = 0; k < (strlen(chat.chatTab[i])); k += 33){
+						strcpy(temp, clearStr(temp));
+						for(int p = k; p < 33 + k && p < (strlen(chat.chatTab[i])); p++){
+							int len = strlen(temp);
+							temp[len] = chat.chatTab[i][p];
+							temp[len+1] = '\0';
+							if(verbose)printf("%s",temp);
+						}
+						if(verbose)printf("\n");
+						displayText(renderer, chatX, chatY + (j * 15), 15 ,temp, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+						j++;
+					}
+				}
+				else{
+					displayText(renderer, chatX, chatY + (j * 15), 15 , chat.chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255);
+					if(verbose)printf("%s \n", chat.chatTab[i]);
+					j++;
+				}
+
+			}
+	}
+	return OK;
+}
+
 
 int displayInterface(SDL_Renderer *renderer)
 // Display the UI
@@ -405,13 +445,9 @@ int displayInterface(SDL_Renderer *renderer)
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 		SDL_RenderFillRect(renderer, &chatScreen);
 		displayText(renderer, chatBox.x + (chatBox.w /2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255);
+		
+		displayChat(renderer, chatScreen.x+2, chatScreen.y + 2);
 
-		if(chat->index >= 0){
-			for (int i = 0; i < chat->index; i++){
-				displayText(renderer, chatScreen.x+2, chatScreen.y + 2 + (i * 15), 15 , chat->chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255);
-				if(verbose)printf("%s \n", chat->chatTab[i]);
-			}
-		}
 
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
 		SDL_SetRenderDrawColor(renderer, 85, 34, 0, 255);
@@ -428,6 +464,8 @@ int displayInterface(SDL_Renderer *renderer)
 
 	return 0;
 }
+
+
 
 int displayMap(SDL_Renderer *renderer, int x, int y)
 // Display the map

@@ -5,7 +5,7 @@
 
 err_t init_chat(chat_t * c)
 {
-    c->index = 0;
+    c->index = -1;
     return OK;
 }
 

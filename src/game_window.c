@@ -44,7 +44,6 @@ int hover_tchat = 0;						// Hover tchat button
 int hover_passive_help = 0;					// Hover passive help in ID card (with mouse position)
 int end_of_turn = 0;						// Fin de tour
 int isChatActive = 0;						// Chat button
-int chatTabIndex = 0;						// Index of Chat Array;
 Direction camMove = -1;
 
 int xWinSize, yWinSize;						// x and y sizes of the window
@@ -284,6 +283,7 @@ int createGameWindow(int x, int y)
 								break;
 							case SDLK_RETURN:
 								if(isChatActive == 1){
+									
 									nouveau_Msg(&chat, pseudoChat);
 									sprintf(pseudoChat, "%s : ",pseudoUser);
 								}
