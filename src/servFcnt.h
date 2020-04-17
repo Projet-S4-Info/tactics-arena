@@ -31,11 +31,8 @@ err_t stopTCPSocketCli(int socketConnected);
 int listenChanges(int socketConnected);
 err_t sendStruct(void * structure, int size,int socket);
 void sendPseudo(int sock,t_user info);
-err_t sendMsg(int socket, char pseudo[128], t_msgChat monMsg);
-const char * realStr();
 void getLocalIP();
 const char * setServIP();
-char * flushMsg(char * monMsg);
 void * recep(void * container, int size, int socket);
 int recepChat(void * structure, int size, int socket);
 

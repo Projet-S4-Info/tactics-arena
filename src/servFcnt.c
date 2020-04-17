@@ -116,21 +116,6 @@ const char * setServIP(){
   return servIP;
 }
 
-/**
- * \fn char * flushMsg(char msg[])
- * \return char *
- * \brief Function to flush and clean given string
-*/
-
-
-char * flushMsg(char monMsg[MAX_BUFF_SIZE]){
-  // printf("\nMon MSG before flush : %s", monMsg);
-    for(int i = 0; monMsg[i]; i++){
-      monMsg[i] = ' ';
-    }
-  // printf("\nMon MSG after flush : %s", monMsg);
-  return monMsg;
-}
 
 /**
  * \fn err_t sendStruct(void * structure, int size, int socket)
@@ -148,43 +133,6 @@ err_t sendStruct(void * structure, int size, int socket){
     return SEND_ERROR;
   }
 }
-
-/**
- * \fn err_t sendMsg(int socket, char pseudo[], t_msgChat monMsg)
- * \return err_t SEND_OK or SEND_ERROR
- * \brief function to send a message to a client or a server
-*/
-
-err_t sendMsg(int socket, char pseudo[128], t_msgChat monMsg){
-  int sockCli;
-  char buffer[MAX_BUFF_SIZE];
-  flushMsg(buffer);
-  
-  printf("Saisir votre message : ");
-  scanf(" %[^\n]", buffer);
-
-  printf("\nVotre message : %s \n", buffer);
-  //printf("Buffer size sendMSG: %lu (%lu)", strlen(buffer), sizeof(buffer));
-  sprintf(monMsg.msg,"%s",buffer);
-  sprintf(monMsg.pseudoChat,"%s",pseudo);
-
-  //printf("\nDEBUG SENDMSG : monMsg.msg:  %s", monMsg.msg);
-  sockCli = send(socket,(void *)&monMsg, sizeof(monMsg), 0);
-  if(sockCli != SOCKET_ERROR){
-    if(verbose)printf("Message envoyé avec succes ! \n");
-    return OK;
-  }
-  else{
-    printf("Send MSG error ... \n");
-    return SEND_ERROR;
-  }
-}
-
-/**
- * \fn void startChat(int socket, char pseudo[], t_msgChat monMsg)
- * \return void
- * \brief Function to start the chat
-*/
 
 
 /**
