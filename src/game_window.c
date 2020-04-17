@@ -418,6 +418,7 @@ int createGameWindow(int x, int y)
 			}
 
 			SDL_Delay(1000/_FPS_);
+			//clearOldCache();
 
 		}
 		closeWindow(pWindow);

@@ -24,7 +24,7 @@
 /* =============== CONSTANTES ================ */
 
 
-#define _NB_TEXT_CACHE_ 256     // Max number of cached texts
+#define _NB_TEXT_CACHE_ 1000    // Max number of cached texts
 #define _CACHE_AGE_ 5           // Max age of a cached text before being removed
 
 
@@ -90,13 +90,61 @@ err_t addToCache(char *content, int size, char *police, SDL_Color color, SDL_Sur
 }
 
 
+err_t destroyCacheEntry(int index)
+// Destroy a cache entry
+{
+    if (verbose) printf("[TEXT CACHE] Suppression du cache : %s\n", text_cache[index].content);
+    if (verbose) printf("-----------> L'entree existe depuis %dms\n", SDL_GetTicks()-text_cache[index].time);
+    SDL_FreeSurface(text_cache[index].surface);
+    text_cache[index].surface = NULL;
+    //free(text_cache[index].content);
+    //free(text_cache[index].police);
+    text_cache[index].content = NULL;
+    text_cache[index].police = NULL;
+    if (verbose) printf("[TEXT CACHE] Entree supprimee avec succes\n");
+    text_cache_size--;
+
+    return OK;
+}
+
+
+err_t slideCache(int index)
+// Slide all the caches entries if an entry is destroyed
+{
+    for (int i = index; i < text_cache_size; i++)
+    {
+        text_cache[i].content = malloc(sizeof(char) * strlen(text_cache[i+1].content));
+        strcpy(text_cache[i].content, text_cache[i+1].content);
+        text_cache[i].police = malloc(sizeof(char) * strlen(text_cache[i+1].police));
+        strcpy(text_cache[i].police, text_cache[i+1].police);
+        text_cache[i].color = text_cache[i+1].color;
+        text_cache[i].size = text_cache[i+1].size;
+        text_cache[i].time = text_cache[i+1].time;
+        text_cache[i].surface = malloc(sizeof(SDL_Surface*));
+        text_cache[i].surface = text_cache[i+1].surface;
+        destroyCacheEntry(i+1);
+    }
+
+    return OK;
+}
+
+
 err_t clearOldCache()
 // Clear old cache entries
 {
-    for (int i = 0; i < text_cache_size; i++)
+    if (text_cache_size > 0)
     {
-        
+        for (int i = 0; i < text_cache_size; i++)
+        {
+            if (text_cache[i].time > (SDL_GetTicks()-(_CACHE_AGE_*1000)) || text_cache[i].time > SDL_GetTicks())
+            {
+                destroyCacheEntry(i);
+                slideCache(i);
+            }
+        }
     }
+
+    return OK;
 }
 
 
@@ -162,10 +210,12 @@ err_t displayText(SDL_Renderer *renderer, int x, int y, int size, char *content,
         /* Ajout du texte en noir */
         SDL_SetRenderDrawColor(renderer, r, g, b, 255);
         SDL_RenderCopy(renderer, text_tex, NULL, &txtDestRect);
+
+        SDL_DestroyTexture(text_tex);
     }
     else
     {
-        if (verbose) printf("[TEXT] Texte non disponible dans le cache...\n");
+        if (verbose && caching) printf("[TEXT] Texte non disponible dans le cache...\n");
 
         SDL_Surface *text = NULL;
         TTF_Font *police = NULL;
