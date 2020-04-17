@@ -63,14 +63,14 @@ void startChat(void * structure, int size, int socket){
 
                 changesChat = 0;
             }else{
-                printf("Aucune structure envoyée depuis thread Chat \n");
+                //printf("Aucune structure envoyée depuis thread Chat \n");
             }
         }else{
             if(recepChat(structure,size,socket) == 1){
                 for(int i = 0; i < chat.index; i++){
                 }
             }else{
-                if(verbose)printf("Aucune structure recue depuis threadChat \n");
+                //if(verbose)printf("Aucune structure recue depuis threadChat \n");
             }
         }
     }

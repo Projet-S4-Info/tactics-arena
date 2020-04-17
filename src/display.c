@@ -170,7 +170,7 @@ err_t displayLog(SDL_Renderer * renderer, Coord pos)
 	{
 		for (int i=0; logs[i].message; i++)
 		{
-			displayText(renderer, x, y, 20, logs[i].message, "../inc/font/Pixels.ttf", 255, 255, 255);
+			displayText(renderer, x, y, 20, logs[i].message, "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 			y += 20;
 		}
 	}

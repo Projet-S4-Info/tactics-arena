@@ -23,7 +23,7 @@ err_t clearOldCache();
 
 SDL_Surface * getTextCache(char *content, int size, char *police, SDL_Color color);
 
-err_t displayText(SDL_Renderer *renderer, int x, int y, int size, char *content, char *text_police, int r, int g, int b);
+err_t displayText(SDL_Renderer *renderer, int x, int y, int size, char *content, char *text_police, int r, int g, int b, bool caching);
 
 
 #endif
