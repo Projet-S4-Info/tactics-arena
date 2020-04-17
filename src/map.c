@@ -342,12 +342,12 @@ err_t displayChat(SDL_Renderer *renderer,int chatX, int chatY){
 							// if(verbose)printf("%s",temp);
 						}
 						// if(verbose)printf("\n");
-						displayText(renderer, chatX, chatY + (j * 15), 15 ,temp, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+						displayText(renderer, chatX, chatY + (j * 15), 15 ,temp, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 						j++;
 					}
 				}
 				else{
-					displayText(renderer, chatX, chatY + (j * 15), 15 , chat.chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255);
+					displayText(renderer, chatX, chatY + (j * 15), 15 , chat.chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 					// if(verbose)printf("%s \n", chat.chatTab[i]);
 					j++;
 				}
@@ -393,43 +393,43 @@ int displayInterface(SDL_Renderer *renderer)
 			displayAbilities(renderer);
 			if (selected_ability != -1){
 				sprintf(selectedAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, selected_ability)), get_desc(tempEntity, selected_ability));
-				displayText(renderer, 16, yWinSize-110, 20, selectedAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255);
+				displayText(renderer, 16, yWinSize-110, 20, selectedAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 			} else {
 				if (hover_ability >= 0) 
 				{
 					sprintf(hoverAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, hover_ability)), get_desc(tempEntity, hover_ability));
-					displayText(renderer, 16, yWinSize-110, 20, hoverAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255);
+					displayText(renderer, 16, yWinSize-110, 20, hoverAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 				}
 			}
 		}
 
 		// Display the ID card of the selected entity
 		displaySprite(renderer, getTexture(textures, "id_card"), 10, 10);
-		displayText(renderer, 382, 128, 18, "?", "../inc/font/Pixels.ttf", 255, 255, 255);
+		displayText(renderer, 382, 128, 18, "?", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 		displaySprite(renderer, getCharFrontTexture(tempEntity->cha_class->cla_name), 51, 52);
-		displayText(renderer, 170, 45, 20, tempEntity->cha_name, "../inc/font/Pixels.ttf", 255, 255, 255);
+		displayText(renderer, 170, 45, 20, tempEntity->cha_name, "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 
 		// -- entity health
 		displaySprite(renderer, getBigTexture(cSprites, "heart_icon"), 170, 70);
 		sprintf(pv_text, "%d", tempEntity->stat_mods[pv]);
-		displayText(renderer, 200, 70, 30, pv_text, "../inc/font/Pixels.ttf", 255, 0, 0);
+		displayText(renderer, 200, 70, 30, pv_text, "../inc/font/Pixels.ttf", 255, 0, 0, TRUE);
 
 		// -- entity action points
 		displaySprite(renderer, getBigTexture(cSprites, "star_icon"), 165, 102);
 		sprintf(pa_text, "%d", tempEntity->act_points);
-		displayText(renderer, 202, 106, 30, pa_text, "../inc/font/Pixels.ttf", 49, 174, 196);
+		displayText(renderer, 202, 106, 30, pa_text, "../inc/font/Pixels.ttf", 49, 174, 196, TRUE);
 
 		// -- entity mouvement points
 		displaySprite(renderer, getBigTexture(cSprites, "mv_icon"), 250, 102);
 		sprintf(pm_text, "%d", tempEntity->stat_mods[mv]);
-		displayText(renderer, 287, 106, 30, pm_text, "../inc/font/Pixels.ttf", 52, 169, 43);
+		displayText(renderer, 287, 106, 30, pm_text, "../inc/font/Pixels.ttf", 52, 169, 43, TRUE);
 
 		// -- passive description if hovering info icon
 		if (hover_passive_help == 1)
 		{
 			sprintf(passive, "Passive : %s", tempEntity->cha_class->Passive.name);
-			displayText(renderer, mouse_position.x+20, mouse_position.y+20, 20, passive, "../inc/font/Pixels.ttf", 238, 165, 53);
-			displayText(renderer, mouse_position.x+20, mouse_position.y+40, 20, tempEntity->cha_class->Passive.desc, "../inc/font/Pixels.ttf", 238, 165, 53);
+			displayText(renderer, mouse_position.x+20, mouse_position.y+20, 20, passive, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
+			displayText(renderer, mouse_position.x+20, mouse_position.y+40, 20, tempEntity->cha_class->Passive.desc, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
 		}
 	}
 
@@ -444,7 +444,7 @@ int displayInterface(SDL_Renderer *renderer)
 	// Next turn button
 	if (hover_next_turn == TRUE)
 	{
-		displayText(renderer, xWinSize-280, yWinSize-110, 20, "Skip turn", "../inc/font/Pixels.ttf", 255, 255, 255);
+		displayText(renderer, xWinSize-280, yWinSize-110, 20, "Skip turn", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 		displaySprite(renderer, getTexture(textures, "end_turn_hover"), xWinSize-280, yWinSize-80);
 	}
 	else
@@ -457,8 +457,8 @@ int displayInterface(SDL_Renderer *renderer)
 	if (isChatActive) displaySprite(renderer, getTexture(textures, "tchat_button_selected"), xWinSize-360, yWinSize-80);
 	else displaySprite(renderer, getTexture(textures, "tchat_button"), xWinSize-360, yWinSize-80);
 	if (hover_tchat == 1 || hover_tchat == 2) displaySprite(renderer, getTexture(textures, "tchat_button_hover"), xWinSize-360, yWinSize-80);
-	if (hover_tchat == 1)displayText(renderer, xWinSize-360, yWinSize-110, 20, "Hide tchat", "../inc/font/Pixels.ttf", 255, 255, 255);
-	else if (hover_tchat == 2) displayText(renderer, xWinSize-360, yWinSize-110, 20, "Display tchat", "../inc/font/Pixels.ttf", 255, 255, 255);
+	if (hover_tchat == 1)displayText(renderer, xWinSize-360, yWinSize-110, 20, "Hide tchat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	else if (hover_tchat == 2) displayText(renderer, xWinSize-360, yWinSize-110, 20, "Display tchat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 	if(isChatActive){
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
@@ -467,7 +467,7 @@ int displayInterface(SDL_Renderer *renderer)
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 		SDL_RenderFillRect(renderer, &chatScreen);
-		displayText(renderer, chatBox.x + (chatBox.w /2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255);
+		displayText(renderer, chatBox.x + (chatBox.w /2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 		
 		displayChat(renderer, chatScreen.x+2, chatScreen.y + 2);
 
@@ -476,9 +476,9 @@ int displayInterface(SDL_Renderer *renderer)
 		SDL_SetRenderDrawColor(renderer, 85, 34, 0, 255);
 		SDL_RenderFillRect(renderer, &chatMsg);
 		if(strlen(pseudoChat) > 33){
-			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , pseudoChat + (strlen(pseudoChat) - 33), "../inc/font/PixelOperator.ttf", 255, 255, 255);
+			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , pseudoChat + (strlen(pseudoChat) - 33), "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 		}else{
-			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , pseudoChat, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , pseudoChat, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 		}
 			
 	}

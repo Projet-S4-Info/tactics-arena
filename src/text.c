@@ -137,13 +137,13 @@ SDL_Surface * getTextCache(char *content, int size, char *police, SDL_Color colo
 
 
 
-err_t displayText(SDL_Renderer *renderer, int x, int y, int size, char *content, char *text_police, int r, int g, int b)
+err_t displayText(SDL_Renderer *renderer, int x, int y, int size, char *content, char *text_police, int r, int g, int b, bool caching)
 // Displays text on the window
 {
     SDL_Color color = {r, g, b};
     SDL_Rect txtDestRect;
 
-    if (isInCache(content, size, text_police, color))
+    if (isInCache(content, size, text_police, color) && caching == TRUE)
     {
 
         // Création de la texture à partir de la surface
@@ -191,7 +191,7 @@ err_t displayText(SDL_Renderer *renderer, int x, int y, int size, char *content,
             return SDL_ERROR;
         }
 
-        addToCache(content, size, text_police, color, text);
+        if (caching == TRUE) addToCache(content, size, text_police, color, text);
 
         SDL_QueryTexture(text_tex, NULL, NULL, &(txtDestRect.w), &(txtDestRect.h));
 

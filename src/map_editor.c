@@ -149,11 +149,11 @@ int displayLoadMenu(SDL_Renderer * renderer, char *mapList[], int xWinSize, int 
 
 	displaySprite(renderer, getTexture(textures, "blur"), 0, 0);
 	displaySprite(renderer, getTexture(textures, "save_menu"), xPos, yPos);
-	displayText(renderer, xPos+10, yPos+5, 20, "Charger la map...", "../inc/font/Pixels.ttf", 255, 255, 255);
-	displayText(renderer, xPos+10, yOpPos-25, 15, "[ENTER] pour valider, [ESC] pour annuler, [ARROWS] pour naviguer", "../inc/font/Pixels.ttf", 255, 255, 255);
-	if (mapList[index] != NULL) displayText(renderer, xPos+40, yPos+55, 20, mapName, "../inc/font/Pixels.ttf", 0, 0, 0);
-	if (index > 0) 		displayText(renderer, xPos+10, yPos+50, 30, "<", "../inc/font/Pixels.ttf", 255, 255, 255);
-	if (index < nbMaps-1) 	displayText(renderer, xOpPos-20, yPos+50, 30, ">", "../inc/font/Pixels.ttf", 255, 255, 255);
+	displayText(renderer, xPos+10, yPos+5, 20, "Charger la map...", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	displayText(renderer, xPos+10, yOpPos-25, 15, "[ENTER] pour valider, [ESC] pour annuler, [ARROWS] pour naviguer", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	if (mapList[index] != NULL) displayText(renderer, xPos+40, yPos+55, 20, mapName, "../inc/font/Pixels.ttf", 0, 0, 0, TRUE);
+	if (index > 0) 		displayText(renderer, xPos+10, yPos+50, 30, "<", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	if (index < nbMaps-1) 	displayText(renderer, xOpPos-20, yPos+50, 30, ">", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 
 	return 1;
 }
@@ -167,9 +167,9 @@ int displaySaveMenu(SDL_Renderer * renderer, Tile * grid, int xWinSize, int yWin
 
 	displaySprite(renderer, getTexture(textures, "blur"), 0, 0);
 	displaySprite(renderer, getTexture(textures, "save_menu"), xPos, yPos);
-	displayText(renderer, xPos+10, yPos+5, 20, "Enregistrer la map...", "../inc/font/Pixels.ttf", 255, 255, 255);
-	displayText(renderer, xPos+10, yOpPos-25, 20, "[ENTER] pour valider, [ESC] pour annuler", "../inc/font/Pixels.ttf", 255, 255, 255);
-	if (mapName != NULL) displayText(renderer, xPos+40, yPos+55, 20, mapName, "../inc/font/Pixels.ttf", 0, 0, 0);
+	displayText(renderer, xPos+10, yPos+5, 20, "Enregistrer la map...", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	displayText(renderer, xPos+10, yOpPos-25, 20, "[ENTER] pour valider, [ESC] pour annuler", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	if (mapName != NULL) displayText(renderer, xPos+40, yPos+55, 20, mapName, "../inc/font/Pixels.ttf", 0, 0, 0, TRUE);
 
 	return 1;
 }
@@ -356,20 +356,20 @@ int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, int selec
 
 	// Boutons
 	displaySprite(renderer, getTexture(textures, "fill_button"), 0, yWinSize-160);
-	displayText(renderer, 10, yWinSize-150, 20, "REMPLIR", "../inc/font/Pixels.ttf", 255, 255, 255);
+	displayText(renderer, 10, yWinSize-150, 20, "REMPLIR", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 	displaySprite(renderer, getTexture(textures, "cancel_button"), 0, yWinSize-120);
-	displayText(renderer, 10, yWinSize-110, 20, "QUITTER", "../inc/font/Pixels.ttf", 255, 255, 255);
+	displayText(renderer, 10, yWinSize-110, 20, "QUITTER", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 	displaySprite(renderer, getTexture(textures, "load_button"), 0, yWinSize-80);
-	displayText(renderer, 10, yWinSize-70, 20, "OUVRIR UNE MAP", "../inc/font/Pixels.ttf", 255, 255, 255);
+	displayText(renderer, 10, yWinSize-70, 20, "OUVRIR UNE MAP", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 	displaySprite(renderer, getTexture(textures, "ok_button"), 0, yWinSize-40);
-	displayText(renderer, 10, yWinSize-30, 20, "ENREGISTRER", "../inc/font/Pixels.ttf", 255, 255, 255);
+	displayText(renderer, 10, yWinSize-30, 20, "ENREGISTRER", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 
-	displayText(renderer, 20, 20, 20, "----- BLOCS -----", "../inc/font/Pixels.ttf", 255, 255, 255);
+	displayText(renderer, 20, 20, 20, "----- BLOCS -----", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 
 	// -- DEBUG Affichage des coordonnées d'affichage de la map
 	char str[12];
 	sprintf(str, "%d, %d", x, y);
-	displayText(renderer, 220, 20, 20, str, "../inc/font/Pixels.ttf", 255, 255, 255);
+	displayText(renderer, 220, 20, 20, str, "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 	// -- DEBUG --
 
 	if (isInSaveMenu == 1) displaySaveMenu(renderer, blankMatrix, xWinSize, yWinSize, mapName, 1);
@@ -457,11 +457,11 @@ int createMapEditorWindow(int x, int y)
 			load_index++;
 			SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
 			SDL_RenderClear(renderer);
-			displayText(renderer, 200, yWinSize/2+120, 40, "Chargement des textures de l'editeur...", "../inc/font/Pixels.ttf", 255, 255, 255);
-			displayText(renderer, 200, yWinSize/2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
-			if (load_index == 1)		displayText(renderer, xWinSize/2, yWinSize/3*2, 60, "Ooo", "../inc/font/Aqua.ttf", 255, 255, 255);
-			else if (load_index == 2)	displayText(renderer, xWinSize/2, yWinSize/3*2, 60, "oOo", "../inc/font/Aqua.ttf", 255, 255, 255);
-			else if (load_index == 3)	displayText(renderer, xWinSize/2, yWinSize/3*2, 60, "ooO", "../inc/font/Aqua.ttf", 255, 255, 255);
+			displayText(renderer, 200, yWinSize/2+120, 40, "Chargement des textures de l'editeur...", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+			displayText(renderer, 200, yWinSize/2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, TRUE);
+			if (load_index == 1)		displayText(renderer, xWinSize/2, yWinSize/3*2, 60, "Ooo", "../inc/font/Aqua.ttf", 255, 255, 255, TRUE);
+			else if (load_index == 2)	displayText(renderer, xWinSize/2, yWinSize/3*2, 60, "oOo", "../inc/font/Aqua.ttf", 255, 255, 255, TRUE);
+			else if (load_index == 3)	displayText(renderer, xWinSize/2, yWinSize/3*2, 60, "ooO", "../inc/font/Aqua.ttf", 255, 255, 255, TRUE);
 			SDL_Delay(100);
 			SDL_RenderPresent(renderer);
 			SDL_Delay(900);
