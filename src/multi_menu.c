@@ -724,4 +724,5 @@ int displayMenuMulti(int x, int y)
 	else{
 		fprintf(stderr,"Erreur de création de la fenêtre: %s\n",SDL_GetError());
 	}
+	return 0;
 }
