@@ -235,7 +235,6 @@ err_t removeOldLogs(Uint32 time)
 	{
 		for (int i = logsSize-1; i >= 0; i--)
 		{
-			// printf("Time log : %d | Time : %d\n", logs[i].time, time);
 			if (logs[i].time < (time - (_LOG_DURATION_*1000)) || logs[i].time > time)
 			{
 				free(logs[i].message);

@@ -154,6 +154,12 @@ int loadMapTextures(SDL_Renderer * renderer)
 						NULL,
 						"attack");
 
+	// Loading move logo
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/interface/move_logo_64.png")),
+						NULL,
+						"move");
+
 	// Clockwise turn icon
 	addTextureToTable(	textures,
 						loadTexture(renderer, loadImage("../inc/img/interface/clockwise_icon_64.png")),
@@ -300,7 +306,7 @@ int displayAbilities(SDL_Renderer *renderer)
 // Display the abilities menu
 {
 	// Abilities icons
-	displaySprite(renderer, getTexture(textures, "attack"), 16, yWinSize-80);
+	displaySprite(renderer, getTexture(textures, "move"), 16, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "attack"), 16+1*80, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "attack"), 16+2*80, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "attack"), 16+3*80, yWinSize-80);
