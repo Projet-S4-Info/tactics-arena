@@ -98,6 +98,9 @@ err_t startTCPSocketCli(int socketCli){
   t_user infoMoi;
     infoMoi.id = 111;
     sprintf(infoMoi.pseudo,"LucienCh2424");
+
+  serverStatus_t startGameCli;
+  startGameCli.isServerStartGame = 0;
       
   if(!windWSAError){
     servIP = ipSrv;
@@ -110,6 +113,7 @@ err_t startTCPSocketCli(int socketCli){
     sockIn.sin_family = AF_INET;
     sockIn.sin_port = htons(PORT);
   /*-------------------------------------------------------------*/
+    nbPlayer +=1;
     
     if(verbose)printf("\nLancement de la création du client...\n");
     
@@ -128,7 +132,14 @@ err_t startTCPSocketCli(int socketCli){
         if(verbose)printf("socketConnectedCli = %d\n", socketConnected);
 
         sendStruct(&infoMoi, sizeof(infoMoi), socketConnected);
-        if(verbose)printf("Conexion établie sans soucis fermeture de la fonction... \n"); 
+        if(verbose)printf("Conexion établie sans soucis fermeture de la fonction... \n");
+
+        if(recep(&startGameCli, sizeof(startGameCli), socketConnected) != NULL){
+          printf("Je suis sur structure recue \n");
+          serverStatus = 3;
+        }
+        
+
         return OK;
       }
       else{

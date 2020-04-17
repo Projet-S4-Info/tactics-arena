@@ -332,16 +332,16 @@ err_t displayChat(SDL_Renderer *renderer,int chatX, int chatY){
 							int len = strlen(temp);
 							temp[len] = chat.chatTab[i][p];
 							temp[len+1] = '\0';
-							if(verbose)printf("%s",temp);
+							// if(verbose)printf("%s",temp);
 						}
-						if(verbose)printf("\n");
+						// if(verbose)printf("\n");
 						displayText(renderer, chatX, chatY + (j * 15), 15 ,temp, "../inc/font/PixelOperator.ttf", 255, 255, 255);
 						j++;
 					}
 				}
 				else{
 					displayText(renderer, chatX, chatY + (j * 15), 15 , chat.chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255);
-					if(verbose)printf("%s \n", chat.chatTab[i]);
+					// if(verbose)printf("%s \n", chat.chatTab[i]);
 					j++;
 				}
 

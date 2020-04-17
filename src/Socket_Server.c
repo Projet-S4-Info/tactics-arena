@@ -53,7 +53,6 @@
 #endif
 
 unsigned int logFlag = 0;
-int isAServer = 0;
 
 /**
  * \fn err_t stopTCPSocketServ(int socket)
@@ -108,6 +107,7 @@ err_t startTCPSocketServ(){
   if(verbose)printf("\nLancement de la créatoin du serveur...\n");
   logFlag = 1;
   isAServer = 1;
+  nbPlayer += 1;
   /*
   * Setting up the socket for all systems
   */
@@ -119,6 +119,9 @@ err_t startTCPSocketServ(){
 
   t_user infoClient;
   infoClient.id = 0;
+
+  serverStatus_t startGame;
+  startGame.isServerStartGame = 0;
   sprintf(infoClient.pseudo ,"PasDeCli");
 
   if(!windWSAError ){
@@ -180,6 +183,20 @@ err_t startTCPSocketServ(){
               if(verbose)printf("SocketServer pseudoCli : %s\n", pseudoClient);
               logFlag = 5;
             }
+
+            while(serverStatus != 1){
+              printf("Waiting to start ... \n");
+              sleep(2);
+            }
+            startGame.isServerStartGame = 1;
+            if(sendStruct(&startGame, sizeof(startGame), socketConnected) != OK){
+              printf("Erreur d'envoie \n");
+            }else{
+              if(verbose)printf("Structure envoyée .... \n");
+              if(verbose)printf("Struct envoyé : isServerStartGame : %d \n", startGame.isServerStartGame);
+              serverStatus = 2;
+            }
+            
             
             
             printf("\nChargement de la partie... \n");

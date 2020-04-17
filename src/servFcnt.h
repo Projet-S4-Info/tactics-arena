@@ -23,7 +23,6 @@ extern char ipSrv[85];
 extern char MapMultiSelected[50];
 extern char pseudoClient[128];
 extern int socketConnected;
-extern int nbPlayer;
 
 err_t startTCPSocketServ();
 err_t startTCPSocketCli();
@@ -35,11 +34,10 @@ void sendPseudo(int sock,t_user info);
 err_t sendMsg(int socket, char pseudo[128], t_msgChat monMsg);
 const char * realStr();
 void getLocalIP();
-void startChat(int sock, char pseudo[128], t_msgChat monMsg);
 const char * setServIP();
-void silentChat(int sock, char pseudo[128], t_msgChat monMsg);
 char * flushMsg(char * monMsg);
 void * recep(void * container, int size, int socket);
+int recepChat(void * structure, int size, int socket);
 
 
 

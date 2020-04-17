@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include "servFcnt.h"
 #include "common.h"
+#include "chat.h"
 
 
 
@@ -59,6 +60,7 @@ char monIP[85];
 
 int nbPlayer = 0;
 int socketConnected = 0;
+int isAServer = 0;
 
 
 
@@ -184,46 +186,6 @@ err_t sendMsg(int socket, char pseudo[128], t_msgChat monMsg){
  * \brief Function to start the chat
 */
 
-void startChat(int sock, char pseudo[128], t_msgChat monMsg){
-
-    sendMsg(sock,pseudo,monMsg);
-    silentChat(sock,pseudo,(t_msgChat)monMsg);
-}
-
-
-
-void silentChat(int sock, char pseudo[128], t_msgChat monMsg){
-
-  time_t seconds;
-  time(&seconds);
-  
-  // printf("\nsize of msgSlilentCHat.msg : %lu (%lu) \n", strlen(msgSilentChat.msg), sizeof(msgSilentChat.msg));
-
-
-  while(1 && ((time(NULL) - seconds)  != (1 *60))){
-    
-    int msgRcv;
-    msgRcv = recv(sock,(void *)&monMsg, sizeof(monMsg), 0);
-    
-    if(msgRcv != SOCKET_ERROR){
-      printf("\nVous avez un nouveau message ! \n");
-      printf("\nTest pseudo : %s\n", pseudo);
-      printf("%s : %s\n",monMsg.pseudoChat, monMsg.msg);
-      // printf("\nSize of msgSlilentCHat.msg : %lu (%lu) \n", strlen(msgSilentChat.msg), sizeof(msgSilentChat.msg));
-      time(&seconds);
-      sleep(1);
-      flushMsg(monMsg.msg);
-
-    }
-      startChat(sock,pseudo,(t_msgChat)monMsg);
-      // printf("Attente : ");
-      // printf("%ld \n", (time(NULL) - seconds));
-      sleep(1);
-      flushMsg(monMsg.msg);
-
-
-  }
-}
 
 /**
  * \fn err_t recep(void * container, int size, int socket)
@@ -235,10 +197,28 @@ void * recep(void * container, int size, int socket){
   if(verbose)printf("bienvenue dans recep \n");
   int flag = 0;
   while(flag == 0){
-    if(recv(socket,container, size, 0) > -1){
-      if(verbose)printf("struct reçue");
+    sleep(2);
+    if(verbose)printf("Inside recep while \n");
+    if(recv(socket,container, size, MSG_DONTWAIT) > -1){
+      if(verbose)printf("Structure recue \n");
       flag = 1;
     }
   }
   return container;
 }
+
+int recepChat(void * structure, int size, int socket){
+  if(verbose)printf("Bienvenue dans recepChat \n");
+  int flag = 0;
+  while(flag != 3){
+    if(verbose)printf("Inside recepChat while\n");
+    if(recv(socket,structure,size,MSG_DONTWAIT) > -1){
+      if(verbose)printf("StructureChat recue \n");
+      flag = 3;
+      return 1;
+    }
+    flag ++;
+  }
+  return 0;
+}
+

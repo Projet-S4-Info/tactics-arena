@@ -17,6 +17,13 @@ extern bool verbose;
 
 extern int isChatActive;
 extern int isAServer;
+extern int serverStatus;
+extern int changesChat;
+extern int nbPlayer;
+
+typedef struct{
+    int isServerStartGame;
+}serverStatus_t;
 
 extern char error_message[NUM_ERROR][STR_LONG];
 

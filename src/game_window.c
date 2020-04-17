@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <pthread.h>
 #include "../SDL2/include/SDL2/SDL.h"
 #include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "../SDL2/include/SDL2/SDL_image.h"
@@ -24,6 +25,7 @@
 #include "gameplay.h"
 #include "chat.h"
 #include "print.h"
+#include "servFcnt.h"
 
 
 /* =============== CONSTANTES ================ */
@@ -46,18 +48,27 @@ int hover_passive_help = 0;					// Hover passive help in ID card (with mouse pos
 int end_of_turn = 0;						// Fin de tour
 int isChatActive = 0;						// Chat button
 Direction camMove = -1;
+int *exitThread;
 
 int xWinSize, yWinSize;						// x and y sizes of the window
 Coord mouse_position;
 
 char pseudoChat[STR_SHORT] = "Chat : ";
-chat_t chat;
+int changesChat = 0;
 
 
 char *compo;
 
 extern Sint32 cursor;
 extern Sint32 selection_len;
+
+pthread_t thread_Chat;
+
+static void * fn_chat (void * p_data)
+{
+    startChat(&chat,sizeof(chat),socketConnected);
+    return NULL;
+}
 
 
 /* =============== FONCTIONS ================ */
@@ -170,10 +181,11 @@ int createGameWindow(int x, int y)
 		char temp[50] = "THILOUROCIEN";
 
 		/*-----------------------------*/
-		if(isAServer != 1){
+		if(nbPlayer == 0){
 			sprintf(pseudoUser, "%s", temp);
 		}
 		sprintf(pseudoChat, "%s : ", pseudoUser);
+
 
 		int running = 1;
 		while(running) {
@@ -234,12 +246,15 @@ int createGameWindow(int x, int y)
 						if(e.motion.x >= xWinSize-360 && e.motion.x <= xWinSize-296 && e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16){
 							if (isChatActive == 1){
 								isChatActive = 0;
+
 								addLog("Tchat desactive");
+								pthread_detach(thread_Chat);
 							}
 							else
 							{
 								isChatActive = 1;
 								addLog("Tchat active");
+								pthread_create(&thread_Chat, NULL, fn_chat, NULL);
 							}
 						}
 
@@ -296,6 +311,7 @@ int createGameWindow(int x, int y)
 									
 									nouveau_Msg(&chat, pseudoChat);
 									sprintf(pseudoChat, "%s : ",pseudoUser);
+									changesChat = 1;
 								}
 						}
 					break;

@@ -17,6 +17,7 @@
 #include <pthread.h>
 #include <dirent.h>
 #include "common.h"
+#include "chat.h"
 #define _NB_MAX_MAPS_ 20
 
 
@@ -40,6 +41,7 @@ int music_Multi_playing = 1;
 int mapListMultiIndex = 0;
 int isMapMultiValid = 0;
 int indexMapMulti = 0;
+int serverStatus = 0;
 
 
 char pseudoSrv[50] = "Pseudo : ";
@@ -90,6 +92,7 @@ static void * fn_client (void * p_data)
     startTCPSocketCli();
     return NULL;
 }
+
 
 void loadMultiMenuTextures(SDL_Renderer *renderer)
 // Load all the textures needed for the menu
@@ -589,18 +592,37 @@ int displayMenuMulti(int x, int y)
 						}
 						
 						// Info Join set 
-						else if (u.motion.x >= 608 && u.motion.x <= 721 && u.motion.y >= 550 && u.motion.y <= 590 && isJoinMenu == 1 && isIPValid == 1 && isPseudoValid == 1){
+						else if (u.motion.x >= 608 && u.motion.x <= 721 && u.motion.y >= 550 && u.motion.y <= 590 && isJoinMenu == 1 && isIPValid == 1 && isPseudoValid == 1 && isInfoJoinSet == 0){
 							isInfoJoinSet = 1;
-							pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);				
+							pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);
+							serverStatus = 1;
+							while(serverStatus != 3){
+								if(verbose)printf("Waiting Sattus to be 1\n");
+								sleep(2);
+							}
+							closeWindow(pWindow);
+							freeMultiMenuTextures();
+							stopMenuMusic(2);
+							return 2;			
 						}
 						
 						// Join Btn after infoJoinSet
 						else if (u.motion.x >= 606 && u.motion.x <= 722 && u.motion.y >= 550 && u.motion.y <= 594 && isHostMenu == 1 && isClientCo == 1){
 							if(verbose)printf("Starting game ... \n");
-							closeWindow(pWindow);
-							freeMultiMenuTextures();
-							stopMenuMusic(2);
-							return 1;
+							
+							if(isHostMenu == 1){
+								serverStatus = 1;
+								while (serverStatus != 2)
+								{
+									if(verbose)printf("Waiting status to be 2 \n");
+									sleep(2);
+								}
+								closeWindow(pWindow);
+								freeMultiMenuTextures();
+								stopMenuMusic(2);
+								return 1;								
+							}
+							
 						}
 						
 						// Nouveau boutton "QUIT" 
@@ -702,5 +724,4 @@ int displayMenuMulti(int x, int y)
 	else{
 		fprintf(stderr,"Erreur de création de la fenêtre: %s\n",SDL_GetError());
 	}
-	return 1;
 }
