@@ -198,9 +198,7 @@ void * recep(void * container, int size, int socket){
   int flag = 0;
   while(flag == 0){
     sleep(2);
-    if(verbose)printf("Inside recep while \n");
     if(recv(socket,container, size, MSG_DONTWAIT) > -1){
-      if(verbose)printf("Structure recue \n");
       flag = 1;
     }
   }
@@ -208,12 +206,9 @@ void * recep(void * container, int size, int socket){
 }
 
 int recepChat(void * structure, int size, int socket){
-  if(verbose)printf("Bienvenue dans recepChat \n");
   int flag = 0;
   while(flag != 3){
-    if(verbose)printf("Inside recepChat while\n");
     if(recv(socket,structure,size,MSG_DONTWAIT) > -1){
-      if(verbose)printf("StructureChat recue \n");
       flag = 3;
       return 1;
     }

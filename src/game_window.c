@@ -257,7 +257,10 @@ int createGameWindow(int x, int y)
 							{
 								isChatActive = 1;
 								addLog("Tchat active");
-								pthread_create(&thread_Chat, NULL, fn_chat, NULL);
+								if(nbPlayer > 0){
+									pthread_create(&thread_Chat, NULL, fn_chat, NULL);
+								}
+
 							}
 						}
 					break;
