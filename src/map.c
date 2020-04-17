@@ -20,6 +20,7 @@
 #include "init.h"
 #include "string.h"
 #include "border.h"
+#include "text.h"
 
 
 /* =============== CONSTANTES =============== */

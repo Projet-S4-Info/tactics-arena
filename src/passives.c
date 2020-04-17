@@ -3,6 +3,7 @@
 #include "init.h"
 #include "display.h"
 #include "border.h"
+#include "text.h"
 
 int Bloodlust_counter;
 bool Sentinel_counter;

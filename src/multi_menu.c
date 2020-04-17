@@ -18,6 +18,9 @@
 #include <dirent.h>
 #include "common.h"
 #include "chat.h"
+#include "text.h"
+
+
 #define _NB_MAX_MAPS_ 20
 
 

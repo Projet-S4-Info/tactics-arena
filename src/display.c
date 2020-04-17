@@ -19,6 +19,7 @@
 #include "init.h"
 #include "gameplay.h"
 #include "game_window.h"
+#include "text.h"
 
 
 /* =============== CONSTANTES ================ */
@@ -31,6 +32,7 @@
 #define _NB_MAX_LOGS_ 11					// Define how many logs the screen can display (-1)
 #define _MAX_SIZE_LOGS_ 50					// Max length of a log message
 #define _LOG_DURATION_ 10					// Duration a log is displayed (in seconds)
+#define _NB_TEXT_CACHE_ 100
 
 
 /* =============== VARIABLES ================ */
@@ -42,6 +44,7 @@ const int camSpeed = 5;						// Speed of the camera movements
 int xWinSize, yWinSize;						// x and y sizes of the window
 Coord mouse_position;
 Log logs[_NB_MAX_LOGS_];
+TextCache text_cache[_NB_TEXT_CACHE_];
 
 /* =============== FONCTIONS ================ */
 
@@ -71,53 +74,6 @@ err_t setRendererDriver(SDL_Renderer *renderer)
 	}
 	
 	free(global_renderer_info);
-
-	return OK;
-}
-
-
-
-err_t displayText(SDL_Renderer *renderer, int x, int y, int size, const char *content, const char *text_police, int r, int g, int b)
-// Displays text on the window
-{
-	SDL_Surface *text = NULL;
-	TTF_Font *police = NULL;
-	SDL_Rect txtDestRect;
-
-	SDL_Color color = {r, g, b};
-
-	// Chargement de la police
-	if( (police = TTF_OpenFont(text_police, size)) == NULL){
-		fprintf(stderr, "Erreur chargement initial font : %s\n", TTF_GetError());
-		return SDL_ERROR;
-	}
-
-	// Création de la surface à partir du texte
-	text = TTF_RenderUTF8_Blended(police, content, color);
-	if(!text){
-		fprintf(stderr, "Erreur à la création du texte : %s\n", SDL_GetError());
-		return SDL_ERROR;
-	}
-
-	// Création de la texture à partir de la surface
-	SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-	SDL_Texture *text_tex = SDL_CreateTextureFromSurface(renderer, text);
-	if(!text_tex){
-		fprintf(stderr, "Erreur à la création du rendu du texte : %s\n", SDL_GetError());
-		return SDL_ERROR;
-	}
-	SDL_QueryTexture(text_tex, NULL, NULL, &(txtDestRect.w), &(txtDestRect.h));
-
-	txtDestRect.x = x;
-	txtDestRect.y = y;
-
-	/* Ajout du texte en noir */
-  	SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-  	SDL_RenderCopy(renderer, text_tex, NULL, &txtDestRect);
-
-	SDL_FreeSurface(text);
-	TTF_CloseFont(police);
-	SDL_DestroyTexture(text_tex);
 
 	return OK;
 }

@@ -13,6 +13,7 @@
 #include "display.h"
 #include "textures.h"
 #include "test.h"
+#include "text.h"
 
 #ifdef _WIN32
 #  include <windows.h>

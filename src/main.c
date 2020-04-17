@@ -20,6 +20,7 @@
 #include "stringdb.h"
 #include "init.h"
 #include "print.h"
+#include "text.h"
 
 #define X 30
 #define Y 30

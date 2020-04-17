@@ -25,6 +25,7 @@ extern char description[100];
 extern int isChatActive;
 extern int chatTabIndex;
 extern Direction camMove;
+extern TTF_Font *policePixels;
 
 extern char pseudoChat[STR_SHORT];
 extern chat_t chat;

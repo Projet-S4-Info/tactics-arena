@@ -6,6 +6,7 @@
 #include "display.h"
 #include "gameplay.h"
 #include "deplacement.h"
+#include "text.h"
 
 err_t rec_id_swap(action * a)
 {

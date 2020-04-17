@@ -13,6 +13,7 @@
 #include "textures.h"
 #include "grid.h"
 #include "display.h"
+#include "text.h"
 
 #define _NB_MAX_MAPS_ 20
 

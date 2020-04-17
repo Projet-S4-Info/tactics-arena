@@ -21,8 +21,6 @@ extern Log logs[];
 
 err_t setRendererDriver(SDL_Renderer *renderer);
 
-err_t displayText(SDL_Renderer *renderer, int x, int y, int size, const char *content, const char *text_police, int r, int g, int b);
-
 err_t displaySprite(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y);
 
 err_t closeWindow(SDL_Window *pWindow);

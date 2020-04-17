@@ -15,6 +15,7 @@
 #include "textures.h"
 #include "display.h"
 #include "grid.h"
+#include "text.h"
 
 
 /* =============== CONSTANTES =============== */

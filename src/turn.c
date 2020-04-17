@@ -9,6 +9,7 @@
 #include "servFcnt.h"
 #include "display.h"
 #include "characters.h"
+#include "text.h"
 
 bool turn_active = TRUE;
 action turn_over = {0,{0,0},0};

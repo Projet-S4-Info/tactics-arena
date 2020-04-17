@@ -26,6 +26,7 @@
 #include "chat.h"
 #include "print.h"
 #include "servFcnt.h"
+#include "text.h"
 
 
 /* =============== CONSTANTES ================ */

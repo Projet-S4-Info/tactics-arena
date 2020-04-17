@@ -130,6 +130,17 @@ typedef struct
     SDL_Texture *textures[4][6]; // 4 directions and 2 different sizes -> 8 in total and 6 animation sprites
 } CharTexture;
 
+typedef struct
+{
+    char *police;
+    int size;
+    char *content;
+    SDL_Color color;
+    SDL_Surface *surface;
+    Uint32 time;
+} TextCache;
+
+
 
 /* COMMUNICATION STRUCTURES */
 
