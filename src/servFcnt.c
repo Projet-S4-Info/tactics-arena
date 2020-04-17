@@ -161,6 +161,7 @@ int recepChat(void * structure, int size, int socket){
       return 1;
     }
     flag ++;
+    sleep(1);
   }
   return 0;
 }
