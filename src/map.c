@@ -353,25 +353,16 @@ err_t displayChat(SDL_Renderer *renderer,int chatX, int chatY){
 							temp[len+1] = '\0';
 							if(verbose >= 2)printf("%s",temp);
 						}
-<<<<<<< HEAD
-						// if(verbose)printf("\n");
-=======
 						if(verbose >= 2)printf("\n");
->>>>>>> :sparkles: adding states to verbose
 						displayText(renderer, chatX, chatY + (j * 15), 15 ,temp, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 						j++;
 					}
 				}
 				else{
 					displayText(renderer, chatX, chatY + (j * 15), 15 , chat.chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
-<<<<<<< HEAD
-					// if(verbose)printf("%s \n", chat.chatTab[i]);
-=======
 					if(verbose >= 2)printf("%s \n", chat.chatTab[i]);
->>>>>>> :sparkles: adding states to verbose
 					j++;
 				}
-
 			}
 	}
 	return OK;

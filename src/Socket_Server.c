@@ -7,6 +7,8 @@
  * \date 18/03/2020
 */
 
+/* =============== DEPENDENCES =============== */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,20 +45,30 @@
   typedef struct sockaddr SOCKADDR;
 #endif
 
+/* =============== VARIABLES =============== */
 unsigned int logFlag = 0;
+
+
+/* =============== FONCTIONS =============== */
 
 /**
  * \fn err_t stopTCPSocketServ(int socket)
  * \return err_t SERV_OK
  * \brief Function to stop the server (close sockets)
- */
+*/
 
 err_t stopTcpSocketServ(int socketConnected){
   if(verbose >= 1)printf("Shutdown socketConnected ...\n");
   shutdown(socketConnected, 2);
   if(verbose >= 1)printf("Close socket : socketConnected...\n");
   closesocket(socketConnected);
-  nbPlayer -= 1; 
+  nbPlayer -= 1;
+  
+  // Commande pour fermer le firewall sur windows
+  #ifdef _WIN32
+    system("netsh advfirewall firewall delete rule name=\"Tactics\"");
+  #endif
+  
   return OK;
 }
 
@@ -65,11 +77,11 @@ err_t stopTcpSocketServ(int socketConnected){
  * \fn err_t startTCPSocketServ(void)
  * \return err_t SERV_OK or SERV_ERROR
  * \brief Function to create the server and wait incoming connection
- */
+*/
 
 err_t startTCPSocketServ(){
  
-  #ifdef __WIN64
+  #ifdef _WIN32
     // Cange codepage CMD
     system("chcp 65001");
     // Creating rules for Firewall
@@ -186,8 +198,6 @@ err_t startTCPSocketServ(){
             }
             if(verbose >= 1)printf("\nChargement de la partie... \n Fermeture de la fonction ... \n");
           }
-          /*-- Commande pour fermer le firewall sur windows --*/
-         // system("netsh advfirewall firewall delete rule name=\"Tactics\"");
         }
         else{
           printf("\nUn problème est survenu lors de la connexion du client :( \n");
@@ -208,6 +218,5 @@ err_t startTCPSocketServ(){
     printf("Un problème est survenu avec Windows :( \n");
     return SERV_ERROR;
   }
-  nbPlayer = 2; 
   return OK;
 }

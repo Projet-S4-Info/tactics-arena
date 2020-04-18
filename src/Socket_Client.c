@@ -7,7 +7,7 @@
  * \date 18/03/2020
  */
 
-
+/* =============== DEPENDENCES =============== */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,18 +17,14 @@
 #include "struct.h"
 #include "common.h"
 
-/*
-* If program run on Windows
-*/
+// For Windows user
 #ifdef _WIN32
   #include <winsock2.h>
-  /*
-  * Needed  non-existent type with winsock2
-  */
+  
+  // Needed non-existent type with winsock2
   typedef int socklen_t;
-/*
-* Else if program run on Unix
-*/
+
+// Other OS
 #else
 
   #include <sys/types.h>
@@ -36,24 +32,26 @@
   #include <netinet/in.h>
   #include <arpa/inet.h>
   #include <unistd.h>
+
   #define closesocket(param) close(param)
   #define INVALID_SOCKET -1
   #define SOCKET_ERROR -1
-  /*
-  * Adding missing types with socket.h
-  */
   typedef int SOCKET;
   typedef struct sockaddr_in SOCKADDR_IN;
   typedef struct sockaddr SOCKADDR;
 #endif
 
+/* =============== VARIABLES =============== */
 int socketCli = 0;
+
+
+/* =============== FONCTIONS =============== */
 
 /**
  * \fn err_t stopTCPSocketCli(int socket)
  * \return err_t CLI_OK
  * \brief Function to stop the Client connection (close sockets)
- */
+*/
 
 err_t stopTCPSocketCli(int socketCli){
   
@@ -73,20 +71,12 @@ err_t stopTCPSocketCli(int socketCli){
 err_t startTCPSocketCli(int socketCli){
 
   #ifdef _WIN32
-    /*
-    * Change the cmd codepage
-    */
+    
+    // Cange codepage CMD
     system("chcp 65001");
     system("cls");
     WSADATA WSAData;
-    /*
-    * Creating var to manage errors
-    */
     int windWSAError;
-    /*
-    * WSAStratup Initialising winsock2 library
-    * return 0 if there is no problems
-    */
     windWSAError = WSAStartup(MAKEWORD(2,2), &WSAData);
   #else
     int windWSAError= 0;
@@ -104,7 +94,7 @@ err_t startTCPSocketCli(int socketCli){
       
   if(!windWSAError){
     servIP = ipSrv;
-    if(verbose)printf("\n%s\n", servIP);
+    if(verbose >= 1)printf("\n%s\n", servIP);
   
   /*---------- Initialisation des structures pour les sockets ----*/
     SOCKADDR_IN sockIn;
