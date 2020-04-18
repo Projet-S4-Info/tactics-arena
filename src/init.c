@@ -124,17 +124,18 @@ err_t ent_init_test(Entity *e, char title[STR_SHORT])
             (e+i)->cha_id = i+1;
             (e+i)->direction = W;
             init_spawn(e+i, ally_spawn[s]);
+            if(verbose)printf("%s Spawn Set to %d %d\n", e->cha_name, e->coords.x, e->coords.y);
+
         }
         else
         {
             (e+i)->cha_id = (i+1)*-1;
             (e+i)->direction = S;
             init_spawn(e+i, foe_spawn[s]);
+            if(verbose)printf("%s Spawn Set to %d %d\n", e->cha_name, e->coords.x, e->coords.y);
         }
 
         (e+i)->active = Alive;
-        (e+i)->coords.x = 0;
-        (e+i)->coords.y = 0;
         (e+i)->act_points = 3;
 
         for(j=0;j<NUM_STATS;j++)

@@ -17,6 +17,10 @@
 #include <pthread.h>
 #include <dirent.h>
 #include "common.h"
+#include "chat.h"
+#include "text.h"
+
+
 #define _NB_MAX_MAPS_ 20
 
 
@@ -40,6 +44,7 @@ int music_Multi_playing = 1;
 int mapListMultiIndex = 0;
 int isMapMultiValid = 0;
 int indexMapMulti = 0;
+int serverStatus = 0;
 
 
 char pseudoSrv[50] = "Pseudo : ";
@@ -90,6 +95,7 @@ static void * fn_client (void * p_data)
     startTCPSocketCli();
     return NULL;
 }
+
 
 void loadMultiMenuTextures(SDL_Renderer *renderer)
 // Load all the textures needed for the menu
@@ -163,11 +169,11 @@ void dispLog(SDL_Renderer *renderer, int consoleX, int consoleY){
 
 	
 	for(int i = 0; i < logFlag; i++ ){
-		displayText(renderer, consoleX + 20, consoleY + (25 * i) , 22, tabLog[i], "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		displayText(renderer, consoleX + 20, consoleY + (25 * i) , 22, tabLog[i], "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
 		if(i == 4 ){
-			displayText(renderer, consoleX + 20, consoleY + (25 * i) , 22, pseudoClient, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+			displayText(renderer, consoleX + 20, consoleY + (25 * i) , 22, pseudoClient, "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
 			displaySprite(renderer, ok_button_Multi, 530, 450);
-			displayText(renderer, 605, 540, 45, "Start", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+			displayText(renderer, 605, 540, 45, "Start", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
 			isClientCo = 1;
 		}
 	}
@@ -220,7 +226,7 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y, int index){
     /* Background image */
 	displaySprite(renderer, background_Multi, 0, 0);
     /* Affiche en gros Tactics Arena */
-	displayText(renderer, 300, 100, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
+	displayText(renderer, 300, 100, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, TRUE);
     /* Quit button */
     displaySprite(renderer, quit_button_Multi, x-300, y-190);
     /* initialisation de l'opacitée */
@@ -250,12 +256,12 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y, int index){
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 185);
 		SDL_RenderFillRect(renderer, &pseudoHostBox);
 	}
-	displayText(renderer, inputSrv.x + 10, inputSrv.y + 15 , 22, "Saisir votre Pseudo : ", "../inc/font/Pixels.ttf", 255, 255, 255);
-	displayText(renderer, inputSrv.x + 15, inputSrv.y + 50, 22, pseudoSrv, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	displayText(renderer, inputSrv.x + 10, inputSrv.y + 15 , 22, "Saisir votre Pseudo : ", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	displayText(renderer, inputSrv.x + 15, inputSrv.y + 50, 22, pseudoSrv, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 
-	displayText(renderer, mapListBox.x - 30, mapListBox.y - 30 , 22, "Chosir une map : ", "../inc/font/Pixels.ttf", 255, 255, 255);
-	displayText(renderer, mapListBox.x - 15, mapListBox.y + 3 , 22, "<", "../inc/font/Pixels.ttf", 255, 255, 255);
-	displayText(renderer, mapListBox.x + mapListBox.w + 5, mapListBox.y + 4, 22, ">", "../inc/font/Pixels.ttf", 255, 255, 255);
+	displayText(renderer, mapListBox.x - 30, mapListBox.y - 30 , 22, "Chosir une map : ", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	displayText(renderer, mapListBox.x - 15, mapListBox.y + 3 , 22, "<", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	displayText(renderer, mapListBox.x + mapListBox.w + 5, mapListBox.y + 4, 22, ">", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 	
 	
 	if(isPseudoValid == 1){
@@ -265,10 +271,10 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y, int index){
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 185);
 		SDL_RenderFillRect(renderer, &mapListBox);
 	}
-	if (mapListMulti[index] != NULL) displayText(renderer, mapListBox.x + 10, mapListBox.y + 4, 20, mapNameMulti, "../inc/font/Pixels.ttf", 255, 255, 255);
+	if (mapListMulti[index] != NULL) displayText(renderer, mapListBox.x + 10, mapListBox.y + 4, 20, mapNameMulti, "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 
 	displaySprite(renderer, ok_button_Multi, 50, mapListBox.y + mapListBox.h + 20);
-	displayText(renderer, 150, mapListBox.y + mapListBox.h + 110, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	displayText(renderer, 150, mapListBox.y + mapListBox.h + 110, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
 	
 
 	/*-------------------input box Host menu -------------------------*/
@@ -280,8 +286,8 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y, int index){
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(renderer, 85, 34, 0, 185);
 		SDL_RenderFillRect(renderer, &infoHost);
-		displayText(renderer, infoHost.x + 10, infoHost.y + 15 , 22, "L'ip du serveur est :", "../inc/font/Pixels.ttf", 255, 255, 255);
-		displayText(renderer, infoHost.x + 15, infoHost.y + 50, 22, monIP, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		displayText(renderer, infoHost.x + 10, infoHost.y + 15 , 22, "L'ip du serveur est :", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+		displayText(renderer, infoHost.x + 15, infoHost.y + 50, 22, monIP, "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
 	}
 
 	dispLog(renderer, console.x, console.y);
@@ -325,7 +331,7 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 	 /* Background image */
 	displaySprite(renderer, background_Multi, 0, 0);
     /* Affiche en gros Tactics Arena */
-	displayText(renderer, 300, 100, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
+	displayText(renderer, 300, 100, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, TRUE);
     /* Quit button */
     displaySprite(renderer, quit_button_Multi, x-300, y-190);
 
@@ -344,10 +350,10 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 		SDL_RenderFillRect(renderer, &pseudoJoinBox);
 	}
 
-	displayText(renderer, inputJoin.x + 10, inputJoin.y + 15 , 22, "Saisir votre Pseudo : ", "../inc/font/Pixels.ttf", 255, 255, 255);
-	displayText(renderer, inputJoin.x + 15, inputJoin.y + 50, 22, pseudoJoin, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	displayText(renderer, inputJoin.x + 10, inputJoin.y + 15 , 22, "Saisir votre Pseudo : ", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	displayText(renderer, inputJoin.x + 15, inputJoin.y + 50, 22, pseudoJoin, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 	displaySprite(renderer, ok_button_Multi, 50, 340);
-	displayText(renderer, 140, 430, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	displayText(renderer, 140, 430, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
 	/*-----------------------------------------*/
 
 	/*-----------info box for JoinMenu---------*/
@@ -365,13 +371,13 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 		SDL_RenderFillRect(renderer, &ipJoinBox);
 	}
 	
-	displayText(renderer, infoJoin.x + 10, infoJoin.y + 15 , 22, "Saisir l'ip du serveur : ", "../inc/font/Pixels.ttf", 255, 255, 255);
-	displayText(renderer, infoJoin.x + 15, infoJoin.y + 50, 22, ipJoin, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	displayText(renderer, infoJoin.x + 10, infoJoin.y + 15 , 22, "Saisir l'ip du serveur : ", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	displayText(renderer, infoJoin.x + 15, infoJoin.y + 50, 22, ipJoin, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 	displaySprite(renderer, ok_button_Multi, 480, 360);
-	displayText(renderer, 590, 450, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+	displayText(renderer, 590, 450, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
 	if((isPseudoValid == 1) && (isIPValid == 1)){
 		displaySprite(renderer, ok_button_Multi, 530, 450);
-		displayText(renderer, 605, 540, 55, "JOIN", "../inc/font/PixelOperator.ttf", 255, 255, 255);
+		displayText(renderer, 605, 540, 55, "JOIN", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
 	}
 	/*-----------------------------------------*/
 
@@ -466,9 +472,9 @@ int displayMenuMulti(int x, int y)
                                     /* Quit button */
                                     displaySprite(renderer, quit_button_Multi, x-300, y-190);
                                     /* Affiche en gros Tactics Arena */
-	                                displayText(renderer, 300, 200, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
+	                                displayText(renderer, 300, 200, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, TRUE);
 	                                /* Mentions de bas de menu */
-	                                displayText(renderer, 5, y-20, 15, "Projet L2 Informatique - BUTEL CHAUVIN DOUCET LAFAY", "../inc/font/Pixels.ttf", 255, 255, 255);
+	                                displayText(renderer, 5, y-20, 15, "Projet L2 Informatique - BUTEL CHAUVIN DOUCET LAFAY", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 									if (music_Multi_playing){
 										displaySprite(renderer, music_on_Multi, x-175, y-200);
 									}else {
@@ -589,18 +595,37 @@ int displayMenuMulti(int x, int y)
 						}
 						
 						// Info Join set 
-						else if (u.motion.x >= 608 && u.motion.x <= 721 && u.motion.y >= 550 && u.motion.y <= 590 && isJoinMenu == 1 && isIPValid == 1 && isPseudoValid == 1){
+						else if (u.motion.x >= 608 && u.motion.x <= 721 && u.motion.y >= 550 && u.motion.y <= 590 && isJoinMenu == 1 && isIPValid == 1 && isPseudoValid == 1 && isInfoJoinSet == 0){
 							isInfoJoinSet = 1;
-							pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);				
+							pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);
+							serverStatus = 1;
+							while(serverStatus != 3){
+								if(verbose)printf("Waiting Sattus to be 1\n");
+								sleep(2);
+							}
+							closeWindow(pWindow);
+							freeMultiMenuTextures();
+							stopMenuMusic(2);
+							return 2;			
 						}
 						
 						// Join Btn after infoJoinSet
 						else if (u.motion.x >= 606 && u.motion.x <= 722 && u.motion.y >= 550 && u.motion.y <= 594 && isHostMenu == 1 && isClientCo == 1){
 							if(verbose)printf("Starting game ... \n");
-							closeWindow(pWindow);
-							freeMultiMenuTextures();
-							stopMenuMusic(2);
-							return 1;
+							
+							if(isHostMenu == 1){
+								serverStatus = 1;
+								while (serverStatus != 2)
+								{
+									if(verbose)printf("Waiting status to be 2 \n");
+									sleep(2);
+								}
+								closeWindow(pWindow);
+								freeMultiMenuTextures();
+								stopMenuMusic(2);
+								return 1;								
+							}
+							
 						}
 						
 						// Nouveau boutton "QUIT" 
@@ -702,5 +727,5 @@ int displayMenuMulti(int x, int y)
 	else{
 		fprintf(stderr,"Erreur de création de la fenêtre: %s\n",SDL_GetError());
 	}
-	return 1;
+	return 0;
 }

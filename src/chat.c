@@ -2,10 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "struct.h"
+#include "servFcnt.h"
+
+chat_t chat;
 
 err_t init_chat(chat_t * c)
 {
-    c->index = 0;
+    c->index = -1;
     return OK;
 }
 
@@ -51,4 +54,24 @@ err_t nouveau_Msg(chat_t *c, char msg[STR_LONG])
     strcpy(c->chatTab[c->index], msg);
 
     return OK;
+}
+
+void startChat(void * structure, int size, int socket){
+    while(1){
+        if(changesChat == 1){
+            if(sendStruct(structure, size, socket) == OK){
+
+                changesChat = 0;
+            }else{
+                //printf("Aucune structure envoyée depuis thread Chat \n");
+            }
+        }else{
+            if(recepChat(structure,size,socket) == 1){
+                for(int i = 0; i < chat.index; i++){
+                }
+            }else{
+                //if(verbose)printf("Aucune structure recue depuis threadChat \n");
+            }
+        }
+    }
 }

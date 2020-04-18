@@ -18,6 +18,9 @@
 #include "display.h"
 #include "textures.h"
 #include "init.h"
+#include "string.h"
+#include "border.h"
+#include "text.h"
 
 
 /* =============== CONSTANTES =============== */
@@ -29,6 +32,12 @@
 
 /* =============== VARIABLES =============== */
 
+
+char selectedAbilityDesc[STR_LONG];
+char hoverAbilityDesc[STR_LONG];
+Coord borderTab[MAXRANGE];
+Coord rangeTab[_X_SIZE_*_Y_SIZE_];
+Coord drawPos = {-1, -1};
 
 
 /* =============== FONCTIONS =============== */
@@ -92,11 +101,17 @@ int loadMapTextures(SDL_Renderer * renderer)
 						loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_128.png")),
 						"snow");
 
-	// Loading sand block textures
+	// Loading selection textures
 	addTextureToTable(	textures,
 						loadTexture(renderer, loadImage("../inc/img/interface/selection_64.png")),
 						loadTexture(renderer, loadImage("../inc/img/interface/selection_128.png")),
 						"selection");
+
+	// Loading ability range textures
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/interface/ability_range_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/ability_range_128.png")),
+						"ability_range");
 
 	// Loading arrow right texture
 	addTextureToTable(	textures,
@@ -139,6 +154,12 @@ int loadMapTextures(SDL_Renderer * renderer)
 						loadTexture(renderer, loadImage("../inc/img/interface/attack_logo_64.png")),
 						NULL,
 						"attack");
+
+	// Loading move logo
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/interface/move_logo_64.png")),
+						NULL,
+						"move");
 
 	// Clockwise turn icon
 	addTextureToTable(	textures,
@@ -286,7 +307,7 @@ int displayAbilities(SDL_Renderer *renderer)
 // Display the abilities menu
 {
 	// Abilities icons
-	displaySprite(renderer, getTexture(textures, "attack"), 16, yWinSize-80);
+	displaySprite(renderer, getTexture(textures, "move"), 16, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "attack"), 16+1*80, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "attack"), 16+2*80, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "attack"), 16+3*80, yWinSize-80);
@@ -295,6 +316,45 @@ int displayAbilities(SDL_Renderer *renderer)
 	displaySprite(renderer, getTexture(textures, "turn_left"), 16+6*80, yWinSize-80);
 
 	return 0;
+}
+
+char * clearStr(char * str){
+	for(int i = 0; i <= strlen(str); i++){
+		str[i] = '\0';
+	}
+
+	return str;
+}
+
+err_t displayChat(SDL_Renderer *renderer,int chatX, int chatY){
+	char temp[33];
+	int j = 0;
+	if( chat.index > -1){
+			for (int i = 0; i <= chat.index ; i++){
+				if(strlen(chat.chatTab[i]) > 33){
+					int k;
+					for(k = 0; k < (strlen(chat.chatTab[i])); k += 33){
+						strcpy(temp, clearStr(temp));
+						for(int p = k; p < 33 + k && p < (strlen(chat.chatTab[i])); p++){
+							int len = strlen(temp);
+							temp[len] = chat.chatTab[i][p];
+							temp[len+1] = '\0';
+							// if(verbose)printf("%s",temp);
+						}
+						// if(verbose)printf("\n");
+						displayText(renderer, chatX, chatY + (j * 15), 15 ,temp, "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
+						j++;
+					}
+				}
+				else{
+					displayText(renderer, chatX, chatY + (j * 15), 15 , chat.chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
+					// if(verbose)printf("%s \n", chat.chatTab[i]);
+					j++;
+				}
+
+			}
+	}
+	return OK;
 }
 
 
@@ -328,45 +388,48 @@ int displayInterface(SDL_Renderer *renderer)
 
 	if (tempEntity != NULL)
 	{
-		displayAbilities(renderer);
-		if (selected_ability != -1){
-			displayText(renderer, 16, yWinSize-110, 20, get_desc(tempEntity, selected_ability), "../inc/font/Pixels.ttf", 255, 255, 255);
-		} else {
-			if (hover_ability >= 0) 
-			{
-				char abilityDesc[STR_LONG];
-				sprintf(abilityDesc, "%s : %s", strToUpper(get_name(tempEntity, hover_ability)), get_desc(tempEntity, hover_ability));
-				displayText(renderer, 16, yWinSize-110, 20, abilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255);
+		if (is_ally(tempEntity))
+		{
+			displayAbilities(renderer);
+			if (selected_ability != -1){
+				sprintf(selectedAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, selected_ability)), get_desc(tempEntity, selected_ability));
+				displayText(renderer, 16, yWinSize-110, 20, selectedAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+			} else {
+				if (hover_ability >= 0) 
+				{
+					sprintf(hoverAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, hover_ability)), get_desc(tempEntity, hover_ability));
+					displayText(renderer, 16, yWinSize-110, 20, hoverAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				}
 			}
 		}
 
 		// Display the ID card of the selected entity
 		displaySprite(renderer, getTexture(textures, "id_card"), 10, 10);
-		displayText(renderer, 382, 128, 18, "?", "../inc/font/Pixels.ttf", 255, 255, 255);
+		displayText(renderer, 382, 128, 18, "?", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 		displaySprite(renderer, getCharFrontTexture(tempEntity->cha_class->cla_name), 51, 52);
-		displayText(renderer, 170, 45, 20, tempEntity->cha_name, "../inc/font/Pixels.ttf", 255, 255, 255);
+		displayText(renderer, 170, 45, 20, tempEntity->cha_name, "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 
 		// -- entity health
 		displaySprite(renderer, getBigTexture(cSprites, "heart_icon"), 170, 70);
 		sprintf(pv_text, "%d", tempEntity->stat_mods[pv]);
-		displayText(renderer, 200, 70, 30, pv_text, "../inc/font/Pixels.ttf", 255, 0, 0);
+		displayText(renderer, 200, 70, 30, pv_text, "../inc/font/Pixels.ttf", 255, 0, 0, TRUE);
 
 		// -- entity action points
 		displaySprite(renderer, getBigTexture(cSprites, "star_icon"), 165, 102);
 		sprintf(pa_text, "%d", tempEntity->act_points);
-		displayText(renderer, 202, 106, 30, pa_text, "../inc/font/Pixels.ttf", 49, 174, 196);
+		displayText(renderer, 202, 106, 30, pa_text, "../inc/font/Pixels.ttf", 49, 174, 196, TRUE);
 
 		// -- entity mouvement points
 		displaySprite(renderer, getBigTexture(cSprites, "mv_icon"), 250, 102);
 		sprintf(pm_text, "%d", tempEntity->stat_mods[mv]);
-		displayText(renderer, 287, 106, 30, pm_text, "../inc/font/Pixels.ttf", 52, 169, 43);
+		displayText(renderer, 287, 106, 30, pm_text, "../inc/font/Pixels.ttf", 52, 169, 43, TRUE);
 
 		// -- passive description if hovering info icon
 		if (hover_passive_help == 1)
 		{
 			sprintf(passive, "Passive : %s", tempEntity->cha_class->Passive.name);
-			displayText(renderer, mouse_position.x+20, mouse_position.y+20, 20, passive, "../inc/font/Pixels.ttf", 238, 165, 53);
-			displayText(renderer, mouse_position.x+20, mouse_position.y+40, 20, tempEntity->cha_class->Passive.desc, "../inc/font/Pixels.ttf", 238, 165, 53);
+			displayText(renderer, mouse_position.x+20, mouse_position.y+20, 20, passive, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
+			displayText(renderer, mouse_position.x+20, mouse_position.y+40, 20, tempEntity->cha_class->Passive.desc, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
 		}
 	}
 
@@ -381,7 +444,7 @@ int displayInterface(SDL_Renderer *renderer)
 	// Next turn button
 	if (hover_next_turn == TRUE)
 	{
-		displayText(renderer, xWinSize-280, yWinSize-110, 20, "Skip turn", "../inc/font/Pixels.ttf", 255, 255, 255);
+		displayText(renderer, xWinSize-280, yWinSize-110, 20, "Skip turn", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 		displaySprite(renderer, getTexture(textures, "end_turn_hover"), xWinSize-280, yWinSize-80);
 	}
 	else
@@ -394,8 +457,8 @@ int displayInterface(SDL_Renderer *renderer)
 	if (isChatActive) displaySprite(renderer, getTexture(textures, "tchat_button_selected"), xWinSize-360, yWinSize-80);
 	else displaySprite(renderer, getTexture(textures, "tchat_button"), xWinSize-360, yWinSize-80);
 	if (hover_tchat == 1 || hover_tchat == 2) displaySprite(renderer, getTexture(textures, "tchat_button_hover"), xWinSize-360, yWinSize-80);
-	if (hover_tchat == 1)displayText(renderer, xWinSize-360, yWinSize-110, 20, "Hide tchat", "../inc/font/Pixels.ttf", 255, 255, 255);
-	else if (hover_tchat == 2) displayText(renderer, xWinSize-360, yWinSize-110, 20, "Display tchat", "../inc/font/Pixels.ttf", 255, 255, 255);
+	if (hover_tchat == 1)displayText(renderer, xWinSize-360, yWinSize-110, 20, "Hide tchat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	else if (hover_tchat == 2) displayText(renderer, xWinSize-360, yWinSize-110, 20, "Display tchat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 	if(isChatActive){
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
@@ -404,22 +467,18 @@ int displayInterface(SDL_Renderer *renderer)
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 		SDL_RenderFillRect(renderer, &chatScreen);
-		displayText(renderer, chatBox.x + (chatBox.w /2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255);
+		displayText(renderer, chatBox.x + (chatBox.w /2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+		
+		displayChat(renderer, chatScreen.x+2, chatScreen.y + 2);
 
-		if(chat->index >= 0){
-			for (int i = 0; i < chat->index; i++){
-				displayText(renderer, chatScreen.x+2, chatScreen.y + 2 + (i * 15), 15 , chat->chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255);
-				if(verbose)printf("%s \n", chat->chatTab[i]);
-			}
-		}
 
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
 		SDL_SetRenderDrawColor(renderer, 85, 34, 0, 255);
 		SDL_RenderFillRect(renderer, &chatMsg);
 		if(strlen(pseudoChat) > 33){
-			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , pseudoChat + (strlen(pseudoChat) - 33), "../inc/font/PixelOperator.ttf", 255, 255, 255);
+			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , pseudoChat + (strlen(pseudoChat) - 33), "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 		}else{
-			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , pseudoChat, "../inc/font/PixelOperator.ttf", 255, 255, 255);
+			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , pseudoChat, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 		}
 			
 	}
@@ -428,6 +487,8 @@ int displayInterface(SDL_Renderer *renderer)
 
 	return 0;
 }
+
+
 
 int displayMap(SDL_Renderer *renderer, int x, int y)
 // Display the map
@@ -441,6 +502,11 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 	/* Le fond de la fenêtre sera blanc */
     SDL_SetRenderDrawColor(renderer, 173, 216, 230, 255);
 	SDL_RenderClear(renderer);
+
+	if (selected_ability != -1)
+	{
+		get_border(getEntity(getSelectedPos())->cha_id, selected_ability, borderTab, rangeTab);
+	}
 
     for (int i=0; i < _X_SIZE_; i++){
         for (int j=(_Y_SIZE_-1); j >= 0; j--){
@@ -463,6 +529,18 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 				{
 					if (pxBase == 64)	displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].texture, blockPos.x, blockPos.y);
 					else 				displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].big_texture, blockPos.x, blockPos.y);
+				}
+
+				// Affichage portée d'attaque (si compétence sélectionnée)
+				if (selected_ability != -1)
+				{
+					drawPos.x = i;
+					drawPos.y = j;
+					if (isInCoordTab(rangeTab, drawPos) || isInCoordTab(borderTab, drawPos))
+					{
+						if (pxBase == 64) displaySprite(renderer, getTexture(textures, "ability_range"), blockPos.x, blockPos.y);
+						else displaySprite(renderer, getBigTexture(textures, "ability_range"), blockPos.x, blockPos.y);
+					}
 				}
 
 				// Affichage équipe

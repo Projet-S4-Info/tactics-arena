@@ -3,28 +3,25 @@
 #include "deplacement.h"
 #include "grid.h"
 #include "map_editor.h"
+#include "border.h"
 #include <stdio.h>
 
 void test()
 {
-    Entity * e;
+    loadMap(matrix, "map_sandy_pass");
 
-    int i;
-    for(i=0; i<NUM_CLASS; i++)
-    {
-        printf("\n");
-        printf("Allies[%d] : %s\n", i, Allies[i].cha_class->cla_name);
-        printf("x : %d y : %d\n", Allies[i].coords.x, Allies[i].coords.y);
-        e = getEntity(Allies[i].coords);
-        printf("Tile : %d\n", e == &Allies[i]);
+	debugGrid(matrix, _X_SIZE_, _Y_SIZE_);
 
-        printf("\n");
-        printf("Foes[%d] : %s\n", i, Foes[i].cha_class->cla_name);
-        printf("x : %d y : %d\n", Foes[i].coords.x, Foes[i].coords.y);
-        e = getEntity(Foes[i].coords);
-        printf("Tile : %d\n", e == &Foes[i]);
+    Coord coorTab[MAXRANGE];
+    Coord zone[_X_SIZE_*_Y_SIZE_];
+    Coord c ={0,0};
 
-    }
+    printf("\n");
+    setActionBorder(c, 8, coorTab);
+    setActionZone(8,coorTab,zone);
 
-    printf("\nend of\n");
+    print_grid(coorTab);
+    printf("\n");
+    print_grid(zone);
+
 }

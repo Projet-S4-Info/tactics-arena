@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "struct.h"
+#include "grid.h"
 
 err_t print_abilityId(abilityId id, char tab[STR_SHORT])
 {
@@ -200,5 +201,37 @@ err_t print_StateList(StateList * list, char tab[STR_SHORT])
     {
         printf("List is NULL\n");
     }
+    return OK;
+}
+
+err_t print_grid(Coord tab[])
+{
+    char matrice[_X_SIZE_][_Y_SIZE_];
+
+    int i,j;
+
+    for(i=0; i<_X_SIZE_; i++)
+    {
+        for(j=0; j<_Y_SIZE_; j++)
+        {
+            matrice[i][j] = ' ';
+        }
+    }
+
+    for(i=0; tab[i].x!=-99; i++)
+    {
+        matrice[tab[i].x][tab[i].y] = 'X';
+    }    
+
+    for(i=0; i<_X_SIZE_; i++)
+    {
+        printf("|");
+        for(j=0; j<_Y_SIZE_; j++)
+        {
+            printf("%c|", matrice[i][j]);
+        }
+        printf("\n");
+    }
+
     return OK;
 }

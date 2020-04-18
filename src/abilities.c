@@ -248,7 +248,7 @@ int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
 
     for(i=0; i<3; i++)
     {
-        setActionZone(ct, 6, t);
+        setActionBorder(ct, 6, t);
         for(j=0; j<NUM_CLASS; j++)
         {
             if(isInRange(t, (all+j)->coords))

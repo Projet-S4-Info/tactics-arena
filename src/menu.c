@@ -13,6 +13,7 @@
 #include "display.h"
 #include "textures.h"
 #include "test.h"
+#include "text.h"
 
 #ifdef _WIN32
 #  include <windows.h>
@@ -107,10 +108,10 @@ void updateMenu(SDL_Renderer *renderer, int x, int y)
 		displaySprite(renderer, music_off, x-175, y-200);
 	}
 	/* Affiche en gros Tactics Arena */
-	displayText(renderer, 300, 200, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255);
+	displayText(renderer, 300, 200, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, TRUE);
 
 	/* Mentions de bas de menu */
-	displayText(renderer, 5, y-20, 15, "Projet L2 Informatique - BUTEL CHAUVIN DOUCET LAFAY", "../inc/font/Pixels.ttf", 255, 255, 255);
+	displayText(renderer, 5, y-20, 15, "Projet L2 Informatique - BUTEL CHAUVIN DOUCET LAFAY", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 }
 
 int displayMenu(int x, int y)

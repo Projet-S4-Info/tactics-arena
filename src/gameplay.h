@@ -15,6 +15,7 @@ bool show(Entity * e);
 bool same_team(Entity *a, Entity *b);
 err_t end_Detain(Entity *e);
 bool tile_type(Coord c, targetType targeting, Entity * e);
+bool same_coord(Coord a, Coord b);
 bool closer_coords(Coord a, Coord b);
 Coord add_coords(Coord a, Coord b);
 err_t free_spawn(Entity *e);

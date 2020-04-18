@@ -3,6 +3,7 @@
 #include "init.h"
 #include "display.h"
 #include "border.h"
+#include "text.h"
 
 int Bloodlust_counter;
 bool Sentinel_counter;
@@ -57,7 +58,7 @@ err_t sentinel_check(Entity *e)
 
         Coord t[MAXRANGE];
 
-        setActionZone(r->coords,sight,t);
+        setActionBorder(r->coords,sight,t);
         
         if(isInRange(t, e->coords))
         {
