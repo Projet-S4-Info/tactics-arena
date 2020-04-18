@@ -23,8 +23,8 @@ Coord closest_free_tile(Coord c)
     {
         active = defiler(maFile);
         t = getTile(active);
-        printf("x : %d    y : %d\n", active.x, active.y);
-        printf("Null : %d    Walk : %d\n", t->entity == NULL, t->walkable);
+        if(verbose)printf("x : %d    y : %d\n", active.x, active.y);
+        if(verbose)printf("Null : %d    Walk : %d\n", t->entity == NULL, t->walkable);
 
         if(t->entity == NULL && t->walkable)
         {
