@@ -57,7 +57,7 @@ int socketCli = 0;
 
 err_t stopTCPSocketCli(int socketCli){
   
-  if(verbose)printf("Fermeture du socket Client ... \n");
+  if(verbose >= 0)printf("Fermeture du socket Client ... \n");
   shutdown(socketCli, 2);
   closesocket(socketCli);
   nbPlayer -= 1; 
@@ -115,31 +115,28 @@ err_t startTCPSocketCli(int socketCli){
   /*-------------------------------------------------------------*/
     nbPlayer +=1;
     
-    if(verbose)printf("\nLancement de la création du client...\n");
+    if(verbose >= 0)printf("\nLancement de la création du client...\n");
     
     //-- Création de la socket (IPv4, TCP, 0)
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if(sock != INVALID_SOCKET){
-      if(verbose)printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
+      if(verbose >= 1)printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
 
       // -- Tentative de connection vers le serveur
       if(connect(sock, (SOCKADDR*)&sockIn, sizeof(sockIn)) != SOCKET_ERROR){
-        if(verbose)printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
+        if(verbose >= 0)printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
         socketConnected = sock;
-        if(verbose)printf("\nVous vous appelez : %s", pseudoUser);
+        if(verbose >= 1)printf("\nVous vous appelez : %s", pseudoUser);
         sprintf(infoMoi.pseudo, "%s", pseudoUser);
-        if(verbose)printf("\nDébut de la communication : \n");
-        if(verbose)printf("socketConnectedCli = %d\n", socketConnected);
+        if(verbose >= 0)printf("\nDébut de la communication : \n");
+        if(verbose >= 1)printf("socketConnectedCli = %d\n", socketConnected);
 
         sendStruct(&infoMoi, sizeof(infoMoi), socketConnected);
-        if(verbose)printf("Conexion établie sans soucis fermeture de la fonction... \n");
+        if(verbose >= 0)printf("Conexion établie sans soucis fermeture de la fonction... \n");
 
         if(recep(&startGameCli, sizeof(startGameCli), socketConnected) != NULL){
-          printf("Je suis sur structure recue \n");
           serverStatus = 3;
         }
-        
-
         return OK;
       }
       else{

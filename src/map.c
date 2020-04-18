@@ -50,11 +50,11 @@ int loadMapTextures(SDL_Renderer * renderer)
 {
 	int index;
 
-	if(verbose)printf("[GRAPHICS] Effacement des textures pré-existantes...\n");
+	if(verbose >= 1)printf("[GRAPHICS] Effacement des textures pré-existantes...\n");
 
 	freeTextures(textures);
 
-	if(verbose)printf("[GRAPHICS] Chargement des textures du jeu...\n");
+	if(verbose >= 1)printf("[GRAPHICS] Chargement des textures du jeu...\n");
 
     // Loading blank pattern textures
 	addTextureToTable(	textures,
@@ -212,7 +212,7 @@ int loadMapTextures(SDL_Renderer * renderer)
 						NULL,
 						"id_card");
 
-	if(verbose)printf("[GRAPHICS] %d texture(s) chargée(s) !\n", index+1);
+	if(verbose >=1 )printf("[GRAPHICS] %d texture(s) chargée(s) !\n", index+1);
 
 	return index+1;
 }
@@ -251,7 +251,7 @@ int selectTile(int xpos, int ypos, int mx, int my)
 
 	xTile = xpos+((((xIndex+yIndex)/2)+1)*pxBase);
 	yTile = ypos+((_Y_SIZE_-(yIndex-xIndex))*(pxBase/4)+(pxBase/4));
-	if(verbose)printf("xTile : %d yTile : %d\n", xTile, yTile);
+	if(verbose >= 1)printf("xTile : %d yTile : %d\n", xTile, yTile);
 
 	// Calcul des coordonnées des 4 coins de la tile
 	Coord A = { xTile, yTile };
@@ -291,7 +291,7 @@ int selectTile(int xpos, int ypos, int mx, int my)
 		return 0;
 	}
 
-	if(verbose)printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
+	if(verbose >= 1)printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
 	(*(matrix+xIndex*_X_SIZE_+yIndex)).selected = 1;
 	Coord selectedTile = {xIndex, yIndex};
 	if (selectedEntity != NULL)
@@ -353,16 +353,24 @@ err_t displayChat(SDL_Renderer *renderer,int chatX, int chatY){
 							int len = strlen(temp);
 							temp[len] = chat.chatTab[i][p];
 							temp[len+1] = '\0';
-							// if(verbose)printf("%s",temp);
+							if(verbose >= 2)printf("%s",temp);
 						}
+<<<<<<< HEAD
 						// if(verbose)printf("\n");
+=======
+						if(verbose >= 2)printf("\n");
+>>>>>>> :sparkles: adding states to verbose
 						displayText(renderer, chatX, chatY + (j * 15), 15 ,temp, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 						j++;
 					}
 				}
 				else{
 					displayText(renderer, chatX, chatY + (j * 15), 15 , chat.chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
+<<<<<<< HEAD
 					// if(verbose)printf("%s \n", chat.chatTab[i]);
+=======
+					if(verbose >= 2)printf("%s \n", chat.chatTab[i]);
+>>>>>>> :sparkles: adding states to verbose
 					j++;
 				}
 

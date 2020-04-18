@@ -61,9 +61,9 @@ unsigned int logFlag = 0;
  */
 
 err_t stopTcpSocketServ(int socketConnected){
-  printf("Shutdown socketConnected ...\n");
+  if(verbose >= 0)printf("Shutdown socketConnected ...\n");
   shutdown(socketConnected, 2);
-  printf("Close socket : socketConnected...\n");
+  if(verbose >= 0)printf("Close socket : socketConnected...\n");
   closesocket(socketConnected);
   nbPlayer -= 1; 
   return OK;
@@ -104,7 +104,7 @@ err_t startTCPSocketServ(){
   #endif
 
 
-  if(verbose)printf("\nLancement de la créatoin du serveur...\n");
+  if(verbose >= 0)printf("\nLancement de la créatoin du serveur...\n");
   logFlag = 1;
   isAServer = 1;
   nbPlayer += 1;
@@ -141,7 +141,7 @@ err_t startTCPSocketServ(){
     */
     if((sock = socket(AF_INET, SOCK_STREAM, 0)) != INVALID_SOCKET){
   
-      if(verbose)printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
+      if(verbose >= 1)printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
       sleep(1);
       logFlag = 2;
       
@@ -153,16 +153,16 @@ err_t startTCPSocketServ(){
       * Check if the socket is correct
       */
       if(sockError != SOCKET_ERROR){
-        if(verbose)printf("\nDémarrage du serveur... \n");
+        if(verbose >= 0)printf("\nDémarrage du serveur... \n");
         /*
         * Starting to connect
         * (max number of connection 5)
         */
         getLocalIP();
-        if(verbose)printf("LIP DU SERV EST %s", monIP);
+        if(verbose >= 1)printf("LIP DU SERV EST %s", monIP);
         sockError = listen(sock,5);
         if(sockError != SOCKET_ERROR){
-          if(verbose)printf("\nEn attente de la connexion d'un client...\n");
+          if(verbose >= 0)printf("\nEn attente de la connexion d'un client...\n");
           sleep(1);
           logFlag = 3;
           getLocalIP();
@@ -170,36 +170,36 @@ err_t startTCPSocketServ(){
           socketConnected = accept(sock, (struct  sockaddr  *)&clientAddr, &sizeofSocketConnected);
           if(socketConnected != SOCKET_ERROR){
             
-            if(verbose)printf("\nConnexion établie avec le client !\n");
+            if(verbose >= 0)printf("\nConnexion établie avec le client !\n");
             sleep(1);
             logFlag = 4;
 
 
-            if(verbose)printf("socketConnectedCli = %d\n", socketConnected);
+            if(verbose >= 1)printf("socketConnectedCli = %d\n", socketConnected);
 
             if(recep(&infoClient, sizeof(infoClient), socketConnected) != NULL){
-              if(verbose)printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
+              if(verbose >= 1)printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
               sprintf(pseudoClient, "%s s'est connecté !", infoClient.pseudo);
-              if(verbose)printf("SocketServer pseudoCli : %s\n", pseudoClient);
+              if(verbose >= 1)printf("SocketServer pseudoCli : %s\n", pseudoClient);
               logFlag = 5;
             }
 
             while(serverStatus != 1){
-              printf("Waiting to start ... \n");
+              if(verbose >= 2)printf("Waiting to start ... \n");
               sleep(2);
             }
             startGame.isServerStartGame = 1;
             if(sendStruct(&startGame, sizeof(startGame), socketConnected) != OK){
               printf("Erreur d'envoie \n");
             }else{
-              if(verbose)printf("Structure envoyée .... \n");
-              if(verbose)printf("Struct envoyé : isServerStartGame : %d \n", startGame.isServerStartGame);
+              if(verbose >= 1)printf("Structure envoyée .... \n");
+              if(verbose >= 1)printf("Struct envoyé : isServerStartGame : %d \n", startGame.isServerStartGame);
               serverStatus = 2;
             }
             
             
             
-            printf("\nChargement de la partie... \n");
+            if(verbose >= 0)printf("\nChargement de la partie... \n");
 
             // if(isPseudoValid == 1){
             //   if(verbose)printf("\nVous vous appelez : %s", pseudoUser);
@@ -207,13 +207,6 @@ err_t startTCPSocketServ(){
             // }else{
             //   printf("\nLe pseudo n'est pas mis \n");
             // }
-            
-
-
-
-
-
-
           }
           /*-- Commande pour fermer le firewall sur windows --*/
          // system("netsh advfirewall firewall delete rule name=\"Tactics\"");
