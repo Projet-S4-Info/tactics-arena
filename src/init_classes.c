@@ -148,7 +148,7 @@ err_t init_ranger(Class * c)
         Ranger,
         "Ranger",
         {20,12,10,12,0,8,8},
-        {"Sentinel","The first ennemy that moves to a spot inside a ranger's range every turn, will get bolted."},
+        {"Sentinel","The first ennemy that moves inside a ranger's range every turn, will get bolted."},
         ab
     };
     

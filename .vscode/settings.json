@@ -12,6 +12,7 @@
         "init_classes.h": "c",
         "time.h": "c",
         "init.h": "c",
-        "grid.h": "c"
+        "grid.h": "c",
+        "servfcnt.h": "c"
     }
 }

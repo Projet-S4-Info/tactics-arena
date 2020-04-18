@@ -6,6 +6,8 @@
 #include "gameplay.h"
 #include "grid.h"
 #include "characters.h"
+#include "passives.h"
+
 
 
 Coord closest_free_tile(Coord c)
@@ -149,6 +151,8 @@ err_t simple_move(Entity * e, Coord tabcoord[])
     for(i = 0; tabcoord[i].x != -99; i ++)
     {
         moveEntity(e -> coords, tabcoord[i]);
-        sleep(0.25);
+        sentinel_check(e);
+        usleep(50000);
     }
+    return OK;
 }
