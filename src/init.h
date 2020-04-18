@@ -9,7 +9,7 @@ extern Ability mage_ab[3][NUM_AB];
 extern Entity Allies[NUM_CLASS];
 extern Entity Foes[NUM_CLASS];
 extern Ability Aura_ab;
-Ability Move_ab;
+extern Ability Move_ab;
 
 err_t init_spawn(Entity * e, Coord c[NUM_CLASS]);
 err_t ent_common_init(Entity *e);

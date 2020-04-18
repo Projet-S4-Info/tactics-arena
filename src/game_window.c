@@ -41,6 +41,9 @@
 /* =============== VARIABLES ================ */
 
 
+SDL_Renderer *renderer = NULL;
+int XPOS = 50;								// x and y pos where map is displayed
+int YPOS = 50;								// |
 int selected_ability = -1;					// Selected ability
 int hover_ability = -1;						// Hover ability button
 bool hover_next_turn = FALSE;				// Hover skip turn button
@@ -80,11 +83,6 @@ int createGameWindow(int x, int y)
 {
     // Le pointeur vers la fenetre
 	SDL_Window* pWindow = NULL;
-	SDL_Renderer *renderer=NULL;
-	
-	// x and y pos where map is displayed
-	int XPOS = 50;
-	int YPOS = 50;
 
     /* Initialisation simple */
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0 ) {

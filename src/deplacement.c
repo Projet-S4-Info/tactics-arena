@@ -7,7 +7,9 @@
 #include "grid.h"
 #include "characters.h"
 #include "passives.h"
-
+#include "map.h"
+#include "game_window.h"
+#include "print.h"
 
 
 Coord closest_free_tile(Coord c)
@@ -100,6 +102,7 @@ int * fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_], int max)
             }
         }
     }
+    if(verbose)printf("Fill Tiles Done\n");
     return (int *)matrice;
 }
 
@@ -121,7 +124,7 @@ Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goa
             lowest = matrice[active.x][active.y];
         }
     }
-    while(matrice[is_lowest.x][is_lowest.y] != 0)
+    while(matrice[is_lowest.x][is_lowest.y] > 0)
     {
         tab_bis[t++] = is_lowest;
         for(i = 0; i < 4; i ++)
@@ -131,8 +134,8 @@ Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goa
             {
                 is_lowest.x = active.x;
                 is_lowest.y = active.y;
+                lowest -= 1; 
                 break;
-                
             }
         }   
     }
@@ -142,16 +145,25 @@ Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goa
     }
     tabcoord[i].x = -99;
     tabcoord[i].y = -99;
+    if(verbose)printf("Path Found\n");
     return tabcoord;
 }
 
 err_t simple_move(Entity * e, Coord tabcoord[])
 {
     int i;
+    Coord temp;
+    temp.x = e->coords.x;
+    temp.y = e->coords.y;
+    for(i = 0; tabcoord[i].x != -99; i ++) print_Coord(&tabcoord[i], "");
     for(i = 0; tabcoord[i].x != -99; i ++)
     {
-        moveEntity(e -> coords, tabcoord[i]);
+        printf("Coord of entity : %d:%d\n", temp.x, temp.y);
+        moveEntity(temp, tabcoord[i]);
+        temp.x = e->coords.x + tabcoord[i].x;
+        temp.y = e->coords.y + tabcoord[i].y;
         sentinel_check(e);
+        displayMap(renderer, XPOS, YPOS);
         usleep(50000);
     }
     return OK;

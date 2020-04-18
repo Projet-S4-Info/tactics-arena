@@ -4,6 +4,7 @@
 #include "gameplay.h"
 #include "display.h"
 #include "print.h"
+#include "init.h"
 
 bool isInRange(Coord coorTab[], Coord target)
 {
@@ -304,11 +305,13 @@ bool Cast_check(action a, Coord coorTab[])
 
     if(a.act != Mvt)
     {
-
+        printf("Ability is %s\n", get_name(e,a.act));
         ab = e->cha_class->cla_abilities[a.act%NUM_AB];
     }
     else
     {
+        printf("Ability is a movement\n");
+        ab = Move_ab;
         if(e->status_effect[Cripple])
         {
             sprintf(log, "%s is crippled and cannot move", e->cha_name);
@@ -337,6 +340,10 @@ bool Cast_check(action a, Coord coorTab[])
         {
             printf("Portee OK\n");
             return TRUE;
+        }
+        else
+        {
+            printf("Not in Range\n");
         }
     }
 

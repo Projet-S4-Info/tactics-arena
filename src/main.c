@@ -45,6 +45,7 @@ int main(int argc, char * argv[])
     #endif
 
     int selection = 0;
+    printf("\n");
 
     if(argc < 3){
         if(argc == 2){

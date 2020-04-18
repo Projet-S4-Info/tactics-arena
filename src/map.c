@@ -39,8 +39,6 @@ Coord borderTab[MAXRANGE];
 Coord rangeTab[_X_SIZE_*_Y_SIZE_];
 Coord drawPos = {-1, -1};
 Entity * selectedEntity;
-Entity * caster;
-Entity * target;
 
 
 /* =============== FONCTIONS =============== */
@@ -306,6 +304,10 @@ int selectTile(int xpos, int ypos, int mx, int my)
 			if (Cast_check(act, borderTab)) {
 				printf("Lancement de l'action...\n");
 				action_set(act);
+			}
+			else
+			{
+				printf("Sortie\n");
 			}
 		}
 	}

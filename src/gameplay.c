@@ -7,6 +7,7 @@
 #include "gameplay.h"
 #include "deplacement.h"
 #include "text.h"
+#include "print.h"
 
 err_t rec_id_swap(action * a)
 {
@@ -163,6 +164,9 @@ err_t end_Detain(Entity *e)
 
 bool tile_type(Coord c, targetType targeting, Entity * e)
 {
+
+    print_targetType(targeting, "");
+
     if(targeting!=ANY_TILE)
     {
         Tile * t = getTile(c);

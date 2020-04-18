@@ -15,6 +15,9 @@
 /* =============== VARIABLES =============== */
 
 
+extern SDL_Renderer *renderer;
+extern int XPOS;
+extern int YPOS;
 extern int selected_ability;
 extern int hover_ability;
 extern bool hover_next_turn;
