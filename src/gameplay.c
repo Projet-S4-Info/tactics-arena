@@ -165,7 +165,7 @@ err_t end_Detain(Entity *e)
 bool tile_type(Coord c, targetType targeting, Entity * e)
 {
 
-    print_targetType(targeting, "");
+    if(verbose)print_targetType(targeting, "");
 
     if(targeting!=ANY_TILE)
     {

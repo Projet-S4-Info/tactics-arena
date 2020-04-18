@@ -66,7 +66,6 @@ int Fury_fn(Coord c, Entity * e, StateList * list)
 int Frenzied_Dash_fn(Coord c, Entity * e, StateList * list)
 {
     moveEntity(e->coords, c);
-    e->coords = c;
     return 0;
 }
 
@@ -175,10 +174,11 @@ int mage_switch(Coord c, Entity * e, StateList * list)
 int FlameCharge_fn(Coord c, Entity * e, StateList * list)
 {
     Ability F = e->cha_class->cla_abilities[FlameCharge%NUM_AB];
-    //Insert Pathfinding
-    //Change F's zone to match pathfinding route
+    
+    //implement pathfinding
+    //change f coords depending on pathfinding
+    
     moveEntity(e->coords, c);
-    e->coords = c;
     return apply_to(F,e,list,e->coords);
 }
 
@@ -225,8 +225,6 @@ int Volt_Switch_fn(Coord c, Entity * e, StateList * list)
 {
     Entity * t = getEntity(c);
     switchEntities(c,e->coords);
-    t->coords = e->coords;
-    e->coords = c;
 
     char log[STR_LONG];
     sprintf(log, "%s switched with %s", e->cha_name, t->cha_name);

@@ -139,10 +139,20 @@ Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goa
             }
         }   
     }
+
+    if(verbose)
+    {
+        printf("Goal : ");
+        print_Coord(&goal, "");
+        printf("Origin : ");
+        print_Coord(&is_lowest, "");
+    }
+
     for(t -= 1, i = 0; t >= 0; t --, i ++)
     {
-        tabcoord[i] = compare_coords(tab_bis[t], is_lowest);
+        tabcoord[i] = compare_coords(is_lowest,tab_bis[t]);
     }
+
     tabcoord[i].x = -99;
     tabcoord[i].y = -99;
     if(verbose)printf("Path Found\n");
@@ -152,18 +162,24 @@ Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goa
 err_t simple_move(Entity * e, Coord tabcoord[])
 {
     int i;
-    Coord temp;
-    temp.x = e->coords.x;
-    temp.y = e->coords.y;
-    for(i = 0; tabcoord[i].x != -99; i ++) print_Coord(&tabcoord[i], "");
+    Coord c, start = e->coords;
+
+    if(verbose)
+    {
+        for(i=0; tabcoord[i].x!=-99; i++)
+        {
+            print_Coord(&tabcoord[i], "");
+        }
+    }
+
     for(i = 0; tabcoord[i].x != -99; i ++)
     {
-        printf("Coord of entity : %d:%d\n", temp.x, temp.y);
-        moveEntity(temp, tabcoord[i]);
-        temp.x = e->coords.x + tabcoord[i].x;
-        temp.y = e->coords.y + tabcoord[i].y;
+        c = add_coords(start, tabcoord[i]);
+        if(verbose)printf("Moving from (%d,%d) to (%d,%d)...", e->coords.x, e->coords.y, c.x, c.y);
+        moveEntity(e->coords, c);
+        if(verbose)printf("Completed\n");
         sentinel_check(e);
-        displayMap(renderer, XPOS, YPOS);
+        //displayMap(renderer, XPOS, YPOS);
         usleep(50000);
     }
     return OK;
