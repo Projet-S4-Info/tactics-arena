@@ -26,7 +26,9 @@ err_t apply_movement(action a)
     Entity * e = e_from_id(a.char_id);
     int matrice[_X_SIZE_][_Y_SIZE_];
     Coord tab[_X_SIZE_ * _Y_SIZE_];
+
     simple_move(e, pathfinding((int(*)[_X_SIZE_])fill_tiles(e -> coords, matrice, e -> stat_mods[mv]), tab, a.c ));
+    
     e->coords = a.c;
     return OK;
 }
@@ -188,7 +190,7 @@ err_t action_set(action a)
 {
     printf("Application de l'action...\n");
 
-    sendStruct(&a, sizeof(action), socketConnected);
+    //sendStruct(&a, sizeof(action), socketConnected);
 
     if(a.act == Mvt)
     {

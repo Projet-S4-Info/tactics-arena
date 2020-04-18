@@ -307,6 +307,10 @@ int selectTile(int xpos, int ypos, int mx, int my)
 				printf("Lancement de l'action...\n");
 				action_set(act);
 			}
+			else
+			{
+				printf("Sortie\n");
+			}
 		}
 	}
 	else
