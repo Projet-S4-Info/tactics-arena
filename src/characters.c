@@ -192,8 +192,9 @@ void moveEntity(Coord from, Coord to)
         exit(EXIT_FAILURE);
     }
 
-    (*(matrix+to.x*_X_SIZE_+to.y)).entity = malloc(sizeof(Entity*));
     (*(matrix+to.x*_X_SIZE_+to.y)).entity = (*(matrix+from.x*_X_SIZE_+from.y)).entity;
+    (*(matrix+to.x*_X_SIZE_+to.y)).entity->coords.x = to.x;
+    (*(matrix+to.x*_X_SIZE_+to.y)).entity->coords.y = to.y;
     (*(matrix+from.x*_X_SIZE_+from.y)).entity = NULL;
 }
 
@@ -205,6 +206,10 @@ void switchEntities(Coord pos1, Coord pos2)
     Entity * temp = (*(matrix+pos1.x*_X_SIZE_+pos1.y)).entity;
     (*(matrix+pos1.x*_X_SIZE_+pos1.y)).entity = (*(matrix+pos2.x*_X_SIZE_+pos2.y)).entity;
     (*(matrix+pos2.x*_X_SIZE_+pos2.y)).entity = temp;
+    (*(matrix+pos1.x*_X_SIZE_+pos1.y)).entity->coords.x = pos2.x;
+    (*(matrix+pos1.x*_X_SIZE_+pos1.y)).entity->coords.y = pos2.y;
+    (*(matrix+pos1.x*_X_SIZE_+pos2.y)).entity->coords.x = pos1.x;
+    (*(matrix+pos1.x*_X_SIZE_+pos2.y)).entity->coords.y = pos1.y;
 }
 
 

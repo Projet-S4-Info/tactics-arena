@@ -111,7 +111,7 @@ err_t destroyCacheEntry(int index)
 err_t slideCache(int index)
 // Slide all the caches entries if an entry is destroyed
 {
-    for (int i = index; i < text_cache_size; i++)
+    for (int i = index; i < text_cache_size && text_cache[i].content; i++)
     {
         text_cache[i].content = malloc(sizeof(char) * strlen(text_cache[i+1].content));
         strcpy(text_cache[i].content, text_cache[i+1].content);
@@ -122,7 +122,6 @@ err_t slideCache(int index)
         text_cache[i].time = text_cache[i+1].time;
         text_cache[i].surface = malloc(sizeof(SDL_Surface*));
         text_cache[i].surface = text_cache[i+1].surface;
-        destroyCacheEntry(i+1);
     }
 
     return OK;
