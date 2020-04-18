@@ -9,6 +9,7 @@
 #include "servFcnt.h"
 #include "display.h"
 #include "characters.h"
+#include "deplacement.h"
 
 bool turn_active = TRUE;
 action turn_over = {0,{0,0},0};
@@ -23,7 +24,7 @@ err_t apply_movement(action a)
 {
     Entity * e = e_from_id(a.char_id);
 
-    moveEntity(e->coords, a.c);
+    // simple_move(e, pathfinding());
     e->coords = a.c;
 
     sentinel_check(e);

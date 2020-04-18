@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "struct.h"
 #include "file_coord.h"
 #include "gameplay.h"
 #include "grid.h"
+#include "characters.h"
 
 
 Coord closest_free_tile(Coord c)
@@ -101,16 +103,52 @@ int * fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_], int max)
 
 Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goal)
 {
-    //je me place à la coord de fin sur la matrice et je la met dans le tableau bis 
     Coord tab_bis[MAXRANGE];
-    int t = 0;
+    Coord add[4] = {{1,0},{-1,0},{0,1},{0,-1}};
+    Coord active;
+    Coord is_lowest; 
+    int i, lowest = 1000, t = 0;
     tab_bis[t++] = goal;
+    for(i = 0; i < 4; i++)
+    {
+        active = add_coords(goal, add[i]);
+        if(matrice[active.x][active.y] < lowest && matrice[active.x][active.y] != -1)
+        {
+            is_lowest.x = active.x;
+            is_lowest.y = active.y;
+            lowest = matrice[active.x][active.y];
+        }
+    }
+    while(matrice[is_lowest.x][is_lowest.y] != 0)
+    {
+        tab_bis[t++] = is_lowest;
+        for(i = 0; i < 4; i ++)
+        {
+            active = add_coords(is_lowest , add[i]);
+            if(matrice[active.x][active.y] == lowest - 1)
+            {
+                is_lowest.x = active.x;
+                is_lowest.y = active.y;
+                break;
+                
+            }
+        }   
+    }
+    for(t -= 1, i = 0; t >= 0; t --, i ++)
+    {
+        tabcoord[i] = compare_coords(tab_bis[t], is_lowest);
+    }
+    tabcoord[i].x = -99;
+    tabcoord[i].y = -99;
+    return tabcoord;
+}
 
-    //je regarde les chiffres aux alentours 
-    //je prends le plus petit (sauf -1)
-    //ensuite je suis le chemin du plus petit au plus petit jusqu'a 0 
-    //je met toute les coordonnées passé dans le tableau bis sauf la derniere qui est 0 
-    //je remet les coord dans l'ordre dans le tableau donné en paramètre 
-    //j'ajoute -99,-99 à la fin
-    //je renvoie ce tableau
+err_t simple_move(Entity * e, Coord tabcoord[])
+{
+    int i;
+    for(i = 0; tabcoord[i].x != -99; i ++)
+    {
+        moveEntity(e -> coords, tabcoord[i]);
+        sleep(0.25);
+    }
 }
