@@ -180,11 +180,11 @@ Coord * setActionZone(int range, Coord Border[], Coord Zone[])
                 if(isInRange(Border, c))
                 {
                     Zone[k++] = c;
-                    printf("%d,%d is in range\n", c.x, c.y);
+                    if(verbose)printf("%d,%d is in range\n", c.x, c.y);
                 }
                 else
                 {
-                    printf("%d,%d is not in range\n", c.x, c.y);
+                    if(verbose)printf("%d,%d is not in range\n", c.x, c.y);
                 }
             }
         }
@@ -289,7 +289,7 @@ Coord * get_border(int cha_id, abilityId Id, Coord coorTab[], Coord zone[])
 
 bool Cast_check(action a, Coord coorTab[])
 {
-    printf("Verification de la porte...\n");
+    if(verbose)printf("Verification de la porte...\n");
     Ability ab;
     int var;
     Entity * e = e_from_id(a.char_id);
@@ -299,24 +299,24 @@ bool Cast_check(action a, Coord coorTab[])
     {
         sprintf(log, "%s is frozen and cannot do anything", e->cha_name);
         addLog(log);
-        printf("Portee KO 2\n");
+        if(verbose)printf("Portee KO 2\n");
         return FALSE;
     }
 
     if(a.act != Mvt)
     {
-        printf("Ability is %s\n", get_name(e,a.act));
+        if(verbose)printf("Ability is %s\n", get_name(e,a.act));
         ab = e->cha_class->cla_abilities[a.act%NUM_AB];
     }
     else
     {
-        printf("Ability is a movement\n");
+        if(verbose)printf("Ability is a movement\n");
         ab = Move_ab;
         if(e->status_effect[Cripple])
         {
             sprintf(log, "%s is crippled and cannot move", e->cha_name);
             addLog(log);
-            printf("Portee KO 3\n");
+            if(verbose)printf("Portee KO 3\n");
             return FALSE;
         }
     }
@@ -329,7 +329,7 @@ bool Cast_check(action a, Coord coorTab[])
             Entity * g = e_from_id(var);
             sprintf(log, "%s is provoked by %s and can't do anything other than attack him", e->cha_name, g->cha_name);
             addLog(log);
-            printf("Portee KO 4\n");
+            if(verbose)printf("Portee KO 4\n");
             return FALSE;
         }
     }
@@ -338,16 +338,16 @@ bool Cast_check(action a, Coord coorTab[])
     {
         if(isInRange(coorTab, a.c))
         {
-            printf("Portee OK\n");
+            if(verbose)printf("Portee OK\n");
             return TRUE;
         }
         else
         {
-            printf("Not in Range\n");
+            if(verbose)printf("Not in Range\n");
         }
     }
 
-    printf("Portee KO 5\n");
+    if(verbose)printf("Portee KO 5\n");
 
     return FALSE;
 }
