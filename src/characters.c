@@ -192,8 +192,9 @@ void moveEntity(Coord from, Coord to)
         exit(EXIT_FAILURE);
     }
 
-    matrix[to.x*_X_SIZE_+to.y].entity = matrix[from.x*_X_SIZE_+from.y].entity;
-    matrix[from.x*_X_SIZE_+from.y].entity = NULL;
+    (*(matrix+to.x*_X_SIZE_+to.y)).entity = malloc(sizeof(Entity*));
+    (*(matrix+to.x*_X_SIZE_+to.y)).entity = (*(matrix+from.x*_X_SIZE_+from.y)).entity;
+    (*(matrix+from.x*_X_SIZE_+from.y)).entity = NULL;
 }
 
 

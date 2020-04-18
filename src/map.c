@@ -39,8 +39,6 @@ Coord borderTab[MAXRANGE];
 Coord rangeTab[_X_SIZE_*_Y_SIZE_];
 Coord drawPos = {-1, -1};
 Entity * selectedEntity;
-Entity * caster;
-Entity * target;
 
 
 /* =============== FONCTIONS =============== */

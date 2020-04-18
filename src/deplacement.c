@@ -7,7 +7,9 @@
 #include "grid.h"
 #include "characters.h"
 #include "passives.h"
-
+#include "map.h"
+#include "game_window.h"
+#include "print.h"
 
 
 Coord closest_free_tile(Coord c)
@@ -150,10 +152,18 @@ Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goa
 err_t simple_move(Entity * e, Coord tabcoord[])
 {
     int i;
+    Coord temp;
+    temp.x = e->coords.x;
+    temp.y = e->coords.y;
+    for(i = 0; tabcoord[i].x != -99; i ++) print_Coord(&tabcoord[i], "");
     for(i = 0; tabcoord[i].x != -99; i ++)
     {
-        moveEntity(e -> coords, tabcoord[i]);
+        printf("Coord of entity : %d:%d\n", temp.x, temp.y);
+        moveEntity(temp, tabcoord[i]);
+        temp.x = e->coords.x + tabcoord[i].x;
+        temp.y = e->coords.y + tabcoord[i].y;
         sentinel_check(e);
+        displayMap(renderer, XPOS, YPOS);
         usleep(50000);
     }
     return OK;
