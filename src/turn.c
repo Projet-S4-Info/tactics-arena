@@ -186,6 +186,8 @@ Entity * play_check(Entity *E)
 
 err_t action_set(action a)
 {
+    printf("Application de l'action...\n");
+
     sendStruct(&a, sizeof(action), socketConnected);
 
     if(a.act == Mvt)
@@ -198,6 +200,8 @@ err_t action_set(action a)
     }
 
     play_check(&Allies[a.char_id-1]);
+
+    printf("Action appliquee...\n");
 
     return OK;    
 }

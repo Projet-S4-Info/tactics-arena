@@ -288,6 +288,7 @@ Coord * get_border(int cha_id, abilityId Id, Coord coorTab[], Coord zone[])
 
 bool Cast_check(action a, Coord coorTab[])
 {
+    printf("Verification de la porte...\n");
     Ability ab;
     int var;
     Entity * e = e_from_id(a.char_id);
@@ -297,6 +298,7 @@ bool Cast_check(action a, Coord coorTab[])
     {
         sprintf(log, "%s is frozen and cannot do anything", e->cha_name);
         addLog(log);
+        printf("Portee KO 2\n");
         return FALSE;
     }
 
@@ -311,6 +313,7 @@ bool Cast_check(action a, Coord coorTab[])
         {
             sprintf(log, "%s is crippled and cannot move", e->cha_name);
             addLog(log);
+            printf("Portee KO 3\n");
             return FALSE;
         }
     }
@@ -323,6 +326,7 @@ bool Cast_check(action a, Coord coorTab[])
             Entity * g = e_from_id(var);
             sprintf(log, "%s is provoked by %s and can't do anything other than attack him", e->cha_name, g->cha_name);
             addLog(log);
+            printf("Portee KO 4\n");
             return FALSE;
         }
     }
@@ -331,9 +335,12 @@ bool Cast_check(action a, Coord coorTab[])
     {
         if(isInRange(coorTab, a.c))
         {
+            printf("Portee OK\n");
             return TRUE;
         }
     }
+
+    printf("Portee KO 5\n");
 
     return FALSE;
 }

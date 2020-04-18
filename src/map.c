@@ -38,6 +38,9 @@ char hoverAbilityDesc[STR_LONG];
 Coord borderTab[MAXRANGE];
 Coord rangeTab[_X_SIZE_*_Y_SIZE_];
 Coord drawPos = {-1, -1};
+Entity * selectedEntity;
+Entity * caster;
+Entity * target;
 
 
 /* =============== FONCTIONS =============== */
@@ -284,20 +287,31 @@ int selectTile(int xpos, int ypos, int mx, int my)
 	if (xIndex > _X_SIZE_-1 || yIndex > _Y_SIZE_-1 || xIndex < 0 || yIndex < 0)
 	{
 		selected_ability = -1;
+		selectedEntity = NULL;
 		return 0;
 	}
 
 	if(verbose)printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
 	(*(matrix+xIndex*_X_SIZE_+yIndex)).selected = 1;
 	Coord selectedTile = {xIndex, yIndex};
-	Entity *selectedEntity = getEntity(selectedTile);
 	if (selectedEntity != NULL)
 	{
 		action act = {selectedEntity->cha_id, selectedTile, selected_ability};
 		if (selected_ability != -1)
 		{
-			apply_action(act);
+			char tempNotif[STR_LONG];
+			sprintf(tempNotif, "%s active %s a %d:%d", selectedEntity->cha_name, get_name(selectedEntity, selected_ability), selectedTile.x, selectedTile.y);
+			addLog(tempNotif);
+			printf("%s\n", tempNotif);
+			if (Cast_check(act, borderTab)) {
+				printf("Lancement de l'action...\n");
+				action_set(act);
+			}
 		}
+	}
+	else
+	{
+		selectedEntity = getEntity(selectedTile);
 	}
 
 	return 1;
@@ -342,12 +356,12 @@ err_t displayChat(SDL_Renderer *renderer,int chatX, int chatY){
 							// if(verbose)printf("%s",temp);
 						}
 						// if(verbose)printf("\n");
-						displayText(renderer, chatX, chatY + (j * 15), 15 ,temp, "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
+						displayText(renderer, chatX, chatY + (j * 15), 15 ,temp, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 						j++;
 					}
 				}
 				else{
-					displayText(renderer, chatX, chatY + (j * 15), 15 , chat.chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
+					displayText(renderer, chatX, chatY + (j * 15), 15 , chat.chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 					// if(verbose)printf("%s \n", chat.chatTab[i]);
 					j++;
 				}
@@ -393,12 +407,12 @@ int displayInterface(SDL_Renderer *renderer)
 			displayAbilities(renderer);
 			if (selected_ability != -1){
 				sprintf(selectedAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, selected_ability)), get_desc(tempEntity, selected_ability));
-				displayText(renderer, 16, yWinSize-110, 20, selectedAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				displayText(renderer, 16, yWinSize-110, 20, selectedAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 			} else {
 				if (hover_ability >= 0) 
 				{
 					sprintf(hoverAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, hover_ability)), get_desc(tempEntity, hover_ability));
-					displayText(renderer, 16, yWinSize-110, 20, hoverAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+					displayText(renderer, 16, yWinSize-110, 20, hoverAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 				}
 			}
 		}
@@ -407,7 +421,7 @@ int displayInterface(SDL_Renderer *renderer)
 		displaySprite(renderer, getTexture(textures, "id_card"), 10, 10);
 		displayText(renderer, 382, 128, 18, "?", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 		displaySprite(renderer, getCharFrontTexture(tempEntity->cha_class->cla_name), 51, 52);
-		displayText(renderer, 170, 45, 20, tempEntity->cha_name, "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+		displayText(renderer, 170, 45, 20, tempEntity->cha_name, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- entity health
 		displaySprite(renderer, getBigTexture(cSprites, "heart_icon"), 170, 70);
