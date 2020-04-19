@@ -155,9 +155,12 @@ int createGameWindow(int x, int y)
 			debugGrid(matrix, _X_SIZE_, _Y_SIZE_);
 		}
 
-		ent_init_test(Allies, "Friendly");
-        ent_init_test(Foes, "Ennemy");
-
+		if(!is_online)
+		{
+			ent_init_test(Allies, "Friendly");
+        	ent_init_test(Foes, "Ennemy");
+		}
+		
 		SDL_Delay(1);
 
 		if (verbose)

@@ -13,6 +13,7 @@ int Detain_fn(Coord c, Entity *e, StateList * list);
 int Banner_fn(Coord c, Entity * e, StateList * list);
 
 int mage_switch(Coord c, Entity * e, StateList * list);
+err_t update_mage(Entity *e, abilityId Id);
 int FlameCharge_fn(Coord c, Entity * e, StateList * list);
 int Flare_fn(Coord c, Entity * e, StateList * list);
 int Blizzard_fn(Coord c, Entity * e, StateList * list);

@@ -171,6 +171,24 @@ int mage_switch(Coord c, Entity * e, StateList * list)
     return 0;
 }
 
+err_t update_mage(Entity *e, abilityId Id)
+{
+    if(Id<=Eruption)
+    {
+        e->cha_class->cla_abilities = (Ability *)&mage_ab[0];
+    }
+    else if(Id<=Blizzard)
+    {
+        e->cha_class->cla_abilities = (Ability *)&mage_ab[1];
+    }
+    else
+    {
+        e->cha_class->cla_abilities = (Ability *)&mage_ab[2];
+    }
+
+    return OK;
+}
+
 int FlameCharge_fn(Coord c, Entity * e, StateList * list)
 {
     Ability F = e->cha_class->cla_abilities[FlameCharge%NUM_AB];
