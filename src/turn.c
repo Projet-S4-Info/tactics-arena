@@ -11,6 +11,7 @@
 #include "characters.h"
 #include "deplacement.h"
 #include "text.h"
+#include "game_window.h"
 
 bool turn_active = TRUE;
 action turn_over = {0,{0,0},0};
@@ -172,6 +173,7 @@ Entity * play_check(Entity *E)
         if((F[i].active) && (F[i].act_points>0) && !(F[i].status_effect[Freezing]))
         {
             setSelected((F+i)->coords);
+            selected_ability = -1;
             return F + i;
         }
         else
@@ -190,7 +192,7 @@ err_t action_set(action a)
 {
     printf("Application de l'action...\n");
 
-    //sendStruct(&a, sizeof(action), socketConnected);
+    sendStruct(&a, sizeof(action), socketConnected);
 
     if(a.act == Mvt)
     {
