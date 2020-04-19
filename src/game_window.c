@@ -218,19 +218,21 @@ int createGameWindow(int x, int y)
 							{
 								if (your_turn())
 								{
-									if (e.motion.x >= 16 && e.motion.x <= 80)			selected_ability = Mvt;
+									if (e.motion.x >= 16 && e.motion.x <= 80)
+										if (able_ability(tempEntity, Mvt)) selected_ability = Mvt;
+										else addLog("Not enough AP or MP to move");
 									else if (e.motion.x >= 96 && e.motion.x <= 160)
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
-										else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
+										else addLog("Not enough AP to cast this spell");
 									else if (e.motion.x >= 176 && e.motion.x <= 240)
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
-										else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
+										else addLog("Not enough AP to cast this spell");
 									else if (e.motion.x >= 256 && e.motion.x <= 320)
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
-										else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
+										else addLog("Not enough AP to cast this spell");
 									else if (e.motion.x >= 336 && e.motion.x <= 400)
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-										else addLog("Vous n'avez pas assez de points d'action pour utiliser cette competence");
+										else addLog("Not enough AP to cast this spell");
 									else if (e.motion.x >= 416 && e.motion.x <= 480) turnRight(tempEntity);
 									else if (e.motion.x >= 496 && e.motion.x <= 560) turnLeft(tempEntity);
 									else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
@@ -240,7 +242,12 @@ int createGameWindow(int x, int y)
 
 							} else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 							
-						} else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
+						} 
+						else 
+						{
+							selected_ability = -1;
+							selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
+						}
 
 						if(e.motion.x >= xWinSize-360 && e.motion.x <= xWinSize-296 && e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16){
 							if (isChatActive == 1){
