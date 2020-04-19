@@ -136,10 +136,6 @@ err_t turn_start(Entity *e)
 
 err_t turn_end(Entity *e, StateList * list)
 {
-    if(is_online)
-    {
-        sendStruct(&turn_over, sizeof(action), socketConnected);
-    }
 
     int i,j;
     for(i=0; i<NUM_CLASS; i++)
@@ -251,6 +247,11 @@ err_t local_turn()
     while(turn_active);
 
     turn_end(Allies, stReceived);
+
+    if(is_online)
+    {
+        sendStruct(&turn_over, sizeof(action), socketConnected);
+    }
 
     addLog("Your turn is over");
 
