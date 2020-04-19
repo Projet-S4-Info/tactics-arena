@@ -343,7 +343,27 @@ bool Cast_check(action a, Coord coorTab[])
         }
         else
         {
+            addLog("Tile is out of range");
             if(verbose>=2)printf("Not in Range\n");
+        }
+    }
+    else
+    {
+        if(ab.target == ALLIES)
+        {
+            addLog("No Ally on tile");
+        }
+        else if(ab.target == FOES)
+        {
+            addLog("No Ennemy on tile");
+        }
+        else if(ab.target == BOTH)
+        {
+            addLog("No Character on tile");
+        }
+        else if(ab.target == FREE_TILE)
+        {
+            addLog("Tile is not free");
         }
     }
 

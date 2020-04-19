@@ -84,13 +84,13 @@ int createGameWindow(int x, int y)
 {
     /* Initialisation simple */
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0 ) {
-        fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
+        printf("\033[31;01m[GAME_WINDOW ERROR]\033[00m : Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
         return -1;
     }
 
 	/* Initialisation TTF */
 	if(TTF_Init() == -1) {
-		fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
+		printf("\033[31;01m[GAME_WINDOW ERROR]\033[00m : Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
 		exit(EXIT_FAILURE);
 	}
 
@@ -102,13 +102,13 @@ int createGameWindow(int x, int y)
 												  	SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
 	if(!pWindow){
-		fprintf(stderr, "Erreur à la création de la fenetre : %s\n", SDL_GetError());
+		printf("\033[31;01m[GAME_WINDOW ERROR]\033[00m : Erreur à la création de la fenetre : %s\n", SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
 
 	renderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
 	if(renderer == NULL){
-		fprintf(stderr, "Erreur à la création du renderer\n");
+		printf("\033[31;01m[GAME_WINDOW ERROR]\033[00m : Erreur à la création du rendu\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -149,11 +149,18 @@ int createGameWindow(int x, int y)
 
 		//loadMap(matrix, "map_ice_hole");
 
-		debugGrid(matrix, _X_SIZE_, _Y_SIZE_);
+		if (verbose == 2)
+		{
+			printf("\033[36;01m[GAME_WINDOW]\033[00m : Structure actuelle de la map ([ID_TILE]|[WALKABLE]) : \n");
+			debugGrid(matrix, _X_SIZE_, _Y_SIZE_);
+		}
 
-		ent_init_test(Allies, "Friendly");
-        ent_init_test(Foes, "Ennemy");
-
+		if(!is_online)
+		{
+			ent_init_test(Allies, "Friendly");
+        	ent_init_test(Foes, "Ennemy");
+		}
+		
 		SDL_Delay(1);
 
 		if (verbose)
@@ -237,7 +244,7 @@ int createGameWindow(int x, int y)
 									else if (e.motion.x >= 496 && e.motion.x <= 560) turnLeft(tempEntity);
 									else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 
-									if(verbose)printf("Selected ability : %d\n", selected_ability);
+									if (verbose >= 1) printf("\033[36;01m[GAME_WINDOW]\033[00m : Selected ability : %d\n", selected_ability);
 								}
 
 							} else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
@@ -274,14 +281,14 @@ int createGameWindow(int x, int y)
 						{
 							if (pxBase == 64){
 								pxBase = 128;
-								if(verbose)printf("[GRAPHICS] Zoom In\n");
+								if (verbose >= 1) printf("\033[36;01m[GAME_WINDOW]\033[00m : Zoom In (Resolution : %dx%dpx)\n", pxBase, pxBase);
 								XPOS *= 2;
 								YPOS *= 2;
 							}
 						} else {				// Scroll DOWN
 							if (pxBase == 128){
 								pxBase = 64;
-								if(verbose)printf("[GRAPHICS] Zoom Out\n");
+								if (verbose >= 1) printf("\033[36;01m[GAME_WINDOW]\033[00m : Zoom Out (Resolution : %dx%dpx)\n", pxBase, pxBase);
 								XPOS /= 2;
 								YPOS /= 2;
 							}
@@ -296,7 +303,7 @@ int createGameWindow(int x, int y)
 								if (pxBase == 64){
 									pxBase = 128;
 									addLog("PX 128");
-									if(verbose)printf("[GRAPHICS] Zoom In\n");
+									if (verbose >= 1) printf("\033[36;01m[GAME_WINDOW]\033[00m : Zoom In (Resolution : %dx%dpx)\n", pxBase, pxBase);
 									XPOS *= 2;
 									YPOS *= 2;	
 								}
@@ -305,7 +312,7 @@ int createGameWindow(int x, int y)
 								if (pxBase == 128){
 									pxBase = 64;
 									addLog("PX 64");
-									if(verbose)printf("[GRAPHICS] Zoom Out\n");
+									if (verbose >= 1) printf("\033[36;01m[GAME_WINDOW]\033[00m : Zoom Out (Resolution : %dx%dpx)\n", pxBase, pxBase);
 									XPOS /= 2;
 									YPOS /= 2;
 								}
@@ -426,7 +433,7 @@ int createGameWindow(int x, int y)
 		}
 		closeWindow(pWindow);
 	} else {
-		fprintf(stderr,"[GRAPHICS] Erreur de création de la fenêtre: %s\n", SDL_GetError());
+		printf("\033[31;01m[GAME_WINDOW ERROR]\033[00m : Erreur de création de la fenêtre: %s\n", SDL_GetError());
 	}
 
 	return 1;

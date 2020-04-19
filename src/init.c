@@ -6,6 +6,7 @@
 #include "print.h"
 #include "gameplay.h"
 #include "servFcnt.h"
+#include "grid.h"
 
 StateList *stSent = NULL;
 StateList *stReceived = NULL;
@@ -47,6 +48,7 @@ err_t ent_common_init(Entity *e)
 err_t init_Foes(Direction d)
 {
     init_ent e;
+    Tile * t;
     int i,j;
     for(i=0; i<NUM_CLASS; i++)
     {
@@ -55,11 +57,15 @@ err_t init_Foes(Direction d)
         sprintf(Foes[e.cha_class].cha_name, "Ennemy %s", e.cha_name);
         Foes[e.cha_class].cha_class = &classes[e.cha_class];
         Foes[e.cha_class].direction = d;
-        
+
         for(j=0; j<NUM_STATS; j++)
         {
             Foes[e.cha_class].base_stats[j] = Foes[e.cha_class].stat_mods[j] = e.base_stats[j];
         }
+
+        Foes[e.cha_class].coords = e.starting_position;
+        t = getTile(e.starting_position);
+        t->entity = &Foes[e.cha_class];
 
         ent_common_init(&Foes[e.cha_class]);     
     }

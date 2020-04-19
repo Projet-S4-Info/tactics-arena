@@ -30,7 +30,7 @@
 #define _Y_SIZE_ 30                         // |
 #define _FPS_ 60							// Define at which frequency the game has to refresh
 #define _NB_MAX_LOGS_ 11					// Define how many logs the screen can display (-1)
-#define _MAX_SIZE_LOGS_ STR_LONG					// Max length of a log message
+#define _MAX_SIZE_LOGS_ STR_LONG			// Max length of a log message
 #define _LOG_DURATION_ 10					// Duration a log is displayed (in seconds)
 #define _NB_TEXT_CACHE_ 100
 
@@ -56,19 +56,19 @@ err_t setRendererDriver(SDL_Renderer *renderer)
 
 	if (SDL_GetRendererInfo(renderer, global_renderer_info) != 0)
     {
-        printf("[GRAPHICS] Erreur lors de l'obtention des informations du renderer : %s\n", SDL_GetError());
+        printf("\033[31;01m[DISPLAY ERROR]\033[00m : Erreur lors de l'obtention des informations du renderer : %s\n", SDL_GetError());
 		return SDL_ERROR;
     } else {
-		if(verbose)printf("Driver utilisé par le renderer : %s\n", global_renderer_info->name);
-		if(verbose)printf("Résolution maximale des textures : %dpx / %dpx\n", global_renderer_info->max_texture_width, global_renderer_info->max_texture_height);
+		if (verbose >= 1) printf("\033[36;01m[DISPLAY]\033[00m : Driver utilisé par le renderer : %s\n", global_renderer_info->name);
+		if (verbose >= 1) printf("\033[36;01m[DISPLAY]\033[00m : Résolution maximale des textures : %dpx / %dpx\n", global_renderer_info->max_texture_width, global_renderer_info->max_texture_height);
 	}
 
 	if (!strcmp(global_renderer_info->name, "opengl")){
 		if (SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl"))
 		{
-			if(verbose)printf("[GRAPHICS] Le driver utilisé est maintenant OpenGL\n");
+			if (verbose >= 1) printf("\033[36;01m[DISPLAY]\033[00m : Le driver utilisé est maintenant OpenGL\n");
 		} else {
-			printf("[GRAPHICS] Erreur lors du changement de driver : %s\n", SDL_GetError());
+			printf("\033[31;01m[DISPLAY ERROR]\033[00m : Erreur lors du changement de driver : %s\n", SDL_GetError());
 			return SDL_ERROR;
 		}
 	}
@@ -115,12 +115,10 @@ err_t addLog(char * message)
 	int logsSize;
 
 	for (logsSize = 0; logs[logsSize].message; logsSize++);
-
-	if (verbose) printf("[LOGS] %d messages dans les logs.\n", logsSize);
 	
 	if (strlen(message) >= _MAX_SIZE_LOGS_)
 	{
-		if (verbose) printf("[LOGS] La log %s ne peut être ajoutée car sa taille est trop importante (max : %d caracteres).\n", message, _MAX_SIZE_LOGS_);
+		printf("\033[31;01m[LOGS ERROR]\033[00m : La log %s ne peut être ajoutée car sa taille est trop importante (max : %d caracteres).\n", message, _MAX_SIZE_LOGS_);
 		return STR_TOO_LONG;
 	}
 	else
@@ -151,6 +149,8 @@ err_t addLog(char * message)
 		logs[0].time = SDL_GetTicks();
 		strcpy(logs[0].message, message);
 	}
+
+	if (verbose >= 1) printf("\033[36;01m[LOGS]\033[00m : %d messages dans les logs.\n", logsSize);
 
 	return OK;
 }

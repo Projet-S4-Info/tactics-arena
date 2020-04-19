@@ -43,7 +43,7 @@ int loadEditorTextures(SDL_Renderer * renderer, TabTexture * textures)
 
 	freeTextures(textures);*/
 
-	if(verbose)printf("[MAP EDITOR] Chargement des textures du jeu...\n");
+	if (verbose >= 1) printf("\033[36;01m[MAP_EDITOR]\033[00m : Chargement des textures du jeu...\n");
 
 	// Loading interface texture
 	addTextureToTable(	textures,
@@ -99,7 +99,7 @@ int loadEditorTextures(SDL_Renderer * renderer, TabTexture * textures)
 								NULL,
 								"save_menu");
 
-	if(verbose)printf("[GRAPHICS] %d texture(s) chargée(s) !\n", index+1);
+	if(verbose)printf("\033[36;01m[MAP_EDITOR]\033[00m : %d texture(s) chargée(s) !\n", index+1);
 
 	return index+1;
 }
@@ -113,7 +113,7 @@ int listMaps(char *mapList[])
 
 	d = opendir("../maps");
 	if (!d){
-		printf("Aucune map sauvegardée\n");
+		printf("\033[31;01m[MAP_EDITOR ERROR]\033[00m : Aucune map sauvegardée\n");
 		return -1;
 	}
 	else
@@ -196,7 +196,7 @@ int loadMap(Tile * grid, const char * name)
 	char mapName[20];
 
 	sprintf(mapName, "../maps/%s", name);
-	if(verbose)printf("[EDITOR] Chargement de la map %s...\n", mapName);
+	if (verbose >= 1) printf("\033[36;01m[MAP_EDITOR]\033[00m : Chargement de la map %s...\n", mapName);
 
 	FILE * map;
 	map = fopen(mapName, "rb");
@@ -204,7 +204,7 @@ int loadMap(Tile * grid, const char * name)
 
 	fclose(map);
 
-	if(verbose)printf("[EDITOR] Map %s chargée avec succès !\n", mapName);
+	if (verbose >= 1) printf("\033[36;01m[MAP_EDITOR]\033[00m : Map %s chargée avec succès !\n", mapName);
 
 	return 1;
 }
@@ -291,7 +291,7 @@ void fillMap(Tile * grid, int block_id)
 			else (*(grid+i*_X_SIZE_+j)).walkable = 1;
 		}
 	}
-	if(verbose)printf("[EDITOR] Map remplie avec le bloc [%s] id %d\n", textures[block_id].texture_name, block_id);
+	if (verbose >= 1) printf("\033[36;01m[MAP_EDITOR]\033[00m : Map remplie avec le bloc [%s] id %d\n", textures[block_id].texture_name, block_id);
 }
 
 int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, int select, int xWinSize, int yWinSize)
@@ -406,13 +406,13 @@ int createMapEditorWindow(int x, int y)
 
     /* Initialisation simple */
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0 ) {
-        fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
+        printf("\033[31;01m[MAP_EDITOR ERROR]\033[00m : Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
         return -1;
     }
 
 	/* Initialisation TTF */
 	if(TTF_Init() == -1) {
-		fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
+		printf("\033[31;01m[MAP_EDITOR ERROR]\033[00m : Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
 		exit(EXIT_FAILURE);
 	}
 
@@ -424,13 +424,13 @@ int createMapEditorWindow(int x, int y)
 												  					SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
 	if(!pWindow){
-		fprintf(stderr, "Erreur à la création de la fenetre : %s\n", SDL_GetError());
+		printf("\033[31;01m[MAP_EDITOR ERROR]\033[00m : Erreur à la création de la fenetre : %s\n", SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
 
 	renderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
 	if(renderer == NULL){
-		fprintf(stderr, "Erreur à la création du renderer\n");
+		printf("\033[31;01m[MAP_EDITOR ERROR]\033[00m : Erreur à la création du rendu\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -447,7 +447,7 @@ int createMapEditorWindow(int x, int y)
 		// Chargement des textures
 		loadMapTextures(renderer);
 		if (loadEditorTextures(renderer, textures) == 0){
-			printf("Erreur lors du chargement des textures (0 chargée)\n");
+			printf("\033[31;01m[MAP_EDITOR ERROR]\033[00m : Erreur lors du chargement des textures (0 chargée)\n");
 			return 0;
 		}
 		int start_seconds = SDL_GetTicks()/1000;
@@ -562,7 +562,7 @@ int createMapEditorWindow(int x, int y)
 						{
 							if (PX == 64){
 								PX = 128;
-								if(verbose)printf("[GRAPHICS] Zoom In\n");
+								if (verbose >= 1) printf("\033[36;01m[MAP_EDITOR]\033[00m : Zoom In (Resolution : %dx%dpx)\n", pxBase, pxBase);
 								XPOS *= 2;
 								YPOS *= 2;
 								displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
@@ -570,7 +570,7 @@ int createMapEditorWindow(int x, int y)
 						} else {				// Scroll DOWN
 							if (PX == 128){
 								PX = 64;
-								if(verbose)printf("[GRAPHICS] Zoom Out\n");
+								if (verbose >= 1) printf("\033[36;01m[MAP_EDITOR]\033[00m : Zoom Out (Resolution : %dx%dpx)\n", pxBase, pxBase);
 								XPOS /= 2;
 								YPOS /= 2;
 								displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
@@ -584,7 +584,7 @@ int createMapEditorWindow(int x, int y)
 								case SDLK_KP_PLUS: 	// "+" key
 									if (PX == 64){
 										PX = 128;
-										if(verbose)printf("[GRAPHICS] Zoom In\n");
+										if (verbose >= 1) printf("\033[36;01m[MAP_EDITOR]\033[00m : Zoom In (Resolution : %dx%dpx)\n", pxBase, pxBase);
 										XPOS *= 2;
 										YPOS *= 2;
 										displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
@@ -593,7 +593,7 @@ int createMapEditorWindow(int x, int y)
 								case SDLK_KP_MINUS:	// "-" key
 									if (PX == 128){
 										PX = 64;
-										if(verbose)printf("[GRAPHICS] Zoom Out\n");
+										if (verbose >= 1) printf("\033[36;01m[MAP_EDITOR]\033[00m : Zoom Out (Resolution : %dx%dpx)\n", pxBase, pxBase);
 										XPOS /= 2;
 										YPOS /= 2;
 										displayEditorMap(renderer, XPOS, YPOS, PX, SELECT,  xWinSize, yWinSize);
@@ -714,7 +714,7 @@ int createMapEditorWindow(int x, int y)
 		closeWindow(pWindow);
 		freeTextures(textures);
 	} else {
-		fprintf(stderr,"[GRAPHICS] Erreur de création de la fenêtre: %s\n",SDL_GetError());
+		printf("\033[31;01m[MAP_EDITOR ERROR]\033[00m : Erreur de création de la fenêtre: %s\n",SDL_GetError());
 	}
 
 	return 1;

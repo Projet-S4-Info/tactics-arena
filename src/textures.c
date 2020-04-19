@@ -89,7 +89,7 @@ int addTextureToTable(TabTexture * texturesTable, SDL_Texture * texture, SDL_Tex
 	texturesTable[index].big_texture = big_texture;
 	texturesTable[index].texture_name = texture_name;
 
-	if(verbose)printf("[GRAPHICS] Ajout de la texture [%s] à l'id %d\n", texture_name, index);
+	if (verbose == 2) printf("\033[36;01m[TEXTURES]\033[00m : Ajout de la texture [%s] à l'id %d\n", texture_name, index);
 
 	return index;
 }
@@ -151,7 +151,7 @@ SDL_Surface * loadImage(const char * img)
 	rwop=SDL_RWFromFile(img, "rb");
 	surface=IMG_LoadPNG_RW(rwop);
 	if(!surface) {
-		printf("[GRAPHICS] loadImage error while loading %s : %s\n", img, IMG_GetError());
+		printf("\033[31;01m[TEXTURES ERROR]\033[00m : Erreur lors du chargement de l'image %s : %s\n", img, IMG_GetError());
 		exit(EXIT_FAILURE);
 	}
 
@@ -170,7 +170,7 @@ SDL_Texture * loadTexture(SDL_Renderer * renderer, SDL_Surface * surface)
 
 	texture = SDL_CreateTextureFromSurface(renderer, surface);
 	if(!texture){
-		fprintf(stderr, "[GRAPHICS] loadTexture error while creating texture : %s\n", SDL_GetError());
+		printf("\033[31;01m[TEXTURES ERROR]\033[00m : Erreur lors de la creation de la texture : %s\n", SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
 

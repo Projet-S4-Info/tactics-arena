@@ -56,6 +56,8 @@ err_t get_team(Entity *e, Entity **all, bool same)
     return OK;
 }
 
+
+
 winId game_over()
 {
     winId all_dead = LOSE;
@@ -118,6 +120,11 @@ char * get_desc(Entity * e, abilityId ab_id)
     {
         return Move_ab.eng.desc;
     }
+}
+
+bool is_aoe(Entity * e, abilityId id)
+{
+    return e->cha_class->cla_abilities[id%NUM_AB].nb_coords > 1;
 }
 
 bool able_ability(Entity *e, abilityId ab_id)
