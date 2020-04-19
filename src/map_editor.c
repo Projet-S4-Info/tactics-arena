@@ -169,7 +169,7 @@ int displaySaveMenu(SDL_Renderer * renderer, Tile * grid, int xWinSize, int yWin
 	displaySprite(renderer, getTexture(textures, "save_menu"), xPos, yPos);
 	displayText(renderer, xPos+10, yPos+5, 20, "Enregistrer la map...", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 	displayText(renderer, xPos+10, yOpPos-25, 20, "[ENTER] pour valider, [ESC] pour annuler", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
-	if (mapName != NULL) displayText(renderer, xPos+40, yPos+55, 20, mapName, "../inc/font/Pixels.ttf", 0, 0, 0, TRUE);
+	if (mapName != NULL) displayText(renderer, xPos+40, yPos+55, 20, mapName, "../inc/font/Pixels.ttf", 0, 0, 0, FALSE);
 
 	return 1;
 }
@@ -273,7 +273,7 @@ int changeTile(Tile * grid, int xpos, int ypos, int mx, int my, int pxBase, int 
 
 	// DEBUG printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
 	(*(grid+xIndex*_X_SIZE_+yIndex)).tile_id = toTile;
-	if (toTile == WATER) (*(grid+xIndex*_X_SIZE_+yIndex)).walkable = 0;
+	if (toTile == WATER || toTile == BLANK) (*(grid+xIndex*_X_SIZE_+yIndex)).walkable = 0;
 	else (*(grid+xIndex*_X_SIZE_+yIndex)).walkable = 1;
 
 	return 1;

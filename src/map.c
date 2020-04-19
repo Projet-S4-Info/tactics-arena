@@ -530,17 +530,18 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 			{
 
 				// Affichage block
-				if ((*(matrix+i*_X_SIZE_+j)).tile_id == 1)
+				if ((*(matrix+i*_X_SIZE_+j)).tile_id != BLANK)
 				{
-					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
-					else				displaySprite(renderer, getBigTexture(textures, "blue_selected"), blockPos.x, blockPos.y);
-					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "block"), blockPos.x, blockPos.y);
-					else				displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
-				}
-				else if ((*(matrix+i*_X_SIZE_+j)).tile_id <= 7)
-				{
-					if (pxBase == 64)	displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].texture, blockPos.x, blockPos.y);
-					else 				displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].big_texture, blockPos.x, blockPos.y);
+					if ((*(matrix+i*_X_SIZE_+j)).tile_id == 1)
+					{
+						if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "block"), blockPos.x, blockPos.y);
+						else				displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
+					}
+					else if ((*(matrix+i*_X_SIZE_+j)).tile_id <= 7)
+					{
+						if (pxBase == 64)	displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].texture, blockPos.x, blockPos.y);
+						else 				displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].big_texture, blockPos.x, blockPos.y);
+					}
 				}
 
 				// Affichage portée d'attaque (si compétence sélectionnée)
