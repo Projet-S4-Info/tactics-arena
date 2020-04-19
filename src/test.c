@@ -8,20 +8,4 @@
 
 void test()
 {
-    loadMap(matrix, "map_sandy_pass");
-
-	debugGrid(matrix, _X_SIZE_, _Y_SIZE_);
-
-    Coord coorTab[MAXRANGE];
-    Coord zone[_X_SIZE_*_Y_SIZE_];
-    Coord c ={0,0};
-
-    printf("\n");
-    setActionBorder(c, 8, coorTab);
-    setActionZone(8,coorTab,zone);
-
-    print_grid(coorTab);
-    printf("\n");
-    print_grid(zone);
-
 }

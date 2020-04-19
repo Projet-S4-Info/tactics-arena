@@ -105,13 +105,13 @@ Coord * setActionBorder(Coord start, int range, Coord tab[])
         {
             goal = add_coords(start,max[i]);
 
-            if(verbose)print_Coord(&goal, "Goal : ");
+            if(verbose>=2)print_Coord(&goal, "Goal : ");
 
             while(!same_coord(c = add_coords(active,add[i]), goal))
             {
                 norm = normalize(c);
 
-                if(verbose)
+                if(verbose>=2)
                 {
                     print_Coord(&active, "Active : ");
                     print_Coord(&c, "c : ");
@@ -120,29 +120,29 @@ Coord * setActionBorder(Coord start, int range, Coord tab[])
                 
                 if(matrice[norm.x][norm.y])
                 {
-                    if(verbose)printf("Adding\n");
+                    if(verbose>=2)printf("Adding\n");
                     tab[j++] = norm;
                     matrice[norm.x][norm.y] = FALSE;
                 }
                 else
                 {
-                    if(verbose)printf("Not Adding\n");
+                    if(verbose>=2)printf("Not Adding\n");
                 }
                 active = c;
             }
 
 
             norm = normalize(c);
-            if(verbose)print_Coord(&norm, "Norm : ");
+            if(verbose>=2)print_Coord(&norm, "Norm : ");
             if(matrice[norm.x][norm.y])
             {
-                if(verbose)printf("Adding\n");
+                if(verbose>=2)printf("Adding\n");
                 tab[j++] = norm;
                 matrice[norm.x][norm.y] = FALSE;
             }
             else
             {
-                if(verbose)printf("Not Adding\n");
+                if(verbose>=2)printf("Not Adding\n");
             }
             active = c;
         }
@@ -157,7 +157,7 @@ Coord * setActionBorder(Coord start, int range, Coord tab[])
     Coord r = {-99,-99};
     tab[j] = r;
 
-    if(verbose)printf("Border Size : %d\n", j);
+    if(verbose>=2)printf("Border Size : %d\n", j);
 
     return (Coord *)tab;
 }
@@ -180,11 +180,11 @@ Coord * setActionZone(int range, Coord Border[], Coord Zone[])
                 if(isInRange(Border, c))
                 {
                     Zone[k++] = c;
-                    if(verbose)printf("%d,%d is in range\n", c.x, c.y);
+                    if(verbose>=2)printf("%d,%d is in range\n", c.x, c.y);
                 }
                 else
                 {
-                    if(verbose)printf("%d,%d is not in range\n", c.x, c.y);
+                    if(verbose>=2)printf("%d,%d is not in range\n", c.x, c.y);
                 }
             }
         }
@@ -198,7 +198,7 @@ Coord * setActionZone(int range, Coord Border[], Coord Zone[])
     Coord d = {-99,-99};
     Zone[k] = d;
 
-    if(verbose)printf("Zone Size : %d\n", k);
+    if(verbose>=2)printf("Zone Size : %d\n", k);
 
     return (Coord *)Zone;
 }
@@ -233,7 +233,7 @@ Coord * setMovementBorder(int matrice[_X_SIZE_][_Y_SIZE_], Coord tab[])
     b.y = -99;
     tab[l] = b;
 
-    if(verbose)printf("Border Size : %d\n", l);
+    if(verbose>=2)printf("Border Size : %d\n", l);
 
     return (Coord *)tab;
 }
@@ -259,7 +259,7 @@ Coord * setMovementZone(int matrice[_X_SIZE_][_Y_SIZE_], Coord tab[])
     c.y = -99;
     tab[k] = c;
 
-    if(verbose)printf("Zone Size : %d\n", k);
+    if(verbose>=2)printf("Zone Size : %d\n", k);
 
     return (Coord *)tab;
 }
@@ -269,8 +269,8 @@ Coord * get_border(int cha_id, abilityId Id, Coord coorTab[], Coord zone[])
     Entity * e = e_from_id(cha_id);
     int matrice[_X_SIZE_][_Y_SIZE_];
 
-    if(verbose)printf("Selected Entity : %s\n", e->cha_name);
-    if(verbose)printf("Selected Entity pos : %d, %d\n", e->coords.x, e->coords.y);
+    if(verbose>=2)printf("Selected Entity : %s\n", e->cha_name);
+    if(verbose>=2)printf("Selected Entity pos : %d, %d\n", e->coords.x, e->coords.y);
 
     if(Id == Mvt)
     {
@@ -289,7 +289,7 @@ Coord * get_border(int cha_id, abilityId Id, Coord coorTab[], Coord zone[])
 
 bool Cast_check(action a, Coord coorTab[])
 {
-    if(verbose)printf("Verification de la porte...\n");
+    if(verbose>=2)printf("Verification de la porte...\n");
     Ability ab;
     int var;
     Entity * e = e_from_id(a.char_id);
@@ -299,24 +299,24 @@ bool Cast_check(action a, Coord coorTab[])
     {
         sprintf(log, "%s is frozen and cannot do anything", e->cha_name);
         addLog(log);
-        if(verbose)printf("Portee KO 2\n");
+        if(verbose>=1)printf("Portee KO 2\n");
         return FALSE;
     }
 
     if(a.act != Mvt)
     {
-        if(verbose)printf("Ability is %s\n", get_name(e,a.act));
+        if(verbose>=1)printf("Ability is %s\n", get_name(e,a.act));
         ab = e->cha_class->cla_abilities[a.act%NUM_AB];
     }
     else
     {
-        if(verbose)printf("Ability is a movement\n");
+        if(verbose>=1)printf("Ability is a movement\n");
         ab = Move_ab;
         if(e->status_effect[Cripple])
         {
             sprintf(log, "%s is crippled and cannot move", e->cha_name);
             addLog(log);
-            if(verbose)printf("Portee KO 3\n");
+            if(verbose>=1)printf("Portee KO 3\n");
             return FALSE;
         }
     }
@@ -329,7 +329,7 @@ bool Cast_check(action a, Coord coorTab[])
             Entity * g = e_from_id(var);
             sprintf(log, "%s is provoked by %s and can't do anything other than attack him", e->cha_name, g->cha_name);
             addLog(log);
-            if(verbose)printf("Portee KO 4\n");
+            if(verbose>=1)printf("Portee KO 4\n");
             return FALSE;
         }
     }
@@ -338,16 +338,16 @@ bool Cast_check(action a, Coord coorTab[])
     {
         if(isInRange(coorTab, a.c))
         {
-            if(verbose)printf("Portee OK\n");
+            if(verbose>=1)printf("Portee OK\n");
             return TRUE;
         }
         else
         {
-            if(verbose)printf("Not in Range\n");
+            if(verbose>=2)printf("Not in Range\n");
         }
     }
 
-    if(verbose)printf("Portee KO 5\n");
+    if(verbose>=1)printf("Portee KO 5\n");
 
     return FALSE;
 }

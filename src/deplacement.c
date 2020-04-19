@@ -25,8 +25,8 @@ Coord closest_free_tile(Coord c)
     {
         active = defiler(maFile);
         t = getTile(active);
-        if(verbose)printf("x : %d    y : %d\n", active.x, active.y);
-        if(verbose)printf("Null : %d    Walk : %d\n", t->entity == NULL, t->walkable);
+        if(verbose>=2)printf("x : %d    y : %d\n", active.x, active.y);
+        if(verbose>=2)printf("Null : %d    Walk : %d\n", t->entity == NULL, t->walkable);
 
         if(t->entity == NULL && t->walkable)
         {
@@ -70,25 +70,25 @@ int * fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_], int max)
     Coord add[4] = {{1,0},{-1,0},{0,1},{0,-1}};
     Tile * t;
 
-    if(verbose)printf("\n");
+    if(verbose>=2)printf("\n");
     while(!file_vide(maFile))
     {
         active = defiler(maFile);
 
-        if(verbose)printf("Active : %d %d\n", active.x, active.y);
+        if(verbose>=2)printf("Active : %d %d\n", active.x, active.y);
 
         for(i=0; i<4; i++)
         {
             active_2 = add_coords(active, add[i]);
-            if(verbose)printf("    Active_2 : %d %d\n", active_2.x, active_2.y);
+            if(verbose>=2)printf("    Active_2 : %d %d\n", active_2.x, active_2.y);
             if(isInGrid(active_2))
             {
-                if(verbose)printf("        In Grid\n");
+                if(verbose>=2)printf("        In Grid\n");
                 t = getTile(active_2);
 
                 if(matrice[active_2.x][active_2.y]==-1 && t->walkable && t->entity == NULL)
                 {
-                    if(verbose)printf("        Adding\n");
+                    if(verbose>=2)printf("        Adding\n");
                     matrice[active_2.x][active_2.y] = matrice[active.x][active.y] + 1;
                     if(matrice[active_2.x][active_2.y] < max)
                     {
@@ -97,12 +97,12 @@ int * fill_tiles(Coord c, int matrice[_X_SIZE_][_Y_SIZE_], int max)
                 }
                 else
                 {
-                    if(verbose)printf("        Not Adding\n");
+                    if(verbose>=2)printf("        Not Adding\n");
                 }
             }
         }
     }
-    if(verbose)printf("Fill Tiles Done\n");
+    if(verbose>=2)printf("Fill Tiles Done\n");
     return (int *)matrice;
 }
 
@@ -140,7 +140,7 @@ Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goa
         }   
     }
 
-    if(verbose)
+    if(verbose>=2)
     {
         printf("Goal : ");
         print_Coord(&goal, "");
@@ -155,7 +155,7 @@ Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goa
 
     tabcoord[i].x = -99;
     tabcoord[i].y = -99;
-    if(verbose)printf("Path Found\n");
+    if(verbose>=1)printf("Path Found\n");
     return tabcoord;
 }
 
@@ -166,7 +166,7 @@ err_t simple_move(Entity * e, Coord tabcoord[])
 
     selected_ability = -1;
 
-    if(verbose)
+    if(verbose>=2)
     {
         for(i=0; tabcoord[i].x!=-99; i++)
         {
@@ -179,11 +179,11 @@ err_t simple_move(Entity * e, Coord tabcoord[])
     for(i = 0; tabcoord[i].x != -99; i ++)
     {
         c = add_coords(start, tabcoord[i]);
-        if(TRUE)printf("Moving from (%d,%d) to (%d,%d)...", e->coords.x, e->coords.y, c.x, c.y);
+        if(verbose>=2)printf("Moving from (%d,%d) to (%d,%d)...", e->coords.x, e->coords.y, c.x, c.y);
         moveEntity(e->coords, c);
         Coord target = {e->coords.x, e->coords.y};
         setSelected(target);
-        if(TRUE)printf("Completed\n");
+        if(verbose>=2)printf("Completed\n");
         sentinel_check(e);
         displayMap(SDL_GetRenderer(pWindow), XPOS, YPOS);
         SDL_Delay(250);

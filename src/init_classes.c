@@ -29,7 +29,7 @@ err_t init_aoe()
     }
     if(i!=51)
     {
-        if(verbose)printf("%d\n",i);
+        if(verbose>=1)printf("%d\n",i);
         return INIT_COORD_ERR;
     }
 
@@ -54,7 +54,7 @@ err_t init_aoe()
 
     if(i!=103)
     {
-        if(verbose)printf("%d\n",i);
+        if(verbose>=1)printf("%d\n",i);
         return INIT_COORD_ERR;
     }
 
@@ -116,7 +116,7 @@ err_t init_berserker(Class * c)
 
     *c = temp;
 
-    if(verbose) printf("%s initialized!\n", c->cla_name);
+    if(verbose>=1) printf("%s initialized!\n", c->cla_name);
 
     return OK;
 }
@@ -154,7 +154,7 @@ err_t init_ranger(Class * c)
     
     *c = temp;
 
-    if(verbose) printf("%s initialized!\n", c->cla_name);
+    if(verbose>=1) printf("%s initialized!\n", c->cla_name);
 
     return OK;
 }
@@ -207,7 +207,7 @@ err_t init_goliath(Class * c)
     
     *c = temp;
 
-    if(verbose) printf("%s initialized!\n", c->cla_name);
+    if(verbose>=1) printf("%s initialized!\n", c->cla_name);
 
     return OK;
 }
@@ -288,7 +288,7 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
 
     if(i!=75)
     {  
-        if(verbose)printf("%d\n",i);
+        if(verbose>=1)printf("%d\n",i);
         return INIT_COORD_ERR;
     }
 
@@ -333,7 +333,7 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
 
     *c = temp;
 
-    if(verbose) printf("%s initialized!\n", c->cla_name);
+    if(verbose>=1) printf("%s initialized!\n", c->cla_name);
 
     return OK;
 }
@@ -369,7 +369,7 @@ err_t init_valkyrie(Class * c)
     
     *c = temp;
 
-    if(verbose) printf("%s initialized!\n", c->cla_name);
+    if(verbose>=1) printf("%s initialized!\n", c->cla_name);
 
     return OK;
 }
@@ -417,7 +417,7 @@ err_t init_angel(Class * c, Ability *pass)
     
     *c = temp;
 
-    if(verbose) printf("%s initialized!\n", c->cla_name);
+    if(verbose>=1) printf("%s initialized!\n", c->cla_name);
 
     return OK;
 }
@@ -428,45 +428,45 @@ err_t ability_destroy(Ability * a)
 {
     if(a!=NULL)
     {
-        if(verbose) printf("Destroying %s's pointers!\n", a->eng.name);
+        if(verbose>=2) printf("Destroying %s's pointers!\n", a->eng.name);
 
-        if(verbose) printf("Damage...");
+        if(verbose>=2) printf("Damage...");
         if(a->damage!=NULL&&*(a->damage)!=NULL)
         {
             free(*(a->damage));
             *(a->damage) = NULL;
-            if(verbose) printf("freed\n");
+            if(verbose>=2) printf("freed\n");
         }
         else
         {
-            if(verbose) printf("null\n");
+            if(verbose>=2) printf("null\n");
         }
 
-        if(verbose) printf("Coords...");
+        if(verbose>=2) printf("Coords...");
         if(a->coord!=NULL&&*(a->coord)!=NULL)
         {
             free(*(a->coord));
             *(a->coord) = NULL;
-            if(verbose) printf("freed\n");
+            if(verbose>=2) printf("freed\n");
         }
         else
         {
-            if(verbose) printf("null\n");
+            if(verbose>=2) printf("null\n");
         }
 
-        if(verbose) printf("Modifiers...");
+        if(verbose>=2) printf("Modifiers...");
         if(a->mods!=NULL&&*(a->mods)!=NULL)
         {  
             free(*(a->mods));
             *(a->mods) = NULL;
-            if(verbose) printf("freed\n");
+            if(verbose>=2) printf("freed\n");
         }
         else
         {
-            if(verbose) printf("NULL\n");
+            if(verbose>=2) printf("NULL\n");
         }
 
-        if(verbose) printf("%s's pointers destroyed!\n", a->eng.name);
+        if(verbose>=1) printf("%s's pointers destroyed!\n", a->eng.name);
     }
 
     return OK;
@@ -482,7 +482,7 @@ err_t class_destroy(Class * c)
         {
             strcpy(name, c->cla_name);
 
-            if(verbose) printf("Starting destruction of %s!\n", name);
+            if(verbose>=1) printf("Starting destruction of %s!\n", name);
 
             if(c->cla_abilities!=NULL)
             {
@@ -494,10 +494,10 @@ err_t class_destroy(Class * c)
 
                 free(c->cla_abilities);
                 c->cla_abilities = NULL;
-                if(verbose) printf("%s's abilities destroyed!\n", name);
+                if(verbose>=1) printf("%s's abilities destroyed!\n", name);
             }
 
-            if(verbose) printf("Destruction of %s finished!\n\n", name);
+            if(verbose>=1) printf("Destruction of %s finished!\n\n", name);
         }
     }
     return OK;

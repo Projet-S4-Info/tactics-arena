@@ -13,6 +13,7 @@
         "time.h": "c",
         "init.h": "c",
         "grid.h": "c",
-        "servfcnt.h": "c"
+        "servfcnt.h": "c",
+        "characters.h": "c"
     }
 }

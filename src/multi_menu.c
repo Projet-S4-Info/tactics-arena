@@ -19,6 +19,7 @@
 #include "common.h"
 #include "chat.h"
 #include "text.h"
+#include "turn.h"
 
 
 #define _NB_MAX_MAPS_ 20
@@ -86,6 +87,7 @@ multiThread_t threadCli;
 static void * fn_server (void * p_data)
 {
     startTCPSocketServ();
+	init_server();
     return NULL;
 }
 
@@ -93,6 +95,7 @@ static void * fn_server (void * p_data)
 static void * fn_client (void * p_data)
 {
     startTCPSocketCli();
+	init_client();
     return NULL;
 }
 

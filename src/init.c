@@ -19,7 +19,7 @@ Ability Move_ab;
 err_t init_spawn(Entity * e, Coord c)
 {
     e->coords = c;
-    if(verbose)printf("Setting %s Spawn at %d %d\n", e->cha_name, c.x, c.y);
+    if(verbose>=2)printf("Setting %s Spawn at %d %d\n", e->cha_name, c.x, c.y);
 
     free_spawn(e);
     
@@ -124,7 +124,7 @@ err_t ent_init_test(Entity *e, char title[STR_SHORT])
             (e+i)->cha_id = i+1;
             (e+i)->direction = W;
             init_spawn(e+i, ally_spawn[s]);
-            if(verbose)printf("%s Spawn Set to %d %d\n", e->cha_name, e->coords.x, e->coords.y);
+            if(verbose>=2)printf("%s Spawn Set to %d %d\n", e->cha_name, e->coords.x, e->coords.y);
 
         }
         else
@@ -132,7 +132,7 @@ err_t ent_init_test(Entity *e, char title[STR_SHORT])
             (e+i)->cha_id = (i+1)*-1;
             (e+i)->direction = S;
             init_spawn(e+i, foe_spawn[s]);
-            if(verbose)printf("%s Spawn Set to %d %d\n", e->cha_name, e->coords.x, e->coords.y);
+            if(verbose>=2)printf("%s Spawn Set to %d %d\n", e->cha_name, e->coords.x, e->coords.y);
         }
 
         (e+i)->active = Alive;
@@ -150,7 +150,6 @@ err_t ent_init_test(Entity *e, char title[STR_SHORT])
         {
             (e+i)->ab_cooldown[j] = 0;
         }
-        if(verbose) printf("Allies : %s initialized!\n", (e+i)->cha_name);
     }
 
     (e + Mage)->cha_class->cla_abilities = &mage_ab[rand()%3][0];
@@ -173,14 +172,14 @@ err_t init_classes()
     printf("%s",error_message[init_list(&stSent)]);
     printf("%s",error_message[init_list(&stReceived)]);
 
-    if(verbose) printf("End of initialisation!\n");
+    if(verbose>=1) printf("End of initialisation!\n");
 
     return OK;
 }
 
 err_t destroy_game()
 {
-    if(verbose) printf("\nStart of Destruction!\n");
+    if(verbose>=1) printf("\nStart of Destruction!\n");
 
     list_destroy(stSent);
     list_destroy(stReceived);
@@ -192,7 +191,7 @@ err_t destroy_game()
         class_destroy(&classes[i]);
     }
 
-    if(verbose) printf("Starting destruction of Mage!\n");
+    if(verbose>=1) printf("Starting destruction of Mage!\n");
     for(i=0; i<3; i++)
     {
         for(j=0; j<NUM_AB; j++)
@@ -200,10 +199,13 @@ err_t destroy_game()
             ability_destroy(&mage_ab[i][j]);
         }
     }
-    if(verbose) printf("Mage's abilities destroyed!\n\n");
+    if(verbose>=1) printf("Mage's abilities destroyed!\n\n");
 
     ability_destroy(&Aura_ab);
-    if(verbose) printf("Angel's Aura passive destroyed!\n");
+    if(verbose>=1) printf("Angel's Aura passive destroyed!\n");
+
+    ability_destroy(&Move_ab);
+    if(verbose>=1) printf("Movement ability destroyed\n");
 
     return OK;
 }

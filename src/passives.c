@@ -10,7 +10,7 @@ bool Sentinel_counter;
 
 err_t activate_bloodlust(Entity *e, StateList * list)
 {
-    if(verbose)printf("Bloodlust was triggered!\n");
+    if(verbose>=1)printf("Bloodlust was triggered!\n");
 
     char log[STR_LONG];
     sprintf(log, "%s's Bloodlust was triggered", e->cha_name);
@@ -30,6 +30,7 @@ err_t activate_aura(Entity *e, StateList *list)
     char log[STR_LONG];
     sprintf(log, "%s's Aura was triggered", e->cha_name);
     addLog(log);
+    if(verbose>=1)printf("%s\n",log);
 
     apply_to(Aura_ab, e, list, e->coords);
 
@@ -64,6 +65,7 @@ err_t sentinel_check(Entity *e)
         {
             char log[STR_LONG];
             sprintf(log, "%s's Sentinel was triggered", r->cha_name);
+            if(verbose>=1)printf("%s\n",log);
             addLog(log);
 
             apply_to(r->cha_class->cla_abilities[Bolt%NUM_AB], r, list, e->coords);

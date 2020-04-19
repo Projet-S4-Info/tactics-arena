@@ -24,6 +24,20 @@ err_t online_setup()
     return OK;
 }
 
+err_t endgame_message(winId Id)
+{
+    if(Id == WIN)
+    {
+        addLog("YOU HAVE WON!");
+    }
+    else
+    {
+        addLog("YOU HAVE LOST!");
+    }
+
+    return OK;
+}
+
 bool your_turn()
 {
     return turn_active;
@@ -63,7 +77,7 @@ err_t apply_action(action a)
     }
     active_ab = active_ent->cha_class->cla_abilities[a.act%NUM_AB];
 
-    if(verbose)printf("\n\n%s has chosen to %s at the following coordinates : %d,%d\n", active_ent->cha_name, active_ab.eng.name, a.c.x, a.c.y);
+    if(verbose>=1)printf("\n\n%s has chosen to %s at the following coordinates : %d,%d\n", active_ent->cha_name, active_ab.eng.name, a.c.x, a.c.y);
 
     sprintf(log, "%s cast %s", active_ent->cha_name, active_ab.eng.name);
     addLog(log);
@@ -79,7 +93,7 @@ err_t apply_action(action a)
     }
     else
     {
-        if(verbose)printf("%s is Blessed!\n", active_ent->cha_name);
+        if(verbose>=1)printf("%s is Blessed!\n", active_ent->cha_name);
     }
     
     if(active_ab.fn_use!=ONLY)
@@ -248,10 +262,7 @@ err_t local_turn()
 
     turn_end(Allies, stReceived);
 
-    if(is_online)
-    {
-        sendStruct(&turn_over, sizeof(action), socketConnected);
-    }
+    sendStruct(&turn_over, sizeof(action), socketConnected);
 
     addLog("Your turn is over");
 
