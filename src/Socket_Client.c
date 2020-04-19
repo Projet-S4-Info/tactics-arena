@@ -5,7 +5,7 @@
  * \author Lucien Chauvin
  * \version 0.1.0
  * \date 18/03/2020
- */
+*/
 
 /* =============== DEPENDENCES =============== */
 #include <stdio.h>
@@ -66,7 +66,7 @@ err_t stopTCPSocketCli(int socketCli){
  * \fn err_t startTCPSocketCli(int socket)
  * \return err_t CLI_OK or CLI_ERROR
  * \brief Function to start to connect a client to a server
- */
+*/
 
 err_t startTCPSocketCli(int socketCli){
 
@@ -82,7 +82,7 @@ err_t startTCPSocketCli(int socketCli){
     int windWSAError= 0;
   #endif
 
-  
+ 
   const char * servIP = malloc(sizeof(char) * 85);
 
   t_user infoMoi;
@@ -104,7 +104,7 @@ err_t startTCPSocketCli(int socketCli){
     sockIn.sin_port = htons(PORT);
   /*-------------------------------------------------------------*/
     nbPlayer +=1;
-    
+   
     if(verbose >= 1)printf("\nLancement de la création du client...\n");
     
     //-- Création de la socket (IPv4, TCP, 0)

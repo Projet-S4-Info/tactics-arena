@@ -494,9 +494,6 @@ int displayInterface(SDL_Renderer *renderer)
 		}
 			
 	}
-	
-	
-
 	return 0;
 }
 
