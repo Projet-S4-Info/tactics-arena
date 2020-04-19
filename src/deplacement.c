@@ -161,7 +161,6 @@ Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goa
 
 err_t simple_move(Entity * e, Coord tabcoord[])
 {
-    SDL_Renderer *tempRenderer = NULL;
     int i;
     Coord c, start = e->coords;
 
