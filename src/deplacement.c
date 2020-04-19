@@ -161,8 +161,11 @@ Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goa
 
 err_t simple_move(Entity * e, Coord tabcoord[])
 {
+    SDL_Renderer *tempRenderer = NULL;
     int i;
     Coord c, start = e->coords;
+
+    selected_ability = -1;
 
     if(verbose)
     {
@@ -172,6 +175,8 @@ err_t simple_move(Entity * e, Coord tabcoord[])
         }
     }
 
+    unselect();
+
     for(i = 0; tabcoord[i].x != -99; i ++)
     {
         c = add_coords(start, tabcoord[i]);
@@ -179,8 +184,11 @@ err_t simple_move(Entity * e, Coord tabcoord[])
         moveEntity(e->coords, c);
         if(verbose)printf("Completed\n");
         sentinel_check(e);
-        //displayMap(renderer, XPOS, YPOS);
-        usleep(50000);
+        displayMap(SDL_GetRenderer(pWindow), XPOS, YPOS);
+        SDL_Delay(250);
     }
+
+    Coord target = {e->coords.x, e->coords.y};
+    setSelected(target);
     return OK;
 }

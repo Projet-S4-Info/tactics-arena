@@ -10,6 +10,7 @@
 
 
 extern Coord borderTab[];
+extern Coord rangeTab[];
 extern Entity * selectedEntity;
 
 

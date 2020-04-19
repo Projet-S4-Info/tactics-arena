@@ -228,11 +228,7 @@ int selectTile(int xpos, int ypos, int mx, int my)
 	float cpAB, cpBC, cpDC, cpAD;
 
 	// On déselectionne toutes les cases
-	for (int i=0; i<_X_SIZE_; i++){
-		for (int j=0; j<_Y_SIZE_; j++){
-			(*(matrix+i*_X_SIZE_+j)).selected = 0;
-		}
-	}
+	unselect();
 
 	// Position de l'origine de la map en 2D isométrique
 	xIsoOrigin = xpos;

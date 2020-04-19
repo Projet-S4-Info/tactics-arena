@@ -42,6 +42,7 @@
 
 
 SDL_Renderer *renderer = NULL;
+SDL_Window* pWindow = NULL;
 int XPOS = 50;								// x and y pos where map is displayed
 int YPOS = 50;								// |
 int selected_ability = -1;					// Selected ability
@@ -81,9 +82,6 @@ static void * fn_chat (void * p_data)
 int createGameWindow(int x, int y)
 // Create a window with with x*y size (in px)
 {
-    // Le pointeur vers la fenetre
-	SDL_Window* pWindow = NULL;
-
     /* Initialisation simple */
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0 ) {
         fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
