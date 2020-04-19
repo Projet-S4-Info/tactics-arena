@@ -545,14 +545,19 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 				}
 
 				// Affichage portée d'attaque (si compétence sélectionnée)
-				if (selected_ability != -1)
+				Entity * tempEntity = NULL;
+				tempEntity = getEntity(getSelectedPos());
+				if (tempEntity != NULL)
 				{
-					drawPos.x = i;
-					drawPos.y = j;
-					if (isInCoordTab(rangeTab, drawPos) || isInCoordTab(borderTab, drawPos))
+					if (selected_ability != -1 && is_ally(tempEntity))
 					{
-						if (pxBase == 64) displaySprite(renderer, getTexture(textures, "ability_range"), blockPos.x, blockPos.y);
-						else displaySprite(renderer, getBigTexture(textures, "ability_range"), blockPos.x, blockPos.y);
+						drawPos.x = i;
+						drawPos.y = j;
+						if (isInCoordTab(rangeTab, drawPos) || isInCoordTab(borderTab, drawPos))
+						{
+							if (pxBase == 64) displaySprite(renderer, getTexture(textures, "ability_range"), blockPos.x, blockPos.y);
+							else displaySprite(renderer, getBigTexture(textures, "ability_range"), blockPos.x, blockPos.y);
+						}
 					}
 				}
 
