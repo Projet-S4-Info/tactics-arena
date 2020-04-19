@@ -45,7 +45,6 @@ int main(int argc, char * argv[])
     #endif
 
     int selection = 0;
-    printf("\n");
 
     if(argc < 3){
         if(argc == 2){
@@ -66,7 +65,7 @@ int main(int argc, char * argv[])
     srand(time(NULL));
 
     printf("%s", error_message[ init_classes() ] );
-    
+
     if(verbose)
     {
         printf("Initiation Check!\n\n");
@@ -117,6 +116,7 @@ int main(int argc, char * argv[])
 
     playMenuMusic(1);
     selection = displayMenu(1280, 720);
+    printf("\n");
     
 
     // Lancement du jeu

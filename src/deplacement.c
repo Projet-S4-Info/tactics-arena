@@ -164,7 +164,7 @@ err_t simple_move(Entity * e, Coord tabcoord[])
     int i;
     Coord c, start = e->coords;
 
-    if(verbose)
+    if(TRUE)
     {
         for(i=0; tabcoord[i].x!=-99; i++)
         {
@@ -175,9 +175,9 @@ err_t simple_move(Entity * e, Coord tabcoord[])
     for(i = 0; tabcoord[i].x != -99; i ++)
     {
         c = add_coords(start, tabcoord[i]);
-        if(verbose)printf("Moving from (%d,%d) to (%d,%d)...", e->coords.x, e->coords.y, c.x, c.y);
+        if(TRUE)printf("Moving from (%d,%d) to (%d,%d)...", e->coords.x, e->coords.y, c.x, c.y);
         moveEntity(e->coords, c);
-        if(verbose)printf("Completed\n");
+        if(TRUE)printf("Completed\n");
         sentinel_check(e);
         //displayMap(renderer, XPOS, YPOS);
         usleep(50000);
