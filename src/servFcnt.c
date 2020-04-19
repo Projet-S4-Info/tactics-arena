@@ -128,8 +128,8 @@ void * recep(void * container, int size, int socket){
   if(verbose >= 2)printf("bienvenue dans recep \n");
   int flag = 0;
   while(flag == 0){
-    sleep(2);
-    if(recv(socket,container, size, MSG_DONTWAIT) > -1){
+    sleep(1);
+    if(recv(socket,container, size, 0) > -1){
       flag = 1;
     }
   }
