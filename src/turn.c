@@ -13,14 +13,21 @@
 #include "text.h"
 #include "game_window.h"
 
+bool is_online = FALSE;
 bool turn_active = TRUE;
 action turn_over = {0,{0,0},0};
+
+err_t online_setup()
+{
+    is_online = TRUE;
+    turn_active = FALSE;
+    return OK;
+}
 
 bool your_turn()
 {
     return turn_active;
 }
-
 
 err_t apply_movement(action a)
 {
@@ -29,8 +36,9 @@ err_t apply_movement(action a)
     Coord tab[_X_SIZE_ * _Y_SIZE_];
 
     simple_move(e, pathfinding((int(*)[_X_SIZE_])fill_tiles(e -> coords, matrice, e -> stat_mods[mv]), tab, a.c ));
-    
+
     e->coords = a.c;
+    e->act_points--;
     return OK;
 }
 
@@ -128,7 +136,10 @@ err_t turn_start(Entity *e)
 
 err_t turn_end(Entity *e, StateList * list)
 {
-    sendStruct(&turn_over, sizeof(action), socketConnected);
+    if(is_online)
+    {
+        sendStruct(&turn_over, sizeof(action), socketConnected);
+    }
 
     int i,j;
     for(i=0; i<NUM_CLASS; i++)
@@ -163,7 +174,16 @@ err_t turn_end(Entity *e, StateList * list)
     return OK;
 }
 
-Entity * play_check(Entity *E)
+err_t test_turn()
+{
+    turn_end(Allies, stReceived);
+    turn_start(Foes);
+    turn_end(Foes, stSent);
+    turn_start(Allies);
+    return OK;
+}
+
+bool play_check(Entity *E)
 {
     int current = E->cha_id-1;
     Entity * F = E - current;
@@ -174,7 +194,7 @@ Entity * play_check(Entity *E)
         {
             setSelected((F+i)->coords);
             selected_ability = -1;
-            return F + i;
+            return TRUE;
         }
         else
         {
@@ -183,16 +203,26 @@ Entity * play_check(Entity *E)
         
     } while(i!=current);
     
-    turn_active = FALSE;
+    if(is_online)
+    {
+        turn_active = FALSE;
+    }
+    else
+    {
+        test_turn();
+    }
 
-    return NULL;
+    return FALSE;
 }
 
 err_t action_set(action a)
 {
     printf("Application de l'action...\n");
 
-    sendStruct(&a, sizeof(action), socketConnected);
+    if(is_online)
+    {
+        sendStruct(&a, sizeof(action), socketConnected);
+    }
 
     if(a.act == Mvt)
     {

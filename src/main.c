@@ -21,6 +21,7 @@
 #include "init.h"
 #include "print.h"
 #include "text.h"
+#include "turn.h"
 
 #define X 30
 #define Y 30
@@ -145,6 +146,7 @@ int main(int argc, char * argv[])
     // Multiplayer
     else if (selection == 4){
 
+        online_setup();
         stopMenuMusic(1);
         int res = 0;
         playMenuMusic(2);
