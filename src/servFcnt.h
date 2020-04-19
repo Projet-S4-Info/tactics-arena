@@ -1,7 +1,7 @@
 #ifndef servFcnt_h
 #define servFcnt_h
 #define MAX_BUFF_SIZE 1024
-#define PORT 8000
+#define PORT 3555
 #include "struct.h"
 #include "common.h"
 

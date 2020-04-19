@@ -46,10 +46,10 @@ int addCharacterTexture(SDL_Renderer *renderer, char * name)
     char *dirFolder;
 
     sprintf(path, "../inc/sprites/%s/sprite_indiv/", name);
-    if(verbose) printf("Chargement des textures du dossier : %s\n", path);
+    if(verbose == 2) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement des textures du dossier : %s\n", path);
 
 	charTextures[indexCharTable].texture_name = name;
-    if(verbose) printf("Chargement de la texture : %s\n", strcat(path, "front/Sprite_frontview_64.png"));
+    if(verbose == 2) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement de la texture : %s\n", strcat(path, "front/Sprite_frontview_64.png"));
     sprintf(path, "../inc/sprites/%s/sprite_indiv/", name);
     charTextures[indexCharTable].front = loadTexture(renderer, loadImage(strcat(path, "front/Sprite_frontview_64.png")));
     sprintf(path, "../inc/sprites/%s/sprite_indiv/", name);
@@ -64,14 +64,14 @@ int addCharacterTexture(SDL_Renderer *renderer, char * name)
         for (animIndex = 1; animIndex <= _NB_ANIM_; animIndex++)
         {
             sprintf(temp, "%s%s/Sprite_%s%d.png", path, dirFolder, dirFolder, animIndex);
-            if(verbose) printf("Chargement de la texture : %s\n", temp);
+            if(verbose == 2) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement de la texture : %s\n", temp);
             charTextures[indexCharTable].textures[dirIndex][animIndex-1] = loadTexture(renderer, loadImage(temp));
         }
     }
 
     indexCharTable++;
 
-	if(verbose)printf("[GRAPHICS] Ajout de la texture de la classe [%s] à l'id %d\n", name, indexCharTable);
+	if(verbose == 2) printf("\033[36;01m[CHARACTERS]\033[00m : Ajout de la texture de la classe [%s] à l'id %d\n", name, indexCharTable);
 
 	return indexCharTable;
 }
@@ -126,7 +126,7 @@ int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
 
     freeTextures(cSprites);
 
-    if(verbose)printf("Chargement des textures des personnages...\n");
+    if (verbose >= 1) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement des textures des personnages...\n");
 
     addTextureToTable(  cSprites,
                         loadTexture(renderer, loadImage("../inc/img/icons/heart_16.png")),
@@ -150,8 +150,8 @@ int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
     addCharacterTexture(renderer, "ranger");
     nbChar = addCharacterTexture(renderer, "valkyrie");
 
-    if(verbose)printf("[CHARACTERS] %d texture(s) d'icone(s) chargée(s) !\n", nbSprites+1);
-    if(verbose)printf("[CHARACTERS] %d texture(s) de personnage(s) chargée(s) !\n", nbChar+1);
+    if (verbose >= 1) printf("\033[36;01m[CHARACTERS]\033[00m : %d texture(s) d'icone(s) chargée(s) !\n", nbSprites+1);
+    if (verbose >= 1) printf("\033[36;01m[CHARACTERS]\033[00m : %d texture(s) de personnage(s) chargée(s) !\n", nbChar+1);
     return nbSprites;
 }
 
@@ -162,13 +162,13 @@ void setEntityToTile(Entity * entity, Coord tile)
 {    
     if (tile.x < 0 || tile.x >= _X_SIZE_ || tile.y < 0 || tile.y >= _Y_SIZE_)
     {
-        printf("\033[31;01mERRoR\033[00m : Coordinates out of boundaries\n");
+        printf("\033[31;01m[CHARACTERS ERROR]\033[00m : Coordinates out of boundaries\n");
         exit(EXIT_FAILURE);
     };
 
     if (entity == NULL || matrix == NULL)
     {
-        printf("\033[31;01mERROR\033[00m : Pointer null on tile or entity\n");
+        printf("\033[31;01m[CHARACTERS ERROR]\033[00m : Pointer null on tile or entity\n");
         exit(EXIT_FAILURE);
     }
 
@@ -182,13 +182,13 @@ void moveEntity(Coord from, Coord to)
 {
     if (from.x < 0 || from.x >= _X_SIZE_ || from.y < 0 || from.y >= _Y_SIZE_ || to.x < 0 || to.x >= _X_SIZE_ || to.y < 0 || to.y >= _Y_SIZE_)
     {
-        printf("\033[31;01mERROR\033[00m : Coordinates out of boundaries\n");
+        printf("\033[31;01m[CHARACTERS ERROR]\033[00m : Coordinates out of boundaries\n");
         exit(EXIT_FAILURE);
     };
 
     if (matrix[from.x*_X_SIZE_+from.y].entity == NULL || matrix == NULL)
     {
-        printf("\033[31;01mERROR\033[00m : Pointer null on tile or entity\n");
+        printf("\033[31;01m[CHARACTERS ERROR]\033[00m : Pointer null on tile or entity\n");
         exit(EXIT_FAILURE);
     }
 

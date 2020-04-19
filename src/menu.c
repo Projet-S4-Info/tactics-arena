@@ -48,7 +48,7 @@ int mapIndex = 0;
 void loadMenuTextures(SDL_Renderer *renderer)
 // Load all the textures needed for the menu
 {
-	if(verbose)printf("Chargement des textures du menu...\n");
+	if (verbose >= 1) printf("\033[36;01m[MENU]\033[00m : Chargement des textures du menu...\n");
 
 	// == Loading background ==
 	background = loadTexture(renderer, loadImage("../inc/img/wallpapers/menu2_720p.png"));
@@ -127,13 +127,13 @@ int displayMenu(int x, int y)
 
     /* Initialisation simple */
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0 ) {
-        fprintf(stdout,"[MENU] Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
+        printf("\033[31;01m[MENU ERROR]\033[00m : Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
         return -1;
     }
 
 	/* Initialisation TTF */
 	if(TTF_Init() == -1) {
-		fprintf(stderr, "Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
+		printf("\033[31;01m[MENU ERROR]\033[00m : Erreur d'initialisation de TTF_Init : %s\n", TTF_GetError());
 		exit(EXIT_FAILURE);
 	}
 
@@ -145,13 +145,13 @@ int displayMenu(int x, int y)
 												  		SDL_WINDOW_SHOWN);
 
 	if(!pWindow){
-		fprintf(stderr, "Erreur à la création de la fenetre : %s\n", SDL_GetError());
+		printf("\033[31;01m[MENU ERROR]\033[00m : Erreur à la création de la fenetre : %s\n", SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
 
 	renderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
 	if(renderer == NULL){
-		fprintf(stderr, "Erreur à la création du renderer\n");
+		printf("\033[31;01m[MENU ERROR]\033[00m : Erreur à la création du rendu\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -251,7 +251,7 @@ int displayMenu(int x, int y)
 		closeWindow(pWindow);
 		freeMenuTextures();
 	} else {
-		fprintf(stderr,"Erreur de création de la fenêtre: %s\n",SDL_GetError());
+		printf("\033[31;01m[MENU ERROR]\033[00m : Erreur de création de la fenêtre: %s\n",SDL_GetError());
 	}
 	return 1;
 }

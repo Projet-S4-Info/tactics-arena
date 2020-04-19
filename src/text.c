@@ -73,7 +73,7 @@ err_t addToCache(char *content, int size, char *police, SDL_Color color, SDL_Sur
 {
     if (isInCache(content, size, police, color)) return ALREADY_IN_CACHE;
 
-    if (verbose) printf("[TEXT CACHE] Ajout du texte '%s' au cache à l'ID %d ...\n", content, text_cache_size);
+    if (verbose >= 1) printf("\033[36;01m[TEXT CACHE]\033[00m : Ajout du texte '%s' au cache à l'ID %d ...\n", content, text_cache_size);
 
     text_cache[text_cache_size].content = content;
     text_cache[text_cache_size].police = police;
@@ -84,7 +84,7 @@ err_t addToCache(char *content, int size, char *police, SDL_Color color, SDL_Sur
 
     text_cache_size++;
 
-    if (verbose) printf("[TEXT CACHE] Taille du cache : %d\n", text_cache_size);
+    if (verbose >= 1) printf("\033[36;01m[TEXT CACHE]\033[00m : Taille du cache : %d\n", text_cache_size);
 
     return OK;
 }
@@ -93,15 +93,14 @@ err_t addToCache(char *content, int size, char *police, SDL_Color color, SDL_Sur
 err_t destroyCacheEntry(int index)
 // Destroy a cache entry
 {
-    if (verbose) printf("[TEXT CACHE] Suppression du cache : %s\n", text_cache[index].content);
-    if (verbose) printf("-----------> L'entree existe depuis %dms\n", SDL_GetTicks()-text_cache[index].time);
+    if (verbose >= 1) printf("\033[36;01m[TEXT CACHE]\033[00m : Suppression du cache : %s (Age : %d)\n", text_cache[index].content, SDL_GetTicks()-text_cache[index].time);
     SDL_FreeSurface(text_cache[index].surface);
     text_cache[index].surface = NULL;
     //free(text_cache[index].content);
     //free(text_cache[index].police);
     text_cache[index].content = NULL;
     text_cache[index].police = NULL;
-    if (verbose) printf("[TEXT CACHE] Entree supprimee avec succes\n");
+    if (verbose >= 1) printf("\033[36;01m[TEXT CACHE]\033[00m : Entree supprimee avec succes\n");
     text_cache_size--;
 
     return OK;
@@ -197,7 +196,7 @@ err_t displayText(SDL_Renderer *renderer, int x, int y, int size, char *content,
         SDL_SetRenderDrawColor(renderer, r, g, b, 255);
         SDL_Texture *text_tex = SDL_CreateTextureFromSurface(renderer, getTextCache(content, size, text_police, color));
         if(!text_tex){
-            fprintf(stderr, "Erreur à la création du rendu du texte : %s\n", SDL_GetError());
+            printf("\033[31;01m[TEXT CACHE ERROR]\033[00m : Erreur à la création du rendu du texte : %s\n", SDL_GetError());
             return SDL_ERROR;
         }
 
@@ -214,21 +213,21 @@ err_t displayText(SDL_Renderer *renderer, int x, int y, int size, char *content,
     }
     else
     {
-        if (verbose && caching) printf("[TEXT] Texte non disponible dans le cache...\n");
+        if (verbose >= 1 && caching) printf("\033[36;01m[TEXT CACHE]\033[00m : Texte non disponible dans le cache...\n");
 
         SDL_Surface *text = NULL;
         TTF_Font *police = NULL;
 
         // Chargement de la police
         if( (police = TTF_OpenFont(text_police, size)) == NULL){
-            fprintf(stderr, "Erreur chargement initial font : %s\n", TTF_GetError());
+            printf("\033[31;01m[TEXT CACHE ERROR]\033[00m : Erreur chargement initial font : %s\n", TTF_GetError());
             return SDL_ERROR;
         }
 
         // Création de la surface à partir du texte
         text = TTF_RenderUTF8_Blended(police, content, color);
         if(!text){
-            fprintf(stderr, "Erreur à la création du texte : %s\n", SDL_GetError());
+            printf("\033[31;01m[TEXT CACHE ERROR]\033[00m : Erreur à la création du texte : %s\n", SDL_GetError());
             return SDL_ERROR;
         }
 
@@ -236,7 +235,7 @@ err_t displayText(SDL_Renderer *renderer, int x, int y, int size, char *content,
         SDL_SetRenderDrawColor(renderer, r, g, b, 255);
         SDL_Texture *text_tex = SDL_CreateTextureFromSurface(renderer, text);
         if(!text_tex){
-            fprintf(stderr, "Erreur à la création du rendu du texte : %s\n", SDL_GetError());
+            printf("\033[31;01m[TEXT CACHE ERROR]\033[00m : Erreur à la création du rendu du texte : %s\n", SDL_GetError());
             return SDL_ERROR;
         }
 
