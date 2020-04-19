@@ -30,7 +30,7 @@
 #define _Y_SIZE_ 30                         // |
 #define _FPS_ 60							// Define at which frequency the game has to refresh
 #define _NB_MAX_LOGS_ 11					// Define how many logs the screen can display (-1)
-#define _MAX_SIZE_LOGS_ 50					// Max length of a log message
+#define _MAX_SIZE_LOGS_ STR_LONG					// Max length of a log message
 #define _LOG_DURATION_ 10					// Duration a log is displayed (in seconds)
 #define _NB_TEXT_CACHE_ 100
 

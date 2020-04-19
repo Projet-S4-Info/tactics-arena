@@ -91,6 +91,7 @@ err_t startTCPSocketCli(int socketCli){
 
   serverStatus_t startGameCli;
   startGameCli.isServerStartGame = 0;
+  sprintf(startGameCli.mapNameGame, "0");
       
   if(!windWSAError){
     servIP = ipSrv;
@@ -125,6 +126,7 @@ err_t startTCPSocketCli(int socketCli){
         if(verbose >= 1)printf("Conexion établie sans soucis fermeture de la fonction... \n");
 
         if(recep(&startGameCli, sizeof(startGameCli), socketConnected) != NULL){
+          sprintf(mapMultiSelected, "%s", startGameCli.mapNameGame);
           serverStatus = 3;
         }
         return OK;

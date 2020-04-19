@@ -152,8 +152,10 @@ int main(int argc, char * argv[])
         playMenuMusic(2);
         res = displayMenuMulti(1280,720);
         if(res == 1){
+            loadMap(matrix,mapMultiSelected);
             createGameWindow(1920,1080);
         } else if(res == 2) {
+            loadMap(matrix,mapMultiSelected);
             createGameWindow(1920,1080);
         }
     }

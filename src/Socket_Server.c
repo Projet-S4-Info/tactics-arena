@@ -121,6 +121,7 @@ err_t startTCPSocketServ(){
 
   serverStatus_t startGame;
   startGame.isServerStartGame = 0;
+  sprintf(startGame.mapNameGame, "0");
 
 
   
@@ -189,11 +190,13 @@ err_t startTCPSocketServ(){
               sleep(2);
             }
             startGame.isServerStartGame = 1;
+            sprintf(startGame.mapNameGame, "%s", mapMultiSelected);
             if(sendStruct(&startGame, sizeof(startGame), socketConnected) != OK){
               printf("Erreur d'envoie \n");
             }else{
               if(verbose >= 1)printf("Structure envoyée .... \n");
               if(verbose >= 1)printf("Struct envoyé : isServerStartGame : %d \n", startGame.isServerStartGame);
+              if(verbose >= 1)printf("Struct envoyé : isServerStartGame : %s \n", startGame.mapNameGame);
               serverStatus = 2;
             }
             if(verbose >= 1)printf("\nChargement de la partie... \n Fermeture de la fonction ... \n");

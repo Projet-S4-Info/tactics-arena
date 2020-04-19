@@ -86,6 +86,7 @@ multiThread_t threadCli;
 /*-- Fonction pour le thread du serveur. --*/
 static void * fn_server (void * p_data)
 {
+	
     startTCPSocketServ();
 	init_server();
     return NULL;
@@ -274,7 +275,7 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y, int index){
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 185);
 		SDL_RenderFillRect(renderer, &mapListBox);
 	}
-	if (mapListMulti[index] != NULL) displayText(renderer, mapListBox.x + 10, mapListBox.y + 4, 20, mapNameMulti, "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	if (mapListMulti[index] != NULL) displayText(renderer, mapListBox.x + 10, mapListBox.y + 4, 20, mapNameMulti, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 	displaySprite(renderer, ok_button_Multi, 50, mapListBox.y + mapListBox.h + 20);
 	displayText(renderer, 150, mapListBox.y + mapListBox.h + 110, 55, "OK", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
@@ -532,22 +533,24 @@ int displayMenuMulti(int x, int y)
 								//printf("\nps | i : %d | char %c \n", i, pseuTemp[i]);
 							}
 							sprintf(mapMultiSelected, "%s", mapNameMulti);
-							if(verbose)printf("\nTest User pseudo : %s\n",pseudoUser);
-							if(verbose)printf("\n Test mapMultiSelected : %s \n", mapMultiSelected);
+							if(verbose >= 1)printf("\nTest User pseudo : %s\n",pseudoUser);
+							if(verbose >= 1)printf("\n Test mapMultiSelected : %s \n", mapMultiSelected);
 
 							pthread_create(&threadServ.thread_server, NULL, fn_server, NULL);
 							
 						}
 
 						// MapHost ++
-						else if(u.motion.x >= 404 && u.motion.x <= 422 && u.motion.y >= 496 && u.motion.y <= 518){
+						else if(u.motion.x >= 400 && u.motion.x <= 426 && u.motion.y >= 493 && u.motion.y <= 520 && isHostMenu == 1){
 							indexMapMulti ++;
+							if(verbose >= 0)printf("index map multi %d", indexMapMulti);
 							dispHostMenu(renderer, x, y, indexMapMulti);
 						}
 						
 						// MapHost --
-						else if(u.motion.x >= 53 && u.motion.x <= 70 && u.motion.y >= 496 && u.motion.y <= 518){
+						else if(u.motion.x >= 50 && u.motion.x <= 74 && u.motion.y >= 496 && u.motion.y <= 520 && isHostMenu == 1){
 							indexMapMulti --;
+							if(verbose >= 0)printf("index map multi %d", indexMapMulti);
 							dispHostMenu(renderer, x, y, indexMapMulti);
 						}
 
@@ -571,7 +574,7 @@ int displayMenuMulti(int x, int y)
 								pseudoUser[i-9] = pseuTemp[i];
 								//printf("\nps | i : %d | char %c \n", i, pseuTemp[i]);
 							}
-							if(verbose)printf("\nTest User pseudo : %s\n",pseudoUser);
+							if(verbose >= 1)printf("\nTest User pseudo : %s\n",pseudoUser);
 						}
 
 						// IPBox
@@ -594,7 +597,7 @@ int displayMenuMulti(int x, int y)
 								ipSrv[i-5] = ipTemp[i];
 								//printf("\nipTemp[%d] | char %c \n", i, ipTemp[i]);
 							}
-							if(verbose)printf("\nTest IP Join : %s\n",ipSrv);
+							if(verbose >= 2)printf("\nTest IP Join : %s\n",ipSrv);
 						}
 						
 						// Info Join set 
@@ -603,7 +606,7 @@ int displayMenuMulti(int x, int y)
 							pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);
 							serverStatus = 1;
 							while(serverStatus != 3){
-								if(verbose)printf("Waiting Sattus to be 1\n");
+								if(verbose >= 2)printf("Waiting Sattus to be 1\n");
 								sleep(2);
 							}
 							closeWindow(pWindow);
@@ -614,13 +617,13 @@ int displayMenuMulti(int x, int y)
 						
 						// Join Btn after infoJoinSet
 						else if (u.motion.x >= 606 && u.motion.x <= 722 && u.motion.y >= 550 && u.motion.y <= 594 && isHostMenu == 1 && isClientCo == 1){
-							if(verbose)printf("Starting game ... \n");
+							if(verbose >= 1)printf("Starting game ... \n");
 							
 							if(isHostMenu == 1){
 								serverStatus = 1;
 								while (serverStatus != 2)
 								{
-									if(verbose)printf("Waiting status to be 2 \n");
+									if(verbose >= 2)printf("Waiting status to be 2 \n");
 									sleep(2);
 								}
 								closeWindow(pWindow);
