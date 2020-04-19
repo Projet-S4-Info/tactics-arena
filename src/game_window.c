@@ -147,7 +147,7 @@ int createGameWindow(int x, int y)
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
 
-		loadMap(matrix, "map_test");
+		loadMap(matrix, "map_ice_hole");
 
 		debugGrid(matrix, _X_SIZE_, _Y_SIZE_);
 
