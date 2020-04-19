@@ -181,13 +181,13 @@ err_t simple_move(Entity * e, Coord tabcoord[])
         c = add_coords(start, tabcoord[i]);
         if(TRUE)printf("Moving from (%d,%d) to (%d,%d)...", e->coords.x, e->coords.y, c.x, c.y);
         moveEntity(e->coords, c);
+        Coord target = {e->coords.x, e->coords.y};
+        setSelected(target);
         if(TRUE)printf("Completed\n");
         sentinel_check(e);
         displayMap(SDL_GetRenderer(pWindow), XPOS, YPOS);
         SDL_Delay(250);
     }
 
-    Coord target = {e->coords.x, e->coords.y};
-    setSelected(target);
     return OK;
 }

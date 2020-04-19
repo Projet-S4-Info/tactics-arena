@@ -424,17 +424,17 @@ int displayInterface(SDL_Renderer *renderer)
 		// -- entity health
 		displaySprite(renderer, getBigTexture(cSprites, "heart_icon"), 170, 70);
 		sprintf(pv_text, "%d", tempEntity->stat_mods[pv]);
-		displayText(renderer, 200, 70, 30, pv_text, "../inc/font/Pixels.ttf", 255, 0, 0, TRUE);
+		displayText(renderer, 200, 70, 30, pv_text, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
 
 		// -- entity action points
 		displaySprite(renderer, getBigTexture(cSprites, "star_icon"), 165, 102);
 		sprintf(pa_text, "%d", tempEntity->act_points);
-		displayText(renderer, 202, 106, 30, pa_text, "../inc/font/Pixels.ttf", 49, 174, 196, TRUE);
+		displayText(renderer, 202, 106, 30, pa_text, "../inc/font/Pixels.ttf", 49, 174, 196, FALSE);
 
 		// -- entity mouvement points
 		displaySprite(renderer, getBigTexture(cSprites, "mv_icon"), 250, 102);
 		sprintf(pm_text, "%d", tempEntity->stat_mods[mv]);
-		displayText(renderer, 287, 106, 30, pm_text, "../inc/font/Pixels.ttf", 52, 169, 43, TRUE);
+		displayText(renderer, 287, 106, 30, pm_text, "../inc/font/Pixels.ttf", 52, 169, 43, FALSE);
 
 		// -- passive description if hovering info icon
 		if (hover_passive_help == 1)
