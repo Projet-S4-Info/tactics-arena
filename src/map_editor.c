@@ -39,7 +39,7 @@ int loadEditorTextures(SDL_Renderer * renderer, TabTexture * textures)
 {
 	int index;
 
-	/*if(verbose)printf("[GRAPHICS] Effacement des textures pré-existantes...\n");
+	/*if(verbose>=2)printf("[GRAPHICS] Effacement des textures pré-existantes...\n");
 
 	freeTextures(textures);*/
 
@@ -99,7 +99,7 @@ int loadEditorTextures(SDL_Renderer * renderer, TabTexture * textures)
 								NULL,
 								"save_menu");
 
-	if(verbose)printf("\033[36;01m[MAP_EDITOR]\033[00m : %d texture(s) chargée(s) !\n", index+1);
+	if(verbose>=1)printf("\033[36;01m[MAP_EDITOR]\033[00m : %d texture(s) chargée(s) !\n", index+1);
 
 	return index+1;
 }

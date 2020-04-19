@@ -163,15 +163,6 @@ int createGameWindow(int x, int y)
 		
 		SDL_Delay(1);
 
-		if (verbose)
-		{
-			for (int i=0; i < NUM_CLASS; i++)
-			{
-				print_Coord(&Allies[i].coords, "");
-				print_Coord(&Foes[i].coords, "");
-			}
-		}
-
 		SDL_RenderPresent(renderer);
 
 		Entity * tempEntity = NULL;
@@ -215,7 +206,7 @@ int createGameWindow(int x, int y)
 					/* ********** CLICS SOURIS ************ */
 					case SDL_MOUSEBUTTONDOWN:
 
-						if(verbose)printf("X: %d | Y: %d\n", e.motion.x, e.motion.y);		// Debug console pos x & y on term
+						if(verbose>=2)printf("X: %d | Y: %d\n", e.motion.x, e.motion.y);		// Debug console pos x & y on term
 
 						// Compétences et actions
 						tempEntity = getEntity(getSelectedPos());

@@ -296,9 +296,8 @@ int selectTile(int xpos, int ypos, int mx, int my)
 			//char tempNotif[STR_LONG];
 			//sprintf(tempNotif, "%s active %s a %d:%d", selectedEntity->cha_name, get_name(selectedEntity, selected_ability), selectedTile.x, selectedTile.y);
 			//addLog(tempNotif);
-			//if(verbose)printf("%s\n", tempNotif);
+			//if(verbose>=2)printf("%s\n", tempNotif);
 			if (Cast_check(act, borderTab)) {
-				if(verbose)printf("Lancement de l'action...\n");
 				action_set(act);
 			}
 		}

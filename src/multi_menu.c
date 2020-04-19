@@ -104,7 +104,7 @@ static void * fn_client (void * p_data)
 void loadMultiMenuTextures(SDL_Renderer *renderer)
 // Load all the textures needed for the menu
 {
-	if(verbose)printf("Chargement des textures du menu...\n");
+	if(verbose>=2)printf("Chargement des textures du menu...\n");
 
 	// == Loading background ==
 	background_Multi = loadTexture(renderer, loadImage("../inc/img/wallpapers/menu2_720p.png"));
@@ -493,13 +493,13 @@ int displayMenuMulti(int x, int y)
 					break;
 					case SDL_MOUSEBUTTONDOWN:
 
-						if(verbose)printf("\nX: %d | Y: %d\n", u.motion.x, u.motion.y);	// Debug console pos x & y on term
+						if(verbose>=2)printf("\nX: %d | Y: %d\n", u.motion.x, u.motion.y);	// Debug console pos x & y on term
 
 						// Bouton "Host"
 						if (u.motion.x >= 576 && u.motion.x <= 723 && u.motion.y >= 449 && u.motion.y <= 488 && isHostMenu == 0 && isJoinMenu == 0)
 						{
 							isHostMenu = 1;
-                            if(verbose)printf("Host cliqué :) \n");
+                            if(verbose>=2)printf("Host cliqué :) \n");
                             
                             dispHostMenu(renderer, x, y, indexMapMulti);
 						}
@@ -508,7 +508,7 @@ int displayMenuMulti(int x, int y)
 						else if (u.motion.x >= 575 && u.motion.x <= 724 && u.motion.y >= 513 && u.motion.y <= 554 && isHostMenu == 0 && isJoinMenu == 0)
 						{
 							isJoinMenu = 1;
-                           if(verbose)printf("Join cliqué :) \n");
+                           if(verbose>=2)printf("Join cliqué :) \n");
 							
 							dispJoinMenu(renderer, x, y);
 						}

@@ -17,20 +17,20 @@ int playMenuMusic(int nb)
         return -1;
     }
 
-    if(verbose)printf("[SDL] Audio driver: %s\n", SDL_GetCurrentAudioDriver());
+    if(verbose>=2)printf("[SDL] Audio driver: %s\n", SDL_GetCurrentAudioDriver());
     
     int i, count = SDL_GetNumAudioDevices(0);
     
      /*-- Boucle debug audio --*/
      for (i = 0; i < count; ++i) {
-         if(verbose)printf("Audio device %d: %s\n", i, SDL_GetAudioDeviceName(i, 0));
+         if(verbose>=2)printf("Audio device %d: %s\n", i, SDL_GetAudioDeviceName(i, 0));
     }
 
 
     /* On ouvre le device audio */
     if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) 
     {
-        printf("%s", Mix_GetError());
+        printf("%s\n", Mix_GetError());
     }
 
      /* On charge la musique */
@@ -68,7 +68,7 @@ int stopMenuMusic(int nb)
 int pauseMenuMusic()
 // Pause menu music
 {
-    if(verbose)printf("[AUDIO] Music paused\n");
+    if(verbose>=2)printf("[AUDIO] Music paused\n");
     Mix_PauseMusic();
     return 1;
 }
@@ -76,7 +76,7 @@ int pauseMenuMusic()
 int resumeMenuMusic()
 // Resume menu music
 {
-    if(verbose)printf("[AUDIO] Music resumed\n");
+    if(verbose>=2)printf("[AUDIO] Music resumed\n");
     Mix_ResumeMusic();
     return 1;
 }
