@@ -12,6 +12,7 @@
 #include "deplacement.h"
 #include "text.h"
 #include "game_window.h"
+#include "abilities.h"
 
 bool is_online = FALSE;
 bool turn_active = TRUE;
@@ -75,6 +76,12 @@ err_t apply_action(action a)
         active_ent = &Allies[a.char_id-1];
         list = stSent;
     }
+    
+    if(active_ent->cha_class->cla_id == Mage)
+    {
+        update_mage(active_ent, a.act);
+    }
+
     active_ab = active_ent->cha_class->cla_abilities[a.act%NUM_AB];
 
     if(verbose>=1)printf("\n\n%s has chosen to %s at the following coordinates : %d,%d\n", active_ent->cha_name, active_ab.eng.name, a.c.x, a.c.y);
