@@ -7,7 +7,7 @@
  * \date 18/03/2020
  */
 
-
+/* =============== DEPENDENCES =============== */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,18 +17,14 @@
 #include "struct.h"
 #include "common.h"
 
-/*
-* If program run on Windows
-*/
+// For Windows user
 #ifdef _WIN32
   #include <winsock2.h>
-  /*
-  * Needed  non-existent type with winsock2
-  */
+  
+  // Needed non-existent type with winsock2
   typedef int socklen_t;
-/*
-* Else if program run on Unix
-*/
+
+// Other OS
 #else
 
   #include <sys/types.h>
@@ -36,28 +32,30 @@
   #include <netinet/in.h>
   #include <arpa/inet.h>
   #include <unistd.h>
+
   #define closesocket(param) close(param)
   #define INVALID_SOCKET -1
   #define SOCKET_ERROR -1
-  /*
-  * Adding missing types with socket.h
-  */
   typedef int SOCKET;
   typedef struct sockaddr_in SOCKADDR_IN;
   typedef struct sockaddr SOCKADDR;
 #endif
 
+/* =============== VARIABLES =============== */
 int socketCli = 0;
+
+
+/* =============== FONCTIONS =============== */
 
 /**
  * \fn err_t stopTCPSocketCli(int socket)
  * \return err_t CLI_OK
  * \brief Function to stop the Client connection (close sockets)
- */
+*/
 
 err_t stopTCPSocketCli(int socketCli){
   
-  if(verbose)printf("Fermeture du socket Client ... \n");
+  if(verbose >= 1)printf("Fermeture du socket Client ... \n");
   shutdown(socketCli, 2);
   closesocket(socketCli);
   nbPlayer -= 1; 
@@ -73,20 +71,12 @@ err_t stopTCPSocketCli(int socketCli){
 err_t startTCPSocketCli(int socketCli){
 
   #ifdef _WIN32
-    /*
-    * Change the cmd codepage
-    */
+    
+    // Cange codepage CMD
     system("chcp 65001");
     system("cls");
     WSADATA WSAData;
-    /*
-    * Creating var to manage errors
-    */
     int windWSAError;
-    /*
-    * WSAStratup Initialising winsock2 library
-    * return 0 if there is no problems
-    */
     windWSAError = WSAStartup(MAKEWORD(2,2), &WSAData);
   #else
     int windWSAError= 0;
@@ -104,7 +94,7 @@ err_t startTCPSocketCli(int socketCli){
       
   if(!windWSAError){
     servIP = ipSrv;
-    if(verbose)printf("\n%s\n", servIP);
+    if(verbose >= 1)printf("\n%s\n", servIP);
   
   /*---------- Initialisation des structures pour les sockets ----*/
     SOCKADDR_IN sockIn;
@@ -115,31 +105,28 @@ err_t startTCPSocketCli(int socketCli){
   /*-------------------------------------------------------------*/
     nbPlayer +=1;
     
-    if(verbose)printf("\nLancement de la création du client...\n");
+    if(verbose >= 1)printf("\nLancement de la création du client...\n");
     
     //-- Création de la socket (IPv4, TCP, 0)
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if(sock != INVALID_SOCKET){
-      if(verbose)printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
+      if(verbose >= 1)printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
 
       // -- Tentative de connection vers le serveur
       if(connect(sock, (SOCKADDR*)&sockIn, sizeof(sockIn)) != SOCKET_ERROR){
-        if(verbose)printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
+        if(verbose >= 1)printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
         socketConnected = sock;
-        if(verbose)printf("\nVous vous appelez : %s", pseudoUser);
+        if(verbose >= 1)printf("\nVous vous appelez : %s", pseudoUser);
         sprintf(infoMoi.pseudo, "%s", pseudoUser);
-        if(verbose)printf("\nDébut de la communication : \n");
-        if(verbose)printf("socketConnectedCli = %d\n", socketConnected);
+        if(verbose >= 1)printf("\nDébut de la communication : \n");
+        if(verbose >= 1)printf("socketConnectedCli = %d\n", socketConnected);
 
         sendStruct(&infoMoi, sizeof(infoMoi), socketConnected);
-        if(verbose)printf("Conexion établie sans soucis fermeture de la fonction... \n");
+        if(verbose >= 1)printf("Conexion établie sans soucis fermeture de la fonction... \n");
 
         if(recep(&startGameCli, sizeof(startGameCli), socketConnected) != NULL){
-          printf("Je suis sur structure recue \n");
           serverStatus = 3;
         }
-        
-
         return OK;
       }
       else{

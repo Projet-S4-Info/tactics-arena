@@ -236,7 +236,7 @@ int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Entity * e
     sprintf(temp, "%d", entity->stat_mods[pv]);
     if (pxBase == 64)   displaySprite(renderer, getTexture(cSprites, "heart_icon"), x+(pxBase/4), y-(pxBase/4));
     else                displaySprite(renderer, getBigTexture(cSprites, "heart_icon"), x+(pxBase/4), y-(pxBase/4));
-    displayText(renderer, x+(pxBase/2), y-(pxBase/4), (pxBase/64)*15, temp, "../inc/font/Pixels.ttf", 255, 0, 0, TRUE);
+    displayText(renderer, x+(pxBase/2), y-(pxBase/4), (pxBase/64)*15, temp, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
 
     return 0;
 }

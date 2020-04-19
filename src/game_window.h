@@ -16,6 +16,7 @@
 
 
 extern SDL_Renderer *renderer;
+extern SDL_Window *pWindow;
 extern int XPOS;
 extern int YPOS;
 extern int selected_ability;

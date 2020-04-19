@@ -97,25 +97,9 @@ void getLocalIP(){
           cpt++;
         }
       }
-    if(verbose)printf("L'ip du serveur est : %s", monIP);
+    if(verbose >= 1)printf("L'ip du serveur est : %s", monIP);
   }
 }
-
-/**
- * \fn const char * setServIP(void)
- * \return const char *
- * \brief Function to set the server IP address to a const char * (used for debugging)
- */
-
-
-const char * setServIP(){
-  char * servIP = malloc(sizeof(char) * MAX_BUFF_SIZE);
-  printf("Saisir l'addresse IP du serveur : ");
-  scanf(" %s", servIP);
-  // printf("\n%s\n", servIP);
-  return servIP;
-}
-
 
 /**
  * \fn err_t sendStruct(void * structure, int size, int socket)
@@ -134,7 +118,6 @@ err_t sendStruct(void * structure, int size, int socket){
   }
 }
 
-
 /**
  * \fn err_t recep(void * container, int size, int socket)
  * \return err_t RECV_OK 
@@ -142,7 +125,7 @@ err_t sendStruct(void * structure, int size, int socket){
 */
 
 void * recep(void * container, int size, int socket){
-  if(verbose)printf("bienvenue dans recep \n");
+  if(verbose >= 2)printf("bienvenue dans recep \n");
   int flag = 0;
   while(flag == 0){
     sleep(2);

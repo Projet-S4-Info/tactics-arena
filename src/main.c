@@ -31,7 +31,7 @@
  * \brief Main function
  */
 
-bool verbose = FALSE;
+int verbose;
 int main(int argc, char * argv[])
 {   
     #ifdef _WIN32
@@ -48,14 +48,20 @@ int main(int argc, char * argv[])
 
     if(argc < 3){
         if(argc == 2){
-            if(strcmp(argv[1], "-c") == 0){
-                verbose = TRUE;
+            if(strcmp(argv[1], "-0") == 0){
+                verbose = 0;
+            }
+            else if(strcmp(argv[1], "-1") == 0){
+                verbose = 1;
+            }
+            else if(strcmp(argv[1], "-2") == 0){
+                verbose = 2;
             }
             else{
                 printf("Argument invalide... \n");
             }
         }else if(argc == 1){
-            verbose = FALSE;
+            verbose = -1;
         }
     }else{
         printf("Nombre de paramètres incorrectes ...");

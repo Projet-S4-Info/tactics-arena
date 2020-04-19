@@ -13,7 +13,7 @@ typedef enum error_type {OK, POINTER_NULL, SDL_ERROR, COORD_OUT_OF_BOUND, STR_TO
 
 typedef enum {FALSE, TRUE} bool;
 
-extern bool verbose;
+extern int verbose;
 
 extern int isChatActive;
 extern int isAServer;
