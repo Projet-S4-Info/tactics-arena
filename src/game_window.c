@@ -324,6 +324,11 @@ int createGameWindow(int x, int y)
 									sprintf(pseudoChat, "%s : ",pseudoUser);
 									changesChat = 1;
 								}
+								break;
+							case SDLK_ESCAPE:
+								selected_ability = -1;
+								unselect();
+								break;
 						}
 					break;
 
