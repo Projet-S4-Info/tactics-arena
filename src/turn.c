@@ -154,7 +154,7 @@ err_t turn_start(Entity *e)
 
     //if(e[Angel].active!=Dead)
     //{
-        activate_aura(&e[Angel], stReceived);
+        //activate_aura(&e[Angel], stReceived);
     //}
 
     return OK;

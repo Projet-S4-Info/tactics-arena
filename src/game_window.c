@@ -179,6 +179,8 @@ int createGameWindow(int x, int y)
 
 		SDL_RenderPresent(renderer);
 
+		game_setup = FALSE;
+
 		Entity * tempEntity = NULL;
 
 		init_chat(&chat);
