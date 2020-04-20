@@ -218,18 +218,47 @@ int createGameWindow(int x, int y)
 							{
 								if (your_turn())
 								{
+									// Mouvement
 									if (e.motion.x >= 16 && e.motion.x <= 80)
+									{
 										if (able_ability(tempEntity, Mvt)) selected_ability = Mvt;
+									}
+									// Compétence 1
 									else if (e.motion.x >= 96 && e.motion.x <= 160)
+									{
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+									}
+									// Compétence 2
 									else if (e.motion.x >= 176 && e.motion.x <= 240)
+									{
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
+									}
+									// Compétence 3
 									else if (e.motion.x >= 256 && e.motion.x <= 320)
+									{
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
+									}
+									// Compétence 4
 									else if (e.motion.x >= 336 && e.motion.x <= 400)
+									{
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-									else if (e.motion.x >= 416 && e.motion.x <= 480) turnRight(tempEntity);
-									else if (e.motion.x >= 496 && e.motion.x <= 560) turnLeft(tempEntity);
+									}
+									// Tourner personnage vers la droite
+									else if (e.motion.x >= 416 && e.motion.x <= 480)
+									{
+										turnRight(tempEntity);
+									}
+									// Tourner personnage vers la gauche
+									else if (e.motion.x >= 496 && e.motion.x <= 560)
+									{
+										turnLeft(tempEntity);
+									}
+									// Fin de tour
+									else if (e.motion.x >= xWinSize-280 && e.motion.x <= xWinSize-24 && e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
+									{
+										hover_next_turn = FALSE;
+										set_endturn();
+									}
 									else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 
 									if (verbose >= 1) printf("\033[36;01m[GAME_WINDOW]\033[00m : Selected ability : %d\n", selected_ability);

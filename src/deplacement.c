@@ -208,65 +208,44 @@ err_t total_move(Entity * e, Coord tabcoord[])
     {
         c = add_coords(active, tabcoord[i]);
         if(verbose>=2)printf("Moving from (%d,%d) to (%d,%d)...", e->coords.x, e->coords.y, c.x, c.y);
+        if(c.x == e->coords.x+1)
+        {
+            cpt++;
+            dir = S;
+        }
+        else if(c.x == e->coords.x-1)
+        {
+            cpt++;
+            dir = N;
+        }
+        else if(c.y == e->coords.y+1)
+        {
+            cpt++;
+            dir = E;
+        }
+        else if(c.y == e->coords.y-1)
+        {
+            cpt++;
+            dir = W;
+        }
+
+        if (cpt > 5) cpt = 0;
+
+        e->direction = dir;
+        e->idAnim = cpt;
+
         moveEntity(e->coords, c);
         Coord target = {e->coords.x, e->coords.y};
         setSelected(target);
         if(verbose>=2)printf("Completed\n");
         sentinel_check(e);
-        if(c.x == e->coords.x+1)
-        {
-            if(dir == E)
-            {
-                cpt ++;
-            }
-            else
-            {
-                cpt = 0;
-            }
-            dir = E;
-            displaySprite(SDL_GetRenderer(pWindow), getCharTexture(e->cha_class->cla_name, dir, cpt), XPOS, YPOS);
-        }
-        if(c.x == e -> coords.x-1)
-        {
-             if(dir == W)
-            {
-                cpt ++;
-            }
-            else
-            {
-                cpt = 0;
-            }
-            dir = W;
-            displaySprite(SDL_GetRenderer(pWindow), getCharTexture(e->cha_class->cla_name, dir, cpt), XPOS, YPOS);
-        }
-        if(c.y == e -> coords.y+1)
-        {
-             if(dir == N)
-            {
-                cpt ++;
-            }
-            else
-            {
-                cpt = 0;
-            }
-            dir = N;
-            displaySprite(SDL_GetRenderer(pWindow), getCharTexture(e->cha_class->cla_name, dir, cpt), XPOS, YPOS);
-        }
-        else
-        {
-             if(dir == S)
-            {
-                cpt ++;
-            }
-            else
-            {
-                cpt = 0;
-            }
-            dir = S;
-            displaySprite(SDL_GetRenderer(pWindow), getCharTexture(e->cha_class->cla_name, dir, cpt), XPOS, YPOS);
-        }
-        SDL_RenderPresent(SDL_GetRenderer(pWindow));
-        SDL_Delay(250);
+        
+        displayMap(SDL_GetRenderer(pWindow), XPOS, YPOS);
+
+        SDL_Delay(200);
     }
+
+    e->idAnim = 0;
+
     return OK;
 }
