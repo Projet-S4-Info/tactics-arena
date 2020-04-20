@@ -31,6 +31,7 @@ err_t ent_common_init(Entity *e)
 {
     e->active = Alive;
     e->act_points = 3;
+    e->idAnim = 0;
     
     int i;
     for(i=0; i<NUM_AB; i++)
@@ -148,20 +149,11 @@ err_t ent_init_test(Entity *e, char title[STR_SHORT])
             if(verbose>=2)printf("%s Spawn Set to %d %d\n", e->cha_name, e->coords.x, e->coords.y);
         }
 
-        (e+i)->active = Alive;
-        (e+i)->act_points = 3;
+        ent_common_init(e+i);
 
         for(j=0;j<NUM_STATS;j++)
         {
             (e+i)->stat_mods[j] = (e+i)->base_stats[j] = classes[i].basic_stats[j];
-        }
-        for(j=0; j<NUM_STATUS; j++)
-        {
-            (e+i)->status_effect[j] = 0;
-        }
-        for(j=0; j<NUM_AB; j++)
-        {
-            (e+i)->ab_cooldown[j] = 0;
         }
     }
 

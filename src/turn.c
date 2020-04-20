@@ -91,11 +91,13 @@ err_t apply_action(action a)
 
     if(active_ab.fn_use==BEFORE)
     {
+        if(verbose>=2)printf("Function use : BEFORE\n");
         death_count += active_ab.function(a.c, active_ent, list);
     }
 
     if(!active_ent->status_effect[Blessed])
     {
+        if(verbose>=1)printf("Setting %s's cooldown of %d\n", active_ab.eng.name, active_ab.ab_cost);
         active_ent->ab_cooldown[a.act%NUM_AB] = active_ab.ab_cooldown;
     }
     else
@@ -105,11 +107,13 @@ err_t apply_action(action a)
     
     if(active_ab.fn_use!=ONLY)
     {
+        if(verbose>=2)printf("Function use != ONLY\n");
         death_count += apply_to(active_ab, active_ent, list, a.c);
     }
 
     if(active_ab.fn_use>=ONLY)
     {
+        if(verbose>=2)printf("Function use : AFTER/ONLY\n");
         death_count += active_ab.function(a.c, active_ent, list);
     }
 
