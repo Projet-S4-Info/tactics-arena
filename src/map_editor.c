@@ -437,7 +437,7 @@ int createMapEditorWindow(int x, int y)
 	setRendererDriver(renderer);
 
 	// Launcher icon
-    SDL_SetWindowIcon(pWindow, loadImage("../inc/sprites/goliath/sprite_indiv/front/Sprite_frontview_64.png"));
+    SDL_SetWindowIcon(pWindow, loadImage("../inc/sprites/goliath/sprite_indiv/64_64/front/Sprite_frontview_64.png"));
 
 	if( pWindow )
 	{

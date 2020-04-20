@@ -104,8 +104,8 @@ int loadMapTextures(SDL_Renderer * renderer)
 
 	// Loading trap textures
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/sprites/Traps/Beartrap.png")),
-						NULL,
+						loadTexture(renderer, loadImage("../inc/sprites/traps/Beartrap64.png")),
+						loadTexture(renderer, loadImage("../inc/sprites/traps/Beartrap128.png")),
 						"trap");
 
 	// Loading selection textures
@@ -551,7 +551,7 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 				if ((*(matrix+i*_X_SIZE_+j)).trap.visible == TRUE)
 				{
 					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "trap"), blockPos.x, blockPos.y-(pxBase/3));
-					//else				displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
+					else				displaySprite(renderer, getBigTexture(textures, "trap"), blockPos.x, blockPos.y-(pxBase/3));
 				}
 
 				// Affichage portée d'attaque (si compétence sélectionnée)
