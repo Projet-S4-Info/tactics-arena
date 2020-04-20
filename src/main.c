@@ -123,7 +123,6 @@ int main(int argc, char * argv[])
 
     playMenuMusic(1);
     selection = displayMenu(1280, 720);
-    printf("\n");
     
 
     // Lancement du jeu

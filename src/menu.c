@@ -187,7 +187,7 @@ int displayMenu(int x, int y)
 					break;
 					case SDL_MOUSEBUTTONDOWN:
 
-						if(verbose)printf("X: %d | Y: %d\n", e.motion.x, e.motion.y);		// Debug console pos x & y on term
+						if(verbose>=2)printf("X: %d | Y: %d\n", e.motion.x, e.motion.y);		// Debug console pos x & y on term
 
 						// Bouton "Start"
 						if (e.motion.x >= 569 && e.motion.x <= 730 && e.motion.y >= 394 && e.motion.y <= 443)

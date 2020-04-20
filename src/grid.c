@@ -72,11 +72,11 @@ void debugGrid(Tile * grid, int x, int y)
 {
     for (int i = 0; i < x; i++){
         for (int j = 0; j < y; j++){
-            if(verbose)printf("%d|", (*(grid+i*x+j)).tile_id);
-            if(verbose)printf("%d ", (*(grid+i*x+j)).walkable);
-            if ((*(grid+i*x+j)).entity != NULL && verbose == TRUE) printf("X");
+            if(verbose>=2)printf("%d|", (*(grid+i*x+j)).tile_id);
+            if(verbose>=2)printf("%d ", (*(grid+i*x+j)).walkable);
+            if ((*(grid+i*x+j)).entity != NULL && verbose >=2) printf("X");
         }
-        if(verbose)printf("\n");
+        if(verbose>=2)printf("\n");
     }
 }
 
