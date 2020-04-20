@@ -200,34 +200,51 @@ err_t test_turn()
     return OK;
 }
 
-bool play_check(Entity *E)
+err_t set_endturn()
 {
-    int current = E->cha_id-1;
-    Entity * F = E - current;
-    int i = current;
-    do
+    if(turn_active)
     {
-        if((F[i].active) && (F[i].act_points>0) && !(F[i].status_effect[Freezing]))
+        if(is_online)
         {
-            unselect();
-            selected_ability = -1;
-            return TRUE;
+            turn_active = FALSE;
         }
         else
         {
-            i = i==NUM_CLASS-1 ? 0 : i+1;  
-        }  
-        
-    } while(i!=current);
-    
-    if(is_online)
-    {
-        turn_active = FALSE;
+            test_turn();
+        }
     }
     else
     {
-        test_turn();
+        addLog("It is not your turn");
     }
+
+    return OK;
+}
+
+bool play_check(Entity *e)
+{
+    selected_ability = -1;
+
+    if(e->act_points>0)
+    {
+        return TRUE;
+    }
+    else
+    {
+        unselect();
+        Entity * all;
+        get_team(e, &all, TRUE);
+        int i;
+        for(i=0; i<NUM_CLASS; i++)
+        {
+            if(all[i].act_points>0)
+            {
+                return TRUE;
+            }
+        }
+    }
+    
+    set_endturn();
 
     return FALSE;
 }
