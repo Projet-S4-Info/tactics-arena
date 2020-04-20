@@ -606,46 +606,49 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
         {
             c=add_coords(starting_point, *(active_ab.coord[i]));
 
-            e=getEntity(c);
-            
-            if(e!=NULL)
+            if(isInGrid(c))
             {
-                if(verbose>=1)printf("%s was found in the zone!\n", e->cha_name);
-
-                if(!same_team(e,active_ent))
+                e=getEntity(c);
+                
+                if(e!=NULL)
                 {
-                    if(verbose>=1)printf("%s is an Ennemy!\n", e->cha_name);
+                    if(verbose>=1)printf("%s was found in the zone!\n", e->cha_name);
 
-                    if(active_ab.damage!=NULL)
+                    if(!same_team(e,active_ent))
                     {
-                        if(apply_damage(*(active_ab.damage), active_ent, e))
+                        if(verbose>=1)printf("%s is an Ennemy!\n", e->cha_name);
+
+                        if(active_ab.damage!=NULL)
                         {
-                            death_count++;
+                            if(apply_damage(*(active_ab.damage), active_ent, e))
+                            {
+                                death_count++;
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        if(verbose>=1)printf("%s is an Ally!\n", e->cha_name);
+                    }
+
+                    if(active_ab.mods!=NULL && e->active!=Dead)
+                    {
+                        for(j=0; j<active_ab.nb_mods; j++)
+                        {
+                            if(!same_team(e,active_ent) && (*(active_ab.mods)+j)->t!=ALLIES)
+                                apply_mod(*(active_ab.mods)[j],e, list, active_ent->cha_id);
+
+                            else if((same_team(e,active_ent) && (*(active_ab.mods)+j)->t!=FOES))
+                                apply_mod(*(active_ab.mods)[j],e, list, active_ent->cha_id);
                         }
                     }
 
                 }
-                else
+                if(active_ab.fn_use==DURING)
                 {
-                    if(verbose>=1)printf("%s is an Ally!\n", e->cha_name);
+                    death_count += active_ab.function(c,active_ent,list); 
                 }
-
-                if(active_ab.mods!=NULL && e->active!=Dead)
-                {
-                    for(j=0; j<active_ab.nb_mods; j++)
-                    {
-                        if(!same_team(e,active_ent) && (*(active_ab.mods)+j)->t!=ALLIES)
-                            apply_mod(*(active_ab.mods)[j],e, list, active_ent->cha_id);
-
-                        else if((same_team(e,active_ent) && (*(active_ab.mods)+j)->t!=FOES))
-                            apply_mod(*(active_ab.mods)[j],e, list, active_ent->cha_id);
-                    }
-                }
-
-            }
-            if(active_ab.fn_use==DURING)
-            {
-                death_count += active_ab.function(c,active_ent,list); 
             }
         }
 

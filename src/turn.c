@@ -209,7 +209,7 @@ bool play_check(Entity *E)
     {
         if((F[i].active) && (F[i].act_points>0) && !(F[i].status_effect[Freezing]))
         {
-            setSelected((F+i)->coords);
+            unselect();
             selected_ability = -1;
             return TRUE;
         }

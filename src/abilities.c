@@ -222,11 +222,14 @@ int Flare_fn(Coord c, Entity * e, StateList * list)
     for(i=0; i<a.nb_coords; i++)
     {
         c2 = add_coords(c , *(*(a.coord)+i));
-        t = Get_Trap(c2);
-        if(t.cha_id<0)
+        if(isInGrid(c2))
         {
-            t.visible = TRUE;
-            Set_Trap(t,c2);
+            t = Get_Trap(c2);
+            if(t.cha_id<0)
+            {
+                t.visible = TRUE;
+                Set_Trap(t,c2);
+            }
         }
     }
 
@@ -311,14 +314,17 @@ int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
 
 int Thrust_fn(Coord c, Entity * e, StateList * list)
 {
-    Entity * target = getEntity(add_coords(c,compare_coords(e->coords,c)));
-
-    if(target!=NULL)
+    Coord c2 = add_coords(c,compare_coords(e->coords,c));
+    if(isInGrid(c2))
     {
-        apply_mod(*(*(e->cha_class->cla_abilities[Thrust%NUM_AB].mods)), target, list, e->cha_id);
-        if(apply_damage(*(e->cha_class->cla_abilities[Thrust%NUM_AB].damage), e, target))
+        Entity * target = getEntity(c2);
+        if(target!=NULL)
         {
-            return 1;
+            apply_mod(*(*(e->cha_class->cla_abilities[Thrust%NUM_AB].mods)), target, list, e->cha_id);
+            if(apply_damage(*(e->cha_class->cla_abilities[Thrust%NUM_AB].damage), e, target))
+            {
+                return 1;
+            }
         }
     }
     return 0;

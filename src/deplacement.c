@@ -117,20 +117,21 @@ Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goa
     for(i = 0; i < 4; i++)
     {
         active = add_coords(goal, add[i]);
-        if(matrice[active.x][active.y] < lowest && matrice[active.x][active.y] != -1)
+        if(isInGrid(active) && matrice[active.x][active.y] < lowest && matrice[active.x][active.y] != -1)
         {
             is_lowest.x = active.x;
             is_lowest.y = active.y;
             lowest = matrice[active.x][active.y];
         }
     }
+
     while(matrice[is_lowest.x][is_lowest.y] > 0)
     {
         tab_bis[t++] = is_lowest;
         for(i = 0; i < 4; i ++)
         {
             active = add_coords(is_lowest , add[i]);
-            if(matrice[active.x][active.y] == lowest - 1)
+            if(isInGrid(active) && matrice[active.x][active.y] == lowest - 1)
             {
                 is_lowest.x = active.x;
                 is_lowest.y = active.y;
