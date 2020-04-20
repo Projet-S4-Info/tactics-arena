@@ -4,6 +4,7 @@
 #include "grid.h"
 #include "map_editor.h"
 #include "border.h"
+#include "gameplay.h"
 #include <stdio.h>
 
 void test()

@@ -207,23 +207,23 @@ err_t total_move(Entity * e, Coord tabcoord[])
     for(i = 0; tabcoord[i].x != -99; i ++)
     {
         c = add_coords(active, tabcoord[i]);
-        if(verbose>=2)printf("Moving from (%d,%d) to (%d,%d)...", e->coords.x, e->coords.y, c.x, c.y);
-        if(c.x == e->coords.x+1)
+        if (verbose>=2) printf("Moving from (%d,%d) to (%d,%d)...\n", e->coords.x, e->coords.y, c.x, c.y);
+        if (c.x == e->coords.x+1)
         {
             cpt++;
             dir = S;
         }
-        else if(c.x == e->coords.x-1)
+        else if (c.x == e->coords.x-1)
         {
             cpt++;
             dir = N;
         }
-        else if(c.y == e->coords.y+1)
+        else if (c.y == e->coords.y+1)
         {
             cpt++;
             dir = E;
         }
-        else if(c.y == e->coords.y-1)
+        else if (c.y == e->coords.y-1)
         {
             cpt++;
             dir = W;
