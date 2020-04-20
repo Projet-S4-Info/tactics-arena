@@ -338,6 +338,8 @@ winId game_loop(winId (*turn1)(void), winId (*turn2)(void))
         }
     }
 
+    endgame_message(game_end);
+
     return game_end;
 }
 

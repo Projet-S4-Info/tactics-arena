@@ -56,8 +56,6 @@ err_t get_team(Entity *e, Entity **all, bool same)
     return OK;
 }
 
-
-
 winId game_over()
 {
     winId all_dead = LOSE;
@@ -124,7 +122,20 @@ char * get_desc(Entity * e, abilityId ab_id)
 
 bool able_ability(Entity *e, abilityId ab_id)
 {
-    return e->act_points >= e->cha_class->cla_abilities[ab_id%NUM_AB].ab_cost;
+    if(e->act_points < e->cha_class->cla_abilities[ab_id%NUM_AB].ab_cost)
+    {
+        addLog("Not enough action points for that");
+        return FALSE;
+    }
+    else if(e->ab_cooldown[ab_id%NUM_AB]!=0)
+    {
+        char log[STR_SHORT];
+        sprintf(log, "%s is on cooldown", get_name(e, ab_id));
+        addLog(log);
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 bool is_ally(Entity *e)
@@ -556,14 +567,24 @@ err_t apply_stat_change(Status s, Entity * target, StateList * list)
         sprintf(log_2, " for %d turns", s.duration);
         strcat(log, log_2);
         if(verbose>=1)printf("%s\n",log);
-        addLog(log);
+
+        if(s.value != 0)
+        {
+            addLog(log);
+        }
+
         return list_add(list, s, target);
     }
     else
     {
         strcat(log, " permanently");
         if(verbose>=1)printf("%s\n",log);
-        addLog(log);
+
+        if(s.value != 0)
+        {
+            addLog(log);
+        }
+        
         return OK;
     }
 }

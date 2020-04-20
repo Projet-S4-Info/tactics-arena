@@ -76,6 +76,7 @@ err_t init_Foes(Direction d)
         Foes[e.cha_class].coords = e.starting_position;
         t = getTile(e.starting_position);
         t->entity = &Foes[e.cha_class];
+        if(verbose>=0 && t->entity!=NULL)printf("%s spawned at %d,%d\n", Foes[e.cha_class].cha_name, Foes[e.cha_class].coords.x, Foes[e.cha_class].coords.y);
 
         ent_common_init(&Foes[e.cha_class]);     
     }
