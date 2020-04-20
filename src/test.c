@@ -6,6 +6,7 @@
 #include "border.h"
 #include "gameplay.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void test()
 {

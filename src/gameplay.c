@@ -597,6 +597,9 @@ err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
 
 int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord starting_point)
 {
+
+    if(verbose>=3)print_Ability(&active_ab, "");
+
     int death_count = 0;
     int i,j;
     Coord c;
