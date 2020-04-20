@@ -31,6 +31,7 @@ err_t ent_common_init(Entity *e)
 {
     e->active = Alive;
     e->act_points = 3;
+    e->idAnim = 0;
     
     int i;
     for(i=0; i<NUM_AB; i++)
