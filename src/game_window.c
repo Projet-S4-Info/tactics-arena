@@ -365,7 +365,11 @@ int createGameWindow(int x, int y)
 								break;
 							case SDLK_ESCAPE:
 								if (selected_ability != -1) selected_ability = -1;
-								else unselect();
+								else
+								{
+									unselect();
+									unhover();
+								}
 								break;
 						}
 					break;
@@ -377,6 +381,8 @@ int createGameWindow(int x, int y)
 						hover_tchat = 0;
 						mouse_position.x = e.motion.x;
 						mouse_position.y = e.motion.y;
+
+						hoverTile(XPOS, YPOS, e.motion.x, e.motion.y);
 
 						// Hover skip turn button
 						if (e.motion.x >= xWinSize-280 && e.motion.x <= xWinSize-24 && e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16) hover_next_turn = TRUE;
