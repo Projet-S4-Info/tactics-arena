@@ -345,7 +345,10 @@ winId init_client()
 {
     Coord spawn[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
 
-    init_Foes(W);
+    if(init_Foes(W) == OK){
+        if(verbose >= 0)printf("Init Foes est fait pour client \n");
+    }
+    
     init_Allies(spawn,S);
 
     return game_loop(opposing_turn,local_turn);
@@ -356,7 +359,11 @@ winId init_server()
     Coord spawn[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
 
     init_Allies(spawn,W);
-    init_Foes(S);
+    
+    if (init_Foes(S) == OK){
+        if(verbose >= 0)printf("Init Foes est fait pour serveur \n");
+    }
+    
     
     return game_loop(local_turn,opposing_turn);
 }

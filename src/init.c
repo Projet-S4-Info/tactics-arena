@@ -52,7 +52,14 @@ err_t init_Foes(Direction d)
     int i,j;
     for(i=0; i<NUM_CLASS; i++)
     {
-        rec_id_swap(recep(&e,sizeof(init_ent),socketConnected));
+        if(recep(&e,sizeof(init_ent),socketConnected) != NULL){
+            rec_id_swap((void *)&e);
+            if(verbose >= 0)printf("Init foes id char : %d\n", e.char_id);
+            if(verbose >= 0)printf("Init foes charname : %s\n", e.cha_name);
+            if(verbose >= 0)printf("Init foes class : %d\n", e.cha_class);
+            if(verbose >= 0)printf("Init foes coord : X->%d | Y->%d\n", e.starting_position.x, e.starting_position.y);
+        }
+        
         Foes[e.cha_class].cha_id = e.char_id;
         sprintf(Foes[e.cha_class].cha_name, "Ennemy %s", e.cha_name);
         Foes[e.cha_class].cha_class = &classes[e.cha_class];
