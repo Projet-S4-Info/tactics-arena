@@ -200,8 +200,6 @@ bool isInCoordTab(Coord tab[], Coord pos)
 
     while (tab[index].x != -99)
     {
-        //if (verbose) printf("Range : %d | %d\n", tab[index].x, tab[index].y);
-
         if (tab[index].x == pos.x && tab[index].y == pos.y)
         {
             result = TRUE;

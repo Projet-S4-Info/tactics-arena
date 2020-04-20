@@ -282,9 +282,6 @@ void dispHostMenu(SDL_Renderer *renderer, int x, int y, int index){
 	
 
 	/*-------------------input box Host menu -------------------------*/
-	
-
-	
 
 	if(logFlag >= 3) {
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -635,7 +632,7 @@ int displayMenuMulti(int x, int y)
 						}
 						
 						// Nouveau boutton "QUIT" 
-						else if (u.motion.x >= 1000 && u.motion.x <= 1190 && u.motion.y >= 627 && u.motion.y <= 680 && (isHostMenu == 1 || isJoinMenu == 1)){
+						else if (u.motion.x >= 1000 && u.motion.x <= 1190 && u.motion.y >= 627 && u.motion.y <= 680){
 							closeWindow(pWindow);
 							freeMultiMenuTextures();
 						}
@@ -656,15 +653,6 @@ int displayMenuMulti(int x, int y)
 								displaySprite(renderer, music_on_Multi, x-175, y-200);
 							}
 						}
-			
-						// Bouton "Quit"
-						else if (u.motion.x >= 569 && u.motion.x <= 730 && u.motion.y >= 613 && u.motion.y <= 673 && isHostMenu == 0 && isJoinMenu == 0)
-						{
-							closeWindow(pWindow);
-							freeMultiMenuTextures();
-						}
-						
-						//
 						else{
 							inputIpBtn = 0;
 							inputPseudoBtn = 0;

@@ -179,7 +179,7 @@ err_t simple_move(Entity * e, Coord tabcoord[])
     for(i = 0; tabcoord[i].x != -99; i ++)
     {
         c = add_coords(start, tabcoord[i]);
-        if(verbose>=2)printf("Moving from (%d,%d) to (%d,%d)...", e->coords.x, e->coords.y, c.x, c.y);
+        if(verbose>=2)printf("Moving from (%d,%d) to (%d,%d)...\n", e->coords.x, e->coords.y, c.x, c.y);
         moveEntity(e->coords, c);
         Coord target = {e->coords.x, e->coords.y};
         setSelected(target);
