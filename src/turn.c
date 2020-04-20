@@ -152,10 +152,10 @@ err_t turn_start(Entity *e)
     Bloodlust_counter = 0;
     Sentinel_counter = TRUE;
 
-    //if(e[Angel].active!=Dead)
-    //{
+    if(e[Angel].active!=Dead)
+    {
         activate_aura(&e[Angel], stReceived);
-    //}
+    }
 
     return OK;
 }
@@ -328,8 +328,10 @@ err_t opposing_turn()
 
 winId game_loop(err_t (*turn1)(void), err_t (*turn2)(void))
 {
-    game_setup = TRUE;
     winId game_end;
+
+    game_setup = TRUE;
+    while(game_setup);
 
     while(TRUE)
     {

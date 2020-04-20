@@ -221,7 +221,7 @@ int Flare_fn(Coord c, Entity * e, StateList * list)
 
     for(i=0; i<a.nb_coords; i++)
     {
-        c2 = add_coords(c , *(*(a.coord)+i));
+        c2 = add_coords(c , *((*(a.coord))+i));
         if(isInGrid(c2))
         {
             t = Get_Trap(c2);

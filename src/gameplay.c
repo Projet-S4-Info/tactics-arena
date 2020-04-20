@@ -607,7 +607,7 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
 
         for(i=0; i<active_ab.nb_coords; i++)
         {
-            c=add_coords(starting_point, *(active_ab.coord[i]));
+            c=add_coords(starting_point, *((*(active_ab.coord))+i));
 
             if(isInGrid(c))
             {
