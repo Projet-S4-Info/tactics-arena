@@ -143,11 +143,22 @@ int createGameWindow(int x, int y)
 			SDL_Delay(900);
 		}
 
+		if (is_online)
+		{
+			while((SDL_GetTicks()/1000)-start_seconds < 3)
+			{
+				load_index++;
+				SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
+				SDL_RenderClear(renderer);
+				displayText(renderer, 200, yWinSize/2+120, 40, "Communication des informations avec le serveur...", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				displayText(renderer, 200, yWinSize/2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, TRUE);
+				SDL_RenderPresent(renderer);
+			}
+		}
+
 		/* Le fond de la fenêtre sera blanc */
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderClear(renderer);
-
-		//loadMap(matrix, "map_ice_hole");
 
 		if (verbose == 2)
 		{
