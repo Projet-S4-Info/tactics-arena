@@ -163,6 +163,8 @@ int createGameWindow(int x, int y)
 		
 		SDL_Delay(1);
 
+		displayMap(renderer, XPOS, YPOS);
+
 		SDL_RenderPresent(renderer);
 
 		Entity * tempEntity = NULL;

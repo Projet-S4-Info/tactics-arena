@@ -196,6 +196,7 @@ void moveEntity(Coord from, Coord to)
     (*(matrix+to.x*_X_SIZE_+to.y)).entity->coords.x = to.x;
     (*(matrix+to.x*_X_SIZE_+to.y)).entity->coords.y = to.y;
     (*(matrix+from.x*_X_SIZE_+from.y)).entity = NULL;
+    if (verbose >= 1) printf("\033[36;01m[CHARACTERS]\033[00m : Entité en [%d;%d] déplacée en [%d;%d]\n", from.x, from.y, (*(matrix+to.x*_X_SIZE_+to.y)).entity->coords.x, (*(matrix+to.x*_X_SIZE_+to.y)).entity->coords.y);
 }
 
 
