@@ -196,8 +196,8 @@ err_t simple_move(Entity * e, Coord tabcoord[])
 err_t total_move(Entity * e, Coord tabcoord[])
 {
     int i, cpt = 0;
-    Coord c, test, active = e -> coords;
-    char dir;
+    Coord c, active = e -> coords;
+    Direction dir;
 
     selected_ability = -1;
 
@@ -214,7 +214,7 @@ err_t total_move(Entity * e, Coord tabcoord[])
         sentinel_check(e);
         if(c.x == e -> coords.x ++)
         {
-            if(dir == "e")
+            if(dir == E)
             {
                 cpt ++;
             }
@@ -222,12 +222,12 @@ err_t total_move(Entity * e, Coord tabcoord[])
             {
                 cpt = 0;
             }
-            dir = "e";
+            dir = E;
             displaySprite(SDL_GetRenderer(pWindow), getCharTexture(e -> cha_name, dir, cpt),XPOS, YPOS);
         }
         if(c.x == e -> coords.x --)
         {
-             if(dir == "w")
+             if(dir == W)
             {
                 cpt ++;
             }
@@ -235,12 +235,12 @@ err_t total_move(Entity * e, Coord tabcoord[])
             {
                 cpt = 0;
             }
-            dir = "w";
+            dir = W;
             displaySprite(SDL_GetRenderer(pWindow), getCharTexture(e -> cha_name, dir, cpt),XPOS, YPOS);
         }
         if(c.y == e -> coords.y ++)
         {
-             if(dir == "n")
+             if(dir == N)
             {
                 cpt ++;
             }
@@ -248,12 +248,12 @@ err_t total_move(Entity * e, Coord tabcoord[])
             {
                 cpt = 0;
             }
-            dir = "n";
+            dir = N;
             displaySprite(SDL_GetRenderer(pWindow), getCharTexture(e -> cha_name, dir, cpt),XPOS, YPOS);
         }
         else
         {
-             if(dir == "s")
+             if(dir == S)
             {
                 cpt ++;
             }
@@ -261,7 +261,7 @@ err_t total_move(Entity * e, Coord tabcoord[])
             {
                 cpt = 0;
             }
-            dir = "s";
+            dir = S;
             displaySprite(SDL_GetRenderer(pWindow), getCharTexture(e -> cha_name, dir, cpt),XPOS, YPOS);
         }
         SDL_Delay(250);
