@@ -131,7 +131,7 @@ int main(int argc, char * argv[])
     {
         /*ent_init_test(Allies, "Friendly");
         ent_init_test(Foes, "Ennemy");*/
-        loadMap(matrix, "map_marrais");
+        loadMap(matrix, "map_test_hover");
         if(verbose>=1) printf("GAME START!\n");
         stopMenuMusic(1);
         createGameWindow(1920, 1080);

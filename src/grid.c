@@ -54,6 +54,7 @@ void createGrid(Tile * grid, int seed, int x, int y)
     for (int i = 0; i < x*y; i++){
         grid[i].tile_id = rand()%seed;
         grid[i].selected = 0;
+        grid[i].hovered = 0;
         grid[i].entity = NULL;
         grid[i].trap = trap;
         grid[i].walkable = grid[i].tile_id == 4 ? FALSE : TRUE;
@@ -151,6 +152,24 @@ void unselect()
             if ((*(matrix+i*_X_SIZE_+j)).selected == 1) (*(matrix+i*_X_SIZE_+j)).selected = 0;
         }
     }
+}
+
+void unhover()
+// Unselect the selected tile
+{
+    for (int i=0; i < _X_SIZE_; i++)
+    {
+        for (int j=0; j < _Y_SIZE_; j++)
+        {
+            if ((*(matrix+i*_X_SIZE_+j)).hovered == 1) (*(matrix+i*_X_SIZE_+j)).hovered = 0;
+        }
+    }
+}
+
+void setHovered(Coord pos)
+// Set the tile at pos selected
+{
+    (*(matrix+pos.x*_X_SIZE_+pos.y)).hovered = 1;
 }
 
 void setSelected(Coord pos)
