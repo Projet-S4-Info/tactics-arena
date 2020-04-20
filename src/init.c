@@ -42,6 +42,10 @@ err_t ent_common_init(Entity *e)
     {
         e->status_effect[i] = 0;
     }
+    for(i=0; i<NUM_STATS; i++)
+    {
+        e->base_stats[i] = e->stat_mods[i] = e->cha_class->basic_stats[i];
+    }
 
     return OK;
 }
@@ -50,26 +54,22 @@ err_t init_Foes(Direction d)
 {
     init_ent e;
     Tile * t;
-    int i,j;
+    int i;
     for(i=0; i<NUM_CLASS; i++)
     {
-        if(recep(&e,sizeof(init_ent),socketConnected) != NULL){
-            rec_id_swap((void *)&e);
-            if(verbose >= 0)printf("Init foes id char : %d\n", e.char_id);
-            if(verbose >= 0)printf("Init foes charname : %s\n", e.cha_name);
-            if(verbose >= 0)printf("Init foes class : %d\n", e.cha_class);
-            if(verbose >= 0)printf("Init foes coord : X->%d | Y->%d\n", e.starting_position.x, e.starting_position.y);
+        rec_id_swap(recep(&e,sizeof(init_ent),socketConnected));
+        if(verbose>=2)
+        {
+            printf("Init foes id char : %d\n", e.char_id);
+            printf("Init foes charname : %s\n", e.cha_name);
+            printf("Init foes class : %s\n", classes[e.cha_class].cla_name);
+            print_Coord(&e.starting_position, "Init foes starting position : ");
         }
         
         Foes[e.cha_class].cha_id = e.char_id;
         sprintf(Foes[e.cha_class].cha_name, "Ennemy %s", e.cha_name);
         Foes[e.cha_class].cha_class = &classes[e.cha_class];
         Foes[e.cha_class].direction = d;
-
-        for(j=0; j<NUM_STATS; j++)
-        {
-            Foes[e.cha_class].base_stats[j] = Foes[e.cha_class].stat_mods[j] = e.base_stats[j];
-        }
 
         Foes[e.cha_class].coords = e.starting_position;
         t = getTile(e.starting_position);
@@ -88,7 +88,7 @@ err_t init_Allies(Coord spawn[NUM_CLASS], Direction d)
     classId spawn_order[NUM_CLASS] = {Ranger, Mage, Angel, Valkyrie, Goliath, Berserker};
     init_ent ie;
 
-    int s,i,j;
+    int s,i;
     for(s=0; s<NUM_CLASS; s++)
     {
         ie.cha_class = i = spawn_order[s];
@@ -101,11 +101,6 @@ err_t init_Allies(Coord spawn[NUM_CLASS], Direction d)
 
         Allies[i].cha_class = &classes[i];
         Allies[i].direction = d;
-        
-        for(j=0; j<NUM_STATS; j++)
-        {
-            ie.base_stats[i] = Allies[i].base_stats[j] = Allies[i].stat_mods[j] = classes[i].basic_stats[j];
-        }
 
         ent_common_init(&Allies[i]);
         init_spawn(&Allies[i], spawn[s]);

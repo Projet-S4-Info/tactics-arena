@@ -151,10 +151,10 @@ err_t turn_start(Entity *e)
     Bloodlust_counter = 0;
     Sentinel_counter = TRUE;
 
-    if(e[Angel].active!=Dead)
+    /*if(e[Angel].active!=Dead)
     {
         activate_aura(&e[Angel], stReceived);
-    }
+    }*/
 
     return OK;
 }
