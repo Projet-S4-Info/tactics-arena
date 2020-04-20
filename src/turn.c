@@ -50,7 +50,7 @@ err_t apply_movement(action a)
     int matrice[_X_SIZE_][_Y_SIZE_];
     Coord tab[_X_SIZE_ * _Y_SIZE_];
 
-    simple_move(e, pathfinding((int(*)[_X_SIZE_])fill_tiles(e -> coords, matrice, e -> stat_mods[mv]), tab, a.c ));
+    total_move(e, pathfinding((int(*)[_X_SIZE_])fill_tiles(e -> coords, matrice, e -> stat_mods[mv]), tab, a.c ));
 
     e->coords = a.c;
     e->act_points--;
