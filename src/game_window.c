@@ -163,6 +163,8 @@ int createGameWindow(int x, int y)
 		
 		SDL_Delay(1);
 
+		displayMap(renderer, XPOS, YPOS);
+
 		SDL_RenderPresent(renderer);
 
 		Entity * tempEntity = NULL;
@@ -322,6 +324,11 @@ int createGameWindow(int x, int y)
 									sprintf(pseudoChat, "%s : ",pseudoUser);
 									changesChat = 1;
 								}
+								break;
+							case SDLK_ESCAPE:
+								selected_ability = -1;
+								unselect();
+								break;
 						}
 					break;
 

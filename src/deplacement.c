@@ -10,7 +10,7 @@
 #include "map.h"
 #include "game_window.h"
 #include "print.h"
-
+#include "display.h"
 
 Coord closest_free_tile(Coord c)
 {
@@ -180,7 +180,7 @@ err_t simple_move(Entity * e, Coord tabcoord[])
     for(i = 0; tabcoord[i].x != -99; i ++)
     {
         c = add_coords(start, tabcoord[i]);
-        if(verbose>=2)printf("Moving from (%d,%d) to (%d,%d)...", e->coords.x, e->coords.y, c.x, c.y);
+        if(verbose>=2)printf("Moving from (%d,%d) to (%d,%d)...\n", e->coords.x, e->coords.y, c.x, c.y);
         moveEntity(e->coords, c);
         Coord target = {e->coords.x, e->coords.y};
         setSelected(target);
@@ -190,5 +190,82 @@ err_t simple_move(Entity * e, Coord tabcoord[])
         SDL_Delay(250);
     }
 
+    return OK;
+}
+
+
+err_t total_move(Entity * e, Coord tabcoord[])
+{
+    int i, cpt = 0;
+    Coord c, active = e -> coords;
+    Direction dir;
+
+    selected_ability = -1;
+
+    unselect();
+
+    for(i = 0; tabcoord[i].x != -99; i ++)
+    {
+        c = add_coords(active, tabcoord[i]);
+        if(verbose>=2)printf("Moving from (%d,%d) to (%d,%d)...", e->coords.x, e->coords.y, c.x, c.y);
+        moveEntity(e->coords, c);
+        Coord target = {e->coords.x, e->coords.y};
+        setSelected(target);
+        if(verbose>=2)printf("Completed\n");
+        sentinel_check(e);
+        if(c.x == e -> coords.x ++)
+        {
+            if(dir == E)
+            {
+                cpt ++;
+            }
+            else
+            {
+                cpt = 0;
+            }
+            dir = E;
+            displaySprite(SDL_GetRenderer(pWindow), getCharTexture(e -> cha_name, dir, cpt),XPOS, YPOS);
+        }
+        if(c.x == e -> coords.x --)
+        {
+             if(dir == W)
+            {
+                cpt ++;
+            }
+            else
+            {
+                cpt = 0;
+            }
+            dir = W;
+            displaySprite(SDL_GetRenderer(pWindow), getCharTexture(e -> cha_name, dir, cpt),XPOS, YPOS);
+        }
+        if(c.y == e -> coords.y ++)
+        {
+             if(dir == N)
+            {
+                cpt ++;
+            }
+            else
+            {
+                cpt = 0;
+            }
+            dir = N;
+            displaySprite(SDL_GetRenderer(pWindow), getCharTexture(e -> cha_name, dir, cpt),XPOS, YPOS);
+        }
+        else
+        {
+             if(dir == S)
+            {
+                cpt ++;
+            }
+            else
+            {
+                cpt = 0;
+            }
+            dir = S;
+            displaySprite(SDL_GetRenderer(pWindow), getCharTexture(e -> cha_name, dir, cpt),XPOS, YPOS);
+        }
+        SDL_Delay(250);
+    }
     return OK;
 }

@@ -293,12 +293,13 @@ int selectTile(int xpos, int ypos, int mx, int my)
 		action act = {selectedEntity->cha_id, selectedTile, selected_ability};
 		if (selected_ability != -1)
 		{
-			//char tempNotif[STR_LONG];
-			//sprintf(tempNotif, "%s active %s a %d:%d", selectedEntity->cha_name, get_name(selectedEntity, selected_ability), selectedTile.x, selectedTile.y);
-			//addLog(tempNotif);
-			//if(verbose>=2)printf("%s\n", tempNotif);
 			if (Cast_check(act, borderTab)) {
 				action_set(act);
+			}
+			else
+			{
+				selected_ability = -1;
+				setSelected(selectedEntity->coords);
 			}
 		}
 		else
