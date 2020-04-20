@@ -1,5 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <pthread.h>
+#include <dirent.h>
+#include <unistd.h>
 #include "../SDL2/include/SDL2/SDL.h"
 #include "../SDL2/include/SDL2/SDL_image.h"
 #include "../SDL2/include/SDL2/SDL_ttf.h"
@@ -12,10 +16,6 @@
 #include "textures.h"
 #include "multi_menu.h"
 #include "servFcnt.h"
-#include <unistd.h>
-#include <string.h>
-#include <pthread.h>
-#include <dirent.h>
 #include "common.h"
 #include "chat.h"
 #include "text.h"
