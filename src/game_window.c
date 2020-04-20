@@ -220,19 +220,14 @@ int createGameWindow(int x, int y)
 								{
 									if (e.motion.x >= 16 && e.motion.x <= 80)
 										if (able_ability(tempEntity, Mvt)) selected_ability = Mvt;
-										else addLog("Not enough AP or MP to move");
 									else if (e.motion.x >= 96 && e.motion.x <= 160)
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
-										else addLog("Not enough AP to cast this spell");
 									else if (e.motion.x >= 176 && e.motion.x <= 240)
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
-										else addLog("Not enough AP to cast this spell");
 									else if (e.motion.x >= 256 && e.motion.x <= 320)
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
-										else addLog("Not enough AP to cast this spell");
 									else if (e.motion.x >= 336 && e.motion.x <= 400)
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-										else addLog("Not enough AP to cast this spell");
 									else if (e.motion.x >= 416 && e.motion.x <= 480) turnRight(tempEntity);
 									else if (e.motion.x >= 496 && e.motion.x <= 560) turnLeft(tempEntity);
 									else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
