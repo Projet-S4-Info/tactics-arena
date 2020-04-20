@@ -3,6 +3,7 @@
 #include "struct.h"
 
 extern bool is_online;
+extern bool game_setup;
 
 err_t online_setup();
 bool your_turn();

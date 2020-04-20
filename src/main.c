@@ -46,27 +46,28 @@ int main(int argc, char * argv[])
     #endif
 
     int selection = 0;
+    verbose = -1;
 
-    if(argc < 3){
-        if(argc == 2){
-            if(strcmp(argv[1], "-0") == 0){
-                verbose = 0;
+    if(argc < 3)
+    {
+        if(argc == 2)
+        {
+            char end[STR_SHORT];
+            int i = (int)strtol(argv[1], (char**)&end, 10);
+            if(strcmp(argv[1],end))
+            {
+                verbose = i*-1;
             }
-            else if(strcmp(argv[1], "-1") == 0){
-                verbose = 1;
-            }
-            else if(strcmp(argv[1], "-2") == 0){
-                verbose = 2;
-            }
-            else{
+            else
+            {
                 printf("Argument invalide... \n");
             }
-        }else if(argc == 1){
-            verbose = -1;
         }
-    }else{
+    }
+    else
+    {
         printf("Nombre de paramètres incorrectes ...");
-        printf("Usage : ./TacticsArena <arg1> : -c \n");
+        printf("Usage : ./TacticsArena <arg1> : -# \n");
     }
 
     srand(time(NULL));

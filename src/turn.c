@@ -14,6 +14,7 @@
 #include "game_window.h"
 #include "abilities.h"
 
+bool game_setup = FALSE;
 bool is_online = FALSE;
 bool turn_active = TRUE;
 action turn_over = {0,{0,0},0};
@@ -151,10 +152,10 @@ err_t turn_start(Entity *e)
     Bloodlust_counter = 0;
     Sentinel_counter = TRUE;
 
-    /*if(e[Angel].active!=Dead)
+    if(e[Angel].active!=Dead)
     {
         activate_aura(&e[Angel], stReceived);
-    }*/
+    }
 
     return OK;
 }
@@ -327,6 +328,7 @@ err_t opposing_turn()
 
 winId game_loop(err_t (*turn1)(void), err_t (*turn2)(void))
 {
+    game_setup = TRUE;
     winId game_end;
 
     while(TRUE)
