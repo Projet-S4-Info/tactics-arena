@@ -20,9 +20,11 @@ Ability Move_ab;
 err_t init_spawn(Entity * e, Coord c)
 {
     e->coords = c;
-    if(verbose>=2)printf("Setting %s Spawn at %d %d\n", e->cha_name, c.x, c.y);
+    if(verbose>=0)printf("Setting %s Spawn at %d %d\n", e->cha_name, c.x, c.y);
 
     free_spawn(e);
+
+    if(verbose>=0)printf("%s spawn set to %d %d\n", e->cha_name, e->coords.x, e->coords.y);
     
     return OK;
 }
@@ -58,7 +60,7 @@ err_t init_Foes(Direction d)
     for(i=0; i<NUM_CLASS; i++)
     {
         rec_id_swap(recep(&e,sizeof(init_ent),socketConnected));
-        if(verbose>=2)
+        if(verbose>=0)
         {
             printf("Init foes id char : %d\n", e.char_id);
             printf("Init foes charname : %s\n", e.cha_name);

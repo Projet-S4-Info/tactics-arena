@@ -230,22 +230,14 @@ bool play_check(Entity *e)
 {
     selected_ability = -1;
 
-    if(e->act_points>0)
+    Entity * all;
+    get_team(e, &all, TRUE);
+    int i;
+    for(i=0; i<NUM_CLASS; i++)
     {
-        return TRUE;
-    }
-    else
-    {
-        unselect();
-        Entity * all;
-        get_team(e, &all, TRUE);
-        int i;
-        for(i=0; i<NUM_CLASS; i++)
+        if(all[i].act_points>0)
         {
-            if(all[i].act_points>0)
-            {
-                return TRUE;
-            }
+            return TRUE;
         }
     }
     
@@ -279,15 +271,20 @@ err_t action_set(action a)
     return OK;    
 }
 
-err_t local_turn()
+winId local_turn()
 {   
     addLog("It's your turn");
 
     turn_start(Allies);
 
+    winId game_end;
+
     turn_active = TRUE;
 
-    while(turn_active);
+    do
+    {
+        game_end = game_over();
+    }   while(turn_active && !game_end);
 
     turn_end(Allies, stReceived);
 
@@ -295,10 +292,10 @@ err_t local_turn()
 
     addLog("Your turn is over");
 
-    return OK;
+    return game_end;
 }
 
-err_t opposing_turn()
+winId opposing_turn()
 {
 
     turn_start(Foes);
@@ -323,27 +320,22 @@ err_t opposing_turn()
 
     turn_end(Foes, stSent);
 
-    return OK;
+    return game_over();
 }
 
-winId game_loop(err_t (*turn1)(void), err_t (*turn2)(void))
+winId game_loop(winId (*turn1)(void), winId (*turn2)(void))
 {
-    winId game_end;
+    winId game_end = ONGOING;
 
     game_setup = TRUE;
     while(game_setup);
 
-    while(TRUE)
+    while(!game_end)
     {
-        turn1();
-
-        if((game_end = game_over()))
-            break;
-
-        turn2();
-
-        if((game_end = game_over()))
-            break;
+        if(!(game_end = turn1()))
+        {
+            game_end = turn2();
+        }
     }
 
     return game_end;

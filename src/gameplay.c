@@ -122,11 +122,6 @@ char * get_desc(Entity * e, abilityId ab_id)
     }
 }
 
-bool is_aoe(Entity * e, abilityId id)
-{
-    return e->cha_class->cla_abilities[id%NUM_AB].nb_coords > 1;
-}
-
 bool able_ability(Entity *e, abilityId ab_id)
 {
     return e->act_points >= e->cha_class->cla_abilities[ab_id%NUM_AB].ab_cost;

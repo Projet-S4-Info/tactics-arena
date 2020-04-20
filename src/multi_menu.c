@@ -540,14 +540,14 @@ int displayMenuMulti(int x, int y)
 						// MapHost ++
 						else if(u.motion.x >= 400 && u.motion.x <= 426 && u.motion.y >= 493 && u.motion.y <= 520 && isHostMenu == 1){
 							indexMapMulti ++;
-							if(verbose >= 0)printf("index map multi %d", indexMapMulti);
+							if(verbose >= 2)printf("index map multi %d\n", indexMapMulti);
 							dispHostMenu(renderer, x, y, indexMapMulti);
 						}
 						
 						// MapHost --
 						else if(u.motion.x >= 50 && u.motion.x <= 74 && u.motion.y >= 496 && u.motion.y <= 520 && isHostMenu == 1){
 							indexMapMulti --;
-							if(verbose >= 0)printf("index map multi %d", indexMapMulti);
+							if(verbose >= 2)printf("index map multi %d\n", indexMapMulti);
 							dispHostMenu(renderer, x, y, indexMapMulti);
 						}
 

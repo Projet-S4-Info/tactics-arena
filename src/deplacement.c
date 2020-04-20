@@ -151,7 +151,7 @@ Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goa
 
     for(t -= 1, i = 0; t >= 0; t --, i ++)
     {
-        tabcoord[i] = compare_coords(is_lowest,tab_bis[t]);
+        tabcoord[i] = tab_bis[t];
     }
 
     tabcoord[i].x = -99;
@@ -163,7 +163,7 @@ Coord * pathfinding(int matrice[_X_SIZE_][_Y_SIZE_], Coord tabcoord[], Coord goa
 err_t simple_move(Entity * e, Coord tabcoord[])
 {
     int i;
-    Coord c, start = e->coords;
+    Coord c;
 
     selected_ability = -1;
 
@@ -179,7 +179,7 @@ err_t simple_move(Entity * e, Coord tabcoord[])
 
     for(i = 0; tabcoord[i].x != -99; i ++)
     {
-        c = add_coords(start, tabcoord[i]);
+        c = tabcoord[i];
         if(verbose>=2)printf("Moving from (%d,%d) to (%d,%d)...\n", e->coords.x, e->coords.y, c.x, c.y);
         moveEntity(e->coords, c);
         Coord target = {e->coords.x, e->coords.y};
@@ -197,7 +197,7 @@ err_t simple_move(Entity * e, Coord tabcoord[])
 err_t total_move(Entity * e, Coord tabcoord[])
 {
     int i, cpt = 0;
-    Coord c, active = e->coords;
+    Coord c;
     Direction dir;
 
     selected_ability = -1;
@@ -206,7 +206,7 @@ err_t total_move(Entity * e, Coord tabcoord[])
 
     for(i = 0; tabcoord[i].x != -99; i ++)
     {
-        c = add_coords(active, tabcoord[i]);
+        c = tabcoord[i];
         if (verbose>=2) printf("Moving from (%d,%d) to (%d,%d)...\n", e->coords.x, e->coords.y, c.x, c.y);
         if (c.x == e->coords.x+1)
         {
