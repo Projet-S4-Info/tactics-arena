@@ -145,7 +145,7 @@ int createGameWindow(int x, int y)
 
 		if (is_online)
 		{
-			while((SDL_GetTicks()/1000)-start_seconds < 3)
+			while(!game_setup)
 			{
 				load_index++;
 				SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
@@ -153,6 +153,7 @@ int createGameWindow(int x, int y)
 				displayText(renderer, 200, yWinSize/2+120, 40, "Communication des informations avec le serveur...", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 				displayText(renderer, 200, yWinSize/2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, TRUE);
 				SDL_RenderPresent(renderer);
+				SDL_Delay(1000);
 			}
 		}
 
