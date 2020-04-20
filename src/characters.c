@@ -229,7 +229,7 @@ int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Entity * e
 // Display the characters on the map
 {
     // Display the character
-    if (pxBase == 64)   displaySprite(renderer, getCharTexture(entity->cha_class->cla_name, entity->direction, 0), x, y);
+    if (pxBase == 64)   displaySprite(renderer, getCharTexture(entity->cha_class->cla_name, entity->direction, entity->idAnim), x, y);
     //else                displaySprite(renderer, getBigTexture(cSprites, "base_model"), x, y);
 
     // Display character's life points

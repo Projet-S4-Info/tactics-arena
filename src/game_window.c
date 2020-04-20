@@ -112,7 +112,7 @@ int createGameWindow(int x, int y)
 		exit(EXIT_FAILURE);
 	}
 
-	printf("%s", error_message[setRendererDriver(renderer)]);
+	printf("\033[31;01m[GAME_WINDOW ERROR]\033[00m : %s", error_message[setRendererDriver(renderer)]);
 
 	// Launcher icon
     SDL_SetWindowIcon(pWindow, loadImage("../inc/sprites/goliath/sprite_indiv/front/Sprite_frontview_64.png"));
@@ -218,23 +218,47 @@ int createGameWindow(int x, int y)
 							{
 								if (your_turn())
 								{
+									// Mouvement
 									if (e.motion.x >= 16 && e.motion.x <= 80)
+									{
 										if (able_ability(tempEntity, Mvt)) selected_ability = Mvt;
-										else addLog("Not enough AP or MP to move");
+									}
+									// Compétence 1
 									else if (e.motion.x >= 96 && e.motion.x <= 160)
+									{
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
-										else addLog("Not enough AP to cast this spell");
+									}
+									// Compétence 2
 									else if (e.motion.x >= 176 && e.motion.x <= 240)
+									{
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
-										else addLog("Not enough AP to cast this spell");
+									}
+									// Compétence 3
 									else if (e.motion.x >= 256 && e.motion.x <= 320)
+									{
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
-										else addLog("Not enough AP to cast this spell");
+									}
+									// Compétence 4
 									else if (e.motion.x >= 336 && e.motion.x <= 400)
+									{
 										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-										else addLog("Not enough AP to cast this spell");
-									else if (e.motion.x >= 416 && e.motion.x <= 480) turnRight(tempEntity);
-									else if (e.motion.x >= 496 && e.motion.x <= 560) turnLeft(tempEntity);
+									}
+									// Tourner personnage vers la droite
+									else if (e.motion.x >= 416 && e.motion.x <= 480)
+									{
+										turnRight(tempEntity);
+									}
+									// Tourner personnage vers la gauche
+									else if (e.motion.x >= 496 && e.motion.x <= 560)
+									{
+										turnLeft(tempEntity);
+									}
+									// Fin de tour
+									else if (e.motion.x >= xWinSize-280 && e.motion.x <= xWinSize-24 && e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
+									{
+										hover_next_turn = FALSE;
+										set_endturn();
+									}
 									else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 
 									if (verbose >= 1) printf("\033[36;01m[GAME_WINDOW]\033[00m : Selected ability : %d\n", selected_ability);
@@ -326,8 +350,8 @@ int createGameWindow(int x, int y)
 								}
 								break;
 							case SDLK_ESCAPE:
-								selected_ability = -1;
-								unselect();
+								if (selected_ability != -1) selected_ability = -1;
+								else unselect();
 								break;
 						}
 					break;

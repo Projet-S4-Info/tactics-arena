@@ -88,6 +88,7 @@ typedef struct entity_t
     lifeId active;
     Coord coords;
     Direction direction;
+    int idAnim;
     int act_points;
     int base_stats[NUM_STATS];
     int stat_mods[NUM_STATS];
@@ -153,7 +154,6 @@ typedef struct {
     int char_id;
     char cha_name[STR_SHORT];
     classId cha_class;
-    int base_stats[NUM_STATS];
     Coord starting_position;
 }init_ent;
 

@@ -50,7 +50,7 @@ err_t apply_movement(action a)
     int matrice[_X_SIZE_][_Y_SIZE_];
     Coord tab[_X_SIZE_ * _Y_SIZE_];
 
-    simple_move(e, pathfinding((int(*)[_X_SIZE_])fill_tiles(e -> coords, matrice, e -> stat_mods[mv]), tab, a.c ));
+    total_move(e, pathfinding((int(*)[_X_SIZE_])fill_tiles(e -> coords, matrice, e -> stat_mods[mv]), tab, a.c ));
 
     e->coords = a.c;
     e->act_points--;
@@ -91,11 +91,13 @@ err_t apply_action(action a)
 
     if(active_ab.fn_use==BEFORE)
     {
+        if(verbose>=2)printf("Function use : BEFORE\n");
         death_count += active_ab.function(a.c, active_ent, list);
     }
 
     if(!active_ent->status_effect[Blessed])
     {
+        if(verbose>=1)printf("Setting %s's cooldown of %d\n", active_ab.eng.name, active_ab.ab_cost);
         active_ent->ab_cooldown[a.act%NUM_AB] = active_ab.ab_cooldown;
     }
     else
@@ -105,11 +107,13 @@ err_t apply_action(action a)
     
     if(active_ab.fn_use!=ONLY)
     {
+        if(verbose>=2)printf("Function use != ONLY\n");
         death_count += apply_to(active_ab, active_ent, list, a.c);
     }
 
     if(active_ab.fn_use>=ONLY)
     {
+        if(verbose>=2)printf("Function use : AFTER/ONLY\n");
         death_count += active_ab.function(a.c, active_ent, list);
     }
 
@@ -147,10 +151,10 @@ err_t turn_start(Entity *e)
     Bloodlust_counter = 0;
     Sentinel_counter = TRUE;
 
-    if(e[Angel].active!=Dead)
+    /*if(e[Angel].active!=Dead)
     {
         activate_aura(&e[Angel], stReceived);
-    }
+    }*/
 
     return OK;
 }
@@ -345,8 +349,13 @@ winId init_client()
 {
     Coord spawn[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
 
-    init_Foes(W);
-    init_Allies(spawn,S);
+    if(init_Foes(W) == OK){
+        if(verbose >= 0)printf("Init Foes est fait pour client \n");
+    }
+    
+    if(init_Allies(spawn,S) == OK){
+        if(verbose >= 0)printf("Init Allies client OK \n");
+    }
 
     return game_loop(opposing_turn,local_turn);
 }
@@ -355,8 +364,12 @@ winId init_server()
 {
     Coord spawn[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
 
-    init_Allies(spawn,W);
-    init_Foes(S);
+    if(init_Allies(spawn,W) == OK){
+        if(verbose >= 0)printf("Init Allies server OK \n");
+    }
+    if (init_Foes(S) == OK){
+        if(verbose >= 0)printf("Init Foes est fait pour serveur \n");
+    }
     
     return game_loop(local_turn,opposing_turn);
 }

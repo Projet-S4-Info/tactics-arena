@@ -102,6 +102,12 @@ int loadMapTextures(SDL_Renderer * renderer)
 						loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_128.png")),
 						"snow");
 
+	// Loading trap textures
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/sprites/Traps/Beartrap.png")),
+						NULL,
+						"trap");
+
 	// Loading selection textures
 	addTextureToTable(	textures,
 						loadTexture(renderer, loadImage("../inc/img/interface/selection_64.png")),
@@ -285,7 +291,7 @@ int selectTile(int xpos, int ypos, int mx, int my)
 		return 0;
 	}
 
-	if(verbose >= 1)printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
+	if (verbose >= 1) printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
 	(*(matrix+xIndex*_X_SIZE_+yIndex)).selected = 1;
 	Coord selectedTile = {xIndex, yIndex};
 	if (selectedEntity != NULL)
@@ -539,6 +545,13 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 						if (pxBase == 64)	displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].texture, blockPos.x, blockPos.y);
 						else 				displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].big_texture, blockPos.x, blockPos.y);
 					}
+				}
+
+				// Affichage pièges
+				if ((*(matrix+i*_X_SIZE_+j)).trap.visible == TRUE)
+				{
+					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "trap"), blockPos.x, blockPos.y-(pxBase/3));
+					//else				displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
 				}
 
 				// Affichage portée d'attaque (si compétence sélectionnée)
