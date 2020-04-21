@@ -160,7 +160,8 @@ int Banner_fn(Coord c, Entity * e, StateList * list)
 int mage_switch(Coord c, Entity * e, StateList * list)
 {
     int i = rand()%2;
-    if((Ability*)mage_ab+i != e->cha_class->cla_abilities)
+
+    if((Ability*)mage_ab+(i*NUM_AB) != e->cha_class->cla_abilities)
     {
         e->cha_class->cla_abilities = (Ability*)mage_ab+(i*NUM_AB);
     }
