@@ -277,6 +277,7 @@ int createGameWindow(int x, int y)
 
 									if (verbose >= 1) printf("\033[36;01m[GAME_WINDOW]\033[00m : Selected ability : %d\n", selected_ability);
 								}
+								else addLog("Not available during opponent's turn");
 
 							} else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 							
