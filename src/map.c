@@ -429,7 +429,7 @@ int displayAbilities(SDL_Renderer *renderer)
 	displaySprite(renderer, getTexture(textures, "move"), 16, yWinSize-80);
 	for (int i=0; i < 4; i++)
 	{
-		if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[i].ab_id)) displaySprite(renderer, getTexture(textures, "attack"), 16+(i+1)*80, yWinSize-80);
+		if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[i].ab_id, FALSE)) displaySprite(renderer, getTexture(textures, "attack"), 16+(i+1)*80, yWinSize-80);
 		else displaySprite(renderer, getTexture(textures, "locked_attack"), 16+(i+1)*80, yWinSize-80);
 	}
 	displaySprite(renderer, getTexture(textures, "turn_right"), 16+5*80, yWinSize-80);

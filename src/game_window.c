@@ -235,27 +235,27 @@ int createGameWindow(int x, int y)
 									// Mouvement
 									if (e.motion.x >= 16 && e.motion.x <= 80)
 									{
-										if (able_ability(tempEntity, Mvt)) selected_ability = Mvt;
+										if (able_ability(tempEntity, Mvt, TRUE)) selected_ability = Mvt;
 									}
 									// Compétence 1
 									else if (e.motion.x >= 96 && e.motion.x <= 160)
 									{
-										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id, TRUE)) selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
 									}
 									// Compétence 2
 									else if (e.motion.x >= 176 && e.motion.x <= 240)
 									{
-										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
+										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id, TRUE)) selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
 									}
 									// Compétence 3
 									else if (e.motion.x >= 256 && e.motion.x <= 320)
 									{
-										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
+										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id, TRUE)) selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
 									}
 									// Compétence 4
 									else if (e.motion.x >= 336 && e.motion.x <= 400)
 									{
-										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id)) selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
+										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id, TRUE)) selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
 									}
 									// Tourner personnage vers la droite
 									else if (e.motion.x >= 416 && e.motion.x <= 480)
