@@ -120,18 +120,31 @@ char * get_desc(Entity * e, abilityId ab_id)
     }
 }
 
-bool able_ability(Entity *e, abilityId ab_id)
+bool able_ability(Entity *e, abilityId ab_id, bool show_logs)
 {
     if(e->act_points < e->cha_class->cla_abilities[ab_id%NUM_AB].ab_cost)
     {
-        addLog("Not enough action points for that");
+        if(show_logs)addLog("Not enough action points for that");
         return FALSE;
     }
     else if(e->ab_cooldown[ab_id%NUM_AB]!=0)
     {
-        char log[STR_SHORT];
-        sprintf(log, "%s is on cooldown", get_name(e, ab_id));
-        addLog(log);
+        if(show_logs)
+        {
+            char log[STR_SHORT];
+            sprintf(log, "%s is on cooldown", get_name(e, ab_id));
+            addLog(log);
+        }
+        return FALSE;
+    }
+    else if(e->status_effect[Freezing])
+    {
+        if(show_logs)
+        {
+            char log[STR_SHORT];
+            sprintf(log, "%s is frozen", get_name(e, ab_id));
+            addLog(log);
+        }
         return FALSE;
     }
 

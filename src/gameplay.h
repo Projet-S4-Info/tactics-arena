@@ -9,7 +9,7 @@ winId game_over();
 int get_range(Entity *e, abilityId ab);
 char * get_desc(Entity * e, abilityId ab_id);
 char * get_name(Entity * e, abilityId ab_id);
-bool able_ability(Entity *e, abilityId ab_id);
+bool able_ability(Entity *e, abilityId ab_id, bool show_logs);
 bool is_ally(Entity *e);
 bool show(Entity * e);
 bool same_team(Entity *a, Entity *b);
