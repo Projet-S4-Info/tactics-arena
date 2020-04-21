@@ -95,6 +95,11 @@ int get_range(Entity *e, abilityId ab)
     
 }
 
+int get_cooldown(Entity * e, abilityId Id)
+{
+    return e->ab_cooldown[Id%NUM_AB];
+}
+
 char * get_name(Entity * e, abilityId ab_id)
 {
     if(ab_id!=Mvt)

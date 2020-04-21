@@ -8,6 +8,7 @@ err_t get_team(Entity *e, Entity **all, bool same);
 winId game_over();
 int get_range(Entity *e, abilityId ab);
 char * get_desc(Entity * e, abilityId ab_id);
+int get_cooldown(Entity * e, abilityId Id);
 char * get_name(Entity * e, abilityId ab_id);
 bool able_ability(Entity *e, abilityId ab_id, bool show_logs);
 bool is_ally(Entity *e);

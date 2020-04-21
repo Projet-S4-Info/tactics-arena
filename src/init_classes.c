@@ -352,7 +352,7 @@ err_t init_valkyrie(Class * c)
     *ab = abtemp1;
     Ability abtemp2 = {Odins_Eyes,2,2,8,ANY_TILE,&one_m,51,&aoe51,1,&para,NONE,NULL,{"Odin's Eyes","Call forth a swarm of crows to deal magic damage to an area."}};
     *(ab+1) = abtemp2;
-    Ability abtemp3 = {Life_Transfer,2,3,8,ALLIES,NULL,1,&one_c,0,NULL,ONLY,Life_Transfer_fn,{"Life Transfer","Select an Ally, heal the ally back to full and slow a random ennemy for three turns by the amount healed."}};
+    Ability abtemp3 = {Life_Transfer,2,3,8,ALLIES,NULL,1,&one_c,0,NULL,ONLY,Life_Transfer_fn,{"Life Transfer","Select an Ally, heal the ally back to full and slow the closest ennemy for three turns by the amount healed."}};
     *(ab+2) = abtemp3;
     Ability abtemp4 = {Gates_of_Valhalla,3,5,0,ANY_TILE,NULL,0,NULL,0,NULL,ONLY,Gates_of_Valhalla_fn,{"Gates of Valhalla","Resurrect all dead allies for a turn."}};
     *(ab+3) = abtemp4;
