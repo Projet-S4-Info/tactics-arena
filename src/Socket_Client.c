@@ -16,6 +16,8 @@
 #include "servFcnt.h"
 #include "struct.h"
 #include "common.h"
+#include "grid.h"
+#include "map_editor.h"
 
 // For Windows user
 #ifdef _WIN32
@@ -126,8 +128,17 @@ err_t startTCPSocketCli(int socketCli){
         if(verbose >= 1)printf("Conexion établie sans soucis fermeture de la fonction... \n");
 
         if(recep(&startGameCli, sizeof(startGameCli), socketConnected) != NULL){
-          sprintf(mapMultiSelected, "%s", startGameCli.mapNameGame);
+          loadMap(matrix, startGameCli.mapNameGame);
+        }else{
+          printf("Pas de status recue \n");
+        }
+
+        startGameCli.isServerStartGame = 2;
+        
+        if(sendStruct(&startGameCli, sizeof(startGameCli), socketConnected) == OK){
           serverStatus = 3;
+        }else{
+          printf("Erreur d'envoi du status \n");
         }
         return OK;
       }

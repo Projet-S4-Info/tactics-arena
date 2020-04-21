@@ -17,6 +17,9 @@
 #include "servFcnt.h"
 #include "struct.h"
 #include "common.h"
+#include "grid.h"
+#include "map_editor.h"
+
 
 
 // For Windows user
@@ -199,7 +202,12 @@ err_t startTCPSocketServ(){
               if(verbose >= 1)printf("Structure envoyée .... \n");
               if(verbose >= 1)printf("Struct envoyé : isServerStartGame : %d \n", startGame.isServerStartGame);
               if(verbose >= 1)printf("Struct envoyé : isServerStartGame : %s \n", startGame.mapNameGame);
-              serverStatus = 2;
+              
+              loadMap(matrix, startGame.mapNameGame);
+
+              recep(&startGame, sizeof(startGame), socketConnected);
+              
+              serverStatus = startGame.isServerStartGame;
             }
             if(verbose >= 1)printf("\nChargement de la partie... \n Fermeture de la fonction ... \n");
           }

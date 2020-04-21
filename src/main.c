@@ -149,16 +149,11 @@ int main(int argc, char * argv[])
 
         online_setup();
         stopMenuMusic(1);
-        int res = 0;
         playMenuMusic(2);
-        res = displayMenuMulti(1280,720);
-        if(res == 1){
-            loadMap(matrix,mapMultiSelected);
-            createGameWindow(1920,1080);
-        } else if(res == 2) {
-            loadMap(matrix,mapMultiSelected);
-            createGameWindow(1920,1080);
+        if(displayMenuMulti(1280,720)){
+            createGameWindow(1920, 1080);
         }
+
     }
 
     printf("%s",error_message[destroy_game()]);
