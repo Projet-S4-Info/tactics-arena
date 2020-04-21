@@ -86,7 +86,6 @@ err_t apply_action(action a)
 
     active_ab = active_ent->cha_class->cla_abilities[a.act%NUM_AB];
 
-    if(verbose>=0)print_Ability(&active_ab, "");
     if(verbose>=1)printf("\n\n%s has chosen to %s at the following coordinates : %d,%d\n", active_ent->cha_name, active_ab.eng.name, a.c.x, a.c.y);
 
     sprintf(log, "%s cast %s", active_ent->cha_name, active_ab.eng.name);
@@ -137,11 +136,14 @@ err_t apply_action(action a)
 
 err_t turn_start(Entity *e)
 {
+    if(verbose>=1)printf("Starting turn\n");
     int i;
+    if(verbose>=1)printf("Reseting Action Points\n");
     for(i=0; i<NUM_CLASS; i++)
     {
         if((e+i)->status_effect[Paralyzed])
         {
+            if(verbose>=1)printf("%s is Paralyzed\n", (e+i)->cha_name);
             (e+i)->act_points = 1;
         }
         else
@@ -164,8 +166,9 @@ err_t turn_start(Entity *e)
 
 err_t turn_end(Entity *e, StateList * list)
 {
-
+    if(verbose>=1)printf("Ending Turn\n");
     int i,j;
+    if(verbose>=1)printf("Checking for Burns && Derementing Cooldowns\n");
     for(i=0; i<NUM_CLASS; i++)
     {
         if((e+i)->status_effect[Burning])
@@ -174,6 +177,7 @@ err_t turn_end(Entity *e, StateList * list)
             char log[STR_LONG];
             sprintf(log, "%s was hurt by his burn", (e+i)->cha_name);
             addLog(log);
+            if(verbose>=1)printf("%s\n", log);
             death_check(e);
         }
 
@@ -184,7 +188,7 @@ err_t turn_end(Entity *e, StateList * list)
     }
 
     List_Elem * elem;
-
+    if(verbose>=1)printf("Going through Statelist\n");
     start_list(list);
     while(!(out_of_list(list)))
     {

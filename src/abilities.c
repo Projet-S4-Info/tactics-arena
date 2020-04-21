@@ -7,6 +7,7 @@
 #include "display.h"
 #include "deplacement.h"
 #include "border.h"
+#include "print.h"
 
 int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
 {
@@ -193,11 +194,63 @@ int FlameCharge_fn(Coord c, Entity * e, StateList * list)
 {
     Ability F = e->cha_class->cla_abilities[FlameCharge%NUM_AB];
     
-    //implement pathfinding
-    //change f coords depending on pathfinding
-    
+    Coord length;
+    length = compare_coords(e->coords,c);
+    if(verbose>=2)print_Coord(&length, "Flamecharge path length : ");
+    int l = abs(length.x)+abs(length.y);
+
+    Coord * path = malloc(sizeof(Coord)*l);
+    Coord temp = {0,0};
+
+    int i;
+    for(i=0; i<l; i++)
+    {
+        if(abs(length.x)>=abs(length.y))
+        {
+            if(length.x > 0)
+            {
+                temp.x += 1;
+                length.x += -1;
+            }
+            else
+            {
+                temp.x += -1;
+                length.x += 1;
+            }
+        }
+        else
+        {
+            if(length.y > 0)
+            {
+                temp.y += 1;
+                length.y += -1;
+            }
+            else
+            {
+                temp.y += -1;
+                length.y += 1;
+            }
+        }
+        path[i] = temp;
+    }
+
+    if(verbose>=2)
+    {
+        printf("Flamecharge Path : \n");
+        print_Coord_list(&path,l,"  ");
+    }
+
+    F.coord = &path;
+    F.nb_coords = l;
+    F.fn_use = NONE;
+
+    Tile * t =getTile(e->coords);
+    t->entity = NULL;
+    int n = apply_to(F,e,list,e->coords);
+    t->entity = e;
     moveEntity(e->coords, c);
-    return apply_to(F,e,list,e->coords);
+    free(path);
+    return n;
 }
 
 int Flare_fn(Coord c, Entity * e, StateList * list)
