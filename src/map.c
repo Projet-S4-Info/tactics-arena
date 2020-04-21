@@ -168,6 +168,12 @@ int loadMapTextures(SDL_Renderer * renderer)
 						NULL,
 						"attack");
 
+	// Loading locked attack logo
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/interface/locked_attack_logo_64.png")),
+						NULL,
+						"locked_attack");
+
 	// Loading move logo
 	addTextureToTable(	textures,
 						loadTexture(renderer, loadImage("../inc/img/interface/move_logo_64.png")),
@@ -390,7 +396,10 @@ int selectTile(int xpos, int ypos, int mx, int my)
 		if (selected_ability != -1)
 		{
 			if (Cast_check(act, borderTab)) {
+				Entity * caster = selectedEntity;
 				action_set(act);
+				selected_ability = -1;
+				setSelected(caster->coords);
 			}
 			else
 			{
@@ -415,12 +424,14 @@ int selectTile(int xpos, int ypos, int mx, int my)
 int displayAbilities(SDL_Renderer *renderer)
 // Display the abilities menu
 {
+	Entity * tempEntity = getEntity(getSelectedPos());
 	// Abilities icons
 	displaySprite(renderer, getTexture(textures, "move"), 16, yWinSize-80);
-	displaySprite(renderer, getTexture(textures, "attack"), 16+1*80, yWinSize-80);
-	displaySprite(renderer, getTexture(textures, "attack"), 16+2*80, yWinSize-80);
-	displaySprite(renderer, getTexture(textures, "attack"), 16+3*80, yWinSize-80);
-	displaySprite(renderer, getTexture(textures, "attack"), 16+4*80, yWinSize-80);
+	for (int i=0; i < 4; i++)
+	{
+		if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[i].ab_id)) displaySprite(renderer, getTexture(textures, "attack"), 16+(i+1)*80, yWinSize-80);
+		else displaySprite(renderer, getTexture(textures, "locked_attack"), 16+(i+1)*80, yWinSize-80);
+	}
 	displaySprite(renderer, getTexture(textures, "turn_right"), 16+5*80, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "turn_left"), 16+6*80, yWinSize-80);
 
