@@ -88,7 +88,7 @@ static void * fn_server (void * p_data)
 {
 	
     startTCPSocketServ();
-	sleep(5);
+	// sleep(1);
 	init_server();
     return NULL;
 }
@@ -97,7 +97,7 @@ static void * fn_server (void * p_data)
 static void * fn_client (void * p_data)
 {
     startTCPSocketCli();
-	sleep(5);
+	// sleep(1);
 	init_client();
     return NULL;
 }
@@ -611,7 +611,7 @@ int displayMenuMulti(int x, int y)
 							closeWindow(pWindow);
 							freeMultiMenuTextures();
 							stopMenuMusic(2);
-							return 2;			
+							return 1;			
 						}
 						
 						// Join Btn after infoJoinSet

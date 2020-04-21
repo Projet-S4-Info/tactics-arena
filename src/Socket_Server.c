@@ -17,6 +17,9 @@
 #include "servFcnt.h"
 #include "struct.h"
 #include "common.h"
+#include "grid.h"
+#include "map_editor.h"
+
 
 
 // For Windows user
@@ -130,17 +133,17 @@ err_t startTCPSocketServ(){
   if(!windWSAError ){
    
     // Init structure    
-    //Can change s_addr with given ip inet_addr("192.168.0.0") or INADDR_ANY
+    // Can change s_addr with given ip inet_addr("192.168.0.0") or INADDR_ANY
 
     serveurAddr.sin_addr.s_addr=htonl(INADDR_ANY) ;
     serveurAddr.sin_family = AF_INET;
     serveurAddr.sin_port = htons (PORT);
     
     /*
-    * Creating socket :
-    * param 1 : Use TCP/IP
-    * param 2 : Use with TCP
-    * param 3 : Protocole parameter (useless) -> 0
+      * Creating socket :
+      * param 1 : Use TCP/IP
+      * param 2 : Use with TCP
+      * param 3 : Protocole parameter (useless) -> 0
     */
     
     if((sock = socket(AF_INET, SOCK_STREAM, 0)) != INVALID_SOCKET){
@@ -191,13 +194,20 @@ err_t startTCPSocketServ(){
             }
             startGame.isServerStartGame = 1;
             sprintf(startGame.mapNameGame, "%s", mapMultiSelected);
+            
             if(sendStruct(&startGame, sizeof(startGame), socketConnected) != OK){
               printf("Erreur d'envoie \n");
-            }else{
+            }
+            else{
               if(verbose >= 1)printf("Structure envoyée .... \n");
               if(verbose >= 1)printf("Struct envoyé : isServerStartGame : %d \n", startGame.isServerStartGame);
               if(verbose >= 1)printf("Struct envoyé : isServerStartGame : %s \n", startGame.mapNameGame);
-              serverStatus = 2;
+              
+              loadMap(matrix, startGame.mapNameGame);
+
+              recep(&startGame, sizeof(startGame), socketConnected);
+              
+              serverStatus = startGame.isServerStartGame;
             }
             if(verbose >= 1)printf("\nChargement de la partie... \n Fermeture de la fonction ... \n");
           }
