@@ -332,7 +332,7 @@ err_t free_spawn(Entity *e)
 
 }
 
-err_t remove_mod(Status * stat, Entity * e)
+err_t remove_mod(Status * stat, Entity * e, bool show_log)
 {
     char log[STR_LONG];
 
@@ -360,9 +360,12 @@ err_t remove_mod(Status * stat, Entity * e)
         sprintf(log, "%s is no longer %s", e->cha_name, statName[stat->stat]);
     }
 
-    if(verbose>=1)printf("%s\n", log);
+    if(verbose>=2)printf("%s\n", log);
 
-    addLog(log);
+    if(show_log)
+    {
+        addLog(log);
+    }
 
     return OK;
 }
@@ -397,7 +400,7 @@ err_t new_death(Entity * e)
     start_list(stSent);
     while((v = list_search(stSent,e,-1))!=NULL)
     {
-        remove_mod(v->value, e);
+        remove_mod(v->value, e, FALSE);
         list_remove(stSent);
         list_next(stSent);
     }
@@ -405,7 +408,7 @@ err_t new_death(Entity * e)
     start_list(stReceived);
     while((v = list_search(stReceived,e,-1))!=NULL)
     {
-        remove_mod(v->value, e);
+        remove_mod(v->value, e, FALSE);
         list_remove(stReceived);
         list_next(stReceived);
     }
@@ -425,7 +428,7 @@ err_t new_death(Entity * e)
         start_list(list);
         while((v = list_search(list, NULL, Detained))!=NULL)
         {
-            remove_mod(v->value, v->entity);
+            remove_mod(v->value, v->entity, TRUE);
             list_remove(list);
             list_next(list);
         }
@@ -456,7 +459,7 @@ bool death_check(Entity * e)
         return FALSE;
 }
 
-bool apply_damage(Damage * d, Entity * caster, Entity * target)
+bool apply_damage(Damage * d, Entity * caster, Entity * target, bool show_log)
 {
 
     char log[STR_LONG];
@@ -465,13 +468,13 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target)
     {
         int block = target->status_effect[Guarding] == 1 ? 70 : 30;
 
-        if(verbose>=1)printf("Block chance : %d\n", block);
+        if(verbose>=2)printf("Block chance : %d\n", block);
 
         if(block>=(rand()%100+1))
         {
             if(verbose>=1)printf("Block Successful!\n");
             sprintf(log, "%s blocked the incoming damage", target->cha_name);
-            addLog(log);
+            if(show_log)addLog(log);
             //PLAY ANIMATION
             return FALSE;
         }
@@ -510,13 +513,13 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target)
     if(verbose>=2)printf("%s's health after the attack : %d\n", target->cha_name, target->stat_mods[pv]);
 
     if(verbose>=1)printf("%s\n",log);
-    addLog(log);
+    if(show_log)addLog(log);
 
     return death_check(target);
 
 }
 
-err_t apply_status(Status s, Entity *target, StateList *list, int caster_id)
+err_t apply_status(Status s, Entity *target, StateList *list, int caster_id, bool show_log)
 {
     char log[STR_LONG];
 
@@ -539,10 +542,10 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id)
 
     else if(s.stat==Burning && target->status_effect[Freezing])
     {
-        remove_mod(renew_mod(target, Freezing),target);
+        remove_mod(renew_mod(target, Freezing),target, FALSE);
         if(verbose>=1)printf("Attempting to burn %s has thawed him out!\n", target->cha_name);
         sprintf(log, "Attempting to burn %s has thawed him out", target->cha_name);
-        addLog(log);
+        if(show_log)addLog(log);
         return OK;
     }
 
@@ -552,7 +555,7 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id)
         {
             if(verbose>=1)printf("Target is burning, cannot be frozen!\n");
             sprintf(log, "%s is burning and cannot be frozen", target->cha_name);
-            addLog(log);
+            if(show_log)addLog(log);
             return OK;
         }
         else
@@ -568,27 +571,25 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id)
         sprintf(log, "%s is %s", target->cha_name, statusName[s.stat]);
     }
 
-    if(verbose>=1)printf("Status effect : %d", target->status_effect[s.stat]);
-
     if(s.duration!=0)
     {
         char log_2[STR_SHORT];
         sprintf(log_2, " for %d turns", s.duration);
         strcat(log, log_2);
         if(verbose>=1)printf("%s\n",log);
-        addLog(log);
+        if(show_log)addLog(log);
         return list_add(list, s, target);
     }
     else
     {
         strcat(log, " permanently");
         if(verbose>=1)printf("%s\n",log);
-        addLog(log);
+        if(show_log)addLog(log);
         return OK;
     }
 }
 
-err_t apply_stat_change(Status s, Entity * target, StateList * list)
+err_t apply_stat_change(Status s, Entity * target, StateList * list, bool show_log)
 {
     char log[STR_LONG];
 
@@ -621,7 +622,7 @@ err_t apply_stat_change(Status s, Entity * target, StateList * list)
 
         if(s.value != 0)
         {
-            addLog(log);
+            if(show_log)addLog(log);
         }
 
         return list_add(list, s, target);
@@ -633,7 +634,7 @@ err_t apply_stat_change(Status s, Entity * target, StateList * list)
 
         if(s.value != 0)
         {
-            addLog(log);
+            if(show_log)addLog(log);
         }
         
         return OK;
@@ -642,17 +643,18 @@ err_t apply_stat_change(Status s, Entity * target, StateList * list)
 
 err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
 {
-    if(m.chance*100>=(rand()%100+1))
+    
+    if(m.chance*100>=rand()%100+1)
     {
         if(verbose>=1)printf("Modifier landed!\n");
 
         if(m.effect.value==0)
         {
-            return apply_status(m.effect,target, list, caster_id);
+            return apply_status(m.effect,target, list, caster_id, TRUE);
         }
         else
         {
-            return apply_stat_change(m.effect,target, list);
+            return apply_stat_change(m.effect,target, list, TRUE);
         }
     }
     else
@@ -690,7 +692,7 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
 
                         if(active_ab.damage!=NULL)
                         {
-                            if(apply_damage(*(active_ab.damage), active_ent, e))
+                            if(apply_damage(*(active_ab.damage), active_ent, e, TRUE))
                             {
                                 death_count++;
                             }
@@ -706,11 +708,11 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
                     {
                         for(j=0; j<active_ab.nb_mods; j++)
                         {
-                            if(!same_team(e,active_ent) && (*(active_ab.mods)+j)->t!=ALLIES)
-                                apply_mod(*(active_ab.mods)[j],e, list, active_ent->cha_id);
+                            if(!same_team(e,active_ent) && ((*(active_ab.mods))+j)->t!=ALLIES)
+                                apply_mod(*((*(active_ab.mods))+j),e, list, active_ent->cha_id);
 
-                            else if((same_team(e,active_ent) && (*(active_ab.mods)+j)->t!=FOES))
-                                apply_mod(*(active_ab.mods)[j],e, list, active_ent->cha_id);
+                            else if((same_team(e,active_ent) && ((*(active_ab.mods))+j)->t!=FOES))
+                                apply_mod(*((*(active_ab.mods))+j),e, list, active_ent->cha_id);
                         }
                     }
 

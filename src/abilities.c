@@ -20,7 +20,7 @@ int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
             char log[STR_LONG];
             sprintf(log, "%s's Killing Blow was triggered", e->cha_name);
             addLog(log);
-            apply_stat_change(v, t, list);
+            apply_stat_change(v, t, list, TRUE);
             e->act_points+=1;
         }
     }
@@ -38,7 +38,7 @@ int Fury_fn(Coord c, Entity * e, StateList * list)
         if(!list_check(stSent))
         {
             turns += v->value->duration;
-            remove_mod(v->value,e);
+            remove_mod(v->value,e, TRUE);
             list_remove(stSent);
         }
         list_next(stSent);
@@ -50,7 +50,7 @@ int Fury_fn(Coord c, Entity * e, StateList * list)
         if(!list_check(stReceived))
         {
             turns += v->value->duration;
-            remove_mod(v->value,e);
+            remove_mod(v->value,e, TRUE);
             list_remove(stReceived);
         }
         list_next(stReceived);
@@ -58,7 +58,7 @@ int Fury_fn(Coord c, Entity * e, StateList * list)
 
     Status d = {turns, atk, 0};
 
-    apply_stat_change(d, e, list);
+    apply_stat_change(d, e, list, TRUE);
 
     return 0;
 }
@@ -84,7 +84,7 @@ int Focus_fn(Coord c, Entity * e, StateList * list)
         {
             if(list_change(stSent, -1)!=NULL)
             {
-                remove_mod(v->value,e);
+                remove_mod(v->value,e, TRUE);
                 list_remove(stSent);
             }
         }
@@ -102,7 +102,7 @@ int Focus_fn(Coord c, Entity * e, StateList * list)
         {
             if(list_change(stReceived, -1)!=NULL)
             {
-                remove_mod(v->value,e);
+                remove_mod(v->value,e, TRUE);
                 list_remove(stReceived);
             }
         }
@@ -211,8 +211,17 @@ int Flare_fn(Coord c, Entity * e, StateList * list)
     int i;
     for(i=0; i<NUM_CLASS; i++)
     {
-        apply_stat_change(b_vis,all+i,list);
-        apply_stat_change(b_mv,all+i,list);
+        apply_stat_change(b_vis,all+i,list, FALSE);
+        apply_stat_change(b_mv,all+i,list, FALSE);
+    }
+
+    if(all == Allies)
+    {
+        addLog("Allies' vision and movement were increased by 4 for 2 turns");
+    }
+    else
+    {
+        addLog("Ennemies' vision and movement were increased by 4 for 2 turns");
     }
 
     Ability a = e->cha_class->cla_abilities[Flare%NUM_AB];
@@ -291,14 +300,14 @@ int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
 
         if(target != NULL)
         {
-            apply_damage(*(e->cha_class->cla_abilities[Lightning_Chain%NUM_AB].damage), e, target);
-            ct = target->coords;
-            closest.x = -99;
-            target = NULL;
-
             char log[STR_LONG];
             sprintf(log, "The lightning bounced to %s", e->cha_name);
             addLog(log);
+
+            apply_damage(*(e->cha_class->cla_abilities[Lightning_Chain%NUM_AB].damage), e, target, TRUE);
+            ct = target->coords;
+            closest.x = -99;
+            target = NULL;
         }
         else
         {
@@ -321,7 +330,7 @@ int Thrust_fn(Coord c, Entity * e, StateList * list)
         if(target!=NULL)
         {
             apply_mod(*(*(e->cha_class->cla_abilities[Thrust%NUM_AB].mods)), target, list, e->cha_id);
-            if(apply_damage(*(e->cha_class->cla_abilities[Thrust%NUM_AB].damage), e, target))
+            if(apply_damage(*(e->cha_class->cla_abilities[Thrust%NUM_AB].damage), e, target, TRUE))
             {
                 return 1;
             }
@@ -369,7 +378,7 @@ int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
 
     Status s = {h,mv,3};
 
-    apply_stat_change(s,t,list);
+    apply_stat_change(s,t,list, TRUE);
     return 0;
 }
 
@@ -385,7 +394,7 @@ int Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list)
 
     for(i=0; i<count; i++)
     {
-        apply_status(s,tab[i], list, e->cha_id);
+        apply_status(s,tab[i], list, e->cha_id, FALSE);
         tab[i]->active = Alive;
         free_spawn(tab[i]);
     }

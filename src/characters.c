@@ -239,17 +239,18 @@ void moveEntity(Coord from, Coord to)
 }
 
 
-
 void switchEntities(Coord pos1, Coord pos2)
 // Switch the positions of the 2 entities
 {
-    Entity * temp = (*(matrix+pos1.x*_X_SIZE_+pos1.y)).entity;
-    (*(matrix+pos1.x*_X_SIZE_+pos1.y)).entity = (*(matrix+pos2.x*_X_SIZE_+pos2.y)).entity;
-    (*(matrix+pos2.x*_X_SIZE_+pos2.y)).entity = temp;
-    (*(matrix+pos1.x*_X_SIZE_+pos1.y)).entity->coords.x = pos2.x;
-    (*(matrix+pos1.x*_X_SIZE_+pos1.y)).entity->coords.y = pos2.y;
-    (*(matrix+pos1.x*_X_SIZE_+pos2.y)).entity->coords.x = pos1.x;
-    (*(matrix+pos1.x*_X_SIZE_+pos2.y)).entity->coords.y = pos1.y;
+    Tile * t1 = getTile(pos1);
+    Tile * t2 = getTile(pos2);
+
+    Entity * temp = t1->entity;
+    t1->entity = t2->entity;
+    t2->entity = temp;
+    
+    t2->entity->coords = pos1;
+    t1->entity->coords = pos2;
 }
 
 

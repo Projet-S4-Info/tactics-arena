@@ -100,7 +100,7 @@ err_t apply_action(action a)
 
     if(!active_ent->status_effect[Blessed])
     {
-        if(verbose>=1)printf("Setting %s's cooldown of %d\n", active_ab.eng.name, active_ab.ab_cost);
+        if(verbose>=1)printf("Setting %s's cooldown of %d\n", active_ab.eng.name, active_ab.ab_cooldown);
         active_ent->ab_cooldown[a.act%NUM_AB] = active_ab.ab_cooldown;
     }
     else
@@ -193,7 +193,7 @@ err_t turn_end(Entity *e, StateList * list)
         if(elem!=NULL)
         {
             list_remove(list);
-            remove_mod(elem->value, elem->entity);
+            remove_mod(elem->value, elem->entity, TRUE);
         }
         list_next(list);
     }
