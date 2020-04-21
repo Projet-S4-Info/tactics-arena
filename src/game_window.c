@@ -112,7 +112,7 @@ int createGameWindow(int x, int y)
 		exit(EXIT_FAILURE);
 	}
 
-	printf("\033[31;01m[GAME_WINDOW ERROR]\033[00m : %s", error_message[setRendererDriver(renderer)]);
+	printf("%s", error_message[setRendererDriver(renderer)]);
 
 	// Launcher icon
     SDL_SetWindowIcon(pWindow, loadImage("../inc/sprites/goliath/sprite_indiv/64_64/front/Sprite_frontview_64.png"));
@@ -275,12 +275,26 @@ int createGameWindow(int x, int y)
 									}
 									else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 
-									if (verbose >= 1) printf("\033[36;01m[GAME_WINDOW]\033[00m : Selected ability : %d\n", selected_ability);
-								}
-								else addLog("Not available during opponent's turn");
+									// Exception Last Sacrifice
+									if (selected_ability == Last_Sacrifice && count_dead_allies(tempEntity) < 1)
+									{
+										selected_ability = -1;
+										addLog("No dead allies yet");
+									}
 
-							} else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
-							
+									if (verbose >= 1) printf("\033[36;01m[GAME_WINDOW]\033[00m : Selected ability : %d\n", selected_ability);
+
+								}
+								else
+								{
+									addLog("Not available during opponent's turn");
+								}
+
+							}
+							else
+							{
+								selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
+							}
 						} 
 						else 
 						{

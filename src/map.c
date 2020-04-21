@@ -265,7 +265,6 @@ int hoverTile(int xpos, int ypos, int mx, int my)
 
 	xTile = xpos+((((xIndex+yIndex)/2)+1)*pxBase);
 	yTile = ypos+((_Y_SIZE_-(yIndex-xIndex))*(pxBase/4)+(pxBase/4));
-	if(verbose >= 1)printf("xTile : %d yTile : %d\n", xTile, yTile);
 
 	// Calcul des coordonnées des 4 coins de la tile
 	Coord A = { xTile, yTile };
@@ -387,7 +386,7 @@ int selectTile(int xpos, int ypos, int mx, int my)
 		return 0;
 	}
 
-	if (verbose >= 1) printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
+	if (verbose >= 1) printf("\033[36;01m[MAP]\033[00m : Case sélectionnée : %d, %d\n", xIndex, yIndex);
 	(*(matrix+xIndex*_X_SIZE_+yIndex)).selected = 1;
 	Coord selectedTile = {xIndex, yIndex};
 	if (selectedEntity != NULL)
@@ -426,31 +425,43 @@ int displayAbilities(SDL_Renderer *renderer)
 {
 	Entity * tempEntity = getEntity(getSelectedPos());
 	// Abilities icons
-	displaySprite(renderer, getTexture(textures, "move"), 16, yWinSize-80);
-	displayText(renderer, 21, yWinSize-80+5, 20, "1", "../inc/font/Pixels.ttf", 49, 174, 196, FALSE);
-	for (int i=0; i < 4; i++)
+	if (selected_ability != Last_Sacrifice)
 	{
-		char abCost[10];
-		char abCooldown[10];
-		int cost = get_cost(tempEntity, tempEntity->cha_class->cla_abilities[i].ab_id);
-		int cd = get_cooldown(tempEntity, tempEntity->cha_class->cla_abilities[i].ab_id);
-		sprintf(abCost, "%d", cost);
-		sprintf(abCooldown, "%d", cd);
-		if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[i].ab_id, FALSE))
+		displaySprite(renderer, getTexture(textures, "move"), 16, yWinSize-80);
+		displayText(renderer, 21, yWinSize-80+5, 20, "1", "../inc/font/Pixels.ttf", 49, 174, 196, FALSE);
+		for (int i=0; i < 4; i++)
 		{
-			displaySprite(renderer, getTexture(textures, "attack"), 16+(i+1)*80, yWinSize-80);
-			displayText(renderer, 16+(i+1)*80+5, yWinSize-80+5, 20, abCost, "../inc/font/Pixels.ttf", 49, 174, 196, FALSE);
-			if (cd != 0) displayText(renderer, 16+(i+1)*80+49, yWinSize-35, 20, abCooldown, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+			char abCost[10];
+			char abCooldown[10];
+			int cost = get_cost(tempEntity, tempEntity->cha_class->cla_abilities[i].ab_id);
+			int cd = get_cooldown(tempEntity, tempEntity->cha_class->cla_abilities[i].ab_id);
+			sprintf(abCost, "%d", cost);
+			sprintf(abCooldown, "%d", cd);
+			if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[i].ab_id, FALSE))
+			{
+				displaySprite(renderer, getTexture(textures, "attack"), 16+(i+1)*80, yWinSize-80);
+				displayText(renderer, 16+(i+1)*80+5, yWinSize-80+5, 20, abCost, "../inc/font/Pixels.ttf", 49, 174, 196, FALSE);
+				if (cd != 0) displayText(renderer, 16+(i+1)*80+49, yWinSize-35, 20, abCooldown, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+			}
+			else
+			{
+				displaySprite(renderer, getTexture(textures, "locked_attack"), 16+(i+1)*80, yWinSize-80);
+				displayText(renderer, 16+(i+1)*80+5, yWinSize-80+5, 20, abCost, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+				if (cd != 0) displayText(renderer, 16+(i+1)*80+49, yWinSize-35, 20, abCooldown, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+			}
 		}
-		else
+		displaySprite(renderer, getTexture(textures, "turn_right"), 16+5*80, yWinSize-80);
+		displaySprite(renderer, getTexture(textures, "turn_left"), 16+6*80, yWinSize-80);
+	}
+	else
+	// Dead allies menu for last sacrifice ability
+	{
+		Entity * deadAllies[count_dead_allies(tempEntity)];
+		for (int i=0; i < count_dead_allies(tempEntity); i++)
 		{
-			displaySprite(renderer, getTexture(textures, "locked_attack"), 16+(i+1)*80, yWinSize-80);
-			displayText(renderer, 16+(i+1)*80+5, yWinSize-80+5, 20, abCost, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
-			if (cd != 0) displayText(renderer, 16+(i+1)*80+49, yWinSize-35, 20, abCooldown, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+			displaySprite(renderer, getCharFrontTexture(deadAllies[i]->cha_class->cla_name), 16+(i+1)*80+5, yWinSize-80+5);
 		}
 	}
-	displaySprite(renderer, getTexture(textures, "turn_right"), 16+5*80, yWinSize-80);
-	displaySprite(renderer, getTexture(textures, "turn_left"), 16+6*80, yWinSize-80);
 
 	return 0;
 }

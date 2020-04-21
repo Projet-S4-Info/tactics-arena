@@ -182,7 +182,15 @@ void setSelected(Coord pos)
 void freezeWater(Coord pos)
 // Turns the given water block to an ice block
 {
-    if ((*(matrix+pos.x*_X_SIZE_+pos.y)).tile_id == 4)   (*(matrix+pos.x*_X_SIZE_+pos.y)).tile_id = 6;
+    if ((*(matrix+pos.x*_X_SIZE_+pos.y)).tile_id == WATER)
+    {
+        (*(matrix+pos.x*_X_SIZE_+pos.y)).tile_id = ICE;
+        (*(matrix+pos.x*_X_SIZE_+pos.y)).walkable = 1;
+    }
+    else
+    {
+        (*(matrix+pos.x*_X_SIZE_+pos.y)).tile_id = SNOW;
+    }
 }
 
 Tile * getTile(Coord pos)
