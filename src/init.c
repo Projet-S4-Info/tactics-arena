@@ -20,11 +20,11 @@ Ability Move_ab;
 err_t init_spawn(Entity * e, Coord c)
 {
     e->coords = c;
-    if(verbose>=0)printf("Setting %s Spawn at %d %d\n", e->cha_name, c.x, c.y);
+    if(verbose>=1)printf("Setting %s Spawn at %d %d\n", e->cha_name, c.x, c.y);
 
     free_spawn(e);
 
-    if(verbose>=0)printf("%s spawn set to %d %d\n", e->cha_name, e->coords.x, e->coords.y);
+    if(verbose>=1)printf("%s spawn set to %d %d\n", e->cha_name, e->coords.x, e->coords.y);
     
     return OK;
 }
@@ -60,7 +60,7 @@ err_t init_Foes(Direction d)
     for(i=0; i<NUM_CLASS; i++)
     {
         rec_id_swap(recep(&e,sizeof(init_ent),socketConnected));
-        if(verbose>=0)
+        if(verbose>=2)
         {
             printf("Init foes id char : %d\n", e.char_id);
             printf("Init foes charname : %s\n", e.cha_name);
@@ -76,7 +76,7 @@ err_t init_Foes(Direction d)
         Foes[e.cha_class].coords = e.starting_position;
         t = getTile(e.starting_position);
         t->entity = &Foes[e.cha_class];
-        if(verbose>=0 && t->entity!=NULL)printf("%s spawned at %d,%d\n", Foes[e.cha_class].cha_name, Foes[e.cha_class].coords.x, Foes[e.cha_class].coords.y);
+        if(verbose>=2 && t->entity!=NULL)printf("%s spawned at %d,%d\n", Foes[e.cha_class].cha_name, Foes[e.cha_class].coords.x, Foes[e.cha_class].coords.y);
 
         ent_common_init(&Foes[e.cha_class]);     
     }

@@ -248,7 +248,7 @@ bool play_check(Entity *e)
 
 err_t action_set(action a)
 {
-    if(verbose>=0)printf("Application de l'action...\n");
+    if(verbose>=2)printf("Application de l'action...\n");
 
     if(is_online)
     {
@@ -266,7 +266,7 @@ err_t action_set(action a)
 
     play_check(&Allies[a.char_id-1]);
 
-    if(verbose>=0)printf("Action appliquee...\n");
+    if(verbose>=2)printf("Action appliquee...\n");
 
     return OK;    
 }
