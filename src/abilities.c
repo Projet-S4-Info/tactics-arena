@@ -398,6 +398,22 @@ int Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list)
 
 int Last_Sacrfice_fn(Coord c, Entity * e, StateList * list)
 {
+
+    new_death(e);
+
+    Entity * all;
+    get_team(e, &all, TRUE);
+    int i;
+    for(i=0; i<NUM_CLASS; i++)
+    {
+        if(same_coord((all+i)->coords,c))
+        {
+            break;
+        }
+    }
+
+    free_spawn(all+i);
+
     return 0;
 }
 

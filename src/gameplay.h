@@ -8,6 +8,7 @@ err_t get_team(Entity *e, Entity **all, bool same);
 winId game_over();
 int get_range(Entity *e, abilityId ab);
 char * get_desc(Entity * e, abilityId ab_id);
+int count_dead_allies(Entity *e);
 int get_cost(Entity *e, abilityId Id);
 int get_cooldown(Entity * e, abilityId Id);
 char * get_name(Entity * e, abilityId ab_id);
