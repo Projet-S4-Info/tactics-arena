@@ -426,7 +426,7 @@ int displayAbilities(SDL_Renderer *renderer)
 {
 	Entity * tempEntity = getEntity(getSelectedPos());
 	// Abilities icons
-	if (selected_ability == Last_Sacrifice)
+	if (selected_ability != Last_Sacrifice)
 	{
 		displaySprite(renderer, getTexture(textures, "move"), 16, yWinSize-80);
 		displayText(renderer, 21, yWinSize-80+5, 20, "1", "../inc/font/Pixels.ttf", 49, 174, 196, FALSE);
