@@ -375,22 +375,19 @@ int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
 
 int Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list)
 {
-    Entity * all;
-
-    get_team(e, &all, TRUE);
+    int count = count_dead_allies(e);
+    Entity * tab[count];
+    get_dead_allies(e, tab);
 
     int i;
 
     Status s = {0, Summoned, 1};
 
-    for(i=0; i<NUM_CLASS; i++)
+    for(i=0; i<count; i++)
     {
-        if((all + i)->active != Alive)
-        {
-            apply_status(s,all+i, list, e->cha_id);
-            (all+i)->active = Alive;
-            free_spawn(all+i);
-        }
+        apply_status(s,tab[i], list, e->cha_id);
+        tab[i]->active = Alive;
+        free_spawn(tab[i]);
     }
 
     return 0;
