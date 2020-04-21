@@ -456,6 +456,7 @@ int displayAbilities(SDL_Renderer *renderer)
 	// Dead allies menu for last sacrifice ability
 	{
 		Entity * deadAllies[count_dead_allies(tempEntity)];
+		get_dead_allies(tempEntity, deadAllies);
 		for (int i=0; i < count_dead_allies(tempEntity); i++)
 		{
 			displaySprite(renderer, getCharFrontTexture(deadAllies[i]->cha_class->cla_name), 16+(i+1)*80+5, yWinSize-80+5);
