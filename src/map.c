@@ -387,7 +387,7 @@ int selectTile(int xpos, int ypos, int mx, int my)
 		return 0;
 	}
 
-	if (verbose >= 1) printf("[GRAPHICS] Case sélectionnée : %d, %d\n", xIndex, yIndex);
+	if (verbose >= 1) printf("\033[36;01m[MAP]\033[00m : Case sélectionnée : %d, %d\n", xIndex, yIndex);
 	(*(matrix+xIndex*_X_SIZE_+yIndex)).selected = 1;
 	Coord selectedTile = {xIndex, yIndex};
 	if (selectedEntity != NULL)
