@@ -156,6 +156,7 @@ err_t ent_init_test(Entity *e, char title[STR_SHORT])
     }
 
     (e + Mage)->cha_class->cla_abilities = &mage_ab[rand()%3][0];
+    (e + Mage)->active = Dead; // For testing
 
     return OK;
 }
