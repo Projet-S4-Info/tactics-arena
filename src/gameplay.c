@@ -95,6 +95,11 @@ int get_range(Entity *e, abilityId ab)
     
 }
 
+int get_cost(Entity *e, abilityId Id)
+{
+    return e->cha_class->cla_abilities[Id%NUM_AB].ab_cost;
+}
+
 int get_cooldown(Entity * e, abilityId Id)
 {
     return e->ab_cooldown[Id%NUM_AB];
