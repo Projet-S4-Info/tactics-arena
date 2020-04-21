@@ -13,6 +13,7 @@
 #include "text.h"
 #include "game_window.h"
 #include "abilities.h"
+#include "print.h"
 
 bool game_setup = FALSE;
 bool is_online = FALSE;
@@ -169,6 +170,9 @@ err_t turn_end(Entity *e, StateList * list)
         if((e+i)->status_effect[Burning])
         {
             e->stat_mods[pv]-=3;
+            char log[STR_LONG];
+            sprintf(log, "%s was hurt by his burn", (e+i)->cha_name);
+            addLog(log);
             death_check(e);
         }
 
@@ -202,6 +206,7 @@ err_t test_turn()
     turn_start(Foes);
     turn_end(Foes, stSent);
     turn_start(Allies);
+    if(verbose >= 2)print_StateList(stSent, "");
     return OK;
 }
 

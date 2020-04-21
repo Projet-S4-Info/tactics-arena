@@ -111,6 +111,22 @@ int count_dead_allies(Entity *e)
     return death_count;
 }
 
+Entity ** get_dead_allies(Entity *e, Entity * tab[])
+{
+    Entity * all;
+    get_team(e, &all, TRUE);
+    int i,j=0;
+    for(i=0; i<NUM_CLASS; i++)
+    {
+        if((all+i)->active == Dead)
+        {
+            tab[j++] = all+i;
+        }
+    }
+
+    return (Entity **)tab;
+}
+
 int get_cost(Entity *e, abilityId Id)
 {
     return e->cha_class->cla_abilities[Id%NUM_AB].ab_cost;

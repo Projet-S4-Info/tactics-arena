@@ -294,7 +294,7 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
 
 
 
-    Ability abtemp1 = {Fireball,1,0,8,BOTH,&one_m,1,&one_c,1,&fire1,AFTER,mage_switch,{"Fireball","Deals damage and has a chance to set target ablaze."}};
+    Ability abtemp1 = {Fireball,1,0,8,ANY_TILE,&one_m,1,&one_c,1,&fire1,AFTER,mage_switch,{"Fireball","Deals damage and has a chance to set target ablaze."}};
     movesets[0][0] = abtemp1;
     Ability abtemp2 = {FlameCharge,2,3,10,FREE_TILE,&one_m,1,&one_c,1,&fire2,ONLY,FlameCharge_fn,{"FlameCharge","Engulf yourself in flames and dash, dealing damage and burning entities in your path."}};
     movesets[0][1] = abtemp2;
@@ -303,7 +303,7 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
     Ability abtemp4 = {Eruption,3,5,12,ANY_TILE,&u,75,&aoe75,1,&fire2,NONE,NULL,{"Eruption","Deal massive damage in a zone and burn all entities."}};
     movesets[0][3] = abtemp4;
 
-    Ability abtemp11 = {Icy_Winds,1,0,8,FOES,&one_m,1,&one_c,1,&ice1,AFTER,mage_switch,{"Icy Winds","Deals damage and has a chance to freeze target."}};
+    Ability abtemp11 = {Icy_Winds,1,0,8,ANY_TILE,&one_m,1,&one_c,1,&ice1,AFTER,mage_switch,{"Icy Winds","Deals damage and has a chance to freeze target."}};
     movesets[1][0] = abtemp11;
     Ability abtemp12 = {Freeze,2,3,8,FOES,&red,1,&one_c,1,&ice2,NONE,NULL,{"Freeze","Deal damage to and freeze an ennemy. "}};
     movesets[1][1] = abtemp12;
@@ -312,7 +312,7 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
     Ability abtemp14 = {Blizzard,3,5,12,ANY_TILE,&d,75,&aoe75,2,&ice3,DURING,Blizzard_fn,{"Blizzard","Deal damage in a zone and highly reduce ennemy vision for a turn, has a chance to freeze ennemies. Water tiles in the are will also freeze."}};
     movesets[1][3] = abtemp14;
 
-    Ability abtemp21 = {Shock,1,0,8,FOES,&d,1,&one_c,0,NULL,AFTER,mage_switch,{"Shock","Zap an ennemy."}};
+    Ability abtemp21 = {Shock,1,0,8,ANY_TILE,&d,1,&one_c,0,NULL,AFTER,mage_switch,{"Shock","Zap an ennemy."}};
     movesets[2][0] = abtemp21;
     Ability abtemp22 = {Volt_Switch,2,3,10,ALLIES,&one_m,51,&aoe51,0,NULL,BEFORE,Volt_Switch_fn,{"Volt Switch","Switch spots with an ally and deal electric damage around caster."}};
     movesets[2][1] = abtemp22;
