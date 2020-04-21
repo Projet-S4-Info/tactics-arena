@@ -221,7 +221,7 @@ int Flare_fn(Coord c, Entity * e, StateList * list)
 
     for(i=0; i<a.nb_coords; i++)
     {
-        c2 = add_coords(c , *(*(a.coord)+i));
+        c2 = add_coords(c , *((*(a.coord))+i));
         if(isInGrid(c2))
         {
             t = Get_Trap(c2);
@@ -270,7 +270,7 @@ int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
         setActionBorder(ct, 6, t);
         for(j=0; j<NUM_CLASS; j++)
         {
-            if(isInRange(t, (all+j)->coords))
+            if(isInRange(t, (all+j)->coords) && !same_coord(ct, (all+j)->coords))
             {
                 if(closest.x == -99)
                 {
@@ -338,18 +338,29 @@ int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
     Entity * all;
     get_team(e, &all, FALSE);
 
-    int i,j=0;
-    int tab[NUM_CLASS];
+    int i;
+    Coord closest = {-99,-99}, ctemp;
 
     for(i=0; i<NUM_CLASS; i++)
     {
         if((all+i)->active)
         {
-            tab[j++] = (all+i)->cha_class->cla_id;
+            if(closest.x == -99)
+            {
+                t = all+i;
+                closest = compare_coords(c, t->coords);
+            }
+            else
+            {
+                ctemp = compare_coords(c, (all+i)->coords);
+                if(closer_coords(ctemp, closest))
+                {
+                    t = all+i;
+                    closest = ctemp;
+                }
+            }
         }
     }
-
-    t = &all[tab[rand()%j]];
 
     f=getEntity(c);
 

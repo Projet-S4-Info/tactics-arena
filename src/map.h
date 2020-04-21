@@ -19,6 +19,7 @@ float crossProduct(Vector AB, Vector AC);
 int displayAbilities(SDL_Renderer * renderer);
 int displayInterface(SDL_Renderer * renderer);
 int displayMap(SDL_Renderer *renderer, int x, int y);
+int hoverTile(int xpos, int ypos, int mx, int my);
 int selectTile(int xpos, int ypos, int mx, int my);
 
 #endif

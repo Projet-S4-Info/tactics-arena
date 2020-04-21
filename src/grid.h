@@ -43,6 +43,10 @@ Coord getSelectedPos();
 
 void unselect();
 
+void unhover();
+
+void setHovered(Coord pos);
+
 void setSelected(Coord pos);
 
 void freezeWater(Coord pos);

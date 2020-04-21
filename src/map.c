@@ -114,6 +114,12 @@ int loadMapTextures(SDL_Renderer * renderer)
 						loadTexture(renderer, loadImage("../inc/img/interface/selection_128.png")),
 						"selection");
 
+	// Loading selection hover textures
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/interface/hover_64.png")),
+						loadTexture(renderer, loadImage("../inc/img/interface/hover_128.png")),
+						"selection_hover");
+
 	// Loading ability range textures
 	addTextureToTable(	textures,
 						loadTexture(renderer, loadImage("../inc/img/interface/ability_range_64.png")),
@@ -161,6 +167,12 @@ int loadMapTextures(SDL_Renderer * renderer)
 						loadTexture(renderer, loadImage("../inc/img/interface/attack_logo_64.png")),
 						NULL,
 						"attack");
+
+	// Loading locked attack logo
+	addTextureToTable(	textures,
+						loadTexture(renderer, loadImage("../inc/img/interface/locked_attack_logo_64.png")),
+						NULL,
+						"locked_attack");
 
 	// Loading move logo
 	addTextureToTable(	textures,
@@ -221,11 +233,95 @@ int loadMapTextures(SDL_Renderer * renderer)
 	return index+1;
 }
 
+
 float crossProduct(Vector AB, Vector AC)
 // Renvoie le produit vectoriel
 {
 	return (( AB.y * AC.x ) - ( AB.x * AC.y ));
 }
+
+
+int hoverTile(int xpos, int ypos, int mx, int my)
+// Set the tile selected according to 2D iso from 2D coordinates
+{
+	int xIndex, yIndex, xIsoOrigin, yIsoOrigin, xTile, yTile;
+	float cpAB, cpBC, cpDC, cpAD;
+	Entity * tempEntity;
+
+	unhover();
+
+	// Position de l'origine de la map en 2D isométrique
+	xIsoOrigin = xpos;
+	yIsoOrigin = ypos+_Y_SIZE_*(pxBase/4);
+
+	// Coordonnées 2D -> 2D iso
+	xIndex = floor(((my-yIsoOrigin)/(pxBase/2) + ((mx-xIsoOrigin)/pxBase)))-1;
+	yIndex = ceil((((mx-xIsoOrigin)/pxBase) - (my-yIsoOrigin)/(pxBase/2)))-1;
+
+	if (my < yIsoOrigin){
+		xIndex--;
+		yIndex++;
+	}
+
+	xTile = xpos+((((xIndex+yIndex)/2)+1)*pxBase);
+	yTile = ypos+((_Y_SIZE_-(yIndex-xIndex))*(pxBase/4)+(pxBase/4));
+	if(verbose >= 1)printf("xTile : %d yTile : %d\n", xTile, yTile);
+
+	// Calcul des coordonnées des 4 coins de la tile
+	Coord A = { xTile, yTile };
+	Coord B = { xTile + (pxBase / 2), yTile - (pxBase / 2) };
+	Coord C = { xTile + pxBase, yTile };
+	Coord D = { xTile + (pxBase / 2), yTile + (pxBase / 4) };
+
+	// Calcul des coordonnées des vecteurs de la tile
+	Vector AB = { B.x - A.x, B.y - A.y };
+	Vector AM = { mx - A.x, my - A.y };
+	Vector BC = { C.x - B.x, C.y - B.y };
+	Vector BM = { mx - B.x, my - B.y };
+	Vector DC = { C.x - D.x, C.y - D.y };
+	Vector DM = { mx - D.x, my - D.y };
+	Vector AD = { D.x - A.x, D.y - A.y };
+	Vector A2M = { mx - A.x, my - A.y };
+	cpAB = crossProduct(AB, AM);
+	cpBC = crossProduct(BC, BM);
+	cpDC = crossProduct(DC, DM);
+	cpAD = crossProduct(AD, A2M);
+
+	// Sélection de la case sélectionnée en fonction de la position relative du clic et des vecteurs
+	if (cpAB > 0){
+		xIndex--;
+	} else if (cpBC > 0){
+		yIndex++;
+	} else if (cpDC < 0){
+		xIndex++;
+	} else if (cpAD < 0){
+		yIndex--;
+	}
+
+	if (xIndex > _X_SIZE_-1 || yIndex > _Y_SIZE_-1 || xIndex < 0 || yIndex < 0)
+	{
+		return 0;
+	}
+
+	(*(matrix+xIndex*_X_SIZE_+yIndex)).hovered = 1;
+
+	if (selected_ability != -1)
+	{
+		Coord center = {xIndex, yIndex};
+		tempEntity = getEntity(getSelectedPos());
+		if (tempEntity->cha_class->cla_abilities[selected_ability%NUM_AB].nb_coords > 1 && isInRange(borderTab, center))
+		{
+			for (int i=0; i < tempEntity->cha_class->cla_abilities[selected_ability%NUM_AB].nb_coords; i++)
+			{
+				Coord highlight = add_coords(center, *((*(tempEntity->cha_class->cla_abilities[selected_ability%NUM_AB].coord))+i));
+				if (isInGrid(highlight)) setHovered(highlight);
+			}
+		}
+	}
+
+	return 1;
+}
+
 
 int selectTile(int xpos, int ypos, int mx, int my)
 // Set the tile selected according to 2D iso from 2D coordinates
@@ -300,7 +396,10 @@ int selectTile(int xpos, int ypos, int mx, int my)
 		if (selected_ability != -1)
 		{
 			if (Cast_check(act, borderTab)) {
+				Entity * caster = selectedEntity;
 				action_set(act);
+				selected_ability = -1;
+				setSelected(caster->coords);
 			}
 			else
 			{
@@ -325,12 +424,25 @@ int selectTile(int xpos, int ypos, int mx, int my)
 int displayAbilities(SDL_Renderer *renderer)
 // Display the abilities menu
 {
+	Entity * tempEntity = getEntity(getSelectedPos());
 	// Abilities icons
 	displaySprite(renderer, getTexture(textures, "move"), 16, yWinSize-80);
-	displaySprite(renderer, getTexture(textures, "attack"), 16+1*80, yWinSize-80);
-	displaySprite(renderer, getTexture(textures, "attack"), 16+2*80, yWinSize-80);
-	displaySprite(renderer, getTexture(textures, "attack"), 16+3*80, yWinSize-80);
-	displaySprite(renderer, getTexture(textures, "attack"), 16+4*80, yWinSize-80);
+	displayText(renderer, 21, yWinSize-80+5, 20, "1", "../inc/font/Pixels.ttf", 49, 174, 196, FALSE);
+	for (int i=0; i < 4; i++)
+	{
+		char abCost[10];
+		sprintf(abCost, "%d", tempEntity->cha_class->cla_abilities[i].ab_cost);
+		if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[i].ab_id, FALSE))
+		{
+			displaySprite(renderer, getTexture(textures, "attack"), 16+(i+1)*80, yWinSize-80);
+			displayText(renderer, 16+(i+1)*80+5, yWinSize-80+5, 20, abCost, "../inc/font/Pixels.ttf", 49, 174, 196, FALSE);
+		}
+		else
+		{
+			displaySprite(renderer, getTexture(textures, "locked_attack"), 16+(i+1)*80, yWinSize-80);
+			displayText(renderer, 16+(i+1)*80+5, yWinSize-80+5, 20, abCost, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+		}
+	}
 	displaySprite(renderer, getTexture(textures, "turn_right"), 16+5*80, yWinSize-80);
 	displaySprite(renderer, getTexture(textures, "turn_left"), 16+6*80, yWinSize-80);
 
@@ -591,6 +703,13 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 				{
 					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "selection"), blockPos.x, blockPos.y);
 					else				displaySprite(renderer, getBigTexture(textures, "selection"), blockPos.x, blockPos.y);
+				}
+
+				// Affichage tuile hover
+				if ((*(matrix+i*_X_SIZE_+j)).hovered == 1)
+				{
+					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "selection_hover"), blockPos.x, blockPos.y);
+					else				displaySprite(renderer, getBigTexture(textures, "selection_hover"), blockPos.x, blockPos.y);
 				}
 
 				if ((*(matrix+i*_X_SIZE_+j)).entity != NULL)

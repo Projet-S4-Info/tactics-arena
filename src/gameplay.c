@@ -56,8 +56,6 @@ err_t get_team(Entity *e, Entity **all, bool same)
     return OK;
 }
 
-
-
 winId game_over()
 {
     winId all_dead = LOSE;
@@ -97,6 +95,16 @@ int get_range(Entity *e, abilityId ab)
     
 }
 
+int get_cost(Entity *e, abilityId Id)
+{
+    return e->cha_class->cla_abilities[Id%NUM_AB].ab_cost;
+}
+
+int get_cooldown(Entity * e, abilityId Id)
+{
+    return e->ab_cooldown[Id%NUM_AB];
+}
+
 char * get_name(Entity * e, abilityId ab_id)
 {
     if(ab_id!=Mvt)
@@ -122,14 +130,35 @@ char * get_desc(Entity * e, abilityId ab_id)
     }
 }
 
-bool is_aoe(Entity * e, abilityId id)
+bool able_ability(Entity *e, abilityId ab_id, bool show_logs)
 {
-    return e->cha_class->cla_abilities[id%NUM_AB].nb_coords > 1;
-}
+    if(e->act_points < e->cha_class->cla_abilities[ab_id%NUM_AB].ab_cost)
+    {
+        if(show_logs)addLog("Not enough action points for that");
+        return FALSE;
+    }
+    else if(e->ab_cooldown[ab_id%NUM_AB]!=0)
+    {
+        if(show_logs)
+        {
+            char log[STR_SHORT];
+            sprintf(log, "%s is on cooldown", get_name(e, ab_id));
+            addLog(log);
+        }
+        return FALSE;
+    }
+    else if(e->status_effect[Freezing])
+    {
+        if(show_logs)
+        {
+            char log[STR_SHORT];
+            sprintf(log, "%s is frozen", get_name(e, ab_id));
+            addLog(log);
+        }
+        return FALSE;
+    }
 
-bool able_ability(Entity *e, abilityId ab_id)
-{
-    return e->act_points >= e->cha_class->cla_abilities[ab_id%NUM_AB].ab_cost;
+    return TRUE;
 }
 
 bool is_ally(Entity *e)
@@ -561,14 +590,24 @@ err_t apply_stat_change(Status s, Entity * target, StateList * list)
         sprintf(log_2, " for %d turns", s.duration);
         strcat(log, log_2);
         if(verbose>=1)printf("%s\n",log);
-        addLog(log);
+
+        if(s.value != 0)
+        {
+            addLog(log);
+        }
+
         return list_add(list, s, target);
     }
     else
     {
         strcat(log, " permanently");
         if(verbose>=1)printf("%s\n",log);
-        addLog(log);
+
+        if(s.value != 0)
+        {
+            addLog(log);
+        }
+        
         return OK;
     }
 }
@@ -607,7 +646,7 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
 
         for(i=0; i<active_ab.nb_coords; i++)
         {
-            c=add_coords(starting_point, *(active_ab.coord[i]));
+            c=add_coords(starting_point, *((*(active_ab.coord))+i));
 
             if(isInGrid(c))
             {

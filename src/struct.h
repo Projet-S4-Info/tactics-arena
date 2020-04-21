@@ -110,6 +110,7 @@ typedef struct
 {
     int tile_id;
     int selected;
+    int hovered;
     Entity * entity;
     Trap_t trap;
     int walkable;
