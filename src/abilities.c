@@ -15,7 +15,7 @@ int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
     t = getEntity(c);
     if(t!=NULL)
     {
-        if(t==Dead)
+        if(t->active == Dead)
         {
             char log[STR_LONG];
             sprintf(log, "%s's Killing Blow was triggered", e->cha_name);

@@ -37,7 +37,7 @@ err_t activate_aura(Entity *e, StateList *list)
     return OK;
 }
 
-err_t sentinel_check(Entity *e)
+bool sentinel_check(Entity *e)
 {
     if(Sentinel_counter)
     {
@@ -68,9 +68,13 @@ err_t sentinel_check(Entity *e)
             if(verbose>=1)printf("%s\n",log);
             addLog(log);
 
-            apply_to(r->cha_class->cla_abilities[Bolt%NUM_AB], r, list, e->coords);
             Sentinel_counter = FALSE;
+
+            if(apply_to(r->cha_class->cla_abilities[Bolt%NUM_AB], r, list, e->coords) != 0)
+            {
+                return TRUE;
+            }
         }
     }
-    return OK;
+    return FALSE;
 }

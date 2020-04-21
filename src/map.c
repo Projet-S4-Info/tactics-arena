@@ -265,7 +265,6 @@ int hoverTile(int xpos, int ypos, int mx, int my)
 
 	xTile = xpos+((((xIndex+yIndex)/2)+1)*pxBase);
 	yTile = ypos+((_Y_SIZE_-(yIndex-xIndex))*(pxBase/4)+(pxBase/4));
-	if(verbose >= 1)printf("xTile : %d yTile : %d\n", xTile, yTile);
 
 	// Calcul des coordonnées des 4 coins de la tile
 	Coord A = { xTile, yTile };
@@ -347,7 +346,6 @@ int selectTile(int xpos, int ypos, int mx, int my)
 
 	xTile = xpos+((((xIndex+yIndex)/2)+1)*pxBase);
 	yTile = ypos+((_Y_SIZE_-(yIndex-xIndex))*(pxBase/4)+(pxBase/4));
-	if(verbose >= 1)printf("xTile : %d yTile : %d\n", xTile, yTile);
 
 	// Calcul des coordonnées des 4 coins de la tile
 	Coord A = { xTile, yTile };

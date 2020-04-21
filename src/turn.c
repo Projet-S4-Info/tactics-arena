@@ -86,6 +86,7 @@ err_t apply_action(action a)
 
     active_ab = active_ent->cha_class->cla_abilities[a.act%NUM_AB];
 
+    if(verbose>=0)print_Ability(&active_ab, "");
     if(verbose>=1)printf("\n\n%s has chosen to %s at the following coordinates : %d,%d\n", active_ent->cha_name, active_ab.eng.name, a.c.x, a.c.y);
 
     sprintf(log, "%s cast %s", active_ent->cha_name, active_ab.eng.name);

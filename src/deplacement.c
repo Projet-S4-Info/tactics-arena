@@ -185,9 +185,12 @@ err_t simple_move(Entity * e, Coord tabcoord[])
         Coord target = {e->coords.x, e->coords.y};
         setSelected(target);
         if(verbose>=2)printf("Completed\n");
-        sentinel_check(e);
         displayMap(SDL_GetRenderer(pWindow), XPOS, YPOS);
         SDL_Delay(250);
+        if(sentinel_check(e))
+        {
+            break;
+        }
     }
 
     return OK;
@@ -238,11 +241,15 @@ err_t total_move(Entity * e, Coord tabcoord[])
         Coord target = {e->coords.x, e->coords.y};
         setSelected(target);
         if(verbose>=2)printf("Completed\n");
-        sentinel_check(e);
         
         displayMap(SDL_GetRenderer(pWindow), XPOS, YPOS);
 
         SDL_Delay(200);
+
+        if(sentinel_check(e))
+        {
+            break;
+        }
     }
 
     e->idAnim = 0;

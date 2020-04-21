@@ -461,12 +461,11 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target)
 
     char log[STR_LONG];
 
-
-    if(target->cha_id==Goliath)
+    if(target->cha_class->cla_id==Goliath)
     {
         int block = target->status_effect[Guarding] == 1 ? 70 : 30;
 
-        if(verbose>=2)printf("Block chance : %d\n", block);
+        if(verbose>=1)printf("Block chance : %d\n", block);
 
         if(block>=(rand()%100+1))
         {
@@ -481,8 +480,6 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target)
             if(verbose>=2)printf("Block Failed!\n");
         }
     }
-
-
 
     int frozen = target->status_effect[Freezing] == 1 ? 6 : 0;
 
@@ -521,7 +518,6 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target)
 
 err_t apply_status(Status s, Entity *target, StateList *list, int caster_id)
 {
-
     char log[STR_LONG];
 
     if(verbose>=2)printf("Modifier is a status effect!\n");
@@ -648,7 +644,7 @@ err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
 {
     if(m.chance*100>=(rand()%100+1))
     {
-        if(verbose>=2)printf("Modifier landed!\n");
+        if(verbose>=1)printf("Modifier landed!\n");
 
         if(m.effect.value==0)
         {

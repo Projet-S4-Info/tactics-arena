@@ -112,7 +112,7 @@ int createGameWindow(int x, int y)
 		exit(EXIT_FAILURE);
 	}
 
-	printf("\033[31;01m[GAME_WINDOW ERROR]\033[00m : %s", error_message[setRendererDriver(renderer)]);
+	printf("%s", error_message[setRendererDriver(renderer)]);
 
 	// Launcher icon
     SDL_SetWindowIcon(pWindow, loadImage("../inc/sprites/goliath/sprite_indiv/64_64/front/Sprite_frontview_64.png"));

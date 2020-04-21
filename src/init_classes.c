@@ -102,7 +102,7 @@ err_t init_berserker(Class * c)
     *(ab+1) = abtemp2;
     Ability abtemp3 = {Fury,2,2,0,ANY_TILE,NULL,1,&one_c,0,NULL,ONLY,Fury_fn,{"Fury","Remove all debuffs and permanently increase attack by the number of turns removed."}};
     *(ab+2) = abtemp3;
-    Ability abtemp4 = {Frenzied_Dash,3,4,9,FREE_TILE,&FD,51,&aoe51,0,NULL,BEFORE,NULL,{"Frenzied Dash","Jump to a tile, dealing aoe damage when landing."}};
+    Ability abtemp4 = {Frenzied_Dash,3,4,9,FREE_TILE,&FD,51,&aoe51,0,NULL,BEFORE,Frenzied_Dash_fn,{"Frenzied Dash","Jump to a tile, dealing aoe damage when landing."}};
     *(ab+3) = abtemp4;
 
     Class temp = 
