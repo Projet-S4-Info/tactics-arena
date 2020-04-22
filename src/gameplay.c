@@ -335,68 +335,95 @@ err_t free_spawn(Entity *e)
 
 err_t remove_mod(Status * stat, Entity * e, bool show_log)
 {
-    char log[STR_LONG];
-
-    if(stat->value==0)
+    if(stat!=NULL)
     {
-        if(verbose>=2)printf("Modifier to remove is a status effect!\n");
-        e->status_effect[stat->stat] = 0;
-        sprintf(log, "%s is no longer %s", e->cha_name, statusName[stat->stat]);
-        
-        if(stat->stat == Summoned)
-        {
-            new_death(e);
-        }
-        else if(stat->stat == Detained)
-        {
-            end_Detain(e);
-        }
-    }
-    else
-    {
-        if(verbose>=2)printf("Modifier to remove is a stat change of a value of %d\n", stat->value);
-        if(verbose>=2)printf("Stat before the change : %d\n", e->stat_mods[stat->stat]);
+        char log[STR_LONG];
 
-        e->stat_mods[stat->stat] += stat->value *-1;
-
-        if(verbose>=2)printf("Stat after the change : %d\n", e->stat_mods[stat->stat]);
-
-        if(stat->value < 0)
+        if(stat->value==0)
         {
-            sprintf(log, "%s no longer has decreased %s", e->cha_name, statName[stat->stat]);
+            if(verbose>=2)printf("Modifier to remove is a status effect!\n");
+            e->status_effect[stat->stat] = 0;
+            sprintf(log, "%s is no longer %s", e->cha_name, statusName[stat->stat]);
+            
+            if(stat->stat == Summoned)
+            {
+                new_death(e);
+            }
+            else if(stat->stat == Detained)
+            {
+                end_Detain(e);
+            }
         }
         else
         {
-            sprintf(log, "%s no longer has increased %s", e->cha_name, statName[stat->stat]);
+            if(verbose>=2)printf("Modifier to remove is a stat change of a value of %d\n", stat->value);
+            if(verbose>=2)printf("Stat before the change : %d\n", e->stat_mods[stat->stat]);
+
+            e->stat_mods[stat->stat] += stat->value *-1;
+
+            if(verbose>=2)printf("Stat after the change : %d\n", e->stat_mods[stat->stat]);
+
+            if(stat->value < 0)
+            {
+                sprintf(log, "%s no longer has decreased %s", e->cha_name, statName[stat->stat]);
+            }
+            else
+            {
+                sprintf(log, "%s no longer has increased %s", e->cha_name, statName[stat->stat]);
+            }
         }
+
+        if(verbose>=2)printf("%s\n", log);
+
+        if(show_log)
+        {
+            addLog(log);
+        }
+
+        return OK;
     }
-
-    if(verbose>=2)printf("%s\n", log);
-
-    if(show_log)
+    else
     {
-        addLog(log);
+        return POINTER_NULL;
     }
-
-    return OK;
 }
 
-Status * renew_mod(Entity * e, statusId status)
+Status * renew_mod(Entity * e, statusId status, Status *s)
 {
+    char log[STR_LONG];
+    if(verbose>=2)
+    {
+        sprintf(log,"Renewing %s's ",e->cha_name);
+        print_statusId(status, log);
+    }
+
     List_Elem * v;
 
     start_list(stReceived);
     v = list_search(stReceived,e,-status);
-    list_remove(stReceived);
-
-    if(v==NULL)
+    if(v!=NULL)
+    {   
+        s = v->value;
+        list_remove(stReceived);
+    }
+    else
     {
         start_list(stSent);
         v = list_search(stSent,e,-status);
-        list_remove(stSent);
+        if(v!=NULL)
+        {
+            s = v->value;
+            list_remove(stSent);
+        }
     }
 
-    return v->value;
+    if(verbose>=2)
+    {
+        sprintf(log,"Finished renewing %s's ",e->cha_name);
+        print_statusId(status, log);
+    }
+
+    return s;
 }
 
 err_t new_death(Entity * e)
@@ -547,13 +574,15 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target, bool show_log)
 err_t apply_status(Status s, Entity *target, StateList *list, int caster_id, bool show_log)
 {
     char log[STR_LONG];
+    Status renew;
 
     if(verbose>=2)printf("Modifier is a status effect!\n");
 
-    if(target->status_effect[s.stat])
+    if(target->status_effect[s.stat] != 0)
     {
-        renew_mod(target, s.stat);
+        renew_mod(target, s.stat, &renew);
         sprintf(log, "%s is still %s", target->cha_name, statusName[s.stat]);
+        if(verbose>=1)printf("%s\n", log);
     }
 
     else if(s.stat==Provoked)
@@ -567,7 +596,7 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id, boo
 
     else if(s.stat==Burning && target->status_effect[Freezing])
     {
-        remove_mod(renew_mod(target, Freezing),target, FALSE);
+        remove_mod(renew_mod(target, Freezing, &renew),target, FALSE);
         if(verbose>=1)printf("Attempting to burn %s has thawed him out!\n", target->cha_name);
         sprintf(log, "Attempting to burn %s has thawed him out", target->cha_name);
         if(show_log)addLog(log);
@@ -596,8 +625,10 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id, boo
         sprintf(log, "%s is %s", target->cha_name, statusName[s.stat]);
     }
 
+
     if(s.duration!=0)
     {
+        if(verbose>=2)printf("Duration != 0\n");
         char log_2[STR_SHORT];
         sprintf(log_2, " for %d turns", s.duration);
         strcat(log, log_2);
@@ -607,6 +638,7 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id, boo
     }
     else
     {
+        if(verbose>=2)printf("Duration == 0\n");
         strcat(log, " permanently");
         if(verbose>=1)printf("%s\n",log);
         if(show_log)addLog(log);
@@ -616,54 +648,56 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id, boo
 
 err_t apply_stat_change(Status s, Entity * target, StateList * list, bool show_log)
 {
-    char log[STR_LONG];
-
-    if(verbose>=2)printf("Modifier is a stat change of %d\n", s.value);
-    if(verbose>=2)printf("Stat before the change : %d\n", target->stat_mods[s.stat]);
-
-    target->stat_mods[s.stat] += s.value;
-
-    if(target->stat_mods[s.stat]>20)
+    if(s.value!=0)
     {
-        s.value -= target->stat_mods[s.stat] - 20;
-        target->stat_mods[s.stat] = 20;
-    }
-    else if(target->stat_mods[s.stat]<0)
-    {
-        s.value -= target->stat_mods[s.stat];
-        target->stat_mods[s.stat] = 0;
-    }
+        char log[STR_LONG];
 
-    sprintf(log, "%s's %s was altered by %d", target->cha_name, statName[s.stat], s.value);
-    
-    if(verbose>=2)printf("Stat after the change : %d\n", target->stat_mods[s.stat]);
+        if(verbose>=2)printf("Modifier is a stat change of %d\n", s.value);
+        if(verbose>=2)printf("Stat before the change : %d\n", target->stat_mods[s.stat]);
 
-    if(s.duration!=0)
-    {
-        char log_2[STR_SHORT];
-        sprintf(log_2, " for %d turns", s.duration);
-        strcat(log, log_2);
-        if(verbose>=1)printf("%s\n",log);
+        target->stat_mods[s.stat] += s.value;
 
-        if(s.value != 0)
+        if(target->stat_mods[s.stat]>20)
         {
-            if(show_log)addLog(log);
+            s.value -= target->stat_mods[s.stat] - 20;
+            target->stat_mods[s.stat] = 20;
+        }
+        else if(target->stat_mods[s.stat]<0)
+        {
+            s.value -= target->stat_mods[s.stat];
+            target->stat_mods[s.stat] = 0;
         }
 
-        return list_add(list, s, target);
-    }
-    else
-    {
-        strcat(log, " permanently");
-        if(verbose>=1)printf("%s\n",log);
-
-        if(s.value != 0)
-        {
-            if(show_log)addLog(log);
-        }
+        sprintf(log, "%s's %s was altered by %d", target->cha_name, statName[s.stat], s.value);
         
-        return OK;
+        if(verbose>=2)printf("Stat after the change : %d\n", target->stat_mods[s.stat]);
+
+        if(s.duration!=0)
+        {
+            char log_2[STR_SHORT];
+            sprintf(log_2, " for %d turns", s.duration);
+            strcat(log, log_2);
+            if(verbose>=1)printf("%s\n",log);
+
+            if(s.value != 0)
+            {
+                if(show_log)addLog(log);
+            }
+
+            return list_add(list, s, target);
+        }
+        else
+        {
+            strcat(log, " permanently");
+            if(verbose>=1)printf("%s\n",log);
+
+            if(s.value!=0)
+            {
+                if(show_log)addLog(log);
+            }
+        }
     }
+    return OK;
 }
 
 err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
