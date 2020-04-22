@@ -552,6 +552,7 @@ int displayInterface(SDL_Renderer *renderer)
 			} else {
 				if (hover_ability >= 0) 
 				{
+					char costDesc[20];
 					sprintf(hoverAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, hover_ability)), get_desc(tempEntity, hover_ability));
 					displayText(renderer, 16, yWinSize-110, 20, hoverAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 				}

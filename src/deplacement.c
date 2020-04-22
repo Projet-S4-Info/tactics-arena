@@ -244,7 +244,7 @@ err_t total_move(Entity * e, Coord tabcoord[])
         
         displayMap(SDL_GetRenderer(pWindow), XPOS, YPOS);
 
-        SDL_Delay(200);
+        SDL_Delay(150);
 
         if(sentinel_check(e))
         {

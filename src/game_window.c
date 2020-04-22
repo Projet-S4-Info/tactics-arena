@@ -58,6 +58,10 @@ int *exitThread;
 int xWinSize, yWinSize;						// x and y sizes of the window
 Coord mouse_position;
 
+
+/* =============== TCHAT ================ */
+
+
 char pseudoChat[STR_SHORT] = "Chat : ";
 int changesChat = 0;
 
@@ -200,10 +204,8 @@ int createGameWindow(int x, int y)
 			while(SDL_PollEvent(&e)) {
 				switch(e.type) {
 
-
 					case SDL_QUIT: running = 0;
 					break;
-
 
 					case SDL_WINDOWEVENT:
 						switch(e.window.event){
@@ -232,48 +234,90 @@ int createGameWindow(int x, int y)
 							{
 								if (your_turn())
 								{
-									// Mouvement
-									if (e.motion.x >= 16 && e.motion.x <= 80)
+									// Sélection des compétences
+									if (selected_ability != Last_Sacrifice)
 									{
-										if (able_ability(tempEntity, Mvt, TRUE)) selected_ability = Mvt;
+										// Mouvement
+										if (e.motion.x >= 16 && e.motion.x <= 80)
+										{
+											if (able_ability(tempEntity, Mvt, TRUE)) selected_ability = Mvt;
+										}
+										// Compétence 1
+										else if (e.motion.x >= 96 && e.motion.x <= 160)
+										{
+											if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id, TRUE)) selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+										}
+										// Compétence 2
+										else if (e.motion.x >= 176 && e.motion.x <= 240)
+										{
+											if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id, TRUE)) selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
+										}
+										// Compétence 3
+										else if (e.motion.x >= 256 && e.motion.x <= 320)
+										{
+											if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id, TRUE)) selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
+										}
+										// Compétence 4
+										else if (e.motion.x >= 336 && e.motion.x <= 400)
+										{
+											if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id, TRUE)) selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
+										}
+										// Tourner personnage vers la droite
+										else if (e.motion.x >= 416 && e.motion.x <= 480)
+										{
+											turnRight(tempEntity);
+										}
+										// Tourner personnage vers la gauche
+										else if (e.motion.x >= 496 && e.motion.x <= 560)
+										{
+											turnLeft(tempEntity);
+										}
+										// Fin de tour
+										else if (e.motion.x >= xWinSize-280 && e.motion.x <= xWinSize-24 && e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
+										{
+											hover_next_turn = FALSE;
+											set_endturn();
+										}
+										else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 									}
-									// Compétence 1
-									else if (e.motion.x >= 96 && e.motion.x <= 160)
+									else
+									// Sélection de l'allié à ressuciter grâce à Last Sacrifice
 									{
-										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id, TRUE)) selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+										int nbDeadAllies = count_dead_allies(tempEntity);
+										action revive = {tempEntity->cha_id, {0,0}, Last_Sacrifice};
+										Entity * deadAllies[nbDeadAllies];
+										get_dead_allies(tempEntity, deadAllies);
+
+										// Allié 1
+										if (e.motion.x >= 16 && e.motion.x <= 80 && nbDeadAllies == 1)
+										{
+											revive.c = deadAllies[0]->coords;
+										}
+										// Allié 2
+										else if (e.motion.x >= 96 && e.motion.x <= 160 && nbDeadAllies == 2)
+										{
+											revive.c = deadAllies[0]->coords;
+										}
+										// Allié 3
+										else if (e.motion.x >= 176 && e.motion.x <= 240 && nbDeadAllies == 3)
+										{
+											revive.c = deadAllies[0]->coords;
+										}
+										// Allié 4
+										else if (e.motion.x >= 256 && e.motion.x <= 320 && nbDeadAllies == 4)
+										{
+											revive.c = deadAllies[0]->coords;
+										}
+										// Allié 5
+										else if (e.motion.x >= 336 && e.motion.x <= 400 && nbDeadAllies == 5)
+										{
+											revive.c = deadAllies[0]->coords;
+										}
+
+										action_set(revive);
+										selected_ability = -1;
+										unselect();
 									}
-									// Compétence 2
-									else if (e.motion.x >= 176 && e.motion.x <= 240)
-									{
-										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id, TRUE)) selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
-									}
-									// Compétence 3
-									else if (e.motion.x >= 256 && e.motion.x <= 320)
-									{
-										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id, TRUE)) selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
-									}
-									// Compétence 4
-									else if (e.motion.x >= 336 && e.motion.x <= 400)
-									{
-										if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id, TRUE)) selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-									}
-									// Tourner personnage vers la droite
-									else if (e.motion.x >= 416 && e.motion.x <= 480)
-									{
-										turnRight(tempEntity);
-									}
-									// Tourner personnage vers la gauche
-									else if (e.motion.x >= 496 && e.motion.x <= 560)
-									{
-										turnLeft(tempEntity);
-									}
-									// Fin de tour
-									else if (e.motion.x >= xWinSize-280 && e.motion.x <= xWinSize-24 && e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
-									{
-										hover_next_turn = FALSE;
-										set_endturn();
-									}
-									else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 
 									// Exception Last Sacrifice
 									if (selected_ability == Last_Sacrifice && count_dead_allies(tempEntity) < 1)
