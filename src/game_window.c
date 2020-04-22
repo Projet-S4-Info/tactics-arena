@@ -286,29 +286,32 @@ int createGameWindow(int x, int y)
 										if (e.motion.x >= 16 && e.motion.x <= 80 && nbDeadAllies == 1)
 										{
 											revive.c = deadAllies[0]->coords;
+											action_set(revive);
 										}
 										// Allié 2
 										else if (e.motion.x >= 96 && e.motion.x <= 160 && nbDeadAllies == 2)
 										{
 											revive.c = deadAllies[1]->coords;
+											action_set(revive);
 										}
 										// Allié 3
 										else if (e.motion.x >= 176 && e.motion.x <= 240 && nbDeadAllies == 3)
 										{
 											revive.c = deadAllies[2]->coords;
+											action_set(revive);
 										}
 										// Allié 4
 										else if (e.motion.x >= 256 && e.motion.x <= 320 && nbDeadAllies == 4)
 										{
 											revive.c = deadAllies[3]->coords;
+											action_set(revive);
 										}
 										// Allié 5
 										else if (e.motion.x >= 336 && e.motion.x <= 400 && nbDeadAllies == 5)
 										{
 											revive.c = deadAllies[4]->coords;
+											action_set(revive);
 										}
-
-										action_set(revive);
 										selected_ability = -1;
 										unselect();
 									}

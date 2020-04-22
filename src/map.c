@@ -467,7 +467,7 @@ int displayAbilities(SDL_Renderer *renderer)
 		get_dead_allies(tempEntity, deadAllies);
 		for (int i=0; i < count_dead_allies(tempEntity); i++)
 		{
-			displaySprite(renderer, getCharFrontTexture(deadAllies[i]->cha_class->cla_name), 16+(i+1)*80+5, yWinSize-80+5);
+			displaySprite(renderer, getCharFrontTexture(deadAllies[i]->cha_class->cla_name), 16+(i)*80+5, yWinSize-80+5);
 		}
 	}
 
