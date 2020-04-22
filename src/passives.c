@@ -41,6 +41,7 @@ bool sentinel_check(Entity *e)
 {
     if(Sentinel_counter)
     {
+        if(verbose>=2)printf("Launching Sentinel Check\n");
         Entity * r;
         StateList * list;
 
