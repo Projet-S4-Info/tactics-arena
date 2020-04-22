@@ -158,10 +158,10 @@ err_t ent_init_test(Entity *e, char title[STR_SHORT])
     (e + Mage)->cha_class->cla_abilities = &mage_ab[rand()%3][0];
 
     //DEAD CHARACTER FOR TESTS
-    int d = rand()%(NUM_CLASS-1);
+    /*int d = rand()%NUM_CLASS;
     (e+d)->active = Dead;
     Tile * t = getTile((e+d)->coords);
-    t->entity = NULL;
+    t->entity = NULL;*/
 
     return OK;
 }
