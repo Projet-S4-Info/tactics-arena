@@ -168,7 +168,7 @@ err_t turn_end(Entity *e, StateList * list)
 {
     if(verbose>=1)printf("Ending Turn\n");
     int i,j;
-    if(verbose>=1)printf("Checking for Burns && Derementing Cooldowns\n");
+    if(verbose>=1)printf("Checking for Burns & Derementing Cooldowns\n");
     for(i=0; i<NUM_CLASS; i++)
     {
         if((e+i)->status_effect[Burning])
@@ -196,8 +196,8 @@ err_t turn_end(Entity *e, StateList * list)
 
         if(elem!=NULL)
         {
-            list_remove(list);
             remove_mod(elem->value, elem->entity, TRUE);
+            list_remove(list);
         }
         list_next(list);
     }

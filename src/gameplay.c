@@ -355,9 +355,19 @@ err_t remove_mod(Status * stat, Entity * e, bool show_log)
     {
         if(verbose>=2)printf("Modifier to remove is a stat change of a value of %d\n", stat->value);
         if(verbose>=2)printf("Stat before the change : %d\n", e->stat_mods[stat->stat]);
+
         e->stat_mods[stat->stat] += stat->value *-1;
+
         if(verbose>=2)printf("Stat after the change : %d\n", e->stat_mods[stat->stat]);
-        sprintf(log, "%s is no longer %s", e->cha_name, statName[stat->stat]);
+
+        if(stat->value < 0)
+        {
+            sprintf(log, "%s no longer has decreased %s", e->cha_name, statName[stat->stat]);
+        }
+        else
+        {
+            sprintf(log, "%s no longer has increased %s", e->cha_name, statName[stat->stat]);
+        }
     }
 
     if(verbose>=2)printf("%s\n", log);

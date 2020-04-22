@@ -473,6 +473,7 @@ int Last_Sacrfice_fn(Coord c, Entity * e, StateList * list)
     }
 
     free_spawn(all+i);
+    (all+i)->active = Alive;
 
     return 0;
 }
