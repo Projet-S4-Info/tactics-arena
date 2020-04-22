@@ -119,7 +119,8 @@ err_t init_Allies(Coord spawn[NUM_CLASS], Direction d)
 
 err_t ent_init_test(Entity *e, char title[STR_SHORT])
 {
-    Coord ally_spawn[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
+    Coord ally_spawn[NUM_CLASS] = {{14,14},{16,14},{11,14},{14,10},{12,12},{15,12}};
+    //Coord ally_spawn[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
     Coord foe_spawn[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
     classId spawn_order[NUM_CLASS] = {Ranger, Mage, Angel, Valkyrie, Goliath, Berserker};
 

@@ -9,6 +9,8 @@
 #include "text.h"
 #include "print.h"
 
+#define DEF_MULT 15
+
 err_t rec_id_swap(action * a)
 {
     a->char_id *= -1;
@@ -80,11 +82,11 @@ winId game_over()
 
 int get_range(Entity *e, abilityId ab)
 {
-    int vision = e->stat_mods[vis];
-    int range_mod = e->cha_class->cla_abilities[ab%NUM_AB].range;
+    float vision = e->stat_mods[vis];
+    float range_mod = e->cha_class->cla_abilities[ab%NUM_AB].range;
 
 
-    int range = range_mod * (vision/10);
+    int range = (range_mod * (vision/10)) + 0.4;
 
     if(range<0)
     {
@@ -470,7 +472,6 @@ bool death_check(Entity * e)
 
 bool apply_damage(Damage * d, Entity * caster, Entity * target, bool show_log)
 {
-
     char log[STR_LONG];
 
     if(target->cha_class->cla_id==Goliath)
@@ -493,7 +494,7 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target, bool show_log)
         }
     }
 
-    int frozen = target->status_effect[Freezing] == 1 ? 6 : 0;
+    float frozen = target->status_effect[Freezing] == 1 ? 6 : 0;
 
     float crippled = target->status_effect[Cripple] == 1 ? 1.75 : 1;
 
@@ -506,18 +507,33 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target, bool show_log)
     if(verbose>=2)printf("%s's health before the attack : %d\n", target->cha_name, target->stat_mods[pv]);
 
     int d_value;
+    float stat_dmg = caster->stat_mods[d->type];
+    float stat_def = target->stat_mods[d->type+2];
 
     if(caster->status_effect[Piercing])
     {
         if(verbose>=2)printf("%s has piercing!\n", caster->cha_name);
-        target->stat_mods[pv] -= d_value = (caster->stat_mods[d->type] * d->multiplier * crippled) + 0.4;
+        d_value = (stat_dmg * d->multiplier * crippled) +0.4;
         sprintf(log, "%s pierced %s's defence and dealt %d damage", caster->cha_name, target->cha_name, d_value);
     }
     else
     {
-        target->stat_mods[pv] -= d_value = (caster->stat_mods[d->type]/(1+((target->stat_mods[d->type+2]+frozen)/15)) * d->multiplier * crippled) + 0.4;
+        d_value = ((stat_dmg/(1+((stat_def+frozen)/DEF_MULT))) * d->multiplier * crippled) + 0.4;
         sprintf(log, "%s dealt %d damage to %s", caster->cha_name, d_value, target->cha_name);
     }
+
+    if(verbose>=2)
+    {
+        printf("stat_dmg : %f\n", stat_dmg);
+        printf("stat_def : %f\n", stat_def);
+        printf("multiplier : %f\n", d->multiplier);
+        printf("DEF_MULT : %d\n", DEF_MULT);
+        printf("frozen : %f\n", frozen);
+        printf("crippled : %f\n", crippled);
+        printf("d_value : %d\n", d_value);
+    }
+
+    target->stat_mods[pv] -= d_value;
 
     if(verbose>=2)printf("%s's health after the attack : %d\n", target->cha_name, target->stat_mods[pv]);
 
