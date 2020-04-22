@@ -329,7 +329,6 @@ err_t free_spawn(Entity *e)
     {
         return POINTER_NULL;
     }
-
 }
 
 err_t remove_mod(Status * stat, Entity * e, bool show_log)

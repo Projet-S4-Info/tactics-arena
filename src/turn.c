@@ -168,7 +168,7 @@ err_t turn_end(Entity *e, StateList * list)
 {
     if(verbose>=1)printf("Ending Turn\n");
     int i,j;
-    if(verbose>=1)printf("Checking for Burns & Derementing Cooldowns\n");
+    if(verbose>=1)printf("Checking for Burns & Decrementing Cooldowns\n");
     for(i=0; i<NUM_CLASS; i++)
     {
         if((e+i)->status_effect[Burning])
