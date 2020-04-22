@@ -31,7 +31,7 @@ err_t new_death(Entity * e);
 bool apply_damage(Damage * d, Entity * caster, Entity * target, bool show_log);
 
 err_t remove_mod(Status * stat, Entity * e, bool show_log);
-Status * renew_mod(Entity * e, statusId status);
+Status * renew_mod(Entity * e, statusId status, Status * s);
 
 err_t apply_stat_change(Status s, Entity * target, StateList * list, bool show_log);
 err_t apply_status(Status s, Entity *target, StateList *list, int caster_id, bool show_log);

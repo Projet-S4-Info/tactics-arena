@@ -109,7 +109,7 @@ err_t init_berserker(Class * c)
     {
         Berserker,
         "Berserker",
-        {20,8,10,10,0,10,10},
+        {20,8,10,8,0,10,10},
         {"Bloodlust","Killing two ennemies in the same turn refills action points and doubles mp and atk stats for one turn."},
         ab
     };
@@ -147,7 +147,7 @@ err_t init_ranger(Class * c)
     {
         Ranger,
         "Ranger",
-        {20,12,10,12,0,8,8},
+        {20,12,10,8,0,8,8},
         {"Sentinel","The first ennemy that moves inside a ranger's range every turn, will get bolted."},
         ab
     };
@@ -200,7 +200,7 @@ err_t init_goliath(Class * c)
     {
         Goliath,
         "Goliath",
-        {20,6,10,8,0,14,12},
+        {20,6,10,6,0,14,12},
         {"Guardian","Has a 30% chance to block incoming damage."},
         ab
     };
@@ -326,7 +326,7 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
     {
         Mage,
         "Mage",
-        {20,7,10,0,14,8,12},
+        {20,7,10,0,10,8,12},
         {"Elementalist","After every use of a basic attack, change element (Fire, Ice, Electricity)."},
         NULL
     };
@@ -362,7 +362,7 @@ err_t init_valkyrie(Class * c)
     {
         Valkyrie,
         "Valkyrie",
-        {20,10,10,10,10,10,10},
+        {20,10,10,10,6,10,10},
         {"Precision","Damaging an ennemy has a chance to paralyze them."},
         ab
     };
@@ -410,7 +410,7 @@ err_t init_angel(Class * c, Ability *pass)
     {
         Angel,
         "Angel",
-        {20,8,10,0,10,12,12},
+        {20,8,10,0,8,12,12},
         {"Aura","Heal all nearby allies at start of your turn."},
         ab
     };
