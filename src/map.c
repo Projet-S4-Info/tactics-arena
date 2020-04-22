@@ -546,13 +546,13 @@ int displayInterface(SDL_Renderer *renderer)
 		if (is_ally(tempEntity))
 		{
 			displayAbilities(renderer);
+
 			if (selected_ability != -1){
 				sprintf(selectedAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, selected_ability)), get_desc(tempEntity, selected_ability));
 				displayText(renderer, 16, yWinSize-110, 20, selectedAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 			} else {
 				if (hover_ability >= 0) 
 				{
-					char costDesc[20];
 					sprintf(hoverAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, hover_ability)), get_desc(tempEntity, hover_ability));
 					displayText(renderer, 16, yWinSize-110, 20, hoverAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 				}
