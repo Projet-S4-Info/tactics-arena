@@ -434,6 +434,30 @@ int createGameWindow(int x, int y)
 									unhover();
 								}
 								break;
+							case SDLK_z:			// "z" key
+								if (!isChatActive) YPOS += (10*(pxBase/64));
+								break;
+							case SDLK_q:			// "q" key
+								if (!isChatActive) XPOS += (10*(pxBase/64));
+								break;
+							case SDLK_s:			// "s" key
+								if (!isChatActive) YPOS -= (10*(pxBase/64));
+								break;
+							case SDLK_d:			// "d" key
+								if (!isChatActive) XPOS -= (10*(pxBase/64));
+								break;
+							case SDLK_UP:			// "ARROW UP" key
+								if (!isChatActive) YPOS += (10*(pxBase/64));
+								break;
+							case SDLK_LEFT:			// "ARROW LEFT" key
+								if (!isChatActive) XPOS += (10*(pxBase/64));
+								break;
+							case SDLK_DOWN:			// "ARROW DOWN" key
+								if (!isChatActive) YPOS -= (10*(pxBase/64));
+								break;
+							case SDLK_RIGHT:		// "ARROW RIGHT" key
+								if (!isChatActive) XPOS -= (10*(pxBase/64));
+								break;
 						}
 					break;
 
