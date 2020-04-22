@@ -136,7 +136,7 @@ err_t addLog(char * message)
 				{
 					free(logs[i+1].message);
 					logs[i+1].message = NULL;
-					logs[i+1].message = malloc(sizeof(char)*strlen(logs[i].message));
+					logs[i+1].message = malloc(sizeof(char)*(strlen(logs[i].message)+1));
 					strcpy(logs[i+1].message, logs[i].message);
 					logs[i+1].time = logs[i].time;
 					free(logs[i].message);
@@ -145,7 +145,7 @@ err_t addLog(char * message)
 			}
 		}
 
-		logs[0].message = malloc(sizeof(char) * strlen(message));
+		logs[0].message = malloc(sizeof(char) * (strlen(message)+1));
 		logs[0].time = SDL_GetTicks();
 		strcpy(logs[0].message, message);
 	}
