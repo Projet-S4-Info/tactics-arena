@@ -272,12 +272,6 @@ int createGameWindow(int x, int y)
 										{
 											turnLeft(tempEntity);
 										}
-										// Fin de tour
-										else if (e.motion.x >= xWinSize-280 && e.motion.x <= xWinSize-24 && e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16)
-										{
-											hover_next_turn = FALSE;
-											set_endturn();
-										}
 										else selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 									}
 									else
@@ -339,11 +333,18 @@ int createGameWindow(int x, int y)
 							{
 								selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 							}
-						} 
+						}
 						else 
 						{
 							selected_ability = -1;
 							selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
+						}
+
+						// Fin de tour
+						if (e.motion.x >= xWinSize-280 && e.motion.x <= xWinSize-24 && e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16 && your_turn())
+						{
+							hover_next_turn = FALSE;
+							set_endturn();
 						}
 
 						if(e.motion.x >= xWinSize-360 && e.motion.x <= xWinSize-296 && e.motion.y >= yWinSize-80 && e.motion.y <= yWinSize-16){
