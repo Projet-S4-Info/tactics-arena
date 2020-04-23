@@ -10,6 +10,11 @@ pwd=$(pwd)
 mkdir SDL2_libraries
 cd SDL2_libraries
 
+sudo apt-get install curl
+sudo apt-get install net-tools
+sudo apt-get install pulseaudio
+sudo apt-get install libasound2-dev libpulse-dev
+
 curl -OL https://www.libsdl.org/release/SDL2-${V_SDL2}.tar.gz
 curl -OL https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${V_SDL2_image}.tar.gz
 curl -OL https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-${V_SDL2_ttf}.tar.gz
@@ -21,7 +26,6 @@ tar -zxvf SDL2_ttf-${V_SDL2_ttf}.tar.gz
 tar -zxvf SDL2_mixer-${V_SDL2_mixer}.tar.gz
 
 sudo apt-get install cmake libfreetype6-dev libfontconfig1-dev xclip
-sudo apt-get build-dep xscreensaver
 sudo apt-get install xorg-dev
 
 cd SDL2-${V_SDL2}
@@ -47,6 +51,7 @@ cd ../SDL2_mixer-${V_SDL2_mixer}
 sudo make
 sudo make install
 
-apt-get install net-tools
-snap install pulseaudio
+
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${pwd}/SDL2/lib
+
+echo -e "\e[31m\e[5mWarning ! \e[0mYou need to execute \e[93mpulseaudio -D\e[0m to get some sound"
