@@ -286,11 +286,12 @@ winId local_turn()
     if(verbose>=1)printf("It's your turn\n");
     addLog("It's your turn");
 
+    turn_active = TRUE;
+
     turn_start(Allies);
+    if(verbose>=2)printf("Turn start done for Allies\n");
 
     winId game_end;
-
-    turn_active = TRUE;
 
     do
     {
@@ -310,6 +311,7 @@ winId opposing_turn()
     addLog("It's your opponent's turn");
 
     turn_start(Foes);
+    if(verbose>=2)printf("Turn start done for Foes\n");
     
     action a;
 
@@ -317,6 +319,7 @@ winId opposing_turn()
 
     while(a.char_id != 0)
     {
+
         if(a.act == Mvt)
         {
             apply_movement(a);
