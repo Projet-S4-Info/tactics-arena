@@ -32,6 +32,7 @@ typedef enum {BLANK, BLOCK, BLUE, RED, WATER, SAND, ICE, SNOW} block_id;
 extern TabTexture cSprites[_NB_MAX_TEXTURES_];
 extern TabTexture textures[_NB_MAX_TEXTURES_];
 extern CharTexture charTextures[_NB_CLASSES_];
+extern AnimTexture animTextures[NB_AB];
 
 
 /* =============== FONCTIONS =============== */
@@ -52,7 +53,7 @@ SDL_Texture * getTexture(TabTexture * textures, const char * texture_name);
 SDL_Texture * getBigTexture(TabTexture * textures, const char * texture_name);
 
 // Crée une surface à partir d'une image
-SDL_Surface * loadImage(const char * img);
+SDL_Surface * loadImage(char * img);
 
 // Crée une texture à partir d'une surface
 SDL_Texture * loadTexture(SDL_Renderer * renderer, SDL_Surface * surface);

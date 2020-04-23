@@ -137,6 +137,15 @@ typedef struct
 
 typedef struct
 {
+    abilityId id;
+    SDL_Texture *spritesSmall[_NB_MAX_ANIM_];
+    SDL_Texture *spritesBig[_NB_MAX_ANIM_];
+    int nb_steps;
+    bool on_ground;
+} AnimTexture;
+
+typedef struct
+{
     char *police;
     int size;
     char *content;

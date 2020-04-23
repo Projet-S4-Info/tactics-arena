@@ -6,6 +6,7 @@
 #define NUM_CLASS 6
 #define NUM_AB 4
 #define NUM_STATUS 10
+#define NB_AB 32
 
 /* ENUMERATIONS */
 typedef enum {pv, mv, vis, atk, magic, res_physic, res_magic} statId;

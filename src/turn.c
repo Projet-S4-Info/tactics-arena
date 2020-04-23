@@ -14,6 +14,7 @@
 #include "game_window.h"
 #include "abilities.h"
 #include "print.h"
+#include "animations.h"
 
 bool game_setup = FALSE;
 bool is_online = FALSE;
@@ -106,6 +107,9 @@ err_t apply_action(action a)
     {
         if(verbose>=1)printf("%s is Blessed!\n", active_ent->cha_name);
     }
+
+    if (isLoaded(active_ab.ab_id))
+        play_ability_animation(active_ab, a.c);
     
     if(active_ab.fn_use!=ONLY)
     {

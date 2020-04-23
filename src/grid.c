@@ -219,6 +219,12 @@ bool isInGrid(Coord pos)
     return (pos.x < _X_SIZE_ && pos.x >= 0 && pos.y < _Y_SIZE_ && pos.y >= 0);
 }
 
+bool isWalkable(Coord pos)
+// Return true if the given tile is walkable
+{
+    return (*(matrix+pos.x*_X_SIZE_+pos.y)).walkable == 1;
+}
+
 bool isInCoordTab(Coord tab[], Coord pos)
 // Return true if the given coord is in the coord table
 {
@@ -234,6 +240,16 @@ bool isInCoordTab(Coord tab[], Coord pos)
         }
         index++;
     }
+
+    return result;
+}
+
+Coord to2D(Coord pos)
+{
+    Coord result;
+
+    result.x = XPOS+(pos.y+1)*(pxBase/2)+(pos.x+1)*(pxBase/2);
+	result.y = YPOS+pos.x*(pxBase/4)+(_Y_SIZE_-pos.y)*(pxBase/4);
 
     return result;
 }

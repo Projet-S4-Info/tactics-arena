@@ -52,7 +52,11 @@ void turnLeft(Entity * entity);
 
 bool isInGrid(Coord pos);
 
+bool isWalkable(Coord pos);
+
 bool isInCoordTab(Coord tab[], Coord pos);
+
+Coord to2D(Coord pos);
 
 
 #endif
