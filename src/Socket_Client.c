@@ -142,7 +142,6 @@ err_t startTCPSocketCli(int socketCli)
         if (recep(&startGameCli, sizeof(startGameCli), socketConnected) != NULL)
         {
           saveMap((Tile *)&startGameCli.gridServer, "map_TempMumlti");
-          loadMap(matrix, "map_TempMumlti");
         }
         else
         {
@@ -150,7 +149,8 @@ err_t startTCPSocketCli(int socketCli)
         }
 
         startGameCli.isServerStartGame = 2;
-
+        loadMap(matrix, "map_TempMumlti");
+        
         if (sendStruct(&startGameCli, sizeof(startGameCli), socketConnected) == OK)
         {
           serverStatus = 3;

@@ -158,6 +158,8 @@ int main(int argc, char * argv[])
 
     printf("%s",error_message[destroy_game()]);
 
+    system("rm ../maps/map_TempMulti");
+
     //getchar();  // Wait for the user to press a key to end the program
 
     return 0;
