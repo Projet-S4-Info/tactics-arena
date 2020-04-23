@@ -87,18 +87,18 @@ multiThread_t threadCli;
 static void * fn_server (void * p_data)
 {
 	
-    startTCPSocketServ();
-	// sleep(1);
-	init_server();
+    if(startTCPSocketServ() == OK){
+		init_server();
+	}
     return NULL;
 }
 
 /*-- Fonction pour le thread du client --*/
 static void * fn_client (void * p_data)
 {
-    startTCPSocketCli();
-	// sleep(1);
-	init_client();
+    if(startTCPSocketCli() == OK){
+		init_client();
+	}
     return NULL;
 }
 

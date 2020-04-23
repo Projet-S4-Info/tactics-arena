@@ -8,6 +8,9 @@
 #include "state.h"
 #include "substruct.h"
 
+#define _X_SIZE_ 30
+#define _Y_SIZE_ 30
+
 /* BASIC STRUCTURES*/
 typedef struct
 {
@@ -157,5 +160,11 @@ typedef struct {
     classId cha_class;
     Coord starting_position;
 }init_ent;
+
+typedef struct{
+    int isServerStartGame;
+    char mapNameGame[50];
+    Tile gridServer[_X_SIZE_][_Y_SIZE_];
+}serverStatus_t;
 
 #endif
