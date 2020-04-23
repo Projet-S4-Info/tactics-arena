@@ -20,37 +20,34 @@
 #include "grid.h"
 #include "map_editor.h"
 
-
-
 // For Windows user
 
 #ifdef _WIN32
-  #include <winsock2.h>
-  
-  // Needed non-existent type with winsock2
-  
-  typedef int socklen_t;
+#include <winsock2.h>
+
+// Needed non-existent type with winsock2
+
+typedef int socklen_t;
 
 // Other OS
 #else
 
-  #include <sys/types.h>
-  #include <sys/socket.h>
-  #include <netinet/in.h>
-  #include <arpa/inet.h>
-  #include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 
-  #define INVALID_SOCKET -1
-  #define SOCKET_ERROR -1
-  #define closesocket(param) close(param)
-  typedef int SOCKET;
-  typedef struct sockaddr_in SOCKADDR_IN;
-  typedef struct sockaddr SOCKADDR;
+#define INVALID_SOCKET -1
+#define SOCKET_ERROR -1
+#define closesocket(param) close(param)
+typedef int SOCKET;
+typedef struct sockaddr_in SOCKADDR_IN;
+typedef struct sockaddr SOCKADDR;
 #endif
 
 /* =============== VARIABLES =============== */
 unsigned int logFlag = 0;
-
 
 /* =============== FONCTIONS =============== */
 
@@ -60,21 +57,23 @@ unsigned int logFlag = 0;
  * \brief Function to stop the server (close sockets)
 */
 
-err_t stopTcpSocketServ(int socketConnected){
-  if(verbose >= 1)printf("Shutdown socketConnected ...\n");
+err_t stopTcpSocketServ(int socketConnected)
+{
+  if (verbose >= 1)
+    printf("Shutdown socketConnected ...\n");
   shutdown(socketConnected, 2);
-  if(verbose >= 1)printf("Close socket : socketConnected...\n");
+  if (verbose >= 1)
+    printf("Close socket : socketConnected...\n");
   closesocket(socketConnected);
   nbPlayer -= 1;
-  
-  // Commande pour fermer le firewall sur windows
-  #ifdef _WIN32
-    system("netsh advfirewall firewall delete rule name=\"Tactics\"");
-  #endif
-  
+
+// Commande pour fermer le firewall sur windows
+#ifdef _WIN32
+  system("netsh advfirewall firewall delete rule name=\"Tactics\"");
+#endif
+
   return OK;
 }
-
 
 /**
  * \fn err_t startTCPSocketServ(void)
@@ -82,37 +81,38 @@ err_t stopTcpSocketServ(int socketConnected){
  * \brief Function to create the server and wait incoming connection
 */
 
-err_t startTCPSocketServ(){
- 
-  #ifdef _WIN32
-    // Cange codepage CMD
-    system("chcp 65001");
-    // Creating rules for Firewall
-    system("netsh advfirewall firewall add rule name=\"Tactics\" protocol=TCP dir=in localport=3555 action=allow");
-    system("netsh advfirewall firewall add rule name=\"Tactics\" protocol=TCP dir=out localport=3555 action=allow");
-    // Get the local IP Address of the server
-    system("ipconfig | findstr /r \"IPv4.*192\" > .test.txt");
-    system("cls");
-    WSADATA WSAData;
+err_t startTCPSocketServ()
+{
 
-    int windWSAError;
-    /*
+#ifdef _WIN32
+  // Cange codepage CMD
+  system("chcp 65001");
+  // Creating rules for Firewall
+  system("netsh advfirewall firewall add rule name=\"Tactics\" protocol=TCP dir=in localport=3555 action=allow");
+  system("netsh advfirewall firewall add rule name=\"Tactics\" protocol=TCP dir=out localport=3555 action=allow");
+  // Get the local IP Address of the server
+  system("ipconfig | findstr /r \"IPv4.*192\" > .test.txt");
+  system("cls");
+  WSADATA WSAData;
+
+  int windWSAError;
+  /*
     * WSAStratup Initialising winsock2 library
     * return 0 if there is no problems
     */
 
-   // return 0 if OK
-    windWSAError = WSAStartup(MAKEWORD(2,2), &WSAData);
-  
-  #else
-    int windWSAError = 0;
-  #endif
- 
+  // return 0 if OK
+  windWSAError = WSAStartup(MAKEWORD(2, 2), &WSAData);
+
+#else
+  int windWSAError = 0;
+#endif
+
   logFlag = 1;
   isAServer = 1;
   nbPlayer += 1;
 
-  SOCKADDR_IN serveurAddr = { 0 };
+  SOCKADDR_IN serveurAddr = {0};
   SOCKET sock;
   SOCKET sockServ;
   SOCKADDR_IN clientAddr;
@@ -120,116 +120,146 @@ err_t startTCPSocketServ(){
 
   t_user infoClient;
   infoClient.id = 0;
-  sprintf(infoClient.pseudo ,"PasDeCli");
+  sprintf(infoClient.pseudo, "PasDeCli");
 
   serverStatus_t startGame;
   startGame.isServerStartGame = 0;
   sprintf(startGame.mapNameGame, "0");
 
+  if (verbose >= 1)
+    printf("\nLancement de la créatoin du serveur...\n");
 
-  
-  if(verbose >= 1)printf("\nLancement de la créatoin du serveur...\n");
-  
-  if(!windWSAError ){
-   
-    // Init structure    
+  if (!windWSAError)
+  {
+
+    // Init structure
     // Can change s_addr with given ip inet_addr("192.168.0.0") or INADDR_ANY
 
-    serveurAddr.sin_addr.s_addr=htonl(INADDR_ANY) ;
+    serveurAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     serveurAddr.sin_family = AF_INET;
-    serveurAddr.sin_port = htons (PORT);
-    
+    serveurAddr.sin_port = htons(PORT);
+
     /*
       * Creating socket :
       * param 1 : Use TCP/IP
       * param 2 : Use with TCP
       * param 3 : Protocole parameter (useless) -> 0
     */
-    
-    if((sock = socket(AF_INET, SOCK_STREAM, 0)) != INVALID_SOCKET){
-  
-      if(verbose >= 1)printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
+
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) != INVALID_SOCKET)
+    {
+
+      if (verbose >= 1)
+        printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
       sleep(1);
       logFlag = 2;
-      
+
       //Bind info to the socket
-      sockServ = bind(sock, (SOCKADDR*)&serveurAddr, sizeof(serveurAddr));
-      
-      if(sockServ != SOCKET_ERROR){
-        if(verbose >= 1)printf("\nDémarrage du serveur... \n");
+      sockServ = bind(sock, (SOCKADDR *)&serveurAddr, sizeof(serveurAddr));
+
+      if (sockServ != SOCKET_ERROR)
+      {
+        if (verbose >= 1)
+          printf("\nDémarrage du serveur... \n");
         getLocalIP();
-        if(verbose >= 1)printf("LIP DU SERV EST %s", monIP);
-        
+        if (verbose >= 1)
+          printf("LIP DU SERV EST %s", monIP);
+
         // Start to listen incomming connexion
-        sockServ = listen(sock,5);
-    
-        if(sockServ != SOCKET_ERROR){
-          if(verbose >= 1)printf("\nEn attente de la connexion d'un client...\n");
+        sockServ = listen(sock, 5);
+
+        if (sockServ != SOCKET_ERROR)
+        {
+          if (verbose >= 1)
+            printf("\nEn attente de la connexion d'un client...\n");
           sleep(1);
           logFlag = 3;
 
           sizeofSocketConnected = sizeof(clientAddr);
           // Save the Client socket to an extern int
-          socketConnected = accept(sock, (struct  sockaddr  *)&clientAddr, &sizeofSocketConnected);
-          
-          if(socketConnected != SOCKET_ERROR){
-            
-            if(verbose >= 1)printf("\nConnexion établie avec le client !\n");
+          socketConnected = accept(sock, (struct sockaddr *)&clientAddr, &sizeofSocketConnected);
+
+          if (socketConnected != SOCKET_ERROR)
+          {
+
+            if (verbose >= 1)
+              printf("\nConnexion établie avec le client !\n");
             sleep(1);
             logFlag = 4;
 
+            if (verbose >= 1)
+              printf("socketConnectedCli = %d\n", socketConnected);
 
-            if(verbose >= 1)printf("socketConnectedCli = %d\n", socketConnected);
-
-            if(recep(&infoClient, sizeof(infoClient), socketConnected) != NULL){
-              if(verbose >= 1)printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
+            if (recep(&infoClient, sizeof(infoClient), socketConnected) != NULL)
+            {
+              if (verbose >= 1)
+                printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
               sprintf(pseudoClient, "%s s'est connecté !", infoClient.pseudo);
-              if(verbose >= 1)printf("SocketServer pseudoCli : %s\n", pseudoClient);
+              if (verbose >= 1)
+                printf("SocketServer pseudoCli : %s\n", pseudoClient);
               logFlag = 5;
             }
 
-            while(serverStatus != 1){
-              if(verbose >= 2)printf("Waiting to start ... \n");
+            while (serverStatus != 1)
+            {
+              if (verbose >= 2)
+                printf("Waiting to start ... \n");
               sleep(2);
             }
             startGame.isServerStartGame = 1;
             sprintf(startGame.mapNameGame, "%s", mapMultiSelected);
-            
-            if(sendStruct(&startGame, sizeof(startGame), socketConnected) != OK){
+
+            if (sendStruct(&startGame, sizeof(startGame), socketConnected) != OK)
+            {
               printf("Erreur d'envoie \n");
             }
-            else{
-              if(verbose >= 1)printf("Structure envoyée .... \n");
-              if(verbose >= 1)printf("Struct envoyé : isServerStartGame : %d \n", startGame.isServerStartGame);
-              if(verbose >= 1)printf("Struct envoyé : isServerStartGame : %s \n", startGame.mapNameGame);
-              
+            else
+            {
+              if (verbose >= 1)
+                printf("Structure envoyée .... \n");
+              if (verbose >= 1)
+                printf("Struct envoyé : isServerStartGame : %d \n", startGame.isServerStartGame);
+              if (verbose >= 1)
+                printf("Struct envoyé : isServerStartGame : %s \n", startGame.mapNameGame);
+
               loadMap(matrix, startGame.mapNameGame);
 
-              recep(&startGame, sizeof(startGame), socketConnected);
-              
-              serverStatus = startGame.isServerStartGame;
+              if (recep(&startGame, sizeof(startGame), socketConnected) != NULL)
+              {
+                serverStatus = startGame.isServerStartGame;
+              }
+              else
+              {
+                if (verbose >= 0)
+                  printf("Pas de recep de status MAP \n");
+              }
+              if (verbose >= 1)
+                printf("\nChargement de la partie... \n Fermeture de la fonction ... \n");
             }
-            if(verbose >= 1)printf("\nChargement de la partie... \n Fermeture de la fonction ... \n");
+          }
+          else
+          {
+            printf("\nUn problème est survenu lors de la connexion du client :( \n");
+            return SERV_ERROR;
           }
         }
-        else{
-          printf("\nUn problème est survenu lors de la connexion du client :( \n");
+        else
+        {
+          printf("\nUn problème est survenu lors de la liaison avec le client :( \n");
           return SERV_ERROR;
         }
       }
-      else{
-        printf("\nUn problème est survenu lors de la liaison avec le client :( \n");
+      else
+      {
+        printf("\nUn problème est survenu lors de la création de la socket :( \n");
         return SERV_ERROR;
       }
     }
-    else{
-      printf("\nUn problème est survenu lors de la création de la socket :( \n");
+    else
+    {
+      printf("Un problème est survenu avec Windows :( \n");
       return SERV_ERROR;
     }
-  }
-  else{
-    printf("Un problème est survenu avec Windows :( \n");
-    return SERV_ERROR;
   }
   return OK;
 }
