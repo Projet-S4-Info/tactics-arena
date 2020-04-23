@@ -8,6 +8,8 @@
 #include "deplacement.h"
 #include "text.h"
 #include "print.h"
+#include "turn.h"
+#include "servFcnt.h"
 
 #define DEF_MULT 15
 
@@ -497,29 +499,65 @@ bool death_check(Entity * e)
         return FALSE;
 }
 
-bool apply_damage(Damage * d, Entity * caster, Entity * target, bool show_log)
+bool apply_check(Modifier * mod, Entity * target)
 {
-    char log[STR_LONG];
+    bool flag;
 
-    if(target->cha_class->cla_id==Goliath)
+    if(your_turn())
     {
-        int block = target->status_effect[Guarding] == 1 ? 70 : 30;
-
-        if(verbose>=2)printf("Block chance : %d\n", block);
-
-        if(block>=(rand()%100+1))
+        if(mod!=NULL)
         {
-            if(verbose>=1)printf("Block Successful!\n");
-            sprintf(log, "%s blocked the incoming damage", target->cha_name);
-            if(show_log)addLog(log);
-            //PLAY ANIMATION
-            return FALSE;
+            if((mod->chance*100)>=((rand()%100)+1))
+            {
+                if(verbose>=1)printf("Modifier Landed\n");
+                flag = TRUE;
+            }
+            else
+            {
+                if(verbose>=1)printf("Modifier not Landed\n");
+                flag = FALSE;
+            }
+        }
+        else if(target->cha_class->cla_id == Goliath)
+        {
+            int block = target->status_effect[Guarding] == 1 ? 70 : 30;
+            if(verbose>=2)printf("Block chance : %d\n", block);
+
+            if(block>=(rand()%100+1))
+            {
+                if(verbose>=1)printf("Block Successful!\n");              
+                flag = FALSE;
+            }
+            else
+            {
+                if(verbose>=2)printf("Block Failed!\n");
+                flag = TRUE;
+            }
         }
         else
         {
-            if(verbose>=2)printf("Block Failed!\n");
+            flag = TRUE;
+        }
+        if(is_online)
+        {
+            sendStruct(&flag, sizeof(bool), socketConnected);
         }
     }
+    else if(is_online)
+    {
+        recep(&flag, sizeof(bool),socketConnected); 
+    }
+    else
+    {
+        flag = TRUE;
+    }
+
+    return flag;
+}
+
+bool apply_damage(Damage * d, Entity * caster, Entity * target, bool show_log)
+{
+    char log[STR_LONG];
 
     float frozen = target->status_effect[Freezing] == 1 ? 6 : 0;
 
@@ -702,25 +740,16 @@ err_t apply_stat_change(Status s, Entity * target, StateList * list, bool show_l
 
 err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
 {
-    
-    if(m.chance*100>=rand()%100+1)
+    if(m.effect.value==0)
     {
-        if(verbose>=1)printf("Modifier landed!\n");
-
-        if(m.effect.value==0)
-        {
-            return apply_status(m.effect,target, list, caster_id, TRUE);
-        }
-        else
-        {
-            return apply_stat_change(m.effect,target, list, TRUE);
-        }
+        return apply_status(m.effect,target, list, caster_id, TRUE);
     }
     else
     {
-        if(verbose>=1)printf("Modifier not landed!\n");
-        return OK;
+        return apply_stat_change(m.effect,target, list, TRUE);
     }
+
+    return OK;
 }
 
 int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord starting_point)
@@ -750,12 +779,21 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
 
                         if(active_ab.damage!=NULL)
                         {
-                            if(apply_damage(*(active_ab.damage), active_ent, e, TRUE))
+                            if(apply_check(NULL,e))
                             {
-                                death_count++;
+                                if(apply_damage(*(active_ab.damage), active_ent, e, TRUE))
+                                {
+                                    death_count++;
+                                }
+                            }
+                            else
+                            {
+                                //ANIMATE BLOCK
+                                char log[STR_LONG];
+                                sprintf(log, "%s blocked incoming damage", e->cha_name);
+                                addLog(log);
                             }
                         }
-
                     }
                     else
                     {
@@ -766,14 +804,15 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
                     {
                         for(j=0; j<active_ab.nb_mods; j++)
                         {
-                            if(!same_team(e,active_ent) && ((*(active_ab.mods))+j)->t!=ALLIES)
-                                apply_mod(*((*(active_ab.mods))+j),e, list, active_ent->cha_id);
-
-                            else if((same_team(e,active_ent) && ((*(active_ab.mods))+j)->t!=FOES))
-                                apply_mod(*((*(active_ab.mods))+j),e, list, active_ent->cha_id);
+                            if((!same_team(e,active_ent) && ((*(active_ab.mods))+j)->t!=ALLIES) || ((same_team(e,active_ent) && ((*(active_ab.mods))+j)->t!=FOES)))
+                            {
+                                if(apply_check((*(active_ab.mods))+j,e))
+                                {
+                                    apply_mod(*((*(active_ab.mods))+j),e, list, active_ent->cha_id);
+                                }
+                            }
                         }
                     }
-
                 }
                 if(active_ab.fn_use==DURING)
                 {

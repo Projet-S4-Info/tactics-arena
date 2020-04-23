@@ -21,11 +21,6 @@ extern int serverStatus;
 extern int changesChat;
 extern int nbPlayer;
 
-typedef struct{
-    int isServerStartGame;
-    char mapNameGame[50];
-}serverStatus_t;
-
 extern char error_message[NUM_ERROR][STR_LONG];
 
 extern char pseudoUser[50];

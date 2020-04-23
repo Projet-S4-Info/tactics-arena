@@ -8,13 +8,6 @@
 #include "textures.h"
 
 
-/* =============== CONSTANTES =============== */
-
-
-#define _X_SIZE_ 30
-#define _Y_SIZE_ 30
-
-
 /* =============== GRILLES DE JEU =============== */
 
 
