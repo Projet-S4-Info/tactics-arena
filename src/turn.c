@@ -108,6 +108,9 @@ err_t apply_action(action a)
         if(verbose>=1)printf("%s is Blessed!\n", active_ent->cha_name);
     }
 
+    selected_ability = -1;
+    unhover();
+
     if (isLoaded(active_ab.ab_id))
         play_ability_animation(active_ab, a.c);
     
