@@ -28,6 +28,7 @@ bool death_check(Entity * e);
 err_t reset_cooldowns(Entity * e);
 
 err_t new_death(Entity * e);
+bool apply_check(Modifier * mod, Entity * target);
 bool apply_damage(Damage * d, Entity * caster, Entity * target, bool show_log);
 
 err_t remove_mod(Status * stat, Entity * e, bool show_log);

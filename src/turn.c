@@ -283,13 +283,15 @@ err_t action_set(action a)
 
 winId local_turn()
 {   
+    if(verbose>=1)printf("It's your turn\n");
     addLog("It's your turn");
 
+    turn_active = TRUE;
+
     turn_start(Allies);
+    if(verbose>=2)printf("Turn start done for Allies\n");
 
     winId game_end;
-
-    turn_active = TRUE;
 
     do
     {
@@ -300,15 +302,16 @@ winId local_turn()
 
     sendStruct(&turn_over, sizeof(action), socketConnected);
 
-    addLog("Your turn is over");
-
     return game_end;
 }
 
 winId opposing_turn()
 {
+    if(verbose>=1)printf("It's your opponenet's turn\n");
+    addLog("It's your opponent's turn");
 
     turn_start(Foes);
+    if(verbose>=2)printf("Turn start done for Foes\n");
     
     action a;
 
@@ -316,6 +319,7 @@ winId opposing_turn()
 
     while(a.char_id != 0)
     {
+
         if(a.act == Mvt)
         {
             apply_movement(a);
@@ -358,11 +362,11 @@ winId init_client()
     Coord spawn[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
 
     if(init_Foes(W) == OK){
-        if(verbose >= 0)printf("Init Foes est fait pour client \n");
+        if(verbose >= 1)printf("Init Foes est fait pour client \n");
     }
     
     if(init_Allies(spawn,S) == OK){
-        if(verbose >= 0)printf("Init Allies client OK \n");
+        if(verbose >= 1)printf("Init Allies client OK \n");
     }
 
     return game_loop(opposing_turn,local_turn);
@@ -373,10 +377,10 @@ winId init_server()
     Coord spawn[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
 
     if(init_Allies(spawn,W) == OK){
-        if(verbose >= 0)printf("Init Allies server OK \n");
+        if(verbose >= 1)printf("Init Allies server OK \n");
     }
     if (init_Foes(S) == OK){
-        if(verbose >= 0)printf("Init Foes est fait pour serveur \n");
+        if(verbose >= 1)printf("Init Foes est fait pour serveur \n");
     }
     
     return game_loop(local_turn,opposing_turn);
