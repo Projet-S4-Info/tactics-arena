@@ -26,6 +26,7 @@
 #include "print.h"
 #include "servFcnt.h"
 #include "text.h"
+#include "animations.h"
 
 /* =============== CONSTANTES ================ */
 
@@ -122,6 +123,7 @@ int createGameWindow(int x, int y)
 		// Chargement des textures
 		loadMapTextures(renderer);
 		loadSprites(renderer, cSprites);
+		loadAnimationTextures();
 
 		int start_seconds = SDL_GetTicks() / 1000;
 		int load_index = 0;

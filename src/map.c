@@ -21,6 +21,7 @@
 #include "string.h"
 #include "border.h"
 #include "text.h"
+#include "animations.h"
 
 
 /* =============== CONSTANTES =============== */

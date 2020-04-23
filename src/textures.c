@@ -25,6 +25,7 @@
 TabTexture cSprites[_NB_MAX_TEXTURES_];
 TabTexture textures[_NB_MAX_TEXTURES_];
 CharTexture charTextures[_NB_CLASSES_];
+AnimTexture animTextures[NB_AB];
 
 
 /* =============== VARIABLES =============== */
@@ -142,7 +143,7 @@ SDL_Texture * getBigTexture(TabTexture * textures, const char * texture_name)
 
 
 
-SDL_Surface * loadImage(const char * img)
+SDL_Surface * loadImage(char * img)
 // Load a PNG image into a surface
 {
 	SDL_RWops *rwop = NULL;
