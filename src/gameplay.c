@@ -10,7 +10,6 @@
 #include "print.h"
 #include "turn.h"
 #include "servFcnt.h"
-#include "stringdb.h"
 
 #define DEF_MULT 15
 
