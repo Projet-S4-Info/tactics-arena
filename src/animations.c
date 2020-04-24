@@ -226,9 +226,10 @@ err_t play_ability_animation(Ability ab, Coord pos)
                 displaySprite(renderer, getAnimTexture(ab.ab_id, i, FALSE), temp.x, temp.y);
             else
                 displaySprite(renderer, getAnimTexture(ab.ab_id, i, TRUE), temp.x, temp.y);
+                
+            SDL_RenderPresent(renderer);
+            SDL_Delay(getAnim(ab.ab_id).speed);
         }
-        SDL_RenderPresent(renderer);
-        SDL_Delay(getAnim(ab.ab_id).speed);
     }
 
     return OK;
