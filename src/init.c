@@ -109,6 +109,14 @@ err_t init_Allies(Coord spawn[NUM_CLASS], Direction d)
         init_spawn(&Allies[i], spawn[s]);
         ie.starting_position = Allies[i].coords;
 
+        if(verbose>=2)
+        {
+            printf("Sending Ally id char : %d\n", ie.char_id);
+            printf("Sending Ally charname : %s\n", ie.cha_name);
+            printf("Sending Ally class : %s\n", classes[ie.cha_class].cla_name);
+            print_Coord(&ie.starting_position, "Sending Ally starting position : ");
+        }
+
         sendStruct(&ie, sizeof(init_ent), socketConnected);
     }
 
