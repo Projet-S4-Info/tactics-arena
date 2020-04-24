@@ -10,6 +10,7 @@
 #include "print.h"
 #include "turn.h"
 #include "servFcnt.h"
+#include "stringdb.h"
 
 #define DEF_MULT 15
 
@@ -540,7 +541,7 @@ bool apply_check(Modifier * mod, Entity * target)
         }
         if(is_online)
         {
-            sendStruct(&flag, sizeof(bool), socketConnected);
+            printf("%s",error_message[sendStruct(&flag, sizeof(bool), socketConnected)];
         }
     }
     else if(is_online)

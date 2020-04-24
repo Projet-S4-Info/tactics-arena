@@ -8,9 +8,9 @@ char error_message[NUM_ERROR][STR_LONG] = {"",
                                             "ERROR : Coordinates out of limits\n", 
                                             "ERROR : String too long\n",
                                             "ERROR : Ability coordinates were not initialised correctly\n",
-                                            "Error : Client not initialised  correctly\n",
-                                            "Error : Server not initialised correctly\n",
-                                            "Error : Structure not send correctly\n",
+                                            "ERROR : Client not initialised  correctly\n",
+                                            "ERROR : Server not initialised correctly\n",
+                                            "ERROR : Structure not sent correctly\n",
                                             "ERROR : Text already in cache, cannot add it twice\n"};
 
 

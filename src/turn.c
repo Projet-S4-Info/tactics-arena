@@ -269,7 +269,7 @@ err_t action_set(action a)
 
     if(is_online)
     {
-        sendStruct(&a, sizeof(action), socketConnected);
+        printf("%s",error_message[sendStruct(&a, sizeof(action), socketConnected)]);
     }
 
     if(a.act == Mvt)
@@ -307,7 +307,7 @@ winId local_turn()
 
     turn_end(Allies, stReceived);
 
-    sendStruct(&turn_over, sizeof(action), socketConnected);
+    printf("%s",error_message[sendStruct(&turn_over, sizeof(action), socketConnected)]);
 
     return game_end;
 }

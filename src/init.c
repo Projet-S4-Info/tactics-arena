@@ -60,6 +60,7 @@ err_t init_Foes(Direction d)
     for(i=0; i<NUM_CLASS; i++)
     {
         rec_id_swap(recep(&e,sizeof(init_ent),socketConnected));
+
         if(verbose>=2)
         {
             printf("Init foes id char : %d\n", e.char_id);
@@ -117,7 +118,7 @@ err_t init_Allies(Coord spawn[NUM_CLASS], Direction d)
             print_Coord(&ie.starting_position, "Sending Ally starting position : ");
         }
 
-        sendStruct(&ie, sizeof(init_ent), socketConnected);
+        printf("%s",error_message[sendStruct(&ie, sizeof(init_ent), socketConnected)]);
     }
 
     Allies[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
