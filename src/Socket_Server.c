@@ -126,6 +126,8 @@ err_t startTCPSocketServ()
   startGame.isServerStartGame = 0;
   sprintf(startGame.mapNameGame, "0");
 
+  char *MapTempMulti = "map_MultiTemp";
+
   if (verbose >= 1)
     printf("\nLancement de la créatoin du serveur...\n");
 
@@ -207,8 +209,10 @@ err_t startTCPSocketServ()
               sleep(2);
             }
             startGame.isServerStartGame = 1;
-            sprintf(startGame.mapNameGame, "%s", mapMultiSelected);
-            loadMap(&startGame.gridServer, mapMultiSelected);
+            
+            loadMap((Tile *)&startGame.gridServer, mapMultiSelected);
+            saveMap((Tile *)&startGame.gridServer, MapTempMulti);
+            sprintf(startGame.mapNameGame, "%s", MapTempMulti);
 
             if (sendStruct((void *)&startGame, sizeof(startGame), socketConnected) != OK)
             {

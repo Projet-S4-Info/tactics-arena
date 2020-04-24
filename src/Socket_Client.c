@@ -141,7 +141,7 @@ err_t startTCPSocketCli(int socketCli)
 
         if (recep((void *)&startGameCli, sizeof(startGameCli), socketConnected) != NULL)
         {
-          saveMap(&startGameCli.gridServer[0][0], "map_TempMumlti");
+          saveMap((Tile *)&startGameCli.gridServer, startGameCli.mapNameGame);
         }
         else
         {
@@ -149,7 +149,7 @@ err_t startTCPSocketCli(int socketCli)
         }
 
         startGameCli.isServerStartGame = 2;
-        loadMap(matrix, "map_TempMumlti");
+        loadMap(matrix, startGameCli.mapNameGame);
         
         if (sendStruct((void *)&startGameCli, sizeof(startGameCli), socketConnected) == OK)
         {
