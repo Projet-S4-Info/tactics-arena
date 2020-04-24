@@ -8,6 +8,7 @@ int Frenzied_Dash_fn(Coord c, Entity * e, StateList * list);
 
 int Focus_fn(Coord c, Entity * e, StateList * list);
 int Trap_fn(Coord c, Entity * e, StateList * list);
+bool trap_check(Entity *e);
 
 int Detain_fn(Coord c, Entity *e, StateList * list);
 int Banner_fn(Coord c, Entity * e, StateList * list);

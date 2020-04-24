@@ -11,6 +11,7 @@
 #include "game_window.h"
 #include "print.h"
 #include "display.h"
+#include "abilities.h"
 
 Coord closest_free_tile(Coord c)
 {
@@ -246,7 +247,7 @@ err_t total_move(Entity * e, Coord tabcoord[])
 
         SDL_Delay(150);
 
-        if(sentinel_check(e))
+        if(sentinel_check(e) || trap_check(e))
         {
             break;
         }

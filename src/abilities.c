@@ -120,6 +120,50 @@ int Trap_fn(Coord c, Entity * e, StateList * list)
     return 0;
 }
 
+bool trap_check(Entity *e)
+{
+    Status s = {0, Cripple, 2};
+
+    Trap_t trap = Get_Trap(e->coords);
+
+    if(verbose>=2)
+    {
+        printf("Trap Check\n");
+        printf("Trap Id = %d\n", trap.cha_id);
+        printf("Trap Visibility : %d\n", trap.visible);
+    }
+
+    if(!same_team(e, (void *)&trap))
+    {
+        StateList * list;
+        int Id;
+        char log[STR_LONG];
+
+        if(same_team(e,Allies))
+        {
+            list = stSent;
+            Id = Foes[Ranger].cha_id;
+        }
+        else
+        {
+            list = stReceived;
+            Id = Allies[Ranger].cha_id;
+        }
+
+        trap.visible = TRUE;
+        Set_Trap(trap, e->coords);
+
+        sprintf(log,"%s stepped into a trap", e->cha_name);
+        addLog(log);
+
+        apply_status(s, e, list, Id, TRUE);
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 int Detain_fn(Coord c, Entity *e, StateList * list)
 {
     Tile * t= getTile(c);
@@ -308,11 +352,18 @@ int Blizzard_fn(Coord c, Entity * e, StateList * list)
 int Volt_Switch_fn(Coord c, Entity * e, StateList * list)
 {
     Entity * t = getEntity(c);
-    switchEntities(c,e->coords);
 
     char log[STR_LONG];
     sprintf(log, "%s switched with %s", e->cha_name, t->cha_name);
     addLog(log);
+
+    if(t->status_effect[Cripple])
+    {
+        Status s;
+        remove_mod(remove_from_list(t,Cripple,&s),t, TRUE);
+    }
+
+    switchEntities(c,e->coords);
 
     return 0;
 }

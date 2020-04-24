@@ -19,6 +19,8 @@ typedef enum {Dead, Alive} lifeId;
 
 typedef enum {Cripple, Detained, Provoked, Burning, Freezing, Paralyzed, Blessed, Piercing, Guarding, Summoned} statusId;
 
+typedef enum {Castable_c, Locked_c, Frozen_c, Crippled_c} castabilityId;
+
 typedef enum {FOES, ALLIES, BOTH, FREE_TILE, ANY_TILE} targetType;
 
 typedef enum {NONE, DURING, BEFORE, ONLY, AFTER} fnid;

@@ -166,12 +166,12 @@ char * get_desc(Entity * e, abilityId ab_id)
     }
 }
 
-bool able_ability(Entity *e, abilityId ab_id, bool show_logs)
+castabilityId able_ability(Entity *e, abilityId ab_id, bool show_logs)
 {
     if(e->act_points < e->cha_class->cla_abilities[ab_id%NUM_AB].ab_cost)
     {
         if(show_logs)addLog("Not enough action points for that");
-        return FALSE;
+        return Locked_c;
     }
     else if(e->ab_cooldown[ab_id%NUM_AB]!=0)
     {
@@ -181,7 +181,7 @@ bool able_ability(Entity *e, abilityId ab_id, bool show_logs)
             sprintf(log, "%s is on cooldown", get_name(e, ab_id));
             addLog(log);
         }
-        return FALSE;
+        return Locked_c;
     }
     else if(e->status_effect[Freezing])
     {
@@ -191,10 +191,17 @@ bool able_ability(Entity *e, abilityId ab_id, bool show_logs)
             sprintf(log, "%s is frozen", get_name(e, ab_id));
             addLog(log);
         }
-        return FALSE;
+        return Frozen_c;
+    }
+    else if(e->status_effect[Cripple])
+    {
+        if(ab_id == Mvt || ab_id == Frenzied_Dash || ab_id == FlameCharge || ab_id == Volt_Switch)
+        {
+            return Crippled_c;
+        }
     }
 
-    return TRUE;
+    return Castable_c;
 }
 
 bool is_ally(Entity *e)
@@ -211,16 +218,25 @@ bool is_ally(Entity *e)
 
 bool same_team(Entity *a, Entity *b)
 {
+
     if(a->cha_id<0&&b->cha_id<0)
     {
+        if(verbose>=3)printf("Same Team Exit 1\n");
         return TRUE;
     }
     else if(a->cha_id>0&&b->cha_id>0)
     {
+        if(verbose>=3)printf("Same Team Exit 2\n");
+        return TRUE;
+    }
+    else if(a->cha_id == 0 || b->cha_id ==0)
+    {
+        if(verbose>=3)printf("Same Team Exit 3\n");
         return TRUE;
     }
     else
     {
+        if(verbose>=3)printf("Same Team Exit 4\n");
         return FALSE;
     }
 }
@@ -355,6 +371,11 @@ err_t remove_mod(Status * stat, Entity * e, bool show_log)
             {
                 end_Detain(e);
             }
+            else if (stat->stat == Cripple)
+            {
+                Trap_t trap = {0,FALSE};
+                Set_Trap(trap, e->coords);
+            }
         }
         else
         {
@@ -390,7 +411,7 @@ err_t remove_mod(Status * stat, Entity * e, bool show_log)
     }
 }
 
-Status * renew_mod(Entity * e, statusId status, Status *s)
+Status * remove_from_list(Entity * e, statusId status, Status *s)
 {
     char log[STR_LONG];
     if(verbose>=2)
@@ -618,7 +639,7 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id, boo
 
     if(target->status_effect[s.stat] != 0)
     {
-        renew_mod(target, s.stat, &renew);
+        remove_from_list(target, s.stat, &renew);
         sprintf(log, "%s is still %s", target->cha_name, statusName[s.stat]);
         if(verbose>=1)printf("%s\n", log);
     }
@@ -634,7 +655,7 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id, boo
 
     else if(s.stat==Burning && target->status_effect[Freezing])
     {
-        remove_mod(renew_mod(target, Freezing, &renew),target, FALSE);
+        remove_mod(remove_from_list(target, Freezing, &renew),target, FALSE);
         if(verbose>=1)printf("Attempting to burn %s has thawed him out!\n", target->cha_name);
         sprintf(log, "Attempting to burn %s has thawed him out", target->cha_name);
         if(show_log)addLog(log);

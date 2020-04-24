@@ -13,7 +13,7 @@ Entity ** get_dead_allies(Entity *e, Entity * tab[]);
 int get_cost(Entity *e, abilityId Id);
 int get_cooldown(Entity * e, abilityId Id);
 char * get_name(Entity * e, abilityId ab_id);
-bool able_ability(Entity *e, abilityId ab_id, bool show_logs);
+castabilityId able_ability(Entity *e, abilityId ab_id, bool show_logs);
 bool is_ally(Entity *e);
 bool show(Entity * e);
 bool same_team(Entity *a, Entity *b);
@@ -32,7 +32,7 @@ bool apply_check(Modifier * mod, Entity * target);
 bool apply_damage(Damage * d, Entity * caster, Entity * target, bool show_log);
 
 err_t remove_mod(Status * stat, Entity * e, bool show_log);
-Status * renew_mod(Entity * e, statusId status, Status * s);
+Status * remove_from_list(Entity * e, statusId status, Status * s);
 
 err_t apply_stat_change(Status s, Entity * target, StateList * list, bool show_log);
 err_t apply_status(Status s, Entity *target, StateList *list, int caster_id, bool show_log);

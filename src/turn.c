@@ -296,7 +296,6 @@ winId local_turn()
     turn_active = TRUE;
 
     turn_start(Allies);
-    if(verbose>=2)printf("Turn start done for Allies\n");
 
     winId game_end;
 

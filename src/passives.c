@@ -4,9 +4,11 @@
 #include "display.h"
 #include "border.h"
 #include "text.h"
+#include "game_window.h"
+#include "animations.h"
 
-int Bloodlust_counter;
-bool Sentinel_counter;
+int Bloodlust_counter = 0;
+bool Sentinel_counter = TRUE;
 
 err_t activate_bloodlust(Entity *e, StateList * list)
 {
@@ -15,6 +17,12 @@ err_t activate_bloodlust(Entity *e, StateList * list)
     char log[STR_LONG];
     sprintf(log, "%s's Bloodlust was triggered", e->cha_name);
     addLog(log);
+
+    selected_ability = -1;
+    unhover();
+
+    if (isLoaded(Fury))
+        play_ability_animation(e->cha_class->cla_abilities[Fury%NUM_AB], e->coords);
 
     e->stat_mods[atk] *= 2;
 
@@ -32,6 +40,12 @@ err_t activate_aura(Entity *e, StateList *list)
     addLog(log);
     if(verbose>=1)printf("%s\n",log);
 
+    selected_ability = -1;
+    unhover();
+
+    if (isLoaded(Aura))
+        play_ability_animation(Aura_ab, e->coords);
+
     apply_to(Aura_ab, e, list, e->coords);
 
     return OK;
@@ -39,6 +53,7 @@ err_t activate_aura(Entity *e, StateList *list)
 
 bool sentinel_check(Entity *e)
 {
+
     if(Sentinel_counter)
     {
         if(verbose>=2)printf("Launching Sentinel Check\n");
@@ -64,18 +79,28 @@ bool sentinel_check(Entity *e)
         
         if(isInRange(t, e->coords))
         {
+            Ability active_ab = r->cha_class->cla_abilities[Bolt%NUM_AB];
             char log[STR_LONG];
             sprintf(log, "%s's Sentinel was triggered", r->cha_name);
             if(verbose>=1)printf("%s\n",log);
             addLog(log);
 
             Sentinel_counter = FALSE;
+            selected_ability = -1;
+            unhover();
 
-            if(apply_to(r->cha_class->cla_abilities[Bolt%NUM_AB], r, list, e->coords) != 0)
+            if (isLoaded(active_ab.ab_id))
+                play_ability_animation(active_ab, e->coords);
+
+            if(apply_to(active_ab, r, list, e->coords) != 0)
             {
                 return TRUE;
             }
         }
+    }
+    else
+    {
+        if(verbose>=2)printf("Sentinel already triggered this turn\n");
     }
     return FALSE;
 }
