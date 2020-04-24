@@ -190,7 +190,7 @@ err_t startTCPSocketServ()
             if (verbose >= 1)
               printf("socketConnectedCli = %d\n", socketConnected);
 
-            if (recep(&infoClient, sizeof(infoClient), socketConnected) != NULL)
+            if (recep((void *)&infoClient, sizeof(infoClient), socketConnected) != NULL)
             {
               if (verbose >= 1)
                 printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
@@ -210,7 +210,7 @@ err_t startTCPSocketServ()
             sprintf(startGame.mapNameGame, "%s", mapMultiSelected);
             loadMap((Tile *)&startGame.gridServer, mapMultiSelected);
 
-            if (sendStruct(&startGame, sizeof(startGame), socketConnected) != OK)
+            if (sendStruct((void *)&startGame, sizeof(startGame), socketConnected) != OK)
             {
               printf("Erreur d'envoie \n");
             }
@@ -225,7 +225,7 @@ err_t startTCPSocketServ()
 
               loadMap(matrix, startGame.mapNameGame);
 
-              if (recep(&startGame, sizeof(startGame), socketConnected) != NULL)
+              if (recep((void *)&startGame, sizeof(startGame), socketConnected) != NULL)
               {
                 serverStatus = startGame.isServerStartGame;
               }

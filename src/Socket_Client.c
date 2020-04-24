@@ -135,11 +135,11 @@ err_t startTCPSocketCli(int socketCli)
         if (verbose >= 1)
           printf("socketConnectedCli = %d\n", socketConnected);
 
-        sendStruct(&infoMoi, sizeof(infoMoi), socketConnected);
+        sendStruct((void *)&infoMoi, sizeof(infoMoi), socketConnected);
         if (verbose >= 1)
           printf("Conexion établie sans soucis fermeture de la fonction... \n");
 
-        if (recep(&startGameCli, sizeof(startGameCli), socketConnected) != NULL)
+        if (recep((void *)&startGameCli, sizeof(startGameCli), socketConnected) != NULL)
         {
           saveMap((Tile *)&startGameCli.gridServer, "map_TempMumlti");
         }
@@ -151,7 +151,7 @@ err_t startTCPSocketCli(int socketCli)
         startGameCli.isServerStartGame = 2;
         loadMap(matrix, "map_TempMumlti");
         
-        if (sendStruct(&startGameCli, sizeof(startGameCli), socketConnected) == OK)
+        if (sendStruct((void *)&startGameCli, sizeof(startGameCli), socketConnected) == OK)
         {
           serverStatus = 3;
         }
