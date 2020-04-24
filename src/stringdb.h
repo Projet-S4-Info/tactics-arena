@@ -3,15 +3,15 @@
 #include "common.h"
 
 char error_message[NUM_ERROR][STR_LONG] = {"", 
-                                            "ERROR: Pointer is Null\n", 
-                                            "ERROR : SDL error\n", 
-                                            "ERROR : Coordinates out of limits\n", 
-                                            "ERROR : String too long\n",
-                                            "ERROR : Ability coordinates were not initialised correctly\n",
-                                            "ERROR : Client not initialised  correctly\n",
-                                            "ERROR : Server not initialised correctly\n",
-                                            "ERROR : Structure not sent correctly\n",
-                                            "ERROR : Text already in cache, cannot add it twice\n"};
+                                            "\033[31;01m[ERROR]\033[00m : Pointer is Null\n", 
+                                            "\033[31;01m[ERROR]\033[00m : SDL error\n", 
+                                            "\033[31;01m[ERROR]\033[00m : Coordinates out of limits\n", 
+                                            "\033[31;01m[ERROR]\033[00m : String too long\n",
+                                            "\033[31;01m[ERROR]\033[00m : Ability coordinates were not initialised correctly\n",
+                                            "\033[31;01m[ERROR]\033[00m : Client not initialised  correctly\n",
+                                            "\033[31;01m[ERROR]\033[00m : Server not initialised correctly\n",
+                                            "\033[31;01m[ERROR]\033[00m : Structure not sent correctly\n",
+                                            "\033[31;01m[ERROR]\033[00m : Text already in cache, cannot add it twice\n"};
 
 
 char statName[NUM_STATS][STR_SHORT] = {"pv", "mv", "vis", "atk", "magic", "res_physic", "res_magic"};

@@ -541,7 +541,7 @@ bool apply_check(Modifier * mod, Entity * target)
         }
         if(is_online)
         {
-            printf("%s",error_message[sendStruct(&flag, sizeof(bool), socketConnected)];
+            printf("%s",error_message[sendStruct(&flag, sizeof(bool), socketConnected)]);
         }
     }
     else if(is_online)
