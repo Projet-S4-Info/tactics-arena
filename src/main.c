@@ -74,7 +74,7 @@ int main(int argc, char * argv[])
 
     printf("%s", error_message[ init_classes() ] );
 
-    if(verbose>=2)
+    if(verbose>=3)
     {
         printf("Initiation Check!\n\n");
         int i,j;
