@@ -16,15 +16,6 @@ int playMenuMusic(int nb)
         return -1;
     }
 
-    for (int i = 0; i < SDL_GetNumAudioDrivers(); ++i) {
-        const char * driver_name = SDL_GetAudioDriver(i);
-        if (SDL_AudioInit(driver_name)) {
-            printf("\033[31;01m[AUDIO ERROR]\033[00m : Audio driver failed to initialize: %s\n", driver_name);
-            SDL_AudioQuit();
-        }
-    }
-
-
     if (verbose >= 2)
         printf("\033[36;01m[AUDIO]\033[00m : Audio driver: %s\n", SDL_GetCurrentAudioDriver());
 
