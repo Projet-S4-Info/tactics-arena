@@ -31,7 +31,7 @@
 
 /* =============== FONCTIONS DE GESTION DES TEXTURES D'ANIMATIONS =============== */
 
-err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, bool aoe, bool on_ground, int speed)
+err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, bool aoe, bool on_ground, int speed, char * sound_effect)
 // Pre-load animation textures for future loading
 {
     int index = 0;
@@ -64,6 +64,10 @@ err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, b
         animTextures[index].spritesBig[tabIndex] = loadTexture(renderer, loadImage(tempBig));*/
         tabIndex++;
     }
+
+    if (verbose == 3)
+            printf("\033[36;01m[ANIMATIONS]\033[00m : Chargement du fichier son : %s\n", sound_effect);
+    animTextures[index].sound_effect = Mix_LoadMUS(sound_effect);
 
     return OK;
 }
@@ -146,18 +150,20 @@ err_t loadAnimationTextures()
 // Load all the animations relative textures
 {
     // Ranger abilities animations
-    addAnimTexture(Bolt, "ranger/bolt", 64, 69, FALSE, FALSE, 100);
-    addAnimTexture(Focus, "ranger/focus_aura", 64, 68, FALSE, FALSE, 100);
-    addAnimTexture(Deadeye, "ranger/eye", 64, 69, FALSE, FALSE, 100);
+    addAnimTexture(Bolt, "ranger/bolt", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Bolt.wav");
+    addAnimTexture(Focus, "ranger/focus_aura", 64, 68, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Focus.wav");
+    addAnimTexture(Deadeye, "ranger/eye", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Deadeye.wav");
 
     // Berserker abilities animations
-    addAnimTexture(Frenzied_Dash, "berserker/earthquake_ultimate", 64, 68, TRUE, TRUE, 100);
+    addAnimTexture(Slash, "berserker/slice", 64, 76, FALSE, FALSE, 20, "../inc/sound_effects/abilities/Slash.wav");
+    addAnimTexture(Fury, "berserker/red_aura", 64, 68, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Fury.wav");
+    addAnimTexture(Frenzied_Dash, "berserker/earthquake_ultimate", 64, 68, TRUE, TRUE, 100, "../inc/sound_effects/abilities/Frenzied_Dash.wav");
 
     // Goliath abilities animations
-    addAnimTexture(Bash, "goliath/boomed", 64, 66, FALSE, FALSE, 100);
-    addAnimTexture(Detain, "goliath/jailed", 64, 70, FALSE, FALSE, 100);
-    addAnimTexture(Shields_Up, "goliath/shieldsup", 64, 71, FALSE, FALSE, 100);
-    addAnimTexture(Banner, "goliath/bluebanneer", 64, 69, FALSE, FALSE, 100);
+    addAnimTexture(Bash, "goliath/boomed", 64, 66, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Bash.wav");
+    addAnimTexture(Detain, "goliath/jailed", 64, 70, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Detain.wav");
+    addAnimTexture(Shields_Up, "goliath/shieldsup", 64, 71, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Shield_Up.wav");
+    addAnimTexture(Banner, "goliath/bluebanneer", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Banner.wav");
 
     return OK;
 }
@@ -197,6 +203,8 @@ err_t play_ability_animation(Ability ab, Coord pos)
 
     displayMap(renderer, XPOS, YPOS);
 
+    Mix_PlayMusic(getAnim(ab.ab_id).sound_effect, 1);
+
     if (getAnim(ab.ab_id).aoe == TRUE)
     {
         for (int i = 0; i < getAnimSteps(ab.ab_id); i++)
@@ -215,6 +223,7 @@ err_t play_ability_animation(Ability ab, Coord pos)
             }
             SDL_RenderPresent(renderer);
             SDL_Delay(getAnim(ab.ab_id).speed);
+            displayMap(renderer, XPOS, YPOS);
         }
     }
     else
@@ -226,9 +235,10 @@ err_t play_ability_animation(Ability ab, Coord pos)
                 displaySprite(renderer, getAnimTexture(ab.ab_id, i, FALSE), temp.x, temp.y);
             else
                 displaySprite(renderer, getAnimTexture(ab.ab_id, i, TRUE), temp.x, temp.y);
-                
+
             SDL_RenderPresent(renderer);
             SDL_Delay(getAnim(ab.ab_id).speed);
+            displayMap(renderer, XPOS, YPOS);
         }
     }
 
