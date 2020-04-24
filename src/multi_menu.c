@@ -637,6 +637,7 @@ int displayMenuMulti(int x, int y)
 						else if (u.motion.x >= 1000 && u.motion.x <= 1190 && u.motion.y >= 627 && u.motion.y <= 680){
 							closeWindow(pWindow);
 							freeMultiMenuTextures();
+							system("./TacticsArena");
 						}
 
 						// Switch musique ON/OFF

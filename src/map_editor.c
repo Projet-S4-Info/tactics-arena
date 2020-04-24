@@ -536,6 +536,7 @@ int createMapEditorWindow(int x, int y)
 							{
 								closeWindow(pWindow);
 								freeTextures(textures);
+								system("./TacticsArena");
 							}
 							// Remplir
 							else if (e.motion.y >= yWinSize-160 && e.motion.y <= yWinSize-120)

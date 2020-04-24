@@ -1,7 +1,6 @@
 
 /* =============== DEPENDENCES =============== */
 
-
 #include <stdio.h>
 #include <math.h>
 #include "../SDL2/include/SDL2/SDL.h"
@@ -23,305 +22,320 @@
 #include "text.h"
 #include "animations.h"
 
-
 /* =============== CONSTANTES =============== */
-
 
 #define _NB_MAX_TEXTURES_ 50
 
-
-
 /* =============== VARIABLES =============== */
-
 
 char selectedAbilityDesc[STR_LONG];
 char hoverAbilityDesc[STR_LONG];
 Coord borderTab[MAXRANGE];
-Coord rangeTab[_X_SIZE_*_Y_SIZE_];
+Coord rangeTab[_X_SIZE_ * _Y_SIZE_];
 Coord drawPos = {-1, -1};
-Entity * selectedEntity;
-
+Entity *selectedEntity;
 
 /* =============== FONCTIONS =============== */
 
-int loadMapTextures(SDL_Renderer * renderer)
+int loadMapTextures(SDL_Renderer *renderer)
 // Load all the map related textures
 {
 	int index;
 
-	if(verbose >= 1)printf("[GRAPHICS] Effacement des textures pré-existantes...\n");
+	if (verbose >= 1)
+		printf("[GRAPHICS] Effacement des textures pré-existantes...\n");
 
 	freeTextures(textures);
 
-	if(verbose >= 1)printf("[GRAPHICS] Chargement des textures du jeu...\n");
+	if (verbose >= 1)
+		printf("[GRAPHICS] Chargement des textures du jeu...\n");
 
-    // Loading blank pattern textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/blank_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/blank_128.png")),
-						"blank");
+	// Loading blank pattern textures
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/blocks/blank_64.png")),
+					  loadTexture(renderer, loadImage("../inc/img/blocks/blank_128.png")),
+					  "blank");
 
 	// Loading non-selected pattern textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_128.png")),
-						"block");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/blocks/block_64.png")),
+					  loadTexture(renderer, loadImage("../inc/img/blocks/block_128.png")),
+					  "block");
 
 	// Loading blue selected pattern textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_blue_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_blue_128.png")),
-						"blue_selected");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/blocks/block_blue_64.png")),
+					  loadTexture(renderer, loadImage("../inc/img/blocks/block_blue_128.png")),
+					  "blue_selected");
 
 	// Loading red selected pattern textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_red_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_red_128.png")),
-						"red_selected");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/blocks/block_red_64.png")),
+					  loadTexture(renderer, loadImage("../inc/img/blocks/block_red_128.png")),
+					  "red_selected");
 
 	// Loading water block textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/water_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/water_128.png")),
-						"water");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/blocks/water_64.png")),
+					  loadTexture(renderer, loadImage("../inc/img/blocks/water_128.png")),
+					  "water");
 
 	// Loading sand block textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/sand_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/sand_128.png")),
-								"sand");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/blocks/sand_64.png")),
+					  loadTexture(renderer, loadImage("../inc/img/blocks/sand_128.png")),
+					  "sand");
 
 	// Loading ice block textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/ice_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/ice_128.png")),
-								"ice");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/blocks/ice_64.png")),
+					  loadTexture(renderer, loadImage("../inc/img/blocks/ice_128.png")),
+					  "ice");
 
 	// Loading snow block textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_128.png")),
-						"snow");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_64.png")),
+					  loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_128.png")),
+					  "snow");
 
 	// Loading trap textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/sprites/traps/Beartrap64.png")),
-						loadTexture(renderer, loadImage("../inc/sprites/traps/Beartrap128.png")),
-						"trap");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/sprites/traps/Beartrap64.png")),
+					  loadTexture(renderer, loadImage("../inc/sprites/traps/Beartrap128.png")),
+					  "trap");
 
 	// Loading selection textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/selection_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/interface/selection_128.png")),
-						"selection");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/selection_64.png")),
+					  loadTexture(renderer, loadImage("../inc/img/interface/selection_128.png")),
+					  "selection");
 
 	// Loading selection hover textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/hover_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/interface/hover_128.png")),
-						"selection_hover");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/hover_64.png")),
+					  loadTexture(renderer, loadImage("../inc/img/interface/hover_128.png")),
+					  "selection_hover");
 
 	// Loading ability range textures
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/ability_range_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/interface/ability_range_128.png")),
-						"ability_range");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/ability_range_64.png")),
+					  loadTexture(renderer, loadImage("../inc/img/interface/ability_range_128.png")),
+					  "ability_range");
 
 	// Loading arrow right texture
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/icons/arrow_right_64.png")),
-						NULL,
-						"arrow_right");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/icons/arrow_right_64.png")),
+					  NULL,
+					  "arrow_right");
 
 	// Loading arrow left texture
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/icons/arrow_left_64.png")),
-						NULL,
-						"arrow_left");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/icons/arrow_left_64.png")),
+					  NULL,
+					  "arrow_left");
 
 	// Loading arrow up texture
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/icons/arrow_up_64.png")),
-						NULL,
-						"arrow_up");
-					
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/icons/arrow_up_64.png")),
+					  NULL,
+					  "arrow_up");
+
 	// Loading arrow down texture
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/icons/arrow_down_64.png")),
-						NULL,
-						"arrow_down");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/icons/arrow_down_64.png")),
+					  NULL,
+					  "arrow_down");
 
 	// Red team texture
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/red_team_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/interface/red_team_128.png")),
-						"red_team");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/red_team_64.png")),
+					  loadTexture(renderer, loadImage("../inc/img/interface/red_team_128.png")),
+					  "red_team");
 
 	// Blue team texture
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/blue_team_64.png")),
-						loadTexture(renderer, loadImage("../inc/img/interface/blue_team_128.png")),
-						"blue_team");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/blue_team_64.png")),
+					  loadTexture(renderer, loadImage("../inc/img/interface/blue_team_128.png")),
+					  "blue_team");
 
 	// Loading attack logo
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/attack_logo_64.png")),
-						NULL,
-						"attack");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/attack_logo_64.png")),
+					  NULL,
+					  "attack");
 
 	// Loading locked attack logo
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/locked_attack_logo_64.png")),
-						NULL,
-						"locked_attack");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/locked_attack_logo_64.png")),
+					  NULL,
+					  "locked_attack");
+
+	// Loading frozen attack logo
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/frozen_attack_logo_64.png")),
+					  NULL,
+					  "frozen_attack");
+
+	// Loading crippled attack logo
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/crippled_attack_logo_64.png")),
+					  NULL,
+					  "crippled_attack");
 
 	// Loading move logo
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/move_logo_64.png")),
-						NULL,
-						"move");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/move_logo_64.png")),
+					  NULL,
+					  "move");
 
 	// Clockwise turn icon
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/clockwise_icon_64.png")),
-						NULL,
-						"turn_right");
-					
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/clockwise_icon_64.png")),
+					  NULL,
+					  "turn_right");
+
 	// Anti-clockwise turn icon
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/anti_clockwise_icon_64.png")),
-						NULL,
-						"turn_left");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/anti_clockwise_icon_64.png")),
+					  NULL,
+					  "turn_left");
 
 	// Loading end of turn button
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/turn_end_grey.png")),
-						NULL,
-						"end_turn");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/turn_end_grey.png")),
+					  NULL,
+					  "end_turn");
 
 	// Loading end of turn button (hover)
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/turn_end_hover.png")),
-						NULL,
-						"end_turn_hover");
-	
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/turn_end_hover.png")),
+					  NULL,
+					  "end_turn_hover");
+
 	// Loading tchat button
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_64.png")),
-						NULL,
-						"tchat_button");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_64.png")),
+					  NULL,
+					  "tchat_button");
 
 	// Loading tchat button (hover)
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_hover_64.png")),
-						NULL,
-						"tchat_button_hover");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_hover_64.png")),
+					  NULL,
+					  "tchat_button_hover");
 
 	// Loading tchat  (selected)
-	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_selected_64.png")),
-						NULL,
-						"tchat_button_selected");
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_selected_64.png")),
+					  NULL,
+					  "tchat_button_selected");
 
 	// Loading ID card texture
-	index = addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/id_card.png")),
-						NULL,
-						"id_card");
+	index = addTextureToTable(textures,
+							  loadTexture(renderer, loadImage("../inc/img/interface/id_card.png")),
+							  NULL,
+							  "id_card");
 
-	if(verbose >=1 )printf("[GRAPHICS] %d texture(s) chargée(s) !\n", index+1);
+	if (verbose >= 1)
+		printf("[GRAPHICS] %d texture(s) chargée(s) !\n", index + 1);
 
-	return index+1;
+	return index + 1;
 }
-
 
 float crossProduct(Vector AB, Vector AC)
 // Renvoie le produit vectoriel
 {
-	return (( AB.y * AC.x ) - ( AB.x * AC.y ));
+	return ((AB.y * AC.x) - (AB.x * AC.y));
 }
-
 
 int hoverTile(int xpos, int ypos, int mx, int my)
 // Set the tile selected according to 2D iso from 2D coordinates
 {
 	int xIndex, yIndex, xIsoOrigin, yIsoOrigin, xTile, yTile;
 	float cpAB, cpBC, cpDC, cpAD;
-	Entity * tempEntity;
+	Entity *tempEntity;
 
 	unhover();
 
 	// Position de l'origine de la map en 2D isométrique
 	xIsoOrigin = xpos;
-	yIsoOrigin = ypos+_Y_SIZE_*(pxBase/4);
+	yIsoOrigin = ypos + _Y_SIZE_ * (pxBase / 4);
 
 	// Coordonnées 2D -> 2D iso
-	xIndex = floor(((my-yIsoOrigin)/(pxBase/2) + ((mx-xIsoOrigin)/pxBase)))-1;
-	yIndex = ceil((((mx-xIsoOrigin)/pxBase) - (my-yIsoOrigin)/(pxBase/2)))-1;
+	xIndex = floor(((my - yIsoOrigin) / (pxBase / 2) + ((mx - xIsoOrigin) / pxBase))) - 1;
+	yIndex = ceil((((mx - xIsoOrigin) / pxBase) - (my - yIsoOrigin) / (pxBase / 2))) - 1;
 
-	if (my < yIsoOrigin){
+	if (my < yIsoOrigin)
+	{
 		xIndex--;
 		yIndex++;
 	}
 
-	xTile = xpos+((((xIndex+yIndex)/2)+1)*pxBase);
-	yTile = ypos+((_Y_SIZE_-(yIndex-xIndex))*(pxBase/4)+(pxBase/4));
+	xTile = xpos + ((((xIndex + yIndex) / 2) + 1) * pxBase);
+	yTile = ypos + ((_Y_SIZE_ - (yIndex - xIndex)) * (pxBase / 4) + (pxBase / 4));
 
 	// Calcul des coordonnées des 4 coins de la tile
-	Coord A = { xTile, yTile };
-	Coord B = { xTile + (pxBase / 2), yTile - (pxBase / 2) };
-	Coord C = { xTile + pxBase, yTile };
-	Coord D = { xTile + (pxBase / 2), yTile + (pxBase / 4) };
+	Coord A = {xTile, yTile};
+	Coord B = {xTile + (pxBase / 2), yTile - (pxBase / 2)};
+	Coord C = {xTile + pxBase, yTile};
+	Coord D = {xTile + (pxBase / 2), yTile + (pxBase / 4)};
 
 	// Calcul des coordonnées des vecteurs de la tile
-	Vector AB = { B.x - A.x, B.y - A.y };
-	Vector AM = { mx - A.x, my - A.y };
-	Vector BC = { C.x - B.x, C.y - B.y };
-	Vector BM = { mx - B.x, my - B.y };
-	Vector DC = { C.x - D.x, C.y - D.y };
-	Vector DM = { mx - D.x, my - D.y };
-	Vector AD = { D.x - A.x, D.y - A.y };
-	Vector A2M = { mx - A.x, my - A.y };
+	Vector AB = {B.x - A.x, B.y - A.y};
+	Vector AM = {mx - A.x, my - A.y};
+	Vector BC = {C.x - B.x, C.y - B.y};
+	Vector BM = {mx - B.x, my - B.y};
+	Vector DC = {C.x - D.x, C.y - D.y};
+	Vector DM = {mx - D.x, my - D.y};
+	Vector AD = {D.x - A.x, D.y - A.y};
+	Vector A2M = {mx - A.x, my - A.y};
 	cpAB = crossProduct(AB, AM);
 	cpBC = crossProduct(BC, BM);
 	cpDC = crossProduct(DC, DM);
 	cpAD = crossProduct(AD, A2M);
 
 	// Sélection de la case sélectionnée en fonction de la position relative du clic et des vecteurs
-	if (cpAB > 0){
+	if (cpAB > 0)
+	{
 		xIndex--;
-	} else if (cpBC > 0){
+	}
+	else if (cpBC > 0)
+	{
 		yIndex++;
-	} else if (cpDC < 0){
+	}
+	else if (cpDC < 0)
+	{
 		xIndex++;
-	} else if (cpAD < 0){
+	}
+	else if (cpAD < 0)
+	{
 		yIndex--;
 	}
 
-	if (xIndex > _X_SIZE_-1 || yIndex > _Y_SIZE_-1 || xIndex < 0 || yIndex < 0)
+	if (xIndex > _X_SIZE_ - 1 || yIndex > _Y_SIZE_ - 1 || xIndex < 0 || yIndex < 0)
 	{
 		return 0;
 	}
 
-	(*(matrix+xIndex*_X_SIZE_+yIndex)).hovered = 1;
+	(*(matrix + xIndex * _X_SIZE_ + yIndex)).hovered = 1;
 
 	if (selected_ability != -1)
 	{
 		Coord center = {xIndex, yIndex};
 		tempEntity = getEntity(getSelectedPos());
-		if (tempEntity->cha_class->cla_abilities[selected_ability%NUM_AB].nb_coords > 1 && isInRange(borderTab, center))
+		if (tempEntity->cha_class->cla_abilities[selected_ability % NUM_AB].nb_coords > 1 && isInRange(borderTab, center))
 		{
-			for (int i=0; i < tempEntity->cha_class->cla_abilities[selected_ability%NUM_AB].nb_coords; i++)
+			for (int i = 0; i < tempEntity->cha_class->cla_abilities[selected_ability % NUM_AB].nb_coords; i++)
 			{
-				Coord highlight = add_coords(center, *((*(tempEntity->cha_class->cla_abilities[selected_ability%NUM_AB].coord))+i));
-				if (isInGrid(highlight)) setHovered(highlight);
+				Coord highlight = add_coords(center, *((*(tempEntity->cha_class->cla_abilities[selected_ability % NUM_AB].coord)) + i));
+				if (isInGrid(highlight))
+					setHovered(highlight);
 			}
 		}
 	}
 
 	return 1;
 }
-
 
 int selectTile(int xpos, int ypos, int mx, int my)
 // Set the tile selected according to 2D iso from 2D coordinates
@@ -334,68 +348,78 @@ int selectTile(int xpos, int ypos, int mx, int my)
 
 	// Position de l'origine de la map en 2D isométrique
 	xIsoOrigin = xpos;
-	yIsoOrigin = ypos+_Y_SIZE_*(pxBase/4);
+	yIsoOrigin = ypos + _Y_SIZE_ * (pxBase / 4);
 
 	// Coordonnées 2D -> 2D iso
-	xIndex = floor(((my-yIsoOrigin)/(pxBase/2) + ((mx-xIsoOrigin)/pxBase)))-1;
-	yIndex = ceil((((mx-xIsoOrigin)/pxBase) - (my-yIsoOrigin)/(pxBase/2)))-1;
+	xIndex = floor(((my - yIsoOrigin) / (pxBase / 2) + ((mx - xIsoOrigin) / pxBase))) - 1;
+	yIndex = ceil((((mx - xIsoOrigin) / pxBase) - (my - yIsoOrigin) / (pxBase / 2))) - 1;
 
-	if (my < yIsoOrigin){
+	if (my < yIsoOrigin)
+	{
 		xIndex--;
 		yIndex++;
 	}
 
-	xTile = xpos+((((xIndex+yIndex)/2)+1)*pxBase);
-	yTile = ypos+((_Y_SIZE_-(yIndex-xIndex))*(pxBase/4)+(pxBase/4));
+	xTile = xpos + ((((xIndex + yIndex) / 2) + 1) * pxBase);
+	yTile = ypos + ((_Y_SIZE_ - (yIndex - xIndex)) * (pxBase / 4) + (pxBase / 4));
 
 	// Calcul des coordonnées des 4 coins de la tile
-	Coord A = { xTile, yTile };
-	Coord B = { xTile + (pxBase / 2), yTile - (pxBase / 2) };
-	Coord C = { xTile + pxBase, yTile };
-	Coord D = { xTile + (pxBase / 2), yTile + (pxBase / 4) };
+	Coord A = {xTile, yTile};
+	Coord B = {xTile + (pxBase / 2), yTile - (pxBase / 2)};
+	Coord C = {xTile + pxBase, yTile};
+	Coord D = {xTile + (pxBase / 2), yTile + (pxBase / 4)};
 
 	// Calcul des coordonnées des vecteurs de la tile
-	Vector AB = { B.x - A.x, B.y - A.y };
-	Vector AM = { mx - A.x, my - A.y };
-	Vector BC = { C.x - B.x, C.y - B.y };
-	Vector BM = { mx - B.x, my - B.y };
-	Vector DC = { C.x - D.x, C.y - D.y };
-	Vector DM = { mx - D.x, my - D.y };
-	Vector AD = { D.x - A.x, D.y - A.y };
-	Vector A2M = { mx - A.x, my - A.y };
+	Vector AB = {B.x - A.x, B.y - A.y};
+	Vector AM = {mx - A.x, my - A.y};
+	Vector BC = {C.x - B.x, C.y - B.y};
+	Vector BM = {mx - B.x, my - B.y};
+	Vector DC = {C.x - D.x, C.y - D.y};
+	Vector DM = {mx - D.x, my - D.y};
+	Vector AD = {D.x - A.x, D.y - A.y};
+	Vector A2M = {mx - A.x, my - A.y};
 	cpAB = crossProduct(AB, AM);
 	cpBC = crossProduct(BC, BM);
 	cpDC = crossProduct(DC, DM);
 	cpAD = crossProduct(AD, A2M);
 
 	// Sélection de la case sélectionnée en fonction de la position relative du clic et des vecteurs
-	if (cpAB > 0){
+	if (cpAB > 0)
+	{
 		xIndex--;
-	} else if (cpBC > 0){
+	}
+	else if (cpBC > 0)
+	{
 		yIndex++;
-	} else if (cpDC < 0){
+	}
+	else if (cpDC < 0)
+	{
 		xIndex++;
-	} else if (cpAD < 0){
+	}
+	else if (cpAD < 0)
+	{
 		yIndex--;
 	}
 
-	if (xIndex > _X_SIZE_-1 || yIndex > _Y_SIZE_-1 || xIndex < 0 || yIndex < 0)
+	if (xIndex > _X_SIZE_ - 1 || yIndex > _Y_SIZE_ - 1 || xIndex < 0 || yIndex < 0)
 	{
 		selected_ability = -1;
 		selectedEntity = NULL;
 		return 0;
 	}
 
-	if (verbose >= 1) printf("\033[36;01m[MAP]\033[00m : Case sélectionnée : %d, %d\n", xIndex, yIndex);
-	(*(matrix+xIndex*_X_SIZE_+yIndex)).selected = 1;
+	if (verbose >= 1)
+		printf("\033[36;01m[MAP]\033[00m : Case sélectionnée : %d, %d\n", xIndex, yIndex);
+	(*(matrix + xIndex * _X_SIZE_ + yIndex)).selected = 1;
 	Coord selectedTile = {xIndex, yIndex};
 	if (selectedEntity != NULL)
 	{
 		action act = {selectedEntity->cha_id, selectedTile, selected_ability};
 		if (selected_ability != -1)
 		{
-			if (Cast_check(act, borderTab)) {
-				Entity * caster = selectedEntity;
+			if (Cast_check(act, borderTab))
+			{
+				Entity *caster = selectedEntity;
 				action_set(act);
 				selected_ability = -1;
 				setSelected(caster->coords);
@@ -410,7 +434,6 @@ int selectTile(int xpos, int ypos, int mx, int my)
 		{
 			selectedEntity = getEntity(selectedTile);
 		}
-		
 	}
 	else
 	{
@@ -423,21 +446,28 @@ int selectTile(int xpos, int ypos, int mx, int my)
 int displayAbilities(SDL_Renderer *renderer)
 // Display the abilities menu
 {
-	Entity * tempEntity = getEntity(getSelectedPos());
+	Entity *tempEntity = getEntity(getSelectedPos());
 	// Abilities icons
 	if (selected_ability != Last_Sacrifice)
 	{
-		if (able_ability(tempEntity, Mvt, FALSE))
+		castabilityId moveable = able_ability(tempEntity, Mvt, FALSE);
+		if (moveable == Castable_c)
 		{
-			displaySprite(renderer, getTexture(textures, "move"), 16, yWinSize-80);
-			displayText(renderer, 21, yWinSize-80+5, 20, "1", "../inc/font/Pixels.ttf", 49, 174, 196, FALSE);
+			displaySprite(renderer, getTexture(textures, "move"), 16, yWinSize - 80);
+			displayText(renderer, 21, yWinSize - 80 + 5, 20, "1", "../inc/font/Pixels.ttf", 49, 174, 196, FALSE);
 		}
 		else
 		{
-			displaySprite(renderer, getTexture(textures, "locked_attack"), 16, yWinSize-80);
-			displayText(renderer, 21, yWinSize-80+5, 20, "1", "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+			if (moveable == Locked_c)
+				displaySprite(renderer, getTexture(textures, "locked_attack"), 16, yWinSize - 80);
+			else if (moveable == Frozen_c)
+				displaySprite(renderer, getTexture(textures, "frozen_attack"), 16, yWinSize - 80);
+			else if (moveable == Crippled_c)
+				displaySprite(renderer, getTexture(textures, "crippled_attack"), 16, yWinSize - 80);
+				
+			displayText(renderer, 21, yWinSize - 80 + 5, 20, "1", "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
 		}
-		for (int i=0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			char abCost[10];
 			char abCooldown[10];
@@ -445,87 +475,107 @@ int displayAbilities(SDL_Renderer *renderer)
 			int cd = get_cooldown(tempEntity, tempEntity->cha_class->cla_abilities[i].ab_id);
 			sprintf(abCost, "%d", cost);
 			sprintf(abCooldown, "%d", cd);
-			if (able_ability(tempEntity, tempEntity->cha_class->cla_abilities[i].ab_id, FALSE))
+			castabilityId castable = able_ability(tempEntity, tempEntity->cha_class->cla_abilities[i].ab_id, FALSE);
+			if (castable == Castable_c)
 			{
-				displaySprite(renderer, getTexture(textures, "attack"), 16+(i+1)*80, yWinSize-80);
-				displayText(renderer, 16+(i+1)*80+5, yWinSize-80+5, 20, abCost, "../inc/font/Pixels.ttf", 49, 174, 196, FALSE);
-				if (cd != 0) displayText(renderer, 16+(i+1)*80+49, yWinSize-35, 20, abCooldown, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+				displaySprite(renderer, getTexture(textures, "attack"), 16 + (i + 1) * 80, yWinSize - 80);
+				displayText(renderer, 16 + (i + 1) * 80 + 5, yWinSize - 80 + 5, 20, abCost, "../inc/font/Pixels.ttf", 49, 174, 196, FALSE);
+				if (cd != 0)
+					displayText(renderer, 16 + (i + 1) * 80 + 49, yWinSize - 35, 20, abCooldown, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 			}
 			else
 			{
-				displaySprite(renderer, getTexture(textures, "locked_attack"), 16+(i+1)*80, yWinSize-80);
-				displayText(renderer, 16+(i+1)*80+5, yWinSize-80+5, 20, abCost, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
-				if (cd != 0) displayText(renderer, 16+(i+1)*80+49, yWinSize-35, 20, abCooldown, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+				if (castable == Locked_c)
+					displaySprite(renderer, getTexture(textures, "locked_attack"), 16 + (i + 1) * 80, yWinSize - 80);
+				else if (castable == Frozen_c)
+					displaySprite(renderer, getTexture(textures, "frozen_attack"), 16 + (i + 1) * 80, yWinSize - 80);
+				else if (castable == Crippled_c)
+					displaySprite(renderer, getTexture(textures, "crippled_attack"), 16 + (i + 1) * 80, yWinSize - 80);
+
+				displayText(renderer, 16 + (i + 1) * 80 + 5, yWinSize - 80 + 5, 20, abCost, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+				if (cd != 0)
+					displayText(renderer, 16 + (i + 1) * 80 + 49, yWinSize - 35, 20, abCooldown, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 			}
 		}
-		displaySprite(renderer, getTexture(textures, "turn_right"), 16+5*80, yWinSize-80);
-		displaySprite(renderer, getTexture(textures, "turn_left"), 16+6*80, yWinSize-80);
+		displaySprite(renderer, getTexture(textures, "turn_right"), 16 + 5 * 80, yWinSize - 80);
+		displaySprite(renderer, getTexture(textures, "turn_left"), 16 + 6 * 80, yWinSize - 80);
 	}
 	else
 	// Dead allies menu for last sacrifice ability
 	{
-		Entity * deadAllies[count_dead_allies(tempEntity)];
+		Entity *deadAllies[count_dead_allies(tempEntity)];
 		get_dead_allies(tempEntity, deadAllies);
-		for (int i=0; i < count_dead_allies(tempEntity); i++)
+		for (int i = 0; i < count_dead_allies(tempEntity); i++)
 		{
-			displaySprite(renderer, getCharFrontTexture(deadAllies[i]->cha_class->cla_name), 16+(i)*80+5, yWinSize-80+5);
+			displaySprite(renderer, getCharFrontTexture(deadAllies[i]->cha_class->cla_name), 16 + (i)*80 + 5, yWinSize - 80 + 5);
 		}
 	}
 
 	return 0;
 }
 
-char * clearStr(char * str){
-	for(int i = 0; i <= strlen(str); i++){
+char *clearStr(char *str)
+{
+	for (int i = 0; i <= strlen(str); i++)
+	{
 		str[i] = '\0';
 	}
 
 	return str;
 }
 
-err_t displayChat(SDL_Renderer *renderer,int chatX, int chatY){
+err_t displayChat(SDL_Renderer *renderer, int chatX, int chatY)
+{
 	char temp[33];
 	int j = 0;
-	if( chat.index > -1){
-			for (int i = 0; i <= chat.index ; i++){
-				if(strlen(chat.chatTab[i]) > 33){
-					int k;
-					for(k = 0; k < (strlen(chat.chatTab[i])); k += 33){
-						strcpy(temp, clearStr(temp));
-						for(int p = k; p < 33 + k && p < (strlen(chat.chatTab[i])); p++){
-							int len = strlen(temp);
-							temp[len] = chat.chatTab[i][p];
-							temp[len+1] = '\0';
-							if(verbose >= 2)printf("%s",temp);
-						}
-						if(verbose >= 2)printf("\n");
-						displayText(renderer, chatX, chatY + (j * 15), 15 ,temp, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
-						j++;
+	if (chat.index > -1)
+	{
+		for (int i = 0; i <= chat.index; i++)
+		{
+			if (strlen(chat.chatTab[i]) > 33)
+			{
+				int k;
+				for (k = 0; k < (strlen(chat.chatTab[i])); k += 33)
+				{
+					strcpy(temp, clearStr(temp));
+					for (int p = k; p < 33 + k && p < (strlen(chat.chatTab[i])); p++)
+					{
+						int len = strlen(temp);
+						temp[len] = chat.chatTab[i][p];
+						temp[len + 1] = '\0';
+						if (verbose >= 2)
+							printf("%s", temp);
 					}
-				}
-				else{
-					displayText(renderer, chatX, chatY + (j * 15), 15 , chat.chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
-					if(verbose >= 2)printf("%s \n", chat.chatTab[i]);
+					if (verbose >= 2)
+						printf("\n");
+					displayText(renderer, chatX, chatY + (j * 15), 15, temp, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 					j++;
 				}
 			}
+			else
+			{
+				displayText(renderer, chatX, chatY + (j * 15), 15, chat.chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
+				if (verbose >= 2)
+					printf("%s \n", chat.chatTab[i]);
+				j++;
+			}
+		}
 	}
 	return OK;
 }
 
-
 int displayInterface(SDL_Renderer *renderer)
 // Display the UI
 {
-	Entity * tempEntity = getEntity(getSelectedPos());
+	Entity *tempEntity = getEntity(getSelectedPos());
 	char passive[100];
 	char pv_text[2];
 	char pa_text[2];
 	char pm_text[2];
 
 	SDL_Rect chatScreen;
-	chatScreen.x = xWinSize-300;
-	chatScreen.y = yWinSize-460;
+	chatScreen.x = xWinSize - 300;
+	chatScreen.y = yWinSize - 460;
 	chatScreen.w = 275;
 	chatScreen.h = 310;
 
@@ -539,8 +589,7 @@ int displayInterface(SDL_Renderer *renderer)
 	chatMsg.x = chatScreen.x;
 	chatMsg.y = chatScreen.y + chatScreen.h + 2;
 	chatMsg.w = chatScreen.w;
-	chatMsg.h = 20; 
-
+	chatMsg.h = 20;
 
 	if (tempEntity != NULL)
 	{
@@ -548,14 +597,17 @@ int displayInterface(SDL_Renderer *renderer)
 		{
 			displayAbilities(renderer);
 
-			if (selected_ability != -1){
+			if (selected_ability != -1)
+			{
 				sprintf(selectedAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, selected_ability)), get_desc(tempEntity, selected_ability));
-				displayText(renderer, 16, yWinSize-110, 20, selectedAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
-			} else {
-				if (hover_ability >= 0) 
+				displayText(renderer, 16, yWinSize - 110, 20, selectedAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+			}
+			else
+			{
+				if (hover_ability >= 0)
 				{
 					sprintf(hoverAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, hover_ability)), get_desc(tempEntity, hover_ability));
-					displayText(renderer, 16, yWinSize-110, 20, hoverAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+					displayText(renderer, 16, yWinSize - 110, 20, hoverAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 				}
 			}
 		}
@@ -585,38 +637,45 @@ int displayInterface(SDL_Renderer *renderer)
 		if (hover_passive_help == 1)
 		{
 			sprintf(passive, "Passive : %s", tempEntity->cha_class->Passive.name);
-			displayText(renderer, mouse_position.x+20, mouse_position.y+20, 20, passive, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
-			displayText(renderer, mouse_position.x+20, mouse_position.y+40, 20, tempEntity->cha_class->Passive.desc, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
+			displayText(renderer, mouse_position.x + 20, mouse_position.y + 20, 20, passive, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
+			displayText(renderer, mouse_position.x + 20, mouse_position.y + 40, 20, tempEntity->cha_class->Passive.desc, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
 		}
 	}
 
 	// Logs
 	Coord logPos;
 	logPos.x = 20;
-	if (tempEntity != NULL) logPos.y = 170;
-	else logPos.y = 20;
+	if (tempEntity != NULL)
+		logPos.y = 170;
+	else
+		logPos.y = 20;
 	removeOldLogs(SDL_GetTicks());
 	displayLog(renderer, logPos);
 
 	// Next turn button
 	if (hover_next_turn == TRUE)
 	{
-		displayText(renderer, xWinSize-280, yWinSize-110, 20, "Skip turn", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
-		displaySprite(renderer, getTexture(textures, "end_turn_hover"), xWinSize-280, yWinSize-80);
+		displayText(renderer, xWinSize - 280, yWinSize - 110, 20, "Skip turn", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+		displaySprite(renderer, getTexture(textures, "end_turn_hover"), xWinSize - 280, yWinSize - 80);
 	}
 	else
 	{
-		displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize-280, yWinSize-80);
+		displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize - 280, yWinSize - 80);
 	}
 
-
 	// Tchat window
-	if (isChatActive) displaySprite(renderer, getTexture(textures, "tchat_button_selected"), xWinSize-360, yWinSize-80);
-	else displaySprite(renderer, getTexture(textures, "tchat_button"), xWinSize-360, yWinSize-80);
-	if (hover_tchat == 1 || hover_tchat == 2) displaySprite(renderer, getTexture(textures, "tchat_button_hover"), xWinSize-360, yWinSize-80);
-	if (hover_tchat == 1)displayText(renderer, xWinSize-360, yWinSize-110, 20, "Hide tchat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
-	else if (hover_tchat == 2) displayText(renderer, xWinSize-360, yWinSize-110, 20, "Display tchat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
-	if(isChatActive){
+	if (isChatActive)
+		displaySprite(renderer, getTexture(textures, "tchat_button_selected"), xWinSize - 360, yWinSize - 80);
+	else
+		displaySprite(renderer, getTexture(textures, "tchat_button"), xWinSize - 360, yWinSize - 80);
+	if (hover_tchat == 1 || hover_tchat == 2)
+		displaySprite(renderer, getTexture(textures, "tchat_button_hover"), xWinSize - 360, yWinSize - 80);
+	if (hover_tchat == 1)
+		displayText(renderer, xWinSize - 360, yWinSize - 110, 20, "Hide tchat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	else if (hover_tchat == 2)
+		displayText(renderer, xWinSize - 360, yWinSize - 110, 20, "Display tchat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+	if (isChatActive)
+	{
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
 		SDL_RenderFillRect(renderer, &chatBox);
@@ -624,37 +683,36 @@ int displayInterface(SDL_Renderer *renderer)
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 		SDL_RenderFillRect(renderer, &chatScreen);
-		displayText(renderer, chatBox.x + (chatBox.w /2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
-		
-		displayChat(renderer, chatScreen.x+2, chatScreen.y + 2);
+		displayText(renderer, chatBox.x + (chatBox.w / 2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 
+		displayChat(renderer, chatScreen.x + 2, chatScreen.y + 2);
 
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
 		SDL_SetRenderDrawColor(renderer, 85, 34, 0, 255);
 		SDL_RenderFillRect(renderer, &chatMsg);
-		if(strlen(pseudoChat) > 33){
-			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , pseudoChat + (strlen(pseudoChat) - 33), "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
-		}else{
-			displayText(renderer, chatMsg.x+2, chatMsg.y + 2, 15 , pseudoChat, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
+		if (strlen(pseudoChat) > 33)
+		{
+			displayText(renderer, chatMsg.x + 2, chatMsg.y + 2, 15, pseudoChat + (strlen(pseudoChat) - 33), "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
 		}
-			
+		else
+		{
+			displayText(renderer, chatMsg.x + 2, chatMsg.y + 2, 15, pseudoChat, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
+		}
 	}
 	return 0;
 }
-
-
 
 int displayMap(SDL_Renderer *renderer, int x, int y)
 // Display the map
 {
 	/* Le fond de la fenêtre sera blanc */
-    SDL_SetRenderDrawColor(renderer, 173, 216, 230, 255);
+	SDL_SetRenderDrawColor(renderer, 173, 216, 230, 255);
 	SDL_RenderClear(renderer);
 
-    Coord blockPos;
+	Coord blockPos;
 
 	/* Le fond de la fenêtre sera blanc */
-    SDL_SetRenderDrawColor(renderer, 173, 216, 230, 255);
+	SDL_SetRenderDrawColor(renderer, 173, 216, 230, 255);
 	SDL_RenderClear(renderer);
 
 	if (selected_ability != -1)
@@ -662,39 +720,47 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 		get_border(getEntity(getSelectedPos())->cha_id, selected_ability, borderTab, rangeTab);
 	}
 
-    for (int i=0; i < _X_SIZE_; i++){
-        for (int j=(_Y_SIZE_-1); j >= 0; j--){
+	for (int i = 0; i < _X_SIZE_; i++)
+	{
+		for (int j = (_Y_SIZE_ - 1); j >= 0; j--)
+		{
 
-			blockPos.x = x+(j+1)*(pxBase/2)+(i+1)*(pxBase/2);
-			blockPos.y = y+i*(pxBase/4)+(_Y_SIZE_-j)*(pxBase/4);
+			blockPos.x = x + (j + 1) * (pxBase / 2) + (i + 1) * (pxBase / 2);
+			blockPos.y = y + i * (pxBase / 4) + (_Y_SIZE_ - j) * (pxBase / 4);
 
 			if (blockPos.x >= -pxBase && blockPos.x <= xWinSize && blockPos.y >= -pxBase && blockPos.y <= yWinSize)
 			{
 
 				// Affichage block
-				if ((*(matrix+i*_X_SIZE_+j)).tile_id != BLANK)
+				if ((*(matrix + i * _X_SIZE_ + j)).tile_id != BLANK)
 				{
-					if ((*(matrix+i*_X_SIZE_+j)).tile_id == 1)
+					if ((*(matrix + i * _X_SIZE_ + j)).tile_id == 1)
 					{
-						if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "block"), blockPos.x, blockPos.y);
-						else				displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
+						if (pxBase == 64)
+							displaySprite(renderer, getTexture(textures, "block"), blockPos.x, blockPos.y);
+						else
+							displaySprite(renderer, getBigTexture(textures, "block"), blockPos.x, blockPos.y);
 					}
-					else if ((*(matrix+i*_X_SIZE_+j)).tile_id <= 7)
+					else if ((*(matrix + i * _X_SIZE_ + j)).tile_id <= 7)
 					{
-						if (pxBase == 64)	displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].texture, blockPos.x, blockPos.y);
-						else 				displaySprite(renderer, textures[(*(matrix+i*_X_SIZE_+j)).tile_id].big_texture, blockPos.x, blockPos.y);
+						if (pxBase == 64)
+							displaySprite(renderer, textures[(*(matrix + i * _X_SIZE_ + j)).tile_id].texture, blockPos.x, blockPos.y);
+						else
+							displaySprite(renderer, textures[(*(matrix + i * _X_SIZE_ + j)).tile_id].big_texture, blockPos.x, blockPos.y);
 					}
 				}
 
 				// Affichage pièges
-				if ((*(matrix+i*_X_SIZE_+j)).trap.visible == TRUE)
+				if ((*(matrix + i * _X_SIZE_ + j)).trap.visible == TRUE)
 				{
-					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "trap"), blockPos.x, blockPos.y-(pxBase/3));
-					else				displaySprite(renderer, getBigTexture(textures, "trap"), blockPos.x, blockPos.y-(pxBase/3));
+					if (pxBase == 64)
+						displaySprite(renderer, getTexture(textures, "trap"), blockPos.x, blockPos.y - (pxBase / 3));
+					else
+						displaySprite(renderer, getBigTexture(textures, "trap"), blockPos.x, blockPos.y - (pxBase / 3));
 				}
 
 				// Affichage portée d'attaque (si compétence sélectionnée)
-				Entity * tempEntity = NULL;
+				Entity *tempEntity = NULL;
 				tempEntity = getEntity(getSelectedPos());
 				if (tempEntity != NULL)
 				{
@@ -704,59 +770,73 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 						drawPos.y = j;
 						if (isInCoordTab(rangeTab, drawPos) || isInCoordTab(borderTab, drawPos))
 						{
-							if (pxBase == 64) displaySprite(renderer, getTexture(textures, "ability_range"), blockPos.x, blockPos.y);
-							else displaySprite(renderer, getBigTexture(textures, "ability_range"), blockPos.x, blockPos.y);
+							if (pxBase == 64)
+								displaySprite(renderer, getTexture(textures, "ability_range"), blockPos.x, blockPos.y);
+							else
+								displaySprite(renderer, getBigTexture(textures, "ability_range"), blockPos.x, blockPos.y);
 						}
 					}
 				}
 
 				// Affichage équipe
-				if ((*(matrix+i*_X_SIZE_+j)).entity != NULL)
+				if ((*(matrix + i * _X_SIZE_ + j)).entity != NULL)
 				{
 					if (pxBase == 64)
 					{
-						if ((*(matrix+i*_X_SIZE_+j)).entity->cha_id > 0) displaySprite(renderer, getTexture(textures, "blue_team"), blockPos.x, blockPos.y);
-						else displaySprite(renderer, getTexture(textures, "red_team"), blockPos.x, blockPos.y);
+						if ((*(matrix + i * _X_SIZE_ + j)).entity->cha_id > 0)
+							displaySprite(renderer, getTexture(textures, "blue_team"), blockPos.x, blockPos.y);
+						else
+							displaySprite(renderer, getTexture(textures, "red_team"), blockPos.x, blockPos.y);
 					}
 					else
 					{
-						if ((*(matrix+i*_X_SIZE_+j)).entity->cha_id > 0) displaySprite(renderer, getBigTexture(textures, "blue_team"), blockPos.x, blockPos.y);
-						else displaySprite(renderer, getBigTexture(textures, "red_team"), blockPos.x, blockPos.y);
+						if ((*(matrix + i * _X_SIZE_ + j)).entity->cha_id > 0)
+							displaySprite(renderer, getBigTexture(textures, "blue_team"), blockPos.x, blockPos.y);
+						else
+							displaySprite(renderer, getBigTexture(textures, "red_team"), blockPos.x, blockPos.y);
 					}
 				}
 
 				// Affichage tuile de sélection
-				if ((*(matrix+i*_X_SIZE_+j)).selected == 1)
+				if ((*(matrix + i * _X_SIZE_ + j)).selected == 1)
 				{
-					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "selection"), blockPos.x, blockPos.y);
-					else				displaySprite(renderer, getBigTexture(textures, "selection"), blockPos.x, blockPos.y);
+					if (pxBase == 64)
+						displaySprite(renderer, getTexture(textures, "selection"), blockPos.x, blockPos.y);
+					else
+						displaySprite(renderer, getBigTexture(textures, "selection"), blockPos.x, blockPos.y);
 				}
 
 				// Affichage tuile hover
-				if ((*(matrix+i*_X_SIZE_+j)).hovered == 1)
+				if ((*(matrix + i * _X_SIZE_ + j)).hovered == 1)
 				{
-					if (pxBase == 64)	displaySprite(renderer, getTexture(textures, "selection_hover"), blockPos.x, blockPos.y);
-					else				displaySprite(renderer, getBigTexture(textures, "selection_hover"), blockPos.x, blockPos.y);
+					if (pxBase == 64)
+						displaySprite(renderer, getTexture(textures, "selection_hover"), blockPos.x, blockPos.y);
+					else
+						displaySprite(renderer, getBigTexture(textures, "selection_hover"), blockPos.x, blockPos.y);
 				}
 
-				if ((*(matrix+i*_X_SIZE_+j)).entity != NULL)
+				if ((*(matrix + i * _X_SIZE_ + j)).entity != NULL)
 				{
-					displayCharacters(renderer, cSprites, (*(matrix+i*_X_SIZE_+j)).entity, blockPos.x, blockPos.y-pxBase/1.6, pxBase);
+					displayCharacters(renderer, cSprites, (*(matrix + i * _X_SIZE_ + j)).entity, blockPos.x, blockPos.y - pxBase / 1.6, pxBase);
 				}
 
 				if (camMove != -1)
 				{
-					if (mouse_position.x <= xWinSize && mouse_position.x >= xWinSize-20){
-						displaySprite(renderer, getTexture(textures, "arrow_right"), xWinSize-64, mouse_position.y-32);
+					if (mouse_position.x <= xWinSize && mouse_position.x >= xWinSize - 20)
+					{
+						displaySprite(renderer, getTexture(textures, "arrow_right"), xWinSize - 64, mouse_position.y - 32);
 					}
-					if (mouse_position.x >= 0 && mouse_position.x <= 20){
-						displaySprite(renderer, getTexture(textures, "arrow_left"), 0, mouse_position.y-32);
+					if (mouse_position.x >= 0 && mouse_position.x <= 20)
+					{
+						displaySprite(renderer, getTexture(textures, "arrow_left"), 0, mouse_position.y - 32);
 					}
-					if (mouse_position.y <= yWinSize && mouse_position.y >= yWinSize-20){
-						displaySprite(renderer, getTexture(textures, "arrow_down"), mouse_position.x-32, yWinSize-64);
+					if (mouse_position.y <= yWinSize && mouse_position.y >= yWinSize - 20)
+					{
+						displaySprite(renderer, getTexture(textures, "arrow_down"), mouse_position.x - 32, yWinSize - 64);
 					}
-					if (mouse_position.y <= 20 && mouse_position.y >= 0){
-						displaySprite(renderer, getTexture(textures, "arrow_up"), mouse_position.x-32, 0);
+					if (mouse_position.y <= 20 && mouse_position.y >= 0)
+					{
+						displaySprite(renderer, getTexture(textures, "arrow_up"), mouse_position.x - 32, 0);
 					}
 				}
 
@@ -765,10 +845,9 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 				sprintf(pos, "%d,%d", i, j);
 				displayText(renderer, imgDestRect.x+(pxBase/2)-10, imgDestRect.y+(pxBase/4), (pxBase/64)*10, pos, "../inc/font/Pixels.ttf", 255, 50, 50);
 				// -- DEBUG --*/
-
 			}
-        }
-    }
+		}
+	}
 
 	displayInterface(renderer);
 

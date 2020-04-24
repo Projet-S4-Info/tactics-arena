@@ -67,7 +67,7 @@ err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, b
 
     if (verbose == 3)
             printf("\033[36;01m[ANIMATIONS]\033[00m : Chargement du fichier son : %s\n", sound_effect);
-    animTextures[index].sound_effect = Mix_LoadMUS(sound_effect);
+    animTextures[index].sound_effect = Mix_LoadWAV(sound_effect);
 
     return OK;
 }
@@ -203,7 +203,7 @@ err_t play_ability_animation(Ability ab, Coord pos)
 
     displayMap(renderer, XPOS, YPOS);
 
-    Mix_PlayMusic(getAnim(ab.ab_id).sound_effect, 1);
+    Mix_PlayChannel(-1, getAnim(ab.ab_id).sound_effect, 0);
 
     if (getAnim(ab.ab_id).aoe == TRUE)
     {

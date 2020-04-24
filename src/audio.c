@@ -12,7 +12,7 @@ int playMenuMusic(int nb)
     /* Initialisation */
     if (SDL_Init(SDL_INIT_AUDIO) != 0)
     {
-        fprintf(stdout, "Échec de l'initialisation de la SDL (%s)\n", SDL_GetError());
+        fprintf(stdout, "\033[31;01m[AUDIO ERROR]\033[00m : Échec de l'initialisation de la SDL (%s)\n", SDL_GetError());
         return -1;
     }
 
@@ -29,7 +29,7 @@ int playMenuMusic(int nb)
     }
 
     /* On ouvre le device audio */
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1)
+    if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1)
     {
         printf("\033[31;01m[AUDIO ERROR]\033[00m : %s\n", Mix_GetError());
     }

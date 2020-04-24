@@ -144,7 +144,7 @@ typedef struct
     bool aoe;
     bool on_ground;
     int speed;
-    Mix_Music *sound_effect;
+    Mix_Chunk *sound_effect;
 } AnimTexture;
 
 typedef struct
