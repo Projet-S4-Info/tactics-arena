@@ -41,7 +41,7 @@ int playMenuMusic(int nb)
     /* On lance la musique */
     if (nb == 1)
     {
-        Mix_PlayMusic(myMus, 1);
+        Mix_PlayMusic(myMus, -1);
     }
     else if (nb == 2)
     {
