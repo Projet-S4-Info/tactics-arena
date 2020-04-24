@@ -9,7 +9,6 @@ Mix_Music *multiMus;
 int playMenuMusic(int nb)
 // Play the menu music
 {
-
     /* Initialisation */
     if (SDL_Init(SDL_INIT_AUDIO) != 0)
     {
@@ -17,8 +16,17 @@ int playMenuMusic(int nb)
         return -1;
     }
 
+    for (int i = 0; i < SDL_GetNumAudioDrivers(); ++i) {
+        const char * driver_name = SDL_GetAudioDriver(i);
+        if (SDL_AudioInit(driver_name)) {
+            printf("\033[31;01m[AUDIO ERROR]\033[00m : Audio driver failed to initialize: %s\n", driver_name);
+            SDL_AudioQuit();
+        }
+    }
+
+
     if (verbose >= 2)
-        printf("[SDL] Audio driver: %s\n", SDL_GetCurrentAudioDriver());
+        printf("\033[36;01m[AUDIO]\033[00m : Audio driver: %s\n", SDL_GetCurrentAudioDriver());
 
     int i, count = SDL_GetNumAudioDevices(0);
 
@@ -26,13 +34,13 @@ int playMenuMusic(int nb)
     for (i = 0; i < count; ++i)
     {
         if (verbose >= 2)
-            printf("Audio device %d: %s\n", i, SDL_GetAudioDeviceName(i, 0));
+            printf("\033[36;01m[AUDIO]\033[00m : Audio device %d: %s\n", i, SDL_GetAudioDeviceName(i, 0));
     }
 
     /* On ouvre le device audio */
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1)
     {
-        printf("%s\n", Mix_GetError());
+        printf("\033[31;01m[AUDIO ERROR]\033[00m : %s\n", Mix_GetError());
     }
 
     /* On charge la musique */
@@ -76,7 +84,7 @@ int pauseMenuMusic()
 // Pause menu music
 {
     if (verbose >= 2)
-        printf("[AUDIO] Music paused\n");
+        printf("\033[36;01m[AUDIO]\033[00m : Music paused\n");
     Mix_PauseMusic();
     return 1;
 }
@@ -85,7 +93,7 @@ int resumeMenuMusic()
 // Resume menu music
 {
     if (verbose >= 2)
-        printf("[AUDIO] Music resumed\n");
+        printf("\033[36;01m[AUDIO]\033[00m : Music resumed\n");
     Mix_ResumeMusic();
     return 1;
 }

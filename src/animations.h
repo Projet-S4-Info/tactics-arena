@@ -20,7 +20,7 @@
 
 /* =============== VARIABLES =============== */
 
-err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index);
+err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, bool aoe, bool on_ground, int speed);
 
 SDL_Texture *getAnimTexture(abilityId id, int index, bool big);
 

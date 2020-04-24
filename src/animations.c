@@ -31,7 +31,7 @@
 
 /* =============== FONCTIONS DE GESTION DES TEXTURES D'ANIMATIONS =============== */
 
-err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, bool on_ground)
+err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, bool aoe, bool on_ground, int speed)
 // Pre-load animation textures for future loading
 {
     int index = 0;
@@ -44,18 +44,20 @@ err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, b
         index++;
     }
 
-    if (verbose == 2)
+    if (verbose == 3)
         printf("\033[36;01m[ANIMATIONS]\033[00m : Ajout de la texture [%s] à l'id %d\n", name, index);
 
     animTextures[index].id = id;
     animTextures[index].nb_steps = end_index - start_index + 1;
+    animTextures[index].aoe = aoe;
     animTextures[index].on_ground = on_ground;
+    animTextures[index].speed = speed;
 
     for (int i = start_index; i <= end_index; i++)
     {
         sprintf(tempSmall, "../inc/sprites/attacks/sprite_indiv/64_64/%s%d.png", name, i);
         sprintf(tempBig, "../inc/sprites/attacks/sprite_indiv/128_128/%s%d.png", name, i);
-        if (verbose == 2)
+        if (verbose == 3)
             printf("\033[36;01m[ANIMATIONS]\033[00m : Chargement de la texture : %s\n", tempSmall);
         animTextures[index].spritesSmall[tabIndex] = loadTexture(renderer, loadImage(tempSmall));
         /*if (verbose == 2) printf("\033[36;01m[ANIMATIONS]\033[00m : Ajout de la texture [%s] à l'id %d\n", name, index);
@@ -144,12 +146,18 @@ err_t loadAnimationTextures()
 // Load all the animations relative textures
 {
     // Ranger abilities animations
-    addAnimTexture(Bolt, "ranger/bolt", 64, 69, FALSE);
-    addAnimTexture(Focus, "ranger/focus_aura", 64, 68, FALSE);
-    addAnimTexture(Deadeye, "ranger/eye", 64, 69, FALSE);
+    addAnimTexture(Bolt, "ranger/bolt", 64, 69, FALSE, FALSE, 100);
+    addAnimTexture(Focus, "ranger/focus_aura", 64, 68, FALSE, FALSE, 100);
+    addAnimTexture(Deadeye, "ranger/eye", 64, 69, FALSE, FALSE, 100);
 
     // Berserker abilities animations
-    addAnimTexture(Frenzied_Dash, "berserker/earthquake_ultimate", 64, 68, TRUE);
+    addAnimTexture(Frenzied_Dash, "berserker/earthquake_ultimate", 64, 68, TRUE, TRUE, 100);
+
+    // Goliath abilities animations
+    addAnimTexture(Bash, "goliath/boomed", 64, 66, FALSE, FALSE, 100);
+    addAnimTexture(Detain, "goliath/jailed", 64, 70, FALSE, FALSE, 100);
+    addAnimTexture(Shields_Up, "goliath/shieldsup", 64, 71, FALSE, FALSE, 100);
+    addAnimTexture(Banner, "goliath/bluebanneer", 64, 69, FALSE, FALSE, 100);
 
     return OK;
 }
@@ -189,22 +197,38 @@ err_t play_ability_animation(Ability ab, Coord pos)
 
     displayMap(renderer, XPOS, YPOS);
 
-    for (int i = 0; i < getAnimSteps(ab.ab_id); i++)
+    if (getAnim(ab.ab_id).aoe == TRUE)
     {
-        for (int j = 0; j < ab.nb_coords; j++)
+        for (int i = 0; i < getAnimSteps(ab.ab_id); i++)
         {
-            Coord drawPos = add_coords(pos, *((*(ab.coord))+j));
-            if (isWalkable(drawPos) && isInGrid(drawPos))
+            for (int j = 0; j < ab.nb_coords; j++)
             {
-                temp = to2D(drawPos);
-                if (pxBase == 64)
-                    displaySprite(renderer, getAnimTexture(ab.ab_id, i, FALSE), temp.x, temp.y);
-                else
-                    displaySprite(renderer, getAnimTexture(ab.ab_id, i, TRUE), temp.x, temp.y);
+                Coord drawPos = add_coords(pos, *((*(ab.coord))+j));
+                if (isWalkable(drawPos) && isInGrid(drawPos))
+                {
+                    temp = to2D(drawPos);
+                    if (pxBase == 64)
+                        displaySprite(renderer, getAnimTexture(ab.ab_id, i, FALSE), temp.x, temp.y);
+                    else
+                        displaySprite(renderer, getAnimTexture(ab.ab_id, i, TRUE), temp.x, temp.y);
+                }
             }
+            SDL_RenderPresent(renderer);
+            SDL_Delay(getAnim(ab.ab_id).speed);
+        }
+    }
+    else
+    {
+        for (int i = 0; i < getAnimSteps(ab.ab_id); i++)
+        {
+            temp = to2D(pos);
+            if (pxBase == 64)
+                displaySprite(renderer, getAnimTexture(ab.ab_id, i, FALSE), temp.x, temp.y);
+            else
+                displaySprite(renderer, getAnimTexture(ab.ab_id, i, TRUE), temp.x, temp.y);
         }
         SDL_RenderPresent(renderer);
-        SDL_Delay(100);
+        SDL_Delay(getAnim(ab.ab_id).speed);
     }
 
     return OK;

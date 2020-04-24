@@ -141,7 +141,9 @@ typedef struct
     SDL_Texture *spritesSmall[_NB_MAX_ANIM_];
     SDL_Texture *spritesBig[_NB_MAX_ANIM_];
     int nb_steps;
+    bool aoe;
     bool on_ground;
+    int speed;
 } AnimTexture;
 
 typedef struct

@@ -46,11 +46,11 @@ int addCharacterTexture(SDL_Renderer *renderer, char * name)
     char *dirFolder;
 
     sprintf(path, "../inc/sprites/%s/sprite_indiv/64_64/", name);
-    if(verbose == 2) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement des textures du dossier : %s\n", path);
+    if(verbose == 3) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement des textures du dossier : %s\n", path);
 
     // Textures face (64x64)
 	charTextures[indexCharTable].texture_name = name;
-    if(verbose == 2) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement de la texture : %s\n", strcat(path, "front/Sprite_frontview_64.png"));
+    if(verbose == 3) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement de la texture : %s\n", strcat(path, "front/Sprite_frontview_64.png"));
     sprintf(path, "../inc/sprites/%s/sprite_indiv/64_64/", name);
     charTextures[indexCharTable].front = loadTexture(renderer, loadImage(strcat(path, "front/Sprite_frontview_64.png")));
 
@@ -66,7 +66,7 @@ int addCharacterTexture(SDL_Renderer *renderer, char * name)
         for (animIndex = 1; animIndex <= _NB_ANIM_; animIndex++)
         {
             sprintf(temp, "%s%s/Sprite_%s%d.png", path, dirFolder, dirFolder, animIndex);
-            if(verbose == 2) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement de la texture : %s\n", temp);
+            if(verbose == 3) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement de la texture : %s\n", temp);
             charTextures[indexCharTable].textures[dirIndex][animIndex-1] = loadTexture(renderer, loadImage(temp));
         }
     }
@@ -83,14 +83,14 @@ int addCharacterTexture(SDL_Renderer *renderer, char * name)
         for (animIndex = 128; animIndex < 128+_NB_ANIM_; animIndex++)
         {
             sprintf(temp, "%s%s/Sprite_%s%d.png", path, dirFolder, dirFolder, animIndex);
-            if(verbose == 2) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement de la texture : %s\n", temp);
+            if(verbose == 3) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement de la texture : %s\n", temp);
             charTextures[indexCharTable].textures[dirIndex][animIndex-128] = loadTexture(renderer, loadImage(temp));
         }
     }
 
     indexCharTable++;
 
-	if(verbose == 2) printf("\033[36;01m[CHARACTERS]\033[00m : Ajout de la texture de la classe [%s] à l'id %d\n", name, indexCharTable);
+	if(verbose == 3) printf("\033[36;01m[CHARACTERS]\033[00m : Ajout de la texture de la classe [%s] à l'id %d\n", name, indexCharTable);
 
 	return indexCharTable;
 }

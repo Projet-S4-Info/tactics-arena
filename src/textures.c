@@ -90,7 +90,7 @@ int addTextureToTable(TabTexture * texturesTable, SDL_Texture * texture, SDL_Tex
 	texturesTable[index].big_texture = big_texture;
 	texturesTable[index].texture_name = texture_name;
 
-	if (verbose == 2) printf("\033[36;01m[TEXTURES]\033[00m : Ajout de la texture [%s] à l'id %d\n", texture_name, index);
+	if (verbose == 3) printf("\033[36;01m[TEXTURES]\033[00m : Ajout de la texture [%s] à l'id %d\n", texture_name, index);
 
 	return index;
 }
