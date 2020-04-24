@@ -208,7 +208,7 @@ err_t startTCPSocketServ()
             }
             startGame.isServerStartGame = 1;
             sprintf(startGame.mapNameGame, "%s", mapMultiSelected);
-            loadMap((Tile *)&startGame.gridServer, mapMultiSelected);
+            loadMap(&startGame.gridServer, mapMultiSelected);
 
             if (sendStruct((void *)&startGame, sizeof(startGame), socketConnected) != OK)
             {

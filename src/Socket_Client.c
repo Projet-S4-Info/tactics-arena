@@ -141,7 +141,7 @@ err_t startTCPSocketCli(int socketCli)
 
         if (recep((void *)&startGameCli, sizeof(startGameCli), socketConnected) != NULL)
         {
-          saveMap((Tile *)&startGameCli.gridServer, "map_TempMumlti");
+          saveMap(&startGameCli.gridServer[0][0], "map_TempMumlti");
         }
         else
         {
