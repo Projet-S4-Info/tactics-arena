@@ -100,7 +100,7 @@ int addCharacterTexture(SDL_Renderer *renderer, char * name)
 SDL_Texture * getCharTexture(char *name, Direction direction, int indexAnim)
 // Returns the texture (64x64) of a given class in a given direction at a given animation index
 {
-    SDL_Texture * result;
+    SDL_Texture * result = NULL;
 
     name[0] = tolower(name[0]);
     for (int i=0; i < _NB_CLASSES_; i++)
@@ -112,6 +112,12 @@ SDL_Texture * getCharTexture(char *name, Direction direction, int indexAnim)
         }
     }
 
+    if (result == NULL)
+    {
+        printf("\033[31;01m[CHARACTERS ERROR]\033[00m : Erreur lors du chargement de la texture [%s] (64x64)\n", name);
+        exit(EXIT_FAILURE);
+    }
+
     return result;
 }
 
@@ -120,7 +126,7 @@ SDL_Texture * getCharTexture(char *name, Direction direction, int indexAnim)
 SDL_Texture * getBigCharTexture(char *name, Direction direction, int indexAnim)
 // Returns the texture (128x128) of a given class in a given direction at a given animation index
 {
-    SDL_Texture * result;
+    SDL_Texture * result = NULL;
 
     name[0] = tolower(name[0]);
     for (int i=0; i < _NB_CLASSES_; i++)
@@ -130,6 +136,12 @@ SDL_Texture * getBigCharTexture(char *name, Direction direction, int indexAnim)
             result = charTextures[i].textures[W+1+direction][indexAnim];
             break;
         }
+    }
+
+    if (result == NULL)
+    {
+        printf("\033[31;01m[CHARACTERS ERROR]\033[00m : Erreur lors du chargement de la texture [%s] (128x128)\n", name);
+        exit(EXIT_FAILURE);
     }
 
     return result;

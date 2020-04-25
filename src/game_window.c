@@ -49,6 +49,7 @@ int hover_tchat = 0;		  // Hover tchat button
 int hover_passive_help = 0;	  // Hover passive help in ID card (with mouse position)
 int end_of_turn = 0;		  // Fin de tour
 int isChatActive = 0;		  // Chat button
+char onLoadingScreen[STR_LONG] = "Goliath";
 Direction camMove = -1;
 int *exitThread;
 
@@ -149,24 +150,21 @@ int createGameWindow(int x, int y)
 		int start_seconds = SDL_GetTicks() / 1000;
 		int load_index = 0;
 
-		while ((SDL_GetTicks() / 1000) - start_seconds < 3)
+		// Textures loading screen
+		while ((SDL_GetTicks() / 1000) - start_seconds < _TEXTURE_LOADING_TIME_)
 		{
 			load_index++;
+			if (load_index > 6) load_index = 1;
 			SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
 			SDL_RenderClear(renderer);
-			displayText(renderer, 200, yWinSize / 2 + 120, 40, "Chargement des textures du jeu...", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
-			displayText(renderer, 200, yWinSize / 2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, TRUE);
-			if (load_index == 1)
-				displayText(renderer, xWinSize / 2, yWinSize / 3 * 2, 60, "Ooo", "../inc/font/Aqua.ttf", 255, 255, 255, TRUE);
-			else if (load_index == 2)
-				displayText(renderer, xWinSize / 2, yWinSize / 3 * 2, 60, "oOo", "../inc/font/Aqua.ttf", 255, 255, 255, TRUE);
-			else if (load_index == 3)
-				displayText(renderer, xWinSize / 2, yWinSize / 3 * 2, 60, "ooO", "../inc/font/Aqua.ttf", 255, 255, 255, TRUE);
-			SDL_Delay(100);
+			displayText(renderer, 200, yWinSize / 2 + 120, 40, "Chargement des textures du jeu...", "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+			displayText(renderer, 200, yWinSize / 2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, FALSE);
+			displaySprite(renderer, getBigCharTexture(onLoadingScreen, W, load_index), 1, yWinSize-128);
 			SDL_RenderPresent(renderer);
-			SDL_Delay(900);
+			SDL_Delay(500);
 		}
 
+		// Loading screen for connection
 		if (is_online)
 		{
 			int loadingAnim = 1;
@@ -175,13 +173,13 @@ int createGameWindow(int x, int y)
 				SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 				SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
 				SDL_RenderClear(renderer);
-				displayText(renderer, 200, yWinSize / 2 + 120, 40, "Communication des informations avec le serveur...", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
-				displayText(renderer, 200, yWinSize / 2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, TRUE);
-				displaySprite(renderer, getBigCharTexture("goliath", W, loadingAnim), 1, yWinSize-128);
+				displayText(renderer, 200, yWinSize / 2 + 120, 40, "Communication des informations avec le serveur...", "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+				displayText(renderer, 200, yWinSize / 2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, FALSE);
+				displaySprite(renderer, getBigCharTexture(onLoadingScreen, W, loadingAnim), 1, yWinSize-128);
 				SDL_RenderPresent(renderer);
 				loadingAnim++;
 				if (loadingAnim > 6) loadingAnim = 1;
-				SDL_Delay(1000);
+				SDL_Delay(500);
 			}
 		}
 
