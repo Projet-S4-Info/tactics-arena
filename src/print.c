@@ -174,7 +174,7 @@ err_t print_init_ent(init_ent *e, char tab[STR_SHORT])
 {
     printf("%sCha_Id : %d\n", tab, e->char_id);
     printf("%sCha_Name : %s\n", tab, e->cha_name);
-    print_class_name(e->char_id, tab);
+    print_class_name(e->cha_class, tab);
     print_Coord(&(e->starting_position),tab);
 
     return OK;

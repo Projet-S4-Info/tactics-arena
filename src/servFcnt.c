@@ -135,18 +135,19 @@ void * simple_recep(void *container, int size, int socket)
 err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s, char tab[STR_SHORT]))
 {
   if(verbose>=2)printf("Envoi en Cours\n");
-  bool waiting;
 
-  simple_recep(&waiting, sizeof(bool), socketConnected);
-
-  if(waiting)
-  {
   if(print!=NULL && verbose>= 0)
   {
     print(structure,"SENDING : ");
   }
 
-  return simple_send(structure, size, socket);
+  if(simple_send(structure, size, socket)==OK)
+  {
+    bool received;
+
+    simple_recep(&received, sizeof(bool), socketConnected);
+
+    return OK;
   }
   else
   {
@@ -163,19 +164,24 @@ err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s
 void *recep(void *container, int size, int socket, err_t (*print)(void * s, char tab[STR_SHORT]))
 {
   if(verbose>= 2)printf("En Reception\n");
+  bool received;
 
-  bool waiting = TRUE;
-
-  if(simple_send(&waiting, sizeof(bool), socketConnected)!=SOCKET_ERROR)
+  if(simple_recep(container, size, socket)!=NULL)
   {
-
-    container = simple_recep(container, size, socket);
+    received = TRUE;
 
     if(print!=NULL && verbose>= 0)
     {
       print(container,"RECIEVED : ");
     }
+
   }
+  else
+  {
+    received = FALSE;
+  }
+
+  simple_send(&received, sizeof(bool), socketConnected);
 
   return container;
 }
