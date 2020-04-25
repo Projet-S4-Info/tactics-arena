@@ -139,18 +139,21 @@ err_t startTCPSocketCli(int socketCli)
         if (verbose >= 1)
           printf("Conexion établie sans soucis fermeture de la fonction... \n");
 
-        if (recep((void *)&startGameCli, sizeof(startGameCli), socketConnected, NULL) != NULL)
-        {
-          if(verbose >= 2)printf("Map Name : %s \n", startGameCli.mapNameGame);
-          // if(verbose >= 2)displayMapMulti(startGameCli.multiMap);
-        }
-        else
-        {
-          printf("Pas de status recue \n");
-        }
+
+
+        loadMap(matrix, startGameCli.mapNameGame);
+        // if (recep((void *)&startGameCli, sizeof(startGameCli), socketConnected, NULL) != NULL)
+        // {
+        //   if(verbose >= 2)printf("Map Name : %s \n", startGameCli.mapNameGame);
+
+        // }
+        // else
+        // {
+        //   printf("Pas de status recue \n");
+        // }
 
         startGameCli.isServerStartGame = 2;
-        loadMap(matrix, startGameCli.mapNameGame);
+        
 
         if (sendStruct(&startGameCli, sizeof(startGameCli), socketConnected, NULL) == OK)
         {
