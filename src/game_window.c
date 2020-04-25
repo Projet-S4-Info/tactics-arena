@@ -49,7 +49,7 @@ int hover_tchat = 0;		  // Hover tchat button
 int hover_passive_help = 0;	  // Hover passive help in ID card (with mouse position)
 int end_of_turn = 0;		  // Fin de tour
 int isChatActive = 0;		  // Chat button
-char onLoadingScreen[STR_LONG] = "Goliath";
+char onLoadingScreen[_NB_CLASSES_][STR_SHORT] = {"Goliath", "Valkyrie", "Angel", "Ranger", "Mage", "Berserker"};
 Direction camMove = -1;
 int *exitThread;
 
@@ -147,39 +147,40 @@ int createGameWindow(int x, int y)
 		loadSprites(renderer, cSprites);
 		loadAnimationTextures();
 
-		int start_seconds = SDL_GetTicks() / 1000;
-		int load_index = 0;
-
 		// Textures loading screen
+		int start_seconds = SDL_GetTicks() / 1000;
+		int load_index = -1;
 		while ((SDL_GetTicks() / 1000) - start_seconds < _TEXTURE_LOADING_TIME_)
 		{
 			load_index++;
-			if (load_index > 6) load_index = 1;
+			if (load_index > 5) load_index = 0;
 			SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
 			SDL_RenderClear(renderer);
 			displayText(renderer, 200, yWinSize / 2 + 120, 40, "Chargement des textures du jeu...", "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 			displayText(renderer, 200, yWinSize / 2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, FALSE);
-			displaySprite(renderer, getBigCharTexture(onLoadingScreen, W, load_index), 1, yWinSize-128);
+			displaySprite(renderer, getBigCharTexture(onLoadingScreen[load_index%6], W, load_index%6), 16, yWinSize-112);
 			SDL_RenderPresent(renderer);
-			SDL_Delay(500);
+			SDL_Delay(300);
 		}
 
 		// Loading screen for connection
 		if (is_online)
 		{
-			int loadingAnim = 1;
+			int loadingAnim = 0;
+			int xCharPos;
 			while (!game_setup)
 			{
+				xCharPos = xWinSize-(loadingAnim*10);
+				if (xCharPos < -100) loadingAnim = 0;
 				SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 				SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
 				SDL_RenderClear(renderer);
 				displayText(renderer, 200, yWinSize / 2 + 120, 40, "Communication des informations avec le serveur...", "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 				displayText(renderer, 200, yWinSize / 2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, FALSE);
-				displaySprite(renderer, getBigCharTexture(onLoadingScreen, W, loadingAnim), 1, yWinSize-128);
+				displaySprite(renderer, getBigCharTexture(onLoadingScreen[0], W, loadingAnim%6), xCharPos, yWinSize-112);
 				SDL_RenderPresent(renderer);
 				loadingAnim++;
-				if (loadingAnim > 6) loadingAnim = 1;
-				SDL_Delay(500);
+				SDL_Delay(100);
 			}
 		}
 
