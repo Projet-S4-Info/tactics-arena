@@ -230,8 +230,8 @@ err_t startTCPSocketServ()
 
               if (recep((void *)&startGame, sizeof(startGame), socketConnected) != NULL)
               {
+                
                 serverStatus = startGame.isServerStartGame;
-                loadMap(matrix, startGame.mapNameGame);
               }
               else
               {
@@ -241,6 +241,7 @@ err_t startTCPSocketServ()
               if (verbose >= 1)
                 printf("\nChargement de la partie... \n Fermeture de la fonction ... \n");
             }
+            loadMap(matrix, startGame.mapNameGame);
           }
           else
           {
