@@ -92,7 +92,7 @@ err_t startTCPSocketCli(int socketCli)
   infoMoi.id = 111;
   sprintf(infoMoi.pseudo, "LucienCh2424");
 
-  serverStatus_t startGameCli;
+  ServerStatus_t startGameCli;
   startGameCli.isServerStartGame = 0;
   sprintf(startGameCli.mapNameGame, "0");
 
@@ -141,7 +141,7 @@ err_t startTCPSocketCli(int socketCli)
 
         if (recep((void *)&startGameCli, sizeof(startGameCli), socketConnected) != NULL)
         {
-          saveMap((Tile *)&startGameCli.gridServer, startGameCli.mapNameGame);
+          if(verbose >= 2)printf("Map Name : %s", startGameCli.mapNameGame);
         }
         else
         {

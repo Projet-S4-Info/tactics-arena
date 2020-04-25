@@ -174,9 +174,13 @@ typedef struct {
 }init_ent;
 
 typedef struct{
+    int tile_id;
+    int walkable;
+}Tile_multi_t;
+
+typedef struct{
     int isServerStartGame;
     char mapNameGame[50];
-    Tile gridServer[_X_SIZE_][_Y_SIZE_];
-}serverStatus_t;
+}ServerStatus_t;
 
 #endif
