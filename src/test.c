@@ -10,5 +10,10 @@
 
 void test()
 {
-
+    printf("\n");
+    int i;
+    for(i=0; i<NUM_CLASS; i++)
+    {
+        print_class_name(i,"");
+    }
 }
