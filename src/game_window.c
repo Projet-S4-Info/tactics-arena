@@ -78,7 +78,7 @@ int createGameWindow(int x, int y)
 // Create a window with with x*y size (in px)
 {
 	/* Initialisation simple */
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) != 0)
 	{
 		printf("\033[31;01m[GAME_WINDOW ERROR]\033[00m : Échec de l'initialisation de la SDL (%s)\n", SDL_GetError());
 		return -1;
@@ -110,6 +110,26 @@ int createGameWindow(int x, int y)
 		printf("\033[31;01m[GAME_WINDOW ERROR]\033[00m : Erreur à la création du rendu\n");
 		exit(EXIT_FAILURE);
 	}
+
+	/* *************** INITIALISATION AUDIO *************** */
+    if (verbose >= 2)
+        printf("\033[36;01m[AUDIO]\033[00m : Audio driver: %s\n", SDL_GetCurrentAudioDriver());
+
+    int i, count = SDL_GetNumAudioDevices(0);
+
+    /*-- Boucle debug audio --*/
+    for (i = 0; i < count; ++i)
+    {
+        if (verbose >= 2)
+            printf("\033[36;01m[AUDIO]\033[00m : Audio device %d: %s\n", i, SDL_GetAudioDeviceName(i, 0));
+    }
+
+    /* On ouvre le device audio */
+    if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1)
+    {
+        printf("\033[31;01m[AUDIO ERROR]\033[00m : %s\n", Mix_GetError());
+    }
+	/* ************************************************* */
 
 	printf("%s", error_message[setRendererDriver(renderer)]);
 
@@ -498,47 +518,50 @@ int createGameWindow(int x, int y)
 						if (your_turn())
 						{
 							// Sélection des compétences
-							if (selected_ability != Last_Sacrifice && is_ally(tempEntity) && tempEntity != NULL)
+							if (selected_ability != Last_Sacrifice && tempEntity != NULL)
 							{
-								// Mouvement
-								if (e.key.keysym.sym == SDLK_1)
+								if (is_ally(tempEntity))
 								{
-									if (!able_ability(tempEntity, Mvt, TRUE))
-										selected_ability = Mvt;
-								}
-								// Compétence 1
-								else if (e.key.keysym.sym == SDLK_2)
-								{
-									if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id, TRUE))
-										selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
-								}
-								// Compétence 2
-								else if (e.key.keysym.sym == SDLK_3)
-								{
-									if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id, TRUE))
-										selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
-								}
-								// Compétence 3
-								else if (e.key.keysym.sym == SDLK_4)
-								{
-									if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id, TRUE))
-										selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
-								}
-								// Compétence 4
-								else if (e.key.keysym.sym == SDLK_5)
-								{
-									if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id, TRUE))
-										selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-								}
-								// Tourner personnage vers la droite
-								else if (e.key.keysym.sym == SDLK_6)
-								{
-									turnRight(tempEntity);
-								}
-								// Tourner personnage vers la gauche
-								else if (e.key.keysym.sym == SDLK_7)
-								{
-									turnLeft(tempEntity);
+									// Mouvement
+									if (e.key.keysym.sym == SDLK_1)
+									{
+										if (!able_ability(tempEntity, Mvt, TRUE))
+											selected_ability = Mvt;
+									}
+									// Compétence 1
+									else if (e.key.keysym.sym == SDLK_2)
+									{
+										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id, TRUE))
+											selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+									}
+									// Compétence 2
+									else if (e.key.keysym.sym == SDLK_3)
+									{
+										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id, TRUE))
+											selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
+									}
+									// Compétence 3
+									else if (e.key.keysym.sym == SDLK_4)
+									{
+										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id, TRUE))
+											selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
+									}
+									// Compétence 4
+									else if (e.key.keysym.sym == SDLK_5)
+									{
+										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id, TRUE))
+											selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
+									}
+									// Tourner personnage vers la droite
+									else if (e.key.keysym.sym == SDLK_6)
+									{
+										turnRight(tempEntity);
+									}
+									// Tourner personnage vers la gauche
+									else if (e.key.keysym.sym == SDLK_7)
+									{
+										turnLeft(tempEntity);
+									}
 								}
 							}
 						}
