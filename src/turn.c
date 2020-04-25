@@ -367,13 +367,15 @@ winId init_client()
 {
     Coord spawn[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
 
-    if(init_Foes(W) == OK){
+    /*if(init_Foes(W) == OK){
         if(verbose >= 1)printf("Init Foes est fait pour client \n");
     }
     
     if(init_Allies(spawn,S) == OK){
         if(verbose >= 1)printf("Init Allies client OK \n");
-    }
+    }*/
+    ent_init_test(Allies, "Friendly");
+    ent_init_test(Foes, "Ennemy");
 
     return game_loop(opposing_turn,local_turn);
 }
@@ -382,12 +384,14 @@ winId init_server()
 {
     Coord spawn[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
 
-    if(init_Allies(spawn,W) == OK){
+    /*if(init_Allies(spawn,W) == OK){
         if(verbose >= 1)printf("Init Allies server OK \n");
     }
     if (init_Foes(S) == OK){
         if(verbose >= 1)printf("Init Foes est fait pour serveur \n");
-    }
+    }*/
+    ent_init_test(Allies, "Friendly");
+    ent_init_test(Foes, "Ennemy");
     
     return game_loop(local_turn,opposing_turn);
 }

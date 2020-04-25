@@ -70,31 +70,33 @@ bool sentinel_check(Entity *e)
             r = &Allies[Ranger];
             list = stSent;
         }
-
-        int sight = get_range(r, Bolt);
-
-        Coord t[MAXRANGE];
-
-        setActionBorder(r->coords,sight,t);
-        
-        if(isInRange(t, e->coords))
+        if(r->active != Dead)
         {
-            Ability active_ab = r->cha_class->cla_abilities[Bolt%NUM_AB];
-            char log[STR_LONG];
-            sprintf(log, "%s's Sentinel was triggered", r->cha_name);
-            if(verbose>=1)printf("%s\n",log);
-            addLog(log);
+            int sight = get_range(r, Bolt);
 
-            Sentinel_counter = FALSE;
-            selected_ability = -1;
-            unhover();
+            Coord t[MAXRANGE];
 
-            if (isLoaded(active_ab.ab_id))
-                play_ability_animation(active_ab, e->coords);
-
-            if(apply_to(active_ab, r, list, e->coords) != 0)
+            setActionBorder(r->coords,sight,t);
+            
+            if(isInRange(t, e->coords))
             {
-                return TRUE;
+                Ability active_ab = r->cha_class->cla_abilities[Bolt%NUM_AB];
+                char log[STR_LONG];
+                sprintf(log, "%s's Sentinel was triggered", r->cha_name);
+                if(verbose>=1)printf("%s\n",log);
+                addLog(log);
+
+                Sentinel_counter = FALSE;
+                selected_ability = -1;
+                unhover();
+
+                if (isLoaded(active_ab.ab_id))
+                    play_ability_animation(active_ab, e->coords);
+
+                if(apply_to(active_ab, r, list, e->coords) != 0)
+                {
+                    return TRUE;
+                }
             }
         }
     }

@@ -314,7 +314,7 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
 
     Ability abtemp21 = {Shock,1,0,8,ANY_TILE,&d,1,&one_c,0,NULL,AFTER,mage_switch,{"Shock","Zap an ennemy."}};
     movesets[2][0] = abtemp21;
-    Ability abtemp22 = {Volt_Switch,2,3,10,ALLIES,&one_m,51,&aoe51,0,NULL,BEFORE,Volt_Switch_fn,{"Volt Switch","Switch spots with an ally and deal electric damage around caster."}};
+    Ability abtemp22 = {Volt_Switch,2,3,10,ALLIES,&one_m,51,&aoe51,0,NULL,BEFORE,Volt_Switch_fn,{"Volt Switch","Switch spots with an ally and deal electric damage around caster. Switching with a crippled ally will free him."}};
     movesets[2][1] = abtemp22;
     Ability abtemp23 = {Shock_Therapy,2,3,6,ALLIES,NULL,1,&one_c,2,&thera,NONE,NULL,{"Shock Therapy","Increase ally atk and magic."}};
     movesets[2][2] = abtemp23;
