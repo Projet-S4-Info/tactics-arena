@@ -104,6 +104,12 @@ err_t init_Allies(Coord spawn[NUM_CLASS], Direction d)
         init_spawn(&Allies[i], spawn[s]);
         ie.starting_position = Allies[i].coords;
 
+        if(verbose>=2)
+        {
+            printf("NAME : %s\n", ie.cha_name);
+            print_class_name(ie.cha_class,"");
+        }
+
         printf("%s",error_message[sendStruct(&ie, sizeof(init_ent), socketConnected, (err_t (*)(void*,char*))print_init_ent)]);
 
         //printf("%s",error_message[sendStruct(&i, sizeof(int), socketConnected, (err_t (*)(void *, char *))print_int)]);
