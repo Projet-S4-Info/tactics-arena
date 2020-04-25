@@ -92,7 +92,7 @@ err_t startTCPSocketCli(int socketCli)
   infoMoi.id = 111;
   sprintf(infoMoi.pseudo, "LucienCh2424");
 
-  serverStatus_t startGameCli;
+  ServerStatus_t startGameCli;
   startGameCli.isServerStartGame = 0;
   sprintf(startGameCli.mapNameGame, "0");
 
@@ -141,7 +141,8 @@ err_t startTCPSocketCli(int socketCli)
 
         if (recep((void *)&startGameCli, sizeof(startGameCli), socketConnected) != NULL)
         {
-          saveMap(&startGameCli.gridServer[0][0], "map_TempMumlti");
+          if(verbose >= 2)printf("Map Name : %s \n", startGameCli.mapNameGame);
+          // if(verbose >= 2)displayMapMulti(startGameCli.multiMap);
         }
         else
         {
@@ -149,7 +150,7 @@ err_t startTCPSocketCli(int socketCli)
         }
 
         startGameCli.isServerStartGame = 2;
-        loadMap(matrix, "map_TempMumlti");
+        
         
         if (sendStruct((void *)&startGameCli, sizeof(startGameCli), socketConnected) == OK)
         {
@@ -159,6 +160,7 @@ err_t startTCPSocketCli(int socketCli)
         {
           printf("Erreur d'envoi du status \n");
         }
+        loadMap(matrix, startGameCli.mapNameGame);
         return OK;
       }
       else

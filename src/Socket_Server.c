@@ -122,9 +122,10 @@ err_t startTCPSocketServ()
   infoClient.id = 0;
   sprintf(infoClient.pseudo, "PasDeCli");
 
-  serverStatus_t startGame;
+  ServerStatus_t startGame;
   startGame.isServerStartGame = 0;
   sprintf(startGame.mapNameGame, "0");
+  Tile gridTemp[_X_SIZE_][_Y_SIZE_];
 
   if (verbose >= 1)
     printf("\nLancement de la créatoin du serveur...\n");
@@ -208,7 +209,11 @@ err_t startTCPSocketServ()
             }
             startGame.isServerStartGame = 1;
             sprintf(startGame.mapNameGame, "%s", mapMultiSelected);
-            loadMap(&startGame.gridServer, mapMultiSelected);
+
+            loadMap(&gridTemp[0][0], mapMultiSelected);
+
+            //setupMultiMap(startGame.multiMap, gridTemp);
+            //if(verbose>=2)displayMapMulti(startGame.multiMap);
 
             if (sendStruct((void *)&startGame, sizeof(startGame), socketConnected) != OK)
             {
@@ -223,10 +228,9 @@ err_t startTCPSocketServ()
               if (verbose >= 1)
                 printf("Struct envoyé : isServerStartGame : %s \n", startGame.mapNameGame);
 
-              loadMap(matrix, startGame.mapNameGame);
-
               if (recep((void *)&startGame, sizeof(startGame), socketConnected) != NULL)
               {
+                
                 serverStatus = startGame.isServerStartGame;
               }
               else
@@ -237,6 +241,7 @@ err_t startTCPSocketServ()
               if (verbose >= 1)
                 printf("\nChargement de la partie... \n Fermeture de la fonction ... \n");
             }
+            loadMap(matrix, startGame.mapNameGame);
           }
           else
           {

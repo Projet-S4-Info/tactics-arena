@@ -118,7 +118,7 @@ err_t init_Allies(Coord spawn[NUM_CLASS], Direction d)
             print_Coord(&ie.starting_position, "Sending Ally starting position : ");
         }
 
-        printf("%s",error_message[sendStruct(&ie, sizeof(init_ent), socketConnected)]);
+        printf("%s",error_message[sendStruct((void *)&ie, sizeof(init_ent), socketConnected)]);
     }
 
     Allies[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
