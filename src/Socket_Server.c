@@ -227,21 +227,18 @@ err_t startTCPSocketServ()
             //     printf("Struct envoyé : isServerStartGame : %d \n", startGame.isServerStartGame);
             //   if (verbose >= 1)
             //     printf("Struct envoyé : isServerStartGame : %s \n", startGame.mapNameGame);
-
-              if (recep((void *)&startGame, sizeof(startGame), socketConnected, NULL) != NULL)
-              {
-                
-                serverStatus = startGame.isServerStartGame;
-              }
-              else
-              {
-                if (verbose >= 0)
-                  printf("Pas de recep de status MAP \n");
-              }
-              if (verbose >= 1)
-                printf("\nChargement de la partie... \n Fermeture de la fonction ... \n");
+            if (recep((void *)&startGame, sizeof(startGame), socketConnected, NULL) != NULL)
+            {
+              
+              serverStatus = startGame.isServerStartGame;
             }
-            loadMap(matrix, startGame.mapNameGame);
+            else
+            {
+              if (verbose >= 0)
+                printf("Pas de recep de status MAP \n");
+            }
+            if (verbose >= 1)
+              printf("\nChargement de la partie... \n Fermeture de la fonction ... \n");
           }
           else
           {
