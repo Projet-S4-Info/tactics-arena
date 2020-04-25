@@ -30,10 +30,11 @@
 
 /* =============== CONSTANTES ================ */
 
-#define _NB_MAX_MAPS_ 50 // Max number of maps being listed
+#define _NB_MAX_MAPS_ 50 			// Max number of maps being listed
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
-#define _FPS_ 60 // Define at which frequency the game have to refresh
+#define _FPS_ 60 					// Define at which frequency the game have to refresh
+#define _TEXTURE_LOADING_TIME_ 3	// Loading screen duration for textures (in seconds)
 
 /* =============== VARIABLES ================ */
 
@@ -168,14 +169,18 @@ int createGameWindow(int x, int y)
 
 		if (is_online)
 		{
+			int loadingAnim = 1;
 			while (!game_setup)
 			{
-				load_index++;
+				SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 				SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
 				SDL_RenderClear(renderer);
 				displayText(renderer, 200, yWinSize / 2 + 120, 40, "Communication des informations avec le serveur...", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 				displayText(renderer, 200, yWinSize / 2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, TRUE);
+				displaySprite(renderer, getBigCharTexture("goliath", W, loadingAnim), 1, yWinSize-128);
 				SDL_RenderPresent(renderer);
+				loadingAnim++;
+				if (loadingAnim > 6) loadingAnim = 1;
 				SDL_Delay(1000);
 			}
 		}
