@@ -1,7 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "struct.h"
 #include "grid.h"
+#include "init.h"
+
+err_t print_class_name(classId Id, char tab[STR_SHORT])
+{
+    printf("%sClass : %s\n", tab, classes[Id].cla_name);
+    return OK;
+}
 
 err_t print_int(int * i, char tab[STR_SHORT])
 {
@@ -92,6 +98,14 @@ err_t print_Coord_list(Coord ** c, int nb, char tab[STR_SHORT])
     return OK;
 }
 
+err_t print_action(action *a, char tab[STR_SHORT])
+{
+    printf("%sChar Id : %d\n", tab, a->char_id);
+    print_abilityId(a->act, tab);
+    print_Coord(&(a->c), tab);
+    return OK;
+}
+
 err_t print_Status(Status s, char tab[STR_SHORT])
 {
     char tab2[STR_SHORT];
@@ -153,6 +167,16 @@ err_t print_Modifier_list(Modifier **m, int nb, char tab[STR_SHORT])
         printf("%sModifiers : NULL\n", tab);
     }
     
+    return OK;
+}
+
+err_t print_init_ent(init_ent *e, char tab[STR_SHORT])
+{
+    printf("%sCha_Id : %d\n", tab, e->char_id);
+    printf("%sCha_Name : %s\n", tab, e->cha_name);
+    print_class_name(e->char_id, tab);
+    print_Coord(&(e->starting_position),tab);
+
     return OK;
 }
 

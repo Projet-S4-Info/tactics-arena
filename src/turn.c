@@ -269,7 +269,7 @@ err_t action_set(action a)
 
     if(is_online)
     {
-        printf("%s",error_message[sendStruct(&a, sizeof(action), socketConnected, NULL)]);
+        printf("%s",error_message[sendStruct(&a, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action)]);
     }
 
     if(a.act == Mvt)
@@ -306,7 +306,7 @@ winId local_turn()
 
     turn_end(Allies, stReceived);
 
-    printf("%s",error_message[sendStruct(&turn_over, sizeof(action), socketConnected, NULL)]);
+    printf("%s",error_message[sendStruct(&turn_over, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action)]);
 
     return game_end;
 }
@@ -321,7 +321,7 @@ winId opposing_turn()
     
     action a;
 
-    rec_id_swap(recep(&a, sizeof(action), socketConnected, NULL));
+    rec_id_swap(recep(&a, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action));
 
     while(a.char_id != 0)
     {
@@ -335,7 +335,7 @@ winId opposing_turn()
             apply_action(a);
         }
         
-        rec_id_swap(recep(&a, sizeof(action), socketConnected, NULL));
+        rec_id_swap(recep(&a, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action));
     }
 
     turn_end(Foes, stSent);

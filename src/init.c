@@ -59,15 +59,7 @@ err_t init_Foes(Direction d)
     int i,j;
     for(i=0; i<NUM_CLASS; i++)
     {
-        rec_id_swap(recep(&e,sizeof(init_ent),socketConnected, NULL));
-
-        if(verbose>=2)
-        {
-            printf("Init foes id char : %d\n", e.char_id);
-            printf("Init foes charname : %s\n", e.cha_name);
-            printf("Init foes class : %s\n", classes[e.cha_class].cla_name);
-            print_Coord(&e.starting_position, "Init foes starting position : ");
-        }
+        rec_id_swap(recep(&e,sizeof(init_ent),socketConnected, (err_t (*)(void*,char*))print_init_ent));
         
         Foes[e.cha_class].cha_id = e.char_id;
         sprintf(Foes[e.cha_class].cha_name, "Ennemy %s", e.cha_name);
@@ -112,15 +104,7 @@ err_t init_Allies(Coord spawn[NUM_CLASS], Direction d)
         init_spawn(&Allies[i], spawn[s]);
         ie.starting_position = Allies[i].coords;
 
-        if(verbose>=2)
-        {
-            printf("Sending Ally id char : %d\n", ie.char_id);
-            printf("Sending Ally charname : %s\n", ie.cha_name);
-            printf("Sending Ally class : %s\n", classes[ie.cha_class].cla_name);
-            print_Coord(&ie.starting_position, "Sending Ally starting position : ");
-        }
-
-        printf("%s",error_message[sendStruct(&ie, sizeof(init_ent), socketConnected, NULL)]);
+        printf("%s",error_message[sendStruct(&ie, sizeof(init_ent), socketConnected, (err_t (*)(void*,char*))print_init_ent)]);
 
         //printf("%s",error_message[sendStruct(&i, sizeof(int), socketConnected, (err_t (*)(void *, char *))print_int)]);
     }
