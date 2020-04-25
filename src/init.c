@@ -56,7 +56,7 @@ err_t init_Foes(Direction d)
 {
     init_ent e;
     Tile * t;
-    int i;
+    int i,j;
     for(i=0; i<NUM_CLASS; i++)
     {
         /*rec_id_swap(recep(&e,sizeof(init_ent),socketConnected));
@@ -67,7 +67,7 @@ err_t init_Foes(Direction d)
             printf("Init foes charname : %s\n", e.cha_name);
             printf("Init foes class : %s\n", classes[e.cha_class].cla_name);
             print_Coord(&e.starting_position, "Init foes starting position : ");
-        }*/
+        }
         
         Foes[e.cha_class].cha_id = e.char_id;
         sprintf(Foes[e.cha_class].cha_name, "Ennemy %s", e.cha_name);
@@ -77,12 +77,15 @@ err_t init_Foes(Direction d)
         Foes[e.cha_class].coords = e.starting_position;
         t = getTile(e.starting_position);
         t->entity = &Foes[e.cha_class];
-        if(verbose>=2 && t->entity!=NULL)printf("%s spawned at %d,%d\n", Foes[e.cha_class].cha_name, Foes[e.cha_class].coords.x, Foes[e.cha_class].coords.y);
+        if(verbose>=2 && t->entity!=NULL)printf("%s spawned at %d,%d\n", Foes[e.cha_class].cha_name, Foes[e.cha_class].coords.x, Foes[e.cha_class].coords.y);*/
 
-        ent_common_init(&Foes[e.cha_class]);     
+        recep(&j, sizeof(int), socketConnected);
+        printf("RECIEVED : %d\n", j);
+
+        //ent_common_init(&Foes[e->cha_class]);     
     }
 
-    Foes[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
+    //Foes[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
 
     return OK;
 }
@@ -118,8 +121,10 @@ err_t init_Allies(Coord spawn[NUM_CLASS], Direction d)
             print_Coord(&ie.starting_position, "Sending Ally starting position : ");
         }
 
-        printf("%s",error_message[sendStruct((void *)&ie, sizeof(init_ent), socketConnected)]);*/
+        printf("%s",error_message[sendStruct(&ie, sizeof(init_ent), socketConnected)]);*/
 
+        printf("%s",error_message[sendStruct(&i, sizeof(int), socketConnected)]);
+        printf("SENDING : %d\n", i);
     }
 
     Allies[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
