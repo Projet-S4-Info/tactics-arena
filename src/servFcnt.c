@@ -99,6 +99,31 @@ void getLocalIP()
   }
 }
 
+err_t simple_send(void *structure, int size, int socket)
+{
+  int sockSendError = send(socket, structure, size, 0);
+  if (sockSendError != SOCKET_ERROR)
+  {
+    return OK;
+  }
+  else
+  {
+    return SEND_ERROR;
+  }
+}
+
+void * simple_recep(void *container, int size, int socket)
+{
+  while (TRUE)
+  {
+    if (recv(socket, container, size, 0) > -1)
+    {
+      break;
+    }
+  }
+  return container;
+}
+
 /**
  * \fn err_t sendStruct(void * structure, int size, int socket)
  * \return err_t SEND_OK or SEND_ERROR
@@ -107,17 +132,18 @@ void getLocalIP()
 
 err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s, char tab[STR_SHORT]))
 {
-  int sockSendError;
+  bool waiting;
 
-  if(print!=NULL)
+  simple_recep(&waiting, sizeof(bool), socketConnected);
+
+  if(waiting)
+  {
+  if(print!=NULL && verbose>=2)
   {
     print(structure,"SENDING : ");
   }
 
-  sockSendError = send(socket, structure, size, 0);
-  if (sockSendError != SOCKET_ERROR)
-  {
-    return OK;
+  return simple_send(structure, size, socket);
   }
   else
   {
@@ -135,19 +161,17 @@ void *recep(void *container, int size, int socket, err_t (*print)(void * s, char
 {
   if (verbose >= 2)
     printf("bienvenue dans recep \n");
-  int flag = 0;
-  while (flag == 0)
-  {
-    sleep(1);
-    if (recv(socket, container, size, 0) > -1)
-    {
-      flag = 1;
-    }
-  }
 
-  if(print!=NULL)
+  bool waiting = TRUE;
+
+  if(simple_send(&waiting, sizeof(bool), socketConnected)!=SOCKET_ERROR)
   {
-    print(container,"RECIEVED : ");
+    container = simple_recep(container, size, socket);
+
+    if(print!=NULL && verbose>=2)
+    {
+      print(container,"RECIEVED : ");
+    }
   }
 
   return container;

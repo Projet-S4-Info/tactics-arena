@@ -84,7 +84,7 @@ err_t init_Foes(Direction d)
         //ent_common_init(&Foes[e.cha_class]);     
     }
 
-    Foes[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
+    //Foes[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
 
     return OK;
 }
