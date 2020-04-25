@@ -367,12 +367,12 @@ winId init_client()
 {
     Coord spawn[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
 
-    if(init_Foes(W) == OK){
-        if(verbose >= 1)printf("Init Foes est fait pour client \n");
-    }
-    
     if(init_Allies(spawn,S) == OK){
         if(verbose >= 1)printf("Init Allies client OK \n");
+    }
+
+    if(init_Foes(W) == OK){
+        if(verbose >= 1)printf("Init Foes est fait pour client \n");
     }
 
     return game_loop(opposing_turn,local_turn);
