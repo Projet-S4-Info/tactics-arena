@@ -141,7 +141,7 @@ err_t startTCPSocketCli(int socketCli)
 
 
 
-        loadMap(matrix, startGameCli.mapNameGame);
+        loadMap(matrix, "map_Testlol");
         // if (recep((void *)&startGameCli, sizeof(startGameCli), socketConnected, NULL) != NULL)
         // {
         //   if(verbose >= 2)printf("Map Name : %s \n", startGameCli.mapNameGame);
