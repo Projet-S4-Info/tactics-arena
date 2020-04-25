@@ -135,11 +135,11 @@ err_t startTCPSocketCli(int socketCli)
         if (verbose >= 1)
           printf("socketConnectedCli = %d\n", socketConnected);
 
-        sendStruct((void *)&infoMoi, sizeof(infoMoi), socketConnected);
+        sendStruct((void *)&infoMoi, sizeof(infoMoi), socketConnected, NULL);
         if (verbose >= 1)
           printf("Conexion établie sans soucis fermeture de la fonction... \n");
 
-        if (recep((void *)&startGameCli, sizeof(startGameCli), socketConnected) != NULL)
+        if (recep((void *)&startGameCli, sizeof(startGameCli), socketConnected, NULL) != NULL)
         {
           if(verbose >= 2)printf("Map Name : %s \n", startGameCli.mapNameGame);
           // if(verbose >= 2)displayMapMulti(startGameCli.multiMap);
@@ -152,7 +152,7 @@ err_t startTCPSocketCli(int socketCli)
         startGameCli.isServerStartGame = 2;
         
         
-        if (sendStruct((void *)&startGameCli, sizeof(startGameCli), socketConnected) == OK)
+        if (sendStruct((void *)&startGameCli, sizeof(startGameCli), socketConnected, NULL) == OK)
         {
           serverStatus = 3;
         }

@@ -105,9 +105,14 @@ void getLocalIP()
  * \brief Generic function to send a structur to a client or a server
 */
 
-err_t sendStruct(void *structure, int size, int socket)
+err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s, char tab[STR_SHORT]))
 {
   int sockSendError;
+
+  if(print!=NULL)
+  {
+    print(structure,"SENDING : ");
+  }
 
   sockSendError = send(socket, structure, size, 0);
   if (sockSendError != SOCKET_ERROR)
@@ -126,7 +131,7 @@ err_t sendStruct(void *structure, int size, int socket)
  * \brief Generic function to receive structures
 */
 
-void *recep(void *container, int size, int socket)
+void *recep(void *container, int size, int socket, err_t (*print)(void * s, char tab[STR_SHORT]))
 {
   if (verbose >= 2)
     printf("bienvenue dans recep \n");
@@ -139,6 +144,12 @@ void *recep(void *container, int size, int socket)
       flag = 1;
     }
   }
+
+  if(print!=NULL)
+  {
+    print(container,"RECIEVED : ");
+  }
+
   return container;
 }
 

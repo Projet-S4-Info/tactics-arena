@@ -3,6 +3,12 @@
 #include "struct.h"
 #include "grid.h"
 
+err_t print_int(int * i, char tab[STR_SHORT])
+{
+    printf("%s%d\n", tab, *i);
+    return OK;
+}
+
 err_t print_abilityId(abilityId id, char tab[STR_SHORT])
 {
     printf("%sId : %s\n", tab, IdNames[id]);

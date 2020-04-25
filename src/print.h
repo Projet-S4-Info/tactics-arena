@@ -2,6 +2,7 @@
 #define test_h
 #include "struct.h"
 
+err_t print_int(int * i, char tab[STR_SHORT]);
 err_t print_abilityId(abilityId id, char tab[STR_SHORT]);
 err_t print_targetType(targetType target, char tab[STR_SHORT]);
 err_t print_statId(statId id, char tab[STR_SHORT]);

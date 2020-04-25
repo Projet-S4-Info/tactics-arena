@@ -59,7 +59,7 @@ err_t nouveau_Msg(chat_t *c, char msg[STR_LONG])
 void startChat(void * structure, int size, int socket){
     while(1){
         if(changesChat == 1){
-            if(sendStruct(structure, size, socket) == OK){
+            if(sendStruct(structure, size, socket, NULL) == OK){
 
                 changesChat = 0;
             }else{

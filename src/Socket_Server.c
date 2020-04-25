@@ -191,7 +191,7 @@ err_t startTCPSocketServ()
             if (verbose >= 1)
               printf("socketConnectedCli = %d\n", socketConnected);
 
-            if (recep((void *)&infoClient, sizeof(infoClient), socketConnected) != NULL)
+            if (recep((void *)&infoClient, sizeof(infoClient), socketConnected, NULL) != NULL)
             {
               if (verbose >= 1)
                 printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
@@ -215,7 +215,7 @@ err_t startTCPSocketServ()
             //setupMultiMap(startGame.multiMap, gridTemp);
             //if(verbose>=2)displayMapMulti(startGame.multiMap);
 
-            if (sendStruct((void *)&startGame, sizeof(startGame), socketConnected) != OK)
+            if (sendStruct((void *)&startGame, sizeof(startGame), socketConnected, NULL) != OK)
             {
               printf("Erreur d'envoie \n");
             }
@@ -228,7 +228,7 @@ err_t startTCPSocketServ()
               if (verbose >= 1)
                 printf("Struct envoyé : isServerStartGame : %s \n", startGame.mapNameGame);
 
-              if (recep((void *)&startGame, sizeof(startGame), socketConnected) != NULL)
+              if (recep((void *)&startGame, sizeof(startGame), socketConnected, NULL) != NULL)
               {
                 
                 serverStatus = startGame.isServerStartGame;
