@@ -116,7 +116,7 @@ void * simple_recep(void *container, int size, int socket)
 {
   while (TRUE)
   {
-    if(verbose >= 2)printf("Waiting in simple recep \n");
+    if(verbose >= 4)printf("Waiting in simple recep \n");
     if (recv(socket, container, size, MSG_DONTWAIT) > -1)
     {
       break;
