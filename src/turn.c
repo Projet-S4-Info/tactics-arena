@@ -365,6 +365,7 @@ winId game_loop(winId (*turn1)(void), winId (*turn2)(void))
 
 winId init_client()
 {
+
     Coord spawn[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
 
     if(init_Foes(W) == OK){

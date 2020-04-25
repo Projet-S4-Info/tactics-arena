@@ -132,6 +132,7 @@ void * simple_recep(void *container, int size, int socket)
 
 err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s, char tab[STR_SHORT]))
 {
+  if(verbose>=2)printf("Envoi en Cours\n");
   bool waiting;
 
   simple_recep(&waiting, sizeof(bool), socketConnected);
@@ -159,13 +160,13 @@ err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s
 
 void *recep(void *container, int size, int socket, err_t (*print)(void * s, char tab[STR_SHORT]))
 {
-  if (verbose >= 2)
-    printf("bienvenue dans recep \n");
+  if(verbose>=2)printf("En Reception\n");
 
   bool waiting = TRUE;
 
   if(simple_send(&waiting, sizeof(bool), socketConnected)!=SOCKET_ERROR)
   {
+
     container = simple_recep(container, size, socket);
 
     if(print!=NULL && verbose>=2)
