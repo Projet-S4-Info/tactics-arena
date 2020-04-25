@@ -150,9 +150,9 @@ err_t startTCPSocketCli(int socketCli)
         }
 
         startGameCli.isServerStartGame = 2;
-        
-        
-        if (sendStruct((void *)&startGameCli, sizeof(startGameCli), socketConnected, NULL) == OK)
+        loadMap(matrix, startGameCli.mapNameGame);
+
+        if (sendStruct(&startGameCli, sizeof(startGameCli), socketConnected, NULL) == OK)
         {
           serverStatus = 3;
         }
@@ -160,7 +160,7 @@ err_t startTCPSocketCli(int socketCli)
         {
           printf("Erreur d'envoi du status \n");
         }
-        loadMap(matrix, startGameCli.mapNameGame);
+        
         return OK;
       }
       else
