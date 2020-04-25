@@ -176,11 +176,12 @@ typedef struct {
 typedef struct{
     int tile_id;
     int walkable;
-}Tile_multi_t;
+}MultiTile;
 
 typedef struct{
     int isServerStartGame;
     char mapNameGame[50];
+    MultiTile multiMap[_X_SIZE_][_Y_SIZE_];
 }ServerStatus_t;
 
 #endif

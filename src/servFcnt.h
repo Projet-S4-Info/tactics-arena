@@ -26,6 +26,8 @@ void getLocalIP();
 const char * setServIP();
 void * recep(void * container, int size, int socket);
 int recepChat(void * structure, int size, int socket);
+int setupMultiMap(MultiTile  mapMulti[_X_SIZE_][_Y_SIZE_], Tile mapLocal[_X_SIZE_][_Y_SIZE_]);
+int displayMapMulti(MultiTile mapMulti[_X_SIZE_][_Y_SIZE_]);
 
 
 

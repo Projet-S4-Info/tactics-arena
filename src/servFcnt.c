@@ -157,3 +157,26 @@ int recepChat(void *structure, int size, int socket)
   }
   return 0;
 }
+
+int setupMultiMap(MultiTile mapMulti[_X_SIZE_][_Y_SIZE_], Tile mapLocal[_X_SIZE_][_Y_SIZE_]){
+  for(int i = 0; i < _X_SIZE_; i++){
+    for(int j = 0; j < _Y_SIZE_; j++){
+      mapMulti[i][j].tile_id = mapLocal[i][j].tile_id;
+      mapMulti[i][j].walkable = mapLocal[i][j].walkable; 
+    }
+  }
+  return 1;
+}
+
+int displayMapMulti(MultiTile mapMulti[_X_SIZE_][_Y_SIZE_]){
+  if(verbose>=2)printf("Test affichage mapMulti : \n");
+  for(int i = 0; i < _X_SIZE_; i++){
+    for(int j = 0; j < _Y_SIZE_; j++){
+      if(verbose>= 2)printf("mapMulti[%d][%d].tile_id = %d", i, j, mapMulti[i][j].tile_id);
+      if(verbose>= 2)printf("mapMulti[%d][%d].walkable = %d", i, j, mapMulti[i][j].walkable);
+      if(verbose>=2)printf("\n");
+    }
+    if(verbose>=2)printf("\n");
+  }
+  return 1;
+}
