@@ -88,7 +88,9 @@ static void * fn_server (void * p_data)
 {
 	
     if(startTCPSocketServ() == OK){
+		printf("Fin de startTCPSocketServ \n");
 		sleep(1);
+		printf("Début de init_server \n");
 		init_server();
 	}
     return NULL;
@@ -98,7 +100,9 @@ static void * fn_server (void * p_data)
 static void * fn_client (void * p_data)
 {
     if(startTCPSocketCli() == OK){
+		printf("Fin de startTCPSOcketClient \n");
 		sleep(1);
+		printf("Début d'init_client \n");
 		init_client();
 	}
     return NULL;

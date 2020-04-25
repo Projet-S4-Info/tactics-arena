@@ -116,7 +116,8 @@ void * simple_recep(void *container, int size, int socket)
 {
   while (TRUE)
   {
-    if (recv(socket, container, size, 0) > -1)
+    if(verbose >= 2)printf("Waiting in simple recep \n");
+    if (recv(socket, container, size, MSG_DONTWAIT) > -1)
     {
       break;
     }
@@ -139,7 +140,7 @@ err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s
 
   if(waiting)
   {
-  if(print!=NULL && verbose>=2)
+  if(print!=NULL && verbose>= 0)
   {
     print(structure,"SENDING : ");
   }
@@ -160,7 +161,7 @@ err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s
 
 void *recep(void *container, int size, int socket, err_t (*print)(void * s, char tab[STR_SHORT]))
 {
-  if(verbose>=2)printf("En Reception\n");
+  if(verbose>= 2)printf("En Reception\n");
 
   bool waiting = TRUE;
 
@@ -169,7 +170,7 @@ void *recep(void *container, int size, int socket, err_t (*print)(void * s, char
 
     container = simple_recep(container, size, socket);
 
-    if(print!=NULL && verbose>=2)
+    if(print!=NULL && verbose>= 0)
     {
       print(container,"RECIEVED : ");
     }

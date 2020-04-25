@@ -59,7 +59,7 @@ err_t init_Foes(Direction d)
     int i,j;
     for(i=0; i<NUM_CLASS; i++)
     {
-        /*rec_id_swap(recep(&e,sizeof(init_ent),socketConnected, NULL));
+        rec_id_swap(recep(&e,sizeof(init_ent),socketConnected, NULL));
 
         if(verbose>=2)
         {
@@ -77,14 +77,14 @@ err_t init_Foes(Direction d)
         Foes[e.cha_class].coords = e.starting_position;
         t = getTile(e.starting_position);
         t->entity = &Foes[e.cha_class];
-        if(verbose>=2 && t->entity!=NULL)printf("%s spawned at %d,%d\n", Foes[e.cha_class].cha_name, Foes[e.cha_class].coords.x, Foes[e.cha_class].coords.y);*/
+        if(verbose>=2 && t->entity!=NULL)printf("%s spawned at %d,%d\n", Foes[e.cha_class].cha_name, Foes[e.cha_class].coords.x, Foes[e.cha_class].coords.y);
 
-        recep(&j, sizeof(int), socketConnected, (err_t (*)(void *, char *))print_int);
+        // recep(&j, sizeof(int), socketConnected, (err_t (*)(void *, char *))print_int);
 
-        //ent_common_init(&Foes[e.cha_class]);     
+        ent_common_init(&Foes[e.cha_class]);     
     }
 
-    //Foes[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
+    Foes[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
 
     return OK;
 }
@@ -112,7 +112,7 @@ err_t init_Allies(Coord spawn[NUM_CLASS], Direction d)
         init_spawn(&Allies[i], spawn[s]);
         ie.starting_position = Allies[i].coords;
 
-        /*if(verbose>=2)
+        if(verbose>=2)
         {
             printf("Sending Ally id char : %d\n", ie.char_id);
             printf("Sending Ally charname : %s\n", ie.cha_name);
@@ -120,9 +120,9 @@ err_t init_Allies(Coord spawn[NUM_CLASS], Direction d)
             print_Coord(&ie.starting_position, "Sending Ally starting position : ");
         }
 
-        printf("%s",error_message[sendStruct(&ie, sizeof(init_ent), socketConnected, NULL)]);*/
+        printf("%s",error_message[sendStruct(&ie, sizeof(init_ent), socketConnected, NULL)]);
 
-        printf("%s",error_message[sendStruct(&i, sizeof(int), socketConnected, (err_t (*)(void *, char *))print_int)]);
+        //printf("%s",error_message[sendStruct(&i, sizeof(int), socketConnected, (err_t (*)(void *, char *))print_int)]);
     }
 
     Allies[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];

@@ -210,27 +210,27 @@ err_t startTCPSocketServ()
             startGame.isServerStartGame = 1;
             sprintf(startGame.mapNameGame, "%s", mapMultiSelected);
 
-            loadMap(&gridTemp[0][0], mapMultiSelected);
-
             //setupMultiMap(startGame.multiMap, gridTemp);
             //if(verbose>=2)displayMapMulti(startGame.multiMap);
 
-            // if (sendStruct((void *)&startGame, sizeof(startGame), socketConnected, NULL) != OK)
-            // {
-            //   printf("Erreur d'envoie \n");
-            // }
-            // else
-            // {
-            //   if (verbose >= 1)
-            //     printf("Structure envoyée .... \n");
-            //   if (verbose >= 1)
-            //     printf("Struct envoyé : isServerStartGame : %d \n", startGame.isServerStartGame);
-            //   if (verbose >= 1)
-            //     printf("Struct envoyé : isServerStartGame : %s \n", startGame.mapNameGame);
+            if (sendStruct((void *)&startGame, sizeof(startGame), socketConnected, NULL) != OK)
+            {
+              printf("Erreur d'envoie \n");
+            }
+            else
+            {
+              if (verbose >= 1)
+                printf("Structure envoyée .... \n");
+              if (verbose >= 1)
+                printf("Struct envoyé : isServerStartGame : %d \n", startGame.isServerStartGame);
+              if (verbose >= 1)
+                printf("Struct envoyé : isServerStartGame : %s \n", startGame.mapNameGame);
+            }
+            
             if (recep((void *)&startGame, sizeof(startGame), socketConnected, NULL) != NULL)
             {
-              
               serverStatus = startGame.isServerStartGame;
+              printf("Status server : %d", startGame.isServerStartGame);
             }
             else
             {
@@ -264,5 +264,6 @@ err_t startTCPSocketServ()
       return SERV_ERROR;
     }
   }
+  loadMap(matrix, startGame.mapNameGame);
   return OK;
 }

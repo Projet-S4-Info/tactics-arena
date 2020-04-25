@@ -95,7 +95,6 @@ err_t startTCPSocketCli(int socketCli)
   ServerStatus_t startGameCli;
   startGameCli.isServerStartGame = 0;
   sprintf(startGameCli.mapNameGame, "0");
-  char * mapTemp = "map_Testlol";
 
   if (!windWSAError)
   {
@@ -141,22 +140,18 @@ err_t startTCPSocketCli(int socketCli)
           printf("Conexion établie sans soucis fermeture de la fonction... \n");
 
 
+        if (recep((void *)&startGameCli, sizeof(startGameCli), socketConnected, NULL) != NULL)
+        {
+          if(verbose >= 2)printf("Map Name : %s \n", startGameCli.mapNameGame);
+          startGameCli.isServerStartGame = 2;
 
-        loadMap(matrix,mapTemp);
-        // if (recep((void *)&startGameCli, sizeof(startGameCli), socketConnected, NULL) != NULL)
-        // {
-        //   if(verbose >= 2)printf("Map Name : %s \n", startGameCli.mapNameGame);
+        }
+        else
+        {
+          printf("Pas de status recue \n");
+        }
 
-        // }
-        // else
-        // {
-        //   printf("Pas de status recue \n");
-        // }
-
-        startGameCli.isServerStartGame = 2;
-        
-
-        if (sendStruct(&startGameCli, sizeof(startGameCli), socketConnected, NULL) == OK)
+        if(sendStruct(&startGameCli, sizeof(startGameCli), socketConnected, NULL) == OK)
         {
           serverStatus = 3;
         }
@@ -182,6 +177,6 @@ err_t startTCPSocketCli(int socketCli)
     printf("\nImpossible de créer une socket :( \n");
     return CLI_ERROR;
   }
-  
+  loadMap(matrix,startGameCli.mapNameGame);
   return OK;
 }
