@@ -53,10 +53,8 @@ int playMenuMusic(int nb)
     }
     else if (nb == 3)
     {   
-        while(nb == 3){
-            Mix_PlayMusic(fightMus_one, 1);
-            Mix_PlayMusic(fightMus_two, 1);
-        }
+        Mix_PlayMusic(fightMus_one, 1);
+        Mix_PlayMusic(fightMus_two, 1);
     }
     return 0;
 }
