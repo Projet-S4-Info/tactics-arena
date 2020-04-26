@@ -10,6 +10,7 @@
 
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
+#define NUMBER_OF_MUS 2
 
 /* BASIC STRUCTURES*/
 typedef struct
@@ -40,6 +41,12 @@ typedef struct{
     char chatTab[_NB_MAX_CHAT_][STR_LONG];
     int index;
 }chat_t;
+
+typedef struct{
+    char *musicName;
+    int startFade;
+    Mix_Music *music_p;
+}music_t;
 
 /* ENTITY STRUCTURES */
 

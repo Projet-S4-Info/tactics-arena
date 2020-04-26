@@ -2,11 +2,60 @@
 #include "../SDL2/include/SDL2/SDL.h"
 #include "../SDL2/include/SDL2/SDL_mixer.h"
 #include "common.h"
+#include <pthread.h>
+#include <unistd.h>
+#include "struct.h"
+#include <time.h>
 
 Mix_Music *myMus;
 Mix_Music *multiMus;
-Mix_Music *fightMus_one;
-Mix_Music *fightMus_two;
+Mix_Music *fightMus;
+
+pthread_t thread_music;
+
+static void *fn_gameMus(void *p_data)
+{
+    music_t musList[NUMBER_OF_MUS - 1];
+    musList[0].musicName = "../inc/music/Fight_Music_Courage.wav";
+    musList[0].startFade = 61000;
+    musList[1].musicName = "../inc/music/Fight Music Vanquisher.wav";
+    musList[1].startFade = 108000;
+    musList[0].music_p = Mix_LoadMUS(musList[0].musicName);
+    musList[1].music_p = Mix_LoadMUS(musList[1].musicName);
+
+    int cpt = -1;
+    int debut;
+    while (TRUE)
+    {
+        if (!Mix_PlayingMusic())
+        {
+            if (cpt != -1)
+            {
+                sleep(10);
+            }
+            else if (cpt < NUMBER_OF_MUS - 1)
+            {
+                cpt++;
+            }
+            else
+            {
+                cpt = 0;
+            }
+            fightMus = Mix_LoadMUS(musList[cpt].musicName);
+            Mix_FadeInMusic(musList[cpt].music_p, 1, 3500);
+            debut = clock();
+        }
+        else
+        {
+            if (clock() >= debut + musList[cpt].startFade)
+            {
+                Mix_FadeOutMusic(musList[cpt].startFade);
+            }
+        }
+        sleep(5);
+    }
+    return NULL;
+}
 
 int playMenuMusic(int nb)
 // Play the menu music
@@ -39,8 +88,6 @@ int playMenuMusic(int nb)
     /* On charge la musique */
     myMus = Mix_LoadMUS("../inc/music/cascade.wav");
     multiMus = Mix_LoadMUS("../inc/music/Menu_Multi_Assault.wav");
-    fightMus_one = Mix_LoadMUS("../inc/music/Fight_Music_Courage.wav");
-    fightMus_two = Mix_LoadMUS("../inc/music/Fight Music Vanquisher.wav"); 
 
     /* On lance la musique */
     if (nb == 1)
@@ -52,9 +99,8 @@ int playMenuMusic(int nb)
         Mix_PlayMusic(multiMus, -1);
     }
     else if (nb == 3)
-    {   
-        Mix_PlayMusic(fightMus_one, 1);
-        Mix_PlayMusic(fightMus_two, 1);
+    {
+        pthread_create(&thread_music, NULL, fn_gameMus, NULL);
     }
     return 0;
 }
