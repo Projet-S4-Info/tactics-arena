@@ -165,6 +165,13 @@ err_t loadAnimationTextures()
     addAnimTexture(Shields_Up, "goliath/shieldsup", 64, 71, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Shield_Up.wav");
     addAnimTexture(Banner, "goliath/bluebanneer", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Banner.wav");
 
+    // Angel abilities animations
+    addAnimTexture(Condemn, "angel/condemn", 64, 71, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Condemn.wav");
+    addAnimTexture(Aura, "angel/heal_aura", 64, 68, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Aura.wav");
+    addAnimTexture(Last_Sacrifice, "angel/wings", 64, 68, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Last_Sarifice.wav");
+    addAnimTexture(Holy_Storm, "angel/tornade", 64, 68, TRUE, TRUE, 100, "../inc/sound_effects/abilities/Holy_Storm.wav");
+    addAnimTexture(Gods_Blessing, "angel/oberon", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/God's_Blessing.wav");
+
     return OK;
 }
 
