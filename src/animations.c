@@ -156,6 +156,7 @@ err_t loadAnimationTextures()
 
     // Berserker abilities animations
     addAnimTexture(Slash, "berserker/slice", 64, 76, FALSE, FALSE, 20, "../inc/sound_effects/abilities/Slash.wav");
+    addAnimTexture(Killing_Blow, "berserker/slice", 64, 76, FALSE, FALSE, 20, "../inc/sound_effects/abilities/Slash.wav");
     addAnimTexture(Fury, "berserker/red_aura", 64, 68, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Fury.wav");
     addAnimTexture(Frenzied_Dash, "berserker/earthquake_ultimate", 64, 68, TRUE, TRUE, 100, "../inc/sound_effects/abilities/Frenzied_Dash.wav");
 
