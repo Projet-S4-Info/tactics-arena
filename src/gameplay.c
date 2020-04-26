@@ -561,12 +561,12 @@ bool apply_check(Modifier * mod, Entity * target)
         }
         if(is_online)
         {
-            printf("%s",error_message[sendStruct(&flag, sizeof(bool), socketConnected, print_int)]);
+            printf("%s",error_message[sendStruct(&flag, sizeof(bool), socketConnected, (err_t (*)(void *, char *))print_int)]);
         }
     }
     else if(is_online)
     {
-        recep(&flag, sizeof(bool),socketConnected, print_int); 
+        recep(&flag, sizeof(bool),socketConnected, (err_t (*)(void *, char *))print_int); 
     }
     else
     {
