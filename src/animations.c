@@ -230,16 +230,19 @@ err_t play_ability_animation(Ability ab, Coord pos)
         pos.x--;
         pos.y++;
     }
-    printf("GROUND OK\n");
+    if(verbose>=0)printf("GROUND OK\n");
 
     if (your_turn()) displayMap(renderer, XPOS, YPOS);
-    printf("1ST DISPLAYMAP OK\n");
+    if(verbose>=0)printf("1ST DISPLAYMAP OK\n");
 
     Mix_PlayChannel(-1, getAnim(ab.ab_id).sound_effect, 0);
-    printf("SOUND OK\n");
+    if(verbose>=0)printf("SOUND OK\n");
+
+    if(verbose>=0)printf("ABILITY HAS %d STEPS\n", getAnimSteps(ab.ab_id));
 
     if (getAnim(ab.ab_id).aoe == TRUE)
     {
+        if(verbose>=0)printf("ABILITY HAS AOE ANIMATION\n");
         for (int i = 0; i < getAnimSteps(ab.ab_id); i++)
         {
             for (int j = 0; j < ab.nb_coords; j++)
@@ -257,11 +260,12 @@ err_t play_ability_animation(Ability ab, Coord pos)
             SDL_RenderPresent(renderer);
             SDL_Delay(getAnim(ab.ab_id).speed);
             if (your_turn()) displayMap(renderer, XPOS, YPOS);
-            printf("REFRESH DISPLAY OK\n");
+            if(verbose>=0)printf("STEP %d/%d completed\n", i+1, getAnimSteps(ab.ab_id));
         }
     }
     else
     {
+        if(verbose>=0)printf("ABILITY HAS SINGLE TARGET ANIMATION\n");
         for (int i = 0; i < getAnimSteps(ab.ab_id); i++)
         {
             temp = to2D(pos);
@@ -273,9 +277,10 @@ err_t play_ability_animation(Ability ab, Coord pos)
             SDL_RenderPresent(renderer);
             SDL_Delay(getAnim(ab.ab_id).speed);
             if (your_turn()) displayMap(renderer, XPOS, YPOS);
-            printf("REFRESH DISPLAY OK\n");
+            if(verbose>=0)printf("STEP %d/%d completed\n", i+1, getAnimSteps(ab.ab_id));
         }
     }
 
+    if(verbose>=0)printf("REFRESH DISPLAY OK\n");
     return OK;
 }
