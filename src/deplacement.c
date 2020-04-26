@@ -214,26 +214,26 @@ err_t total_move(Entity * e, Coord tabcoord[])
         if (verbose>=2) printf("Moving from (%d,%d) to (%d,%d)...\n", e->coords.x, e->coords.y, c.x, c.y);
         if (c.x == e->coords.x+1)
         {
-            //cpt++;
+            cpt++;
             dir = S;
         }
         else if (c.x == e->coords.x-1)
         {
-            //cpt++;
+            cpt++;
             dir = N;
         }
         else if (c.y == e->coords.y+1)
         {
-            //cpt++;
+            cpt++;
             dir = E;
         }
         else if (c.y == e->coords.y-1)
         {
-            //cpt++;
+            cpt++;
             dir = W;
         }
 
-        //if (cpt > 5) cpt = 0;
+        if (cpt > 5) cpt = 0;
 
         e->direction = dir;
         e->idAnim = cpt;

@@ -131,6 +131,8 @@ int createGameWindow(int x, int y)
     {
         printf("\033[31;01m[AUDIO ERROR]\033[00m : %s\n", Mix_GetError());
     }
+
+	Mix_Chunk *nopeSound = Mix_LoadWAV("../inc/sound_effects/cant_click.wav");
 	/* ************************************************* */
 
 	printf("%s", error_message[setRendererDriver(renderer)]);
@@ -285,30 +287,35 @@ int createGameWindow(int x, int y)
 									{
 										if (!able_ability(tempEntity, Mvt, TRUE))
 											selected_ability = Mvt;
+										else Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 1
 									else if (e.motion.x >= 96 && e.motion.x <= 160)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+										else Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 2
 									else if (e.motion.x >= 176 && e.motion.x <= 240)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
+										else Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 3
 									else if (e.motion.x >= 256 && e.motion.x <= 320)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
+										else Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 4
 									else if (e.motion.x >= 336 && e.motion.x <= 400)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
+										else Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Tourner personnage vers la droite
 									else if (e.motion.x >= 416 && e.motion.x <= 480)
@@ -370,6 +377,7 @@ int createGameWindow(int x, int y)
 								{
 									selected_ability = -1;
 									addLog("No dead allies yet");
+									Mix_PlayChannel(-1, nopeSound, 0);
 								}
 
 								if (verbose >= 1)
@@ -378,6 +386,7 @@ int createGameWindow(int x, int y)
 							else
 							{
 								addLog("Not available during opponent's turn");
+								Mix_PlayChannel(-1, nopeSound, 0);
 							}
 						}
 						else
@@ -545,30 +554,35 @@ int createGameWindow(int x, int y)
 									{
 										if (!able_ability(tempEntity, Mvt, TRUE))
 											selected_ability = Mvt;
+										else Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 1
 									else if (e.key.keysym.sym == SDLK_2)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+										else Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 2
 									else if (e.key.keysym.sym == SDLK_3)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
+										else Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 3
 									else if (e.key.keysym.sym == SDLK_4)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
+										else Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 4
 									else if (e.key.keysym.sym == SDLK_5)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
+										else Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Tourner personnage vers la droite
 									else if (e.key.keysym.sym == SDLK_6)
@@ -581,6 +595,14 @@ int createGameWindow(int x, int y)
 										turnLeft(tempEntity);
 									}
 								}
+								else
+								{
+									Mix_PlayChannel(-1, nopeSound, 0);
+								}
+							}
+							else
+							{
+								Mix_PlayChannel(-1, nopeSound, 0);
 							}
 						}
 						break;
