@@ -12,6 +12,7 @@
 #include "print.h"
 #include "display.h"
 #include "abilities.h"
+#include "turn.h"
 
 Coord closest_free_tile(Coord c)
 {
