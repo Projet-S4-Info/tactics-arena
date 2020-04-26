@@ -34,7 +34,7 @@
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
 #define _FPS_ 60 					// Define at which frequency the game have to refresh
-#define _TEXTURE_LOADING_TIME_ 5	// Loading screen duration for textures (in seconds)
+#define _TEXTURE_LOADING_TIME_ 10	// Loading screen duration for textures (in seconds)
 
 /* =============== VARIABLES ================ */
 
@@ -150,28 +150,43 @@ int createGameWindow(int x, int y)
 		// Textures loading screen
 		int start_seconds = SDL_GetTicks() / 1000;
 		int load_index = -1;
+		int loadingAnim = 0;
+		int loadingChar = 0;
+		int xCharPos;
 		while ((SDL_GetTicks() / 1000) - start_seconds < _TEXTURE_LOADING_TIME_)
 		{
-			load_index++;
-			if (load_index > 5) load_index = 0;
+			xCharPos = xWinSize-(loadingAnim*20);
+			if (xCharPos < -100) 
+			{
+				loadingAnim = 0;
+				loadingChar++;
+				if (loadingChar > 5) loadingChar = 0;
+			}
+			SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 			SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
 			SDL_RenderClear(renderer);
 			displayText(renderer, 200, yWinSize / 2 + 120, 40, "Chargement des textures du jeu...", "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 			displayText(renderer, 200, yWinSize / 2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, FALSE);
-			displaySprite(renderer, getBigCharTexture(onLoadingScreen[load_index%6], W, load_index%6), 16, yWinSize-112);
+			displaySprite(renderer, getBigCharTexture(onLoadingScreen[loadingChar], W, loadingAnim%6), xCharPos, yWinSize-112);
 			SDL_RenderPresent(renderer);
-			SDL_Delay(200);
+			loadingAnim++;
+			SDL_Delay(100);
 		}
 
 		// Loading screen for connection
 		if (is_online)
 		{
-			int loadingAnim = 0;
-			int xCharPos;
+			loadingAnim = 0;
+			loadingChar = 0;
 			while (!game_setup)
 			{
 				xCharPos = xWinSize-(loadingAnim*20);
-				if (xCharPos < -100) loadingAnim = 0;
+				if (xCharPos < -100) 
+				{
+					loadingAnim = 0;
+					loadingChar++;
+					if (loadingChar > 5) loadingChar = 0;
+				}
 				SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 				SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
 				SDL_RenderClear(renderer);

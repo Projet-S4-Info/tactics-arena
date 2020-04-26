@@ -189,6 +189,11 @@ err_t loadAnimationTextures()
     addAnimTexture(Flare, "mage/flare", 64, 71, FALSE, FALSE, 40, "../inc/sound_effects/abilities/Flare.wav");
     addAnimTexture(Eruption, "mage/explosion", 64, 72, TRUE, FALSE, 100, "../inc/sound_effects/abilities/Eruption.wav");
 
+    // Valkyrie abilities animation
+    addAnimTexture(Odins_Eyes, "valkyrie/crows", 64, 69, TRUE, FALSE, 60, "../inc/sound_effects/abilities/Odin's_Eyes.wav");
+    addAnimTexture(Thrust, "valkyrie/peck", 64, 68, TRUE, FALSE, 80, "../inc/sound_effects/abilities/Thrust.wav");
+    addAnimTexture(Gates_of_Valhalla, "valkyrie/gate", 64, 70, FALSE, FALSE, 60, "../inc/sound_effects/abilities/Gates_of_Valhalla.wav");
+
     return OK;
 }
 
