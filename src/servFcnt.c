@@ -12,6 +12,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <errno.h>
 #include "servFcnt.h"
 #include "common.h"
 #include "chat.h"
@@ -98,35 +99,6 @@ void getLocalIP()
   }
 }
 
-err_t simple_send(void *structure, int size, int socket)
-{
-  int sockSendError = send(socket, structure, size, 0);
-  if (sockSendError != SOCKET_ERROR)
-  {
-    return OK;
-  }
-  else
-  {
-    return SEND_ERROR;
-  }
-}
-
-void * simple_recep(void *container, int size, int socket)
-{
-  /*while (TRUE)
-  {
-    sleep(2);
-    if(verbose >= 4)printf("Waiting in simple recep \n");
-    if (recv(socket, container, size, MSG_DONTWAIT) > -1)
-    {
-      break;
-    }
-  }*/
-
-  recv(socket, container, size, MSG_WAITALL);
-  return container;
-}
-
 /**
  * \fn err_t sendStruct(void * structure, int size, int socket)
  * \return err_t SEND_OK or SEND_ERROR
@@ -135,6 +107,7 @@ void * simple_recep(void *container, int size, int socket)
 
 err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s, char tab[STR_SHORT]))
 {
+  int error;
   if(verbose>=2)printf("Envoi en Cours\n");
 
   if(print!=NULL && verbose>= 0)
@@ -142,16 +115,17 @@ err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s
     print(structure,"SENDING : ");
   }
 
-  if(simple_send(structure, size, socket)==OK)
+  if((error=send(socket, structure, size, 0))!=-1)
   {
     bool received;
 
-    simple_recep(&received, sizeof(bool), socketConnected);
+    recv(socket, &received, sizeof(bool), MSG_WAITALL);
 
     return OK;
   }
   else
   {
+    strerror(error);
     return SEND_ERROR;
   }
 }
@@ -164,10 +138,11 @@ err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s
 
 void *recep(void *container, int size, int socket, err_t (*print)(void * s, char tab[STR_SHORT]))
 {
+  int error;
   if(verbose>= 2)printf("En Reception\n");
   bool received;
 
-  if(simple_recep(container, size, socket)!=NULL)
+  if((error = recv(socket, container, size, MSG_WAITALL))!=-1)
   {
     received = TRUE;
 
@@ -179,10 +154,11 @@ void *recep(void *container, int size, int socket, err_t (*print)(void * s, char
   }
   else
   {
+    strerror(error);
     received = FALSE;
   }
 
-  simple_send(&received, sizeof(bool), socketConnected);
+  send(socket, &received, sizeof(bool), MSG_WAITALL);
 
   return container;
 }
