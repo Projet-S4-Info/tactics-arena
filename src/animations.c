@@ -149,31 +149,30 @@ AnimTexture getAnim(abilityId id)
 err_t loadAnimationTextures()
 // Load all the animations relative textures
 {
-    // Ranger abilities animations
-    addAnimTexture(Bolt, "ranger/bolt", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Bolt.wav");
-    addAnimTexture(Focus, "ranger/focus_aura", 64, 68, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Focus.wav");
-    addAnimTexture(Deadeye, "ranger/eye", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Deadeye.wav");
-
     // Berserker abilities animations
     addAnimTexture(Slash, "berserker/slice", 64, 76, FALSE, FALSE, 20, "../inc/sound_effects/abilities/Slash.wav");
     addAnimTexture(Killing_Blow, "berserker/slice", 64, 76, FALSE, FALSE, 20, "../inc/sound_effects/abilities/Slash.wav");
     addAnimTexture(Fury, "berserker/red_aura", 64, 68, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Fury.wav");
     addAnimTexture(Frenzied_Dash, "berserker/earthquake_ultimate", 64, 68, TRUE, TRUE, 100, "../inc/sound_effects/abilities/Frenzied_Dash.wav");
 
+    // Ranger abilities animations
+    addAnimTexture(Bolt, "ranger/bolt", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Bolt.wav");
+    addAnimTexture(Focus, "ranger/focus_aura", 64, 68, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Focus.wav");
+    addAnimTexture(Trap, "ranger/bolt", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Trap.wav");
+    addAnimTexture(Deadeye, "ranger/eye", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Deadeye.wav");
+
     // Goliath abilities animations
     addAnimTexture(Bash, "goliath/boomed", 64, 66, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Bash.wav");
-    addAnimTexture(Detain, "goliath/jailed", 64, 70, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Detain.wav");
     addAnimTexture(Shields_Up, "goliath/shieldsup", 64, 71, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Shield_Up.wav");
+    addAnimTexture(Detain, "goliath/jailed", 64, 70, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Detain.wav");
     addAnimTexture(Banner, "goliath/bluebanneer", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Banner.wav");
 
-    // Angel abilities animations
-    addAnimTexture(Condemn, "angel/condemn", 64, 71, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Condemn.wav");
-    addAnimTexture(Aura, "angel/heal_aura", 64, 68, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Aura.wav");
-    addAnimTexture(Last_Sacrifice, "angel/wings", 64, 68, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Last_Sarifice.wav");
-    addAnimTexture(Holy_Storm, "angel/tornade", 64, 68, TRUE, TRUE, 100, "../inc/sound_effects/abilities/Holy_Storm.wav");
-    addAnimTexture(Gods_Blessing, "angel/oberon", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/God's_Blessing.wav");
-
     // Mage abilities animations
+    // --- fire
+    addAnimTexture(Fireball, "mage/basefire", 64, 72, FALSE, FALSE, 40, "../inc/sound_effects/abilities/Fireball.wav");
+    addAnimTexture(FlameCharge, "mage/engulf", 64, 73, TRUE, FALSE, 40, "../inc/sound_effects/abilities/Flame_Charge.wav");
+    addAnimTexture(Flare, "mage/flare", 64, 71, FALSE, FALSE, 40, "../inc/sound_effects/abilities/Flare.wav");
+    addAnimTexture(Eruption, "mage/explosion", 64, 72, TRUE, FALSE, 100, "../inc/sound_effects/abilities/Eruption.wav");
     // --- ice
     addAnimTexture(Icy_Winds, "mage/baseice", 64, 74, FALSE, FALSE, 20, "../inc/sound_effects/abilities/Icy_Wind.wav");
     addAnimTexture(Freeze, "mage/freeze", 64, 74, FALSE, FALSE, 20, "../inc/sound_effects/abilities/Freeze.wav");
@@ -184,16 +183,19 @@ err_t loadAnimationTextures()
     addAnimTexture(Volt_Switch, "mage/caseelec", 643, 652, TRUE, FALSE, 30, "../inc/sound_effects/abilities/Volt_Switch.wav");
     addAnimTexture(Shock_Therapy, "mage/scan", 64, 69, FALSE, FALSE, 80, "../inc/sound_effects/abilities/Shock_Therapy.wav");
     addAnimTexture(Lightning_Chain, "mage/baseelec", 64, 68, FALSE, FALSE, 80, "../inc/sound_effects/abilities/Shock.wav");
-    // --- fire
-    addAnimTexture(Fireball, "mage/basefire", 64, 72, FALSE, FALSE, 40, "../inc/sound_effects/abilities/Fireball.wav");
-    addAnimTexture(FlameCharge, "mage/engulf", 64, 73, TRUE, FALSE, 40, "../inc/sound_effects/abilities/Flame_Charge.wav");
-    addAnimTexture(Flare, "mage/flare", 64, 71, FALSE, FALSE, 40, "../inc/sound_effects/abilities/Flare.wav");
-    addAnimTexture(Eruption, "mage/explosion", 64, 72, TRUE, FALSE, 100, "../inc/sound_effects/abilities/Eruption.wav");
 
     // Valkyrie abilities animation
-    addAnimTexture(Odins_Eyes, "valkyrie/crows", 64, 69, TRUE, FALSE, 60, "../inc/sound_effects/abilities/Odin's_Eyes.wav");
     addAnimTexture(Thrust, "valkyrie/peck", 64, 68, TRUE, FALSE, 80, "../inc/sound_effects/abilities/Thrust.wav");
+    addAnimTexture(Odins_Eyes, "valkyrie/crows", 64, 69, TRUE, FALSE, 60, "../inc/sound_effects/abilities/Odin's_Eyes.wav");
+    addAnimTexture(Life_Transfer, "valkyrie/peck", 64, 68, TRUE, FALSE, 80, "../inc/sound_effects/abilities/Life_Transfer.wav");
     addAnimTexture(Gates_of_Valhalla, "valkyrie/gate", 64, 70, FALSE, FALSE, 60, "../inc/sound_effects/abilities/Gates_of_Valhalla.wav");
+
+    // Angel abilities animations
+    addAnimTexture(Condemn, "angel/condemn", 64, 71, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Condemn.wav");
+    addAnimTexture(Holy_Storm, "angel/tornade", 64, 68, TRUE, TRUE, 100, "../inc/sound_effects/abilities/Holy_Storm.wav");
+    addAnimTexture(Last_Sacrifice, "angel/wings", 64, 68, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Last_Sarifice.wav");
+    addAnimTexture(Gods_Blessing, "angel/oberon", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/God's_Blessing.wav");
+    addAnimTexture(Aura, "angel/heal_aura", 64, 68, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Aura.wav");
 
     return OK;
 }
@@ -252,9 +254,11 @@ err_t play_ability_animation(Ability ab, Coord pos)
                 {
                     temp = to2D(drawPos);
                     if (pxBase == 64)
-                        displaySprite(renderer, getAnimTexture(ab.ab_id, i, FALSE), temp.x, temp.y);
+                        //displaySprite(renderer, getAnimTexture(ab.ab_id, i, FALSE), temp.x, temp.y);
+                        displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
                     else
-                        displaySprite(renderer, getAnimTexture(ab.ab_id, i, TRUE), temp.x, temp.y);
+                        //displaySprite(renderer, getAnimTexture(ab.ab_id, i, TRUE), temp.x, temp.y);
+                        displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
                 }
             }
             SDL_RenderPresent(renderer);
@@ -270,9 +274,11 @@ err_t play_ability_animation(Ability ab, Coord pos)
         {
             temp = to2D(pos);
             if (pxBase == 64)
-                displaySprite(renderer, getAnimTexture(ab.ab_id, i, FALSE), temp.x, temp.y);
+                //displaySprite(renderer, getAnimTexture(ab.ab_id, i, FALSE), temp.x, temp.y);
+                displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
             else
-                displaySprite(renderer, getAnimTexture(ab.ab_id, i, TRUE), temp.x, temp.y);
+                //displaySprite(renderer, getAnimTexture(ab.ab_id, i, TRUE), temp.x, temp.y);
+                displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
 
             SDL_RenderPresent(renderer);
             SDL_Delay(getAnim(ab.ab_id).speed);
