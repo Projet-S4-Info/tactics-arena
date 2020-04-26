@@ -115,8 +115,8 @@ err_t apply_action(action a)
     selected_ability = -1;
     unhover();
 
-    /*if (isLoaded(active_ab.ab_id))
-        play_ability_animation(active_ab, a.c);*/
+    if (isLoaded(active_ab.ab_id))
+        play_ability_animation(active_ab, a.c);
     
     if(active_ab.fn_use!=ONLY)
     {

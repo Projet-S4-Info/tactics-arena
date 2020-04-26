@@ -187,7 +187,7 @@ err_t loadAnimationTextures()
     addAnimTexture(Fireball, "mage/basefire", 64, 72, FALSE, FALSE, 40, "../inc/sound_effects/abilities/Fireball.wav");
     addAnimTexture(FlameCharge, "mage/engulf", 64, 73, TRUE, FALSE, 40, "../inc/sound_effects/abilities/Flame_Charge.wav");
     addAnimTexture(Flare, "mage/flare", 64, 71, FALSE, FALSE, 40, "../inc/sound_effects/abilities/Flare.wav");
-    addAnimTexture(Eruption, "mage/explosion", 64, 72, FALSE, TRUE, 100, "../inc/sound_effects/abilities/Eruption.wav");
+    addAnimTexture(Eruption, "mage/explosion", 64, 72, TRUE, FALSE, 100, "../inc/sound_effects/abilities/Eruption.wav");
 
     return OK;
 }

@@ -25,7 +25,7 @@
 TabTexture cSprites[_NB_MAX_TEXTURES_];
 TabTexture textures[_NB_MAX_TEXTURES_];
 CharTexture charTextures[_NB_CLASSES_];
-AnimTexture animTextures[NB_AB];
+AnimTexture animTextures[NB_AB+1];
 
 
 /* =============== VARIABLES =============== */
