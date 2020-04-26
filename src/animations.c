@@ -172,6 +172,23 @@ err_t loadAnimationTextures()
     addAnimTexture(Holy_Storm, "angel/tornade", 64, 68, TRUE, TRUE, 100, "../inc/sound_effects/abilities/Holy_Storm.wav");
     addAnimTexture(Gods_Blessing, "angel/oberon", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/God's_Blessing.wav");
 
+    // Mage abilities animations
+    // --- ice
+    addAnimTexture(Icy_Winds, "mage/baseice", 64, 74, FALSE, FALSE, 20, "../inc/sound_effects/abilities/Icy_Wind.wav");
+    addAnimTexture(Freeze, "mage/freeze", 64, 74, FALSE, FALSE, 20, "../inc/sound_effects/abilities/Freeze.wav");
+    addAnimTexture(Frozen_Armor, "mage/icearmor", 64, 70, FALSE, FALSE, 40, "../inc/sound_effects/abilities/Frost_Armor.wav");
+    addAnimTexture(Blizzard, "mage/blizzard", 1, 10, TRUE, FALSE, 20, "../inc/sound_effects/abilities/Blizzard.wav");
+    // --- electricity
+    addAnimTexture(Shock, "mage/baseelec", 64, 68, FALSE, FALSE, 80, "../inc/sound_effects/abilities/Shock.wav");
+    addAnimTexture(Volt_Switch, "mage/caseelec", 643, 652, TRUE, FALSE, 30, "../inc/sound_effects/abilities/Volt_Switch.wav");
+    addAnimTexture(Shock_Therapy, "mage/scan", 64, 69, FALSE, FALSE, 80, "../inc/sound_effects/abilities/Shock_Therapy.wav");
+    addAnimTexture(Lightning_Chain, "mage/baseelec", 64, 68, FALSE, FALSE, 80, "../inc/sound_effects/abilities/Shock.wav");
+    // --- fire
+    addAnimTexture(Fireball, "mage/basefire", 64, 72, FALSE, FALSE, 40, "../inc/sound_effects/abilities/Fireball.wav");
+    addAnimTexture(FlameCharge, "mage/engulf", 64, 73, TRUE, FALSE, 40, "../inc/sound_effects/abilities/Flame_Charge.wav");
+    addAnimTexture(Flare, "mage/flare", 64, 71, FALSE, FALSE, 40, "../inc/sound_effects/abilities/Flare.wav");
+    addAnimTexture(Eruption, "mage/explosion", 64, 72, FALSE, TRUE, 100, "../inc/sound_effects/abilities/Eruption.wav");
+
     return OK;
 }
 
