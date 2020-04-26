@@ -24,9 +24,9 @@ err_t activate_bloodlust(Entity *e, StateList * list)
     if (isLoaded(Fury))
         play_ability_animation(e->cha_class->cla_abilities[Fury%NUM_AB], e->coords);
 
-    e->stat_mods[atk] *= 2;
+    e->stats[atk] *= 2;
 
-    Status v = {e->stat_mods[atk]/2,atk,1};
+    Status v = {e->stats[atk]/2,atk,1};
     
     Bloodlust_counter = -1;
 

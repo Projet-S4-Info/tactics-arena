@@ -46,114 +46,83 @@ err_t ent_common_init(Entity *e)
     }
     for(i=0; i<NUM_STATS; i++)
     {
-        e->base_stats[i] = e->stat_mods[i] = e->cha_class->basic_stats[i];
+        e->stats[i] = e->cha_class->basic_stats[i];
     }
 
     return OK;
 }
 
-err_t init_Foes(Direction d)
-{
-    init_ent e;
-    Tile * t;
-    int i,j;
-    for(i=0; i<NUM_CLASS; i++)
-    {
-        rec_id_swap(recep(&e,sizeof(init_ent),socketConnected, (err_t (*)(void*,char*))print_init_ent));
-        
-        Foes[e.cha_class].cha_id = e.char_id;
-        sprintf(Foes[e.cha_class].cha_name, "Ennemy %s", e.cha_name);
-        Foes[e.cha_class].cha_class = &classes[e.cha_class];
-        Foes[e.cha_class].direction = d;
-
-        Foes[e.cha_class].coords = e.starting_position;
-        t = getTile(e.starting_position);
-        t->entity = &Foes[e.cha_class];
-        if(verbose>=2 && t->entity!=NULL)printf("%s spawned at %d,%d\n", Foes[e.cha_class].cha_name, Foes[e.cha_class].coords.x, Foes[e.cha_class].coords.y);
-
-        // recep(&j, sizeof(int), socketConnected, (err_t (*)(void *, char *))print_int);
-
-        ent_common_init(&Foes[e.cha_class]);     
-    }
-
-    Foes[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
-
-    return OK;
-}
-
-err_t init_Allies(Coord spawn[NUM_CLASS], Direction d)
+err_t init_Entity(Entity * e,Coord spawn[NUM_CLASS], Direction d, char title[STR_SHORT])
 {
     classId spawn_order[NUM_CLASS] = {Ranger, Mage, Angel, Valkyrie, Goliath, Berserker};
-    init_ent ie;
 
     int s,i;
     for(s=0; s<NUM_CLASS; s++)
     {
-        ie.cha_class = i = spawn_order[s];
+        i = spawn_order[s];
 
-        ie.char_id = Allies[i].cha_id = i+1;
+        (e+i)->cha_id = i+1;
 
-        sprintf(ie.cha_name, "%s", classes[i].cla_name);
+        sprintf((e+i)->cha_name, "%s %s", title, classes[i].cla_name);
 
-        sprintf(Allies[i].cha_name, "Friendly %s", classes[i].cla_name);
+        (e+i)->cha_class = &classes[i];
+        (e+i)->direction = d;
 
-        Allies[i].cha_class = &classes[i];
-        Allies[i].direction = d;
-
-        ent_common_init(&Allies[i]);
-        init_spawn(&Allies[i], spawn[s]);
-        ie.starting_position = Allies[i].coords;
-
-        printf("%s",error_message[sendStruct(&ie, sizeof(init_ent), socketConnected, (err_t (*)(void*,char*))print_init_ent)]);
-
-        //printf("%s",error_message[sendStruct(&i, sizeof(int), socketConnected, (err_t (*)(void *, char *))print_int)]);
+        ent_common_init(e+i);
+        init_spawn(e+i, spawn[s]);
     }
 
-    Allies[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
+    e[Mage].cha_class->cla_abilities = &mage_ab[rand()%3][0];
 
     return OK;
 }
 
-err_t ent_init_test(Entity *e, char title[STR_SHORT])
+err_t ent_init_test()
 {
     Coord ally_spawn[NUM_CLASS] = {{14,14},{16,14},{11,14},{14,10},{12,12},{15,12}};
     //Coord ally_spawn[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
     Coord foe_spawn[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
     classId spawn_order[NUM_CLASS] = {Ranger, Mage, Angel, Valkyrie, Goliath, Berserker};
 
-    int s,i,j;
-    for(s=0; s<NUM_CLASS; s++)
+    int s,i,j,c;
+    Entity * e = Allies;
+    for(c=0; c<2;c++)
     {
-        i = spawn_order[s];
-
-        sprintf((e+i)->cha_name, "%s %s", title, classes[i].cla_name);
-        (e+i)->cha_class = &classes[i];
-
-        if(e==Allies)
+        for(s=0; s<NUM_CLASS; s++)
         {
-            (e+i)->cha_id = i+1;
-            (e+i)->direction = W;
-            init_spawn(e+i, ally_spawn[s]);
-            if(verbose>=2)printf("%s Spawn Set to %d %d\n", e->cha_name, e->coords.x, e->coords.y);
+            i = spawn_order[s];
 
-        }
-        else
-        {
-            (e+i)->cha_id = (i+1)*-1;
-            (e+i)->direction = S;
-            init_spawn(e+i, foe_spawn[s]);
-            if(verbose>=2)printf("%s Spawn Set to %d %d\n", e->cha_name, e->coords.x, e->coords.y);
+            (e+i)->cha_class = &classes[i];
+
+            if(e==Allies)
+            {
+                sprintf((e+i)->cha_name, "Friendly %s", classes[i].cla_name);
+                (e+i)->cha_id = i+1;
+                (e+i)->direction = W;
+                init_spawn(e+i, ally_spawn[s]);
+                if(verbose>=2)printf("%s Spawn Set to %d %d\n", (e+i)->cha_name, (e+i)->coords.x, (e+i)->coords.y);
+
+            }
+            else
+            {
+                sprintf((e+i)->cha_name, "Ennemy %s", classes[i].cla_name);
+                (e+i)->cha_id = (i+1)*-1;
+                (e+i)->direction = S;
+                init_spawn(e+i, foe_spawn[s]);
+                if(verbose>=2)printf("%s Spawn Set to %d %d\n", (e+i)->cha_name, (e+i)->coords.x, (e+i)->coords.y);
+            }
+
+            ent_common_init(e+i);
+
+            for(j=0;j<NUM_STATS;j++)
+            {
+                (e+i)->stats[j] = classes[i].basic_stats[j];
+            }
         }
 
-        ent_common_init(e+i);
-
-        for(j=0;j<NUM_STATS;j++)
-        {
-            (e+i)->stat_mods[j] = (e+i)->base_stats[j] = classes[i].basic_stats[j];
-        }
+        (e + Mage)->cha_class->cla_abilities = &mage_ab[rand()%3][0];
+        e = Foes;
     }
-
-    (e + Mage)->cha_class->cla_abilities = &mage_ab[rand()%3][0];
 
     //DEAD CHARACTER FOR TESTS
     /*int d = rand()%NUM_CLASS;

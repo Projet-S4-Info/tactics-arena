@@ -478,8 +478,8 @@ int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
 
     f=getEntity(c);
 
-    int h = f->base_stats[pv] - f->stat_mods[pv];
-    f->stat_mods[pv] = 20;
+    int h = f->cha_class->basic_stats[pv] - f->stats[pv];
+    f->stats[pv] = 20;
 
     Status s = {h,mv,3};
 

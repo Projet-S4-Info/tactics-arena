@@ -273,7 +273,7 @@ void createCharacters(Coord pos, int pdv)
 // Create a new character at (x,y) pos
 {
     Entity * entity = malloc(sizeof(Entity));
-    entity->stat_mods[0] = pdv;
+    entity->stats[0] = pdv;
     matrix[pos.x*_X_SIZE_+pos.y].entity = entity;
 }
 
@@ -288,7 +288,7 @@ int displayCharacters(SDL_Renderer * renderer, TabTexture * cSprites, Entity * e
 
     // Display character's life points
     char temp[STR_SHORT];
-    sprintf(temp, "%d", entity->stat_mods[pv]);
+    sprintf(temp, "%d", entity->stats[pv]);
     if (pxBase == 64)   displaySprite(renderer, getTexture(cSprites, "heart_icon"), x+(pxBase/4), y-(pxBase/4));
     else                displaySprite(renderer, getBigTexture(cSprites, "heart_icon"), x+(pxBase/4), y-(pxBase/4));
     displayText(renderer, x+(pxBase/2), y-(pxBase/4), (pxBase/64)*15, temp, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);

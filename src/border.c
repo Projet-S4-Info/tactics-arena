@@ -276,7 +276,7 @@ Coord * get_border(int cha_id, abilityId Id, Coord coorTab[], Coord zone[])
     {
         if(e->status_effect[Cripple]!=1)
         {
-            setMovementBorder((int (*)[_X_SIZE_])fill_tiles(e->coords, matrice, e->stat_mods[mv]), coorTab);
+            setMovementBorder((int (*)[_X_SIZE_])fill_tiles(e->coords, matrice, e->stats[mv]), coorTab);
             setMovementZone(matrice, zone);
         }
         else

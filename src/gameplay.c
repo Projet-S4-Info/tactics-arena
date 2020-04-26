@@ -84,7 +84,7 @@ winId game_over()
 
 int get_range(Entity *e, abilityId ab)
 {
-    float vision = e->stat_mods[vis];
+    float vision = e->stats[vis];
     float range_mod = e->cha_class->cla_abilities[ab%NUM_AB].range;
 
 
@@ -380,11 +380,11 @@ err_t remove_mod(Status * stat, Entity * e, bool show_log)
         else
         {
             if(verbose>=2)printf("Modifier to remove is a stat change of a value of %d\n", stat->value);
-            if(verbose>=2)printf("Stat before the change : %d\n", e->stat_mods[stat->stat]);
+            if(verbose>=2)printf("Stat before the change : %d\n", e->stats[stat->stat]);
 
-            e->stat_mods[stat->stat] += stat->value *-1;
+            e->stats[stat->stat] += stat->value *-1;
 
-            if(verbose>=2)printf("Stat after the change : %d\n", e->stat_mods[stat->stat]);
+            if(verbose>=2)printf("Stat after the change : %d\n", e->stats[stat->stat]);
 
             if(stat->value < 0)
             {
@@ -454,7 +454,7 @@ err_t new_death(Entity * e)
     reset_cooldowns(e);
 
     e->active = Dead;
-    e->stat_mods[pv]=20;
+    e->stats[pv]=20;
 
     List_Elem * v;
 
@@ -510,7 +510,7 @@ err_t new_death(Entity * e)
 
 bool death_check(Entity * e)
 {
-    if(e->stat_mods[pv]<=0)
+    if(e->stats[pv]<=0)
     {
         if(verbose>=1)printf("%s was killed!\n", e->cha_name);
         new_death(e);
@@ -590,11 +590,11 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target, bool show_log)
     if(frozen==6)
         if(verbose>=1)printf("%s is frozen and has increased resistances!\n", target->cha_name);
 
-    if(verbose>=2)printf("%s's health before the attack : %d\n", target->cha_name, target->stat_mods[pv]);
+    if(verbose>=2)printf("%s's health before the attack : %d\n", target->cha_name, target->stats[pv]);
 
     int d_value;
-    float stat_dmg = caster->stat_mods[d->type];
-    float stat_def = target->stat_mods[d->type+2];
+    float stat_dmg = caster->stats[d->type];
+    float stat_def = target->stats[d->type+2];
 
     if(caster->status_effect[Piercing])
     {
@@ -619,9 +619,9 @@ bool apply_damage(Damage * d, Entity * caster, Entity * target, bool show_log)
         printf("d_value : %d\n", d_value);
     }
 
-    target->stat_mods[pv] -= d_value;
+    target->stats[pv] -= d_value;
 
-    if(verbose>=2)printf("%s's health after the attack : %d\n", target->cha_name, target->stat_mods[pv]);
+    if(verbose>=2)printf("%s's health after the attack : %d\n", target->cha_name, target->stats[pv]);
 
     if(verbose>=1)printf("%s\n",log);
     if(show_log)addLog(log);
@@ -712,24 +712,24 @@ err_t apply_stat_change(Status s, Entity * target, StateList * list, bool show_l
         char log[STR_LONG];
 
         if(verbose>=2)printf("Modifier is a stat change of %d\n", s.value);
-        if(verbose>=2)printf("Stat before the change : %d\n", target->stat_mods[s.stat]);
+        if(verbose>=2)printf("Stat before the change : %d\n", target->stats[s.stat]);
 
-        target->stat_mods[s.stat] += s.value;
+        target->stats[s.stat] += s.value;
 
-        if(target->stat_mods[s.stat]>20)
+        if(target->stats[s.stat]>20)
         {
-            s.value -= target->stat_mods[s.stat] - 20;
-            target->stat_mods[s.stat] = 20;
+            s.value -= target->stats[s.stat] - 20;
+            target->stats[s.stat] = 20;
         }
-        else if(target->stat_mods[s.stat]<0)
+        else if(target->stats[s.stat]<0)
         {
-            s.value -= target->stat_mods[s.stat];
-            target->stat_mods[s.stat] = 0;
+            s.value -= target->stats[s.stat];
+            target->stats[s.stat] = 0;
         }
 
         sprintf(log, "%s's %s was altered by %d", target->cha_name, statName[s.stat], s.value);
         
-        if(verbose>=2)printf("Stat after the change : %d\n", target->stat_mods[s.stat]);
+        if(verbose>=2)printf("Stat after the change : %d\n", target->stats[s.stat]);
 
         if(s.duration!=0)
         {

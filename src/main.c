@@ -129,8 +129,6 @@ int main(int argc, char * argv[])
     // Lancement du jeu
     if (selection == 2)
     {
-        /*ent_init_test(Allies, "Friendly");
-        ent_init_test(Foes, "Ennemy");*/
         loadMap(matrix, "map_ice_island");
         if(verbose>=1) printf("GAME START!\n");
         stopMenuMusic(1);

@@ -65,7 +65,6 @@ int isAServer = 0;
 
 void getLocalIP()
 {
-
   char s[81];
   FILE *fic;
   system("ifconfig | grep \"inet 1[97]2.*\" | sed \"s/netmask.*//g\" | sed \"s/inet//g\" > .test.txt");
