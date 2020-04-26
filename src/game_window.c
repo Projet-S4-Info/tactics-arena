@@ -34,7 +34,7 @@
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
 #define _FPS_ 60 					// Define at which frequency the game have to refresh
-#define _TEXTURE_LOADING_TIME_ 3	// Loading screen duration for textures (in seconds)
+#define _TEXTURE_LOADING_TIME_ 5	// Loading screen duration for textures (in seconds)
 
 /* =============== VARIABLES ================ */
 
@@ -160,7 +160,7 @@ int createGameWindow(int x, int y)
 			displayText(renderer, 200, yWinSize / 2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, FALSE);
 			displaySprite(renderer, getBigCharTexture(onLoadingScreen[load_index%6], W, load_index%6), 16, yWinSize-112);
 			SDL_RenderPresent(renderer);
-			SDL_Delay(300);
+			SDL_Delay(200);
 		}
 
 		// Loading screen for connection
@@ -170,7 +170,7 @@ int createGameWindow(int x, int y)
 			int xCharPos;
 			while (!game_setup)
 			{
-				xCharPos = xWinSize-(loadingAnim*10);
+				xCharPos = xWinSize-(loadingAnim*20);
 				if (xCharPos < -100) loadingAnim = 0;
 				SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 				SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
