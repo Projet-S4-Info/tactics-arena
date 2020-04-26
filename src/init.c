@@ -48,7 +48,7 @@ err_t ent_common_init(Entity *e)
     {
         e->base_stats[i] = e->stat_mods[i] = e->cha_class->basic_stats[i];
     }
-
+    
     return OK;
 }
 

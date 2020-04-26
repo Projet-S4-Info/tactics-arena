@@ -5,6 +5,8 @@
 
 Mix_Music *myMus;
 Mix_Music *multiMus;
+Mix_Music *fightMus_one;
+Mix_Music *fightMus_two;
 
 int playMenuMusic(int nb)
 // Play the menu music
@@ -36,7 +38,9 @@ int playMenuMusic(int nb)
 
     /* On charge la musique */
     myMus = Mix_LoadMUS("../inc/music/cascade.wav");
-    multiMus = Mix_LoadMUS("../inc/music/Battle-Chiptune.wav");
+    multiMus = Mix_LoadMUS("../inc/music/Menu_Multi_Assault.wav");
+    fightMus_one = Mix_LoadMUS("../inc/music/Fight_Music_Courage.wav");
+    fightMus_two = Mix_LoadMUS("../inc/music/Fight Music Vanquisher.wav"); 
 
     /* On lance la musique */
     if (nb == 1)
@@ -46,6 +50,13 @@ int playMenuMusic(int nb)
     else if (nb == 2)
     {
         Mix_PlayMusic(multiMus, -1);
+    }
+    else if (nb == 3)
+    {   
+        while(nb == 3){
+            Mix_PlayMusic(fightMus_one, 1);
+            Mix_PlayMusic(fightMus_two, 1);
+        }
     }
     return 0;
 }
