@@ -52,7 +52,7 @@ err_t ent_common_init(Entity *e)
     return OK;
 }
 
-err_t init_Entity(Entity * e,Coord spawn[NUM_CLASS], Direction d, char title[STR_SHORT])
+err_t init_Entity(Entity * e,Coord spawn[NUM_CLASS], Direction d, char title[STR_SHORT], int id_mod)
 {
     classId spawn_order[NUM_CLASS] = {Ranger, Mage, Angel, Valkyrie, Goliath, Berserker};
 
@@ -61,7 +61,7 @@ err_t init_Entity(Entity * e,Coord spawn[NUM_CLASS], Direction d, char title[STR
     {
         i = spawn_order[s];
 
-        (e+i)->cha_id = i+1;
+        (e+i)->cha_id = (i+1)*id_mod;
 
         sprintf((e+i)->cha_name, "%s %s", title, classes[i].cla_name);
 

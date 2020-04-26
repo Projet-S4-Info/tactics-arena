@@ -369,11 +369,11 @@ winId game_loop(winId (*turn1)(void), winId (*turn2)(void))
 
 winId init_client()
 {
-    if(init_Entity(Foes, spawn_blue, W, "Ennemy") == OK){
+    if(init_Entity(Foes, spawn_blue, W, "Ennemy", -1) == OK){
         if(verbose >= 1)printf("Init Foes est fait pour client \n");
     }
 
-    if(init_Entity(Allies, spawn_red, S, "Friendly") == OK){
+    if(init_Entity(Allies, spawn_red, S, "Friendly", 1) == OK){
         if(verbose >= 1)printf("Init Allies client OK \n");
     }
 
@@ -382,10 +382,10 @@ winId init_client()
 
 winId init_server()
 {
-    if(init_Entity(Allies, spawn_blue, W, "Friendly") == OK){
+    if(init_Entity(Allies, spawn_blue, W, "Friendly", 1) == OK){
         if(verbose >= 1)printf("Init Allies server OK \n");
     }
-    if (init_Entity(Foes, spawn_red, S, "Ennemy") == OK){
+    if (init_Entity(Foes, spawn_red, S, "Ennemy", -1) == OK){
         if(verbose >= 1)printf("Init Foes est fait pour serveur \n");
     }
     
