@@ -113,15 +113,17 @@ err_t simple_send(void *structure, int size, int socket)
 
 void * simple_recep(void *container, int size, int socket)
 {
-  while (TRUE)
+  /*while (TRUE)
   {
-    sleep(1);
+    sleep(2);
     if(verbose >= 4)printf("Waiting in simple recep \n");
     if (recv(socket, container, size, MSG_DONTWAIT) > -1)
     {
       break;
     }
-  }
+  }*/
+
+  recv(socket, container, size, MSG_WAITALL);
   return container;
 }
 
