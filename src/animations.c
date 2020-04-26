@@ -230,10 +230,13 @@ err_t play_ability_animation(Ability ab, Coord pos)
         pos.x--;
         pos.y++;
     }
+    printf("GROUND OK\n");
 
     if (your_turn()) displayMap(renderer, XPOS, YPOS);
+    printf("1ST DISPLAYMAP OK\n");
 
     Mix_PlayChannel(-1, getAnim(ab.ab_id).sound_effect, 0);
+    printf("SOUND OK\n");
 
     if (getAnim(ab.ab_id).aoe == TRUE)
     {
@@ -254,6 +257,7 @@ err_t play_ability_animation(Ability ab, Coord pos)
             SDL_RenderPresent(renderer);
             SDL_Delay(getAnim(ab.ab_id).speed);
             if (your_turn()) displayMap(renderer, XPOS, YPOS);
+            printf("REFRESH DISPLAY OK\n");
         }
     }
     else
@@ -269,6 +273,7 @@ err_t play_ability_animation(Ability ab, Coord pos)
             SDL_RenderPresent(renderer);
             SDL_Delay(getAnim(ab.ab_id).speed);
             if (your_turn()) displayMap(renderer, XPOS, YPOS);
+            printf("REFRESH DISPLAY OK\n");
         }
     }
 
