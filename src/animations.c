@@ -103,11 +103,14 @@ int getAnimSteps(abilityId id)
 {
     int result = -1;
 
+    printf("Calcul nb animations\n");
+
     for (int i = 0; i < NB_AB; i++)
     {
         if (id == animTextures[i].id)
         {
             result = animTextures[i].nb_steps;
+            printf("Calcul nb animations OK\n");
             break;
         }
     }
@@ -127,12 +130,15 @@ AnimTexture getAnim(abilityId id)
     AnimTexture result;
     bool found = FALSE;
 
+    printf("Recherche de l'animation\n");
+
     for (int i = 0; i < NB_AB; i++)
     {
         if (id == animTextures[i].id)
         {
             result = animTextures[i];
             found = TRUE;
+            printf("Animation trouvee\n");
             break;
         }
     }
@@ -227,6 +233,10 @@ bool isOnGround(abilityId id)
 err_t play_ability_animation(Ability ab, Coord pos)
 {
     Coord temp;
+    int nbSteps = getAnimSteps(ab.ab_id);
+    AnimTexture animation = getAnim(ab.ab_id);
+
+
     if (!isOnGround(ab.ab_id))
     {
         pos.x--;
@@ -237,15 +247,15 @@ err_t play_ability_animation(Ability ab, Coord pos)
     if (your_turn()) displayMap(renderer, XPOS, YPOS);
     if(verbose>=0)printf("1ST DISPLAYMAP OK\n");
 
-    Mix_PlayChannel(-1, getAnim(ab.ab_id).sound_effect, 0);
+    Mix_PlayChannel(-1, animation.sound_effect, 0);
     if(verbose>=0)printf("SOUND OK\n");
 
-    if(verbose>=0)printf("ABILITY HAS %d STEPS\n", getAnimSteps(ab.ab_id));
+    if(verbose>=0)printf("ABILITY HAS %d STEPS\n", nbSteps);
 
-    if (getAnim(ab.ab_id).aoe == TRUE)
+    if (animation.aoe == TRUE)
     {
         if(verbose>=0)printf("ABILITY HAS AOE ANIMATION\n");
-        for (int i = 0; i < getAnimSteps(ab.ab_id); i++)
+        for (int i = 0; i < nbSteps; i++)
         {
             for (int j = 0; j < ab.nb_coords; j++)
             {
@@ -262,15 +272,15 @@ err_t play_ability_animation(Ability ab, Coord pos)
                 }
             }
             SDL_RenderPresent(renderer);
-            SDL_Delay(getAnim(ab.ab_id).speed);
+            SDL_Delay(animation.speed);
             if (your_turn()) displayMap(renderer, XPOS, YPOS);
-            if(verbose>=0)printf("STEP %d/%d completed\n", i+1, getAnimSteps(ab.ab_id));
+            if(verbose>=0)printf("STEP %d/%d completed\n", i+1, nbSteps);
         }
     }
     else
     {
         if(verbose>=0)printf("ABILITY HAS SINGLE TARGET ANIMATION\n");
-        for (int i = 0; i < getAnimSteps(ab.ab_id); i++)
+        for (int i = 0; i < nbSteps; i++)
         {
             temp = to2D(pos);
             if (pxBase == 64)
@@ -281,9 +291,9 @@ err_t play_ability_animation(Ability ab, Coord pos)
                 displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
 
             SDL_RenderPresent(renderer);
-            SDL_Delay(getAnim(ab.ab_id).speed);
+            SDL_Delay(animation.speed);
             if (your_turn()) displayMap(renderer, XPOS, YPOS);
-            if(verbose>=0)printf("STEP %d/%d completed\n", i+1, getAnimSteps(ab.ab_id));
+            if(verbose>=0)printf("STEP %d/%d completed\n", i+1, nbSteps);
         }
     }
 
