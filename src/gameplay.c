@@ -325,7 +325,7 @@ Coord add_coords(Coord a, Coord b)
     c.x = a.x + b.x;
     c.y = a.y + b.y;
 
-    if(verbose>=2)printf("Coords a(%d,%d) and b(%d,%d) added to give c(%d,%d)\n", a.x, a.y, b.x, b.y, c.x, c.y);
+    if(verbose>=3)printf("Coords a(%d,%d) and b(%d,%d) added to give c(%d,%d)\n", a.x, a.y, b.x, b.y, c.x, c.y);
 
     return c;
 }
