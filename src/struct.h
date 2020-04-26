@@ -157,13 +157,6 @@ typedef struct User{
   char pseudo[64];
 } t_user;
 
-typedef struct {
-    int char_id;
-    char cha_name[STR_SHORT];
-    classId cha_class;
-    Coord starting_position;
-}init_ent;
-
 typedef struct{
     int tile_id;
     int walkable;
