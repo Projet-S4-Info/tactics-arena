@@ -29,12 +29,13 @@ static void *fn_gameMus(void *p_data)
     {
         if (!Mix_PlayingMusic())
         {
-            if (cpt != -1)
+            
+            if (cpt < NUMBER_OF_MUS - 1)
             {
-                sleep(10);
-            }
-            else if (cpt < NUMBER_OF_MUS - 1)
-            {
+                if (cpt != -1)
+                {
+                    sleep(10);
+                }
                 cpt++;
             }
             else
