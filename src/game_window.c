@@ -238,6 +238,7 @@ int createGameWindow(int x, int y)
 		sprintf(pseudoChat, "%s : ", pseudoUser);
 
 		int running = 1;
+		playMenuMusic(3);
 		while (running)
 		{
 			tempEntity = getEntity(getSelectedPos());
