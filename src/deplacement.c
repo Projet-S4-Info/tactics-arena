@@ -203,6 +203,7 @@ err_t total_move(Entity * e, Coord tabcoord[])
     int i, cpt = 0;
     Coord c;
     Direction dir;
+    Mix_Chunk *footstep = Mix_LoadWAV("../inc/sound_effects/footstep.wav");
 
     selected_ability = -1;
 
@@ -239,6 +240,7 @@ err_t total_move(Entity * e, Coord tabcoord[])
         e->idAnim = cpt;
 
         moveEntity(e->coords, c);
+        Mix_PlayChannel(-1, footstep, 0);
         Coord target = {e->coords.x, e->coords.y};
         setSelected(target);
         if(verbose>=2)printf("Completed\n");
