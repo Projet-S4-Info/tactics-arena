@@ -148,8 +148,6 @@ typedef struct
     Uint32 time;
 } TextCache;
 
-
-
 /* COMMUNICATION STRUCTURES */
 
 typedef struct User{
