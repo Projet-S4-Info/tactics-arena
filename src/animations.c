@@ -231,7 +231,7 @@ err_t play_ability_animation(Ability ab, Coord pos)
         pos.y++;
     }
 
-    displayMap(renderer, XPOS, YPOS);
+    //displayMap(renderer, XPOS, YPOS);
 
     Mix_PlayChannel(-1, getAnim(ab.ab_id).sound_effect, 0);
 
@@ -253,7 +253,7 @@ err_t play_ability_animation(Ability ab, Coord pos)
             }
             SDL_RenderPresent(renderer);
             SDL_Delay(getAnim(ab.ab_id).speed);
-            displayMap(renderer, XPOS, YPOS);
+            //displayMap(renderer, XPOS, YPOS);
         }
     }
     else
@@ -268,7 +268,7 @@ err_t play_ability_animation(Ability ab, Coord pos)
 
             SDL_RenderPresent(renderer);
             SDL_Delay(getAnim(ab.ab_id).speed);
-            displayMap(renderer, XPOS, YPOS);
+            //displayMap(renderer, XPOS, YPOS);
         }
     }
 

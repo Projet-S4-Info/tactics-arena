@@ -705,10 +705,6 @@ int displayInterface(SDL_Renderer *renderer)
 int displayMap(SDL_Renderer *renderer, int x, int y)
 // Display the map
 {
-	/* Le fond de la fenêtre sera blanc */
-	SDL_SetRenderDrawColor(renderer, 173, 216, 230, 255);
-	SDL_RenderClear(renderer);
-
 	Coord blockPos;
 
 	/* Le fond de la fenêtre sera blanc */
