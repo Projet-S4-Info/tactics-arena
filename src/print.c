@@ -170,16 +170,6 @@ err_t print_Modifier_list(Modifier **m, int nb, char tab[STR_SHORT])
     return OK;
 }
 
-err_t print_init_ent(init_ent *e, char tab[STR_SHORT])
-{
-    printf("%sCha_Id : %d\n", tab, e->char_id);
-    printf("%sCha_Name : %s\n", tab, e->cha_name);
-    print_class_name(e->cha_class, tab);
-    print_Coord(&(e->starting_position),tab);
-
-    return OK;
-}
-
 err_t print_Ability(Ability *a, char tab[STR_SHORT])
 {
     if(a!=NULL)

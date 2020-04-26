@@ -21,6 +21,10 @@ bool is_online = FALSE;
 bool turn_active = TRUE;
 action turn_over = {0,{0,0},0};
 
+Coord spawn_red[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
+Coord spawn_blue[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
+
+
 err_t online_setup()
 {
     is_online = TRUE;
@@ -53,7 +57,7 @@ err_t apply_movement(action a)
     int matrice[_X_SIZE_][_Y_SIZE_];
     Coord tab[_X_SIZE_ * _Y_SIZE_];
 
-    total_move(e, pathfinding((int(*)[_X_SIZE_])fill_tiles(e -> coords, matrice, e -> stat_mods[mv]), tab, a.c ));
+    total_move(e, pathfinding((int(*)[_X_SIZE_])fill_tiles(e -> coords, matrice, e -> stats[mv]), tab, a.c ));
 
     e->coords = a.c;
     e->act_points--;
@@ -180,7 +184,7 @@ err_t turn_end(Entity *e, StateList * list)
     {
         if((e+i)->status_effect[Burning])
         {
-            e->stat_mods[pv]-=3;
+            e->stats[pv]-=3;
             char log[STR_LONG];
             sprintf(log, "%s was hurt by his burn", (e+i)->cha_name);
             addLog(log);
@@ -365,14 +369,11 @@ winId game_loop(winId (*turn1)(void), winId (*turn2)(void))
 
 winId init_client()
 {
-
-    Coord spawn[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
-
-    if(init_Foes(W) == OK){
+    if(init_Entity(Foes, spawn_blue, W, "Ennemy") == OK){
         if(verbose >= 1)printf("Init Foes est fait pour client \n");
     }
 
-    if(init_Allies(spawn,S) == OK){
+    if(init_Entity(Allies, spawn_red, S, "Friendly") == OK){
         if(verbose >= 1)printf("Init Allies client OK \n");
     }
 
@@ -381,12 +382,10 @@ winId init_client()
 
 winId init_server()
 {
-    Coord spawn[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
-
-    if(init_Allies(spawn,W) == OK){
+    if(init_Entity(Allies, spawn_blue, W, "Friendly") == OK){
         if(verbose >= 1)printf("Init Allies server OK \n");
     }
-    if (init_Foes(S) == OK){
+    if (init_Entity(Foes, spawn_red, S, "Ennemy") == OK){
         if(verbose >= 1)printf("Init Foes est fait pour serveur \n");
     }
     

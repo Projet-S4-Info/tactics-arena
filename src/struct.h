@@ -75,14 +75,6 @@ typedef struct
     Ability * cla_abilities;
 } Class;
 
-typedef struct
-{
-    int cha_id;
-    char cha_name[STR_SHORT];
-    classId cha_class;
-    // Item List
-} Character;
-
 typedef struct entity_t
 {
     int cha_id;
@@ -93,8 +85,7 @@ typedef struct entity_t
     Direction direction;
     int idAnim;
     int act_points;
-    int base_stats[NUM_STATS];
-    int stat_mods[NUM_STATS];
+    int stats[NUM_STATS];
     int status_effect[NUM_STATUS];
     int ab_cooldown[NUM_AB];
 } Entity;
@@ -165,13 +156,6 @@ typedef struct User{
   int id;
   char pseudo[64];
 } t_user;
-
-typedef struct {
-    int char_id;
-    char cha_name[STR_SHORT];
-    classId cha_class;
-    Coord starting_position;
-}init_ent;
 
 typedef struct{
     int tile_id;

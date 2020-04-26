@@ -196,8 +196,7 @@ int createGameWindow(int x, int y)
 
 		if (!is_online)
 		{
-			ent_init_test(Allies, "Friendly");
-			ent_init_test(Foes, "Ennemy");
+			ent_init_test();
 		}
 
 		SDL_Delay(1);
