@@ -349,7 +349,7 @@ winId opposing_turn()
     while(received_action.char_id != 0)
     {
         a = received_action;
-        while(received_action.char_id!=0);
+        while(a.char_id!=0);
         rec_id_swap(recep(&a, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action));
     }
 
