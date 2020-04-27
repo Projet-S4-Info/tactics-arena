@@ -184,11 +184,13 @@ int recepChat(void *structure, int size, int socket)
 int setupMultiMap(MultiTile * mapMulti, Tile * mapLocal){
   for(int i = 0; i < _X_SIZE_ * _Y_SIZE_; i++){
     mapMulti[i].tile_id = mapLocal[i].tile_id;
-    mapMulti[i].walkable = mapLocal[i].walkable;
   }
   return 1;
 }
 
 int displayMapMulti(MultiTile  *mapMulti){
+  for(int i = 0; i <_X_SIZE_ * _Y_SIZE_; i++){
+    printf("tile id = %d \n", mapMulti[i].tile_id);
+  }
   return 1;
 }

@@ -210,8 +210,10 @@ err_t startTCPSocketServ()
             startGame.isServerStartGame = 1;
             sprintf(startGame.mapNameGame, "%s", mapMultiSelected);
 
-            //setupMultiMap(startGame.multiMap, gridTemp);
-            //if(verbose>=2)displayMapMulti(startGame.multiMap);
+            loadMap(gridTemp[0],mapMultiSelected);
+
+            setupMultiMap(startGame.multiMap[0], gridTemp[0]);
+            if(verbose>=0)displayMapMulti(startGame.multiMap[0]);
 
             if (sendStruct((void *)&startGame, sizeof(startGame), socketConnected, NULL) != OK)
             {

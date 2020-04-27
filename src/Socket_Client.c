@@ -126,6 +126,7 @@ err_t startTCPSocketCli(int socketCli)
       {
         if (verbose >= 1)
           printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
+
         socketConnected = sock;
         if (verbose >= 1)
           printf("\nVous vous appelez : %s", pseudoUser);
@@ -135,23 +136,24 @@ err_t startTCPSocketCli(int socketCli)
         if (verbose >= 1)
           printf("socketConnectedCli = %d\n", socketConnected);
 
+        serverStatus = 1;
         sendStruct((void *)&infoMoi, sizeof(infoMoi), socketConnected, NULL);
         if (verbose >= 1)
           printf("Conexion établie sans soucis fermeture de la fonction... \n");
 
-
         if (recep((void *)&startGameCli, sizeof(startGameCli), socketConnected, NULL) != NULL)
         {
-          if(verbose >= 2)printf("Map Name : %s \n", startGameCli.mapNameGame);
+          if (verbose >= 2)
+            printf("Map Name : %s \n", startGameCli.mapNameGame);
+            if(verbose>=0)displayMapMulti(startGameCli.multiMap[0]);
           startGameCli.isServerStartGame = 2;
-
         }
         else
         {
           printf("Pas de status recue \n");
         }
 
-        if(sendStruct(&startGameCli, sizeof(startGameCli), socketConnected, NULL) == OK)
+        if (sendStruct(&startGameCli, sizeof(startGameCli), socketConnected, NULL) == OK)
         {
           serverStatus = 3;
         }
@@ -163,6 +165,7 @@ err_t startTCPSocketCli(int socketCli)
       else
       {
         printf("Impossble de se connecter au serveur... :( \n");
+        serverStatus = -2;
         return CLI_ERROR;
       }
     }
