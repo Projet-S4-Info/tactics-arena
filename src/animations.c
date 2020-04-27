@@ -232,7 +232,7 @@ bool isOnGround(abilityId id)
 
 err_t play_ability_animation(Ability ab, Coord pos)
 {
-    Coord temp = {0,0};
+    Coord temp;
     int nbSteps = animTextures[ab.ab_id].nb_steps;
     AnimTexture animation = animTextures[ab.ab_id];
 
@@ -259,10 +259,10 @@ err_t play_ability_animation(Ability ab, Coord pos)
         {
             for (int j = 0; j < ab.nb_coords; j++)
             {
-                //Coord drawPos = add_coords(pos, *((*(ab.coord))+j));
-                //if (isWalkable(drawPos) && isInGrid(drawPos))
-                //{
-                    //temp = to2D(drawPos);
+                Coord drawPos = add_coords(pos, *((*(ab.coord))+j));
+                /*if (isWalkable(drawPos) && isInGrid(drawPos))
+                {*/
+                    temp = to2D(drawPos);
                     if (pxBase == 64)
                         displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
                     else
@@ -280,7 +280,7 @@ err_t play_ability_animation(Ability ab, Coord pos)
         if(verbose>=0)printf("ABILITY HAS SINGLE TARGET ANIMATION\n");
         for (int i = 0; i < nbSteps; i++)
         {
-            //temp = to2D(pos);
+            temp = to2D(pos);
             if (pxBase == 64)
                 displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
             else
