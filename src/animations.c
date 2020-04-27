@@ -247,7 +247,7 @@ err_t play_ability_animation(Ability ab, Coord pos)
     if (your_turn()) displayMap(renderer, XPOS, YPOS);
     if(verbose>=0)printf("1ST DISPLAYMAP OK\n");
 
-    //Mix_PlayChannel(-1, animation.sound_effect, 0);
+    Mix_PlayChannel(-1, animation.sound_effect, 0);
     if(verbose>=0)printf("SOUND OK\n");
 
     if(verbose>=0)printf("ABILITY HAS %d STEPS\n", nbSteps);
@@ -260,14 +260,14 @@ err_t play_ability_animation(Ability ab, Coord pos)
             for (int j = 0; j < ab.nb_coords; j++)
             {
                 Coord drawPos = add_coords(pos, *((*(ab.coord))+j));
-                if (isWalkable(drawPos) && isInGrid(drawPos))
-                {
+                //if (isWalkable(drawPos) && isInGrid(drawPos))
+                //{
                     temp = to2D(drawPos);
-                    /*if (pxBase == 64)
+                    if (pxBase == 64)
                         displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
                     else
-                        displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);*/
-                }
+                        displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
+                //}
             }
             SDL_RenderPresent(renderer);
             SDL_Delay(animation.speed);
@@ -281,10 +281,10 @@ err_t play_ability_animation(Ability ab, Coord pos)
         for (int i = 0; i < nbSteps; i++)
         {
             temp = to2D(pos);
-            /*if (pxBase == 64)
+            if (pxBase == 64)
                 displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
             else
-                displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);*/
+                displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
 
             SDL_RenderPresent(renderer);
             SDL_Delay(animation.speed);
