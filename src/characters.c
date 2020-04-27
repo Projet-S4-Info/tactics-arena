@@ -268,8 +268,8 @@ void switchEntities(Coord pos1, Coord pos2)
         print_Coord(&(t2->entity->coords), "t2 : ");
     }
     
-    t2->entity->coords = pos1;
-    t1->entity->coords = pos2;
+    t2->entity->coords = pos2;
+    t1->entity->coords = pos1;
 
     if(verbose>=0)
     {
