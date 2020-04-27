@@ -7,6 +7,7 @@ extern bool game_setup;
 extern bool applying_action;
 
 err_t online_setup();
+err_t set_main_loop(bool value);
 bool your_turn();
 err_t apply_action(action a);
 err_t action_set(action a);

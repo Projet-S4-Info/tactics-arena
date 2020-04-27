@@ -20,6 +20,7 @@ bool game_setup = FALSE;
 bool is_online = FALSE;
 bool turn_active = TRUE;
 bool applying_action = FALSE;
+bool main_loop_active = TRUE;
 action turn_over = {0,{0,0},0};
 
 Coord spawn_red[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
@@ -30,6 +31,12 @@ err_t online_setup()
 {
     is_online = TRUE;
     turn_active = FALSE;
+    return OK;
+}
+
+err_t set_main_loop(bool value)
+{
+    main_loop_active = value;
     return OK;
 }
 
@@ -317,7 +324,7 @@ winId local_turn()
 
 winId opposing_turn()
 {
-    if(verbose>=1)printf("It's your opponenet's turn\n");
+    if(verbose>=1)printf("It's your opponent's turn\n");
     addLog("It's your opponent's turn");
 
     turn_start(Foes);
@@ -330,6 +337,9 @@ winId opposing_turn()
     while(a.char_id != 0)
     {
         applying_action = TRUE;
+        
+        while(main_loop_active);
+
         if(a.act == Mvt)
         {
             apply_movement(a);

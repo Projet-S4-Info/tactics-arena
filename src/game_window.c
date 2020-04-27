@@ -241,489 +241,492 @@ int createGameWindow(int x, int y)
 		playMenuMusic(3);
 		while (running)
 		{
-			tempEntity = getEntity(getSelectedPos());
-			SDL_Event e;
-			while (SDL_PollEvent(&e))
+			if(!applying_action)
 			{
-				switch (e.type)
+				set_main_loop(TRUE);
+				tempEntity = getEntity(getSelectedPos());
+				SDL_Event e;
+				while (SDL_PollEvent(&e))
 				{
-
-				case SDL_QUIT:
-					running = 0;
-					break;
-
-				case SDL_WINDOWEVENT:
-					switch (e.window.event)
+					switch (e.type)
 					{
-					case SDL_WINDOWEVENT_EXPOSED:
-					case SDL_WINDOWEVENT_SIZE_CHANGED:
-					case SDL_WINDOWEVENT_RESIZED:
-					case SDL_WINDOWEVENT_HIDDEN:
-					case SDL_WINDOWEVENT_SHOWN:
 
-						SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
-
+					case SDL_QUIT:
+						running = 0;
 						break;
-					}
-					break;
 
-				/* ********** CLICS SOURIS ************ */
-				case SDL_MOUSEBUTTONDOWN:
-
-					if (verbose >= 2)
-						printf("X: %d | Y: %d\n", e.motion.x, e.motion.y); // Debug console pos x & y on term
-
-					// Compétences et actions
-					if (tempEntity != NULL && is_ally(tempEntity))
-					{
-						if (e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16)
+					case SDL_WINDOWEVENT:
+						switch (e.window.event)
 						{
+						case SDL_WINDOWEVENT_EXPOSED:
+						case SDL_WINDOWEVENT_SIZE_CHANGED:
+						case SDL_WINDOWEVENT_RESIZED:
+						case SDL_WINDOWEVENT_HIDDEN:
+						case SDL_WINDOWEVENT_SHOWN:
+
+							SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
+
+							break;
+						}
+						break;
+
+					/* ********** CLICS SOURIS ************ */
+					case SDL_MOUSEBUTTONDOWN:
+
+						if (verbose >= 2)
+							printf("X: %d | Y: %d\n", e.motion.x, e.motion.y); // Debug console pos x & y on term
+
+						// Compétences et actions
+						if (tempEntity != NULL && is_ally(tempEntity))
+						{
+							if (e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16)
+							{
+								if (your_turn())
+								{
+									// Sélection des compétences
+									if (selected_ability != Last_Sacrifice)
+									{
+										// Mouvement
+										if (e.motion.x >= 16 && e.motion.x <= 80)
+										{
+											if (!able_ability(tempEntity, Mvt, TRUE))
+												selected_ability = Mvt;
+											else Mix_PlayChannel(-1, nopeSound, 0);
+										}
+										// Compétence 1
+										else if (e.motion.x >= 96 && e.motion.x <= 160)
+										{
+											if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id, TRUE))
+												selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+											else Mix_PlayChannel(-1, nopeSound, 0);
+										}
+										// Compétence 2
+										else if (e.motion.x >= 176 && e.motion.x <= 240)
+										{
+											if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id, TRUE))
+												selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
+											else Mix_PlayChannel(-1, nopeSound, 0);
+										}
+										// Compétence 3
+										else if (e.motion.x >= 256 && e.motion.x <= 320)
+										{
+											if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id, TRUE))
+												selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
+											else Mix_PlayChannel(-1, nopeSound, 0);
+										}
+										// Compétence 4
+										else if (e.motion.x >= 336 && e.motion.x <= 400)
+										{
+											if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id, TRUE))
+												selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
+											else Mix_PlayChannel(-1, nopeSound, 0);
+										}
+										// Tourner personnage vers la droite
+										else if (e.motion.x >= 416 && e.motion.x <= 480)
+										{
+											turnRight(tempEntity);
+										}
+										// Tourner personnage vers la gauche
+										else if (e.motion.x >= 496 && e.motion.x <= 560)
+										{
+											turnLeft(tempEntity);
+										}
+										else
+											selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
+									}
+									else
+									// Sélection de l'allié à ressuciter grâce à Last Sacrifice
+									{
+										int nbDeadAllies = count_dead_allies(tempEntity);
+										action revive = {tempEntity->cha_id, {0, 0}, Last_Sacrifice};
+										Entity *deadAllies[nbDeadAllies];
+										get_dead_allies(tempEntity, deadAllies);
+
+										// Allié 1
+										if (e.motion.x >= 16 && e.motion.x <= 80 && nbDeadAllies == 1)
+										{
+											revive.c = deadAllies[0]->coords;
+											action_set(revive);
+										}
+										// Allié 2
+										else if (e.motion.x >= 96 && e.motion.x <= 160 && nbDeadAllies == 2)
+										{
+											revive.c = deadAllies[1]->coords;
+											action_set(revive);
+										}
+										// Allié 3
+										else if (e.motion.x >= 176 && e.motion.x <= 240 && nbDeadAllies == 3)
+										{
+											revive.c = deadAllies[2]->coords;
+											action_set(revive);
+										}
+										// Allié 4
+										else if (e.motion.x >= 256 && e.motion.x <= 320 && nbDeadAllies == 4)
+										{
+											revive.c = deadAllies[3]->coords;
+											action_set(revive);
+										}
+										// Allié 5
+										else if (e.motion.x >= 336 && e.motion.x <= 400 && nbDeadAllies == 5)
+										{
+											revive.c = deadAllies[4]->coords;
+											action_set(revive);
+										}
+										selected_ability = -1;
+										unselect();
+									}
+
+									// Exception Last Sacrifice
+									if (selected_ability == Last_Sacrifice && count_dead_allies(tempEntity) < 1)
+									{
+										selected_ability = -1;
+										addLog("No dead allies yet");
+										Mix_PlayChannel(-1, nopeSound, 0);
+									}
+
+									if (verbose >= 1)
+										printf("\033[36;01m[GAME_WINDOW]\033[00m : Selected ability : %d\n", selected_ability);
+								}
+								else
+								{
+									addLog("Not available during opponent's turn");
+									Mix_PlayChannel(-1, nopeSound, 0);
+								}
+							}
+							else
+							{
+								selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
+							}
+						}
+						else
+						{
+							selected_ability = -1;
+							selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
+						}
+
+						// Fin de tour
+						if (e.motion.x >= xWinSize - 280 && e.motion.x <= xWinSize - 24 && e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16 && your_turn())
+						{
+							hover_next_turn = FALSE;
+							set_endturn();
+						}
+
+						if (e.motion.x >= xWinSize - 360 && e.motion.x <= xWinSize - 296 && e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16)
+						{
+							if (isChatActive == 1)
+							{
+								isChatActive = 0;
+
+								addLog("Tchat desactive");
+								pthread_detach(thread_Chat);
+							}
+							else
+							{
+								isChatActive = 1;
+								addLog("Tchat active");
+								if (nbPlayer > 0)
+								{
+									pthread_create(&thread_Chat, NULL, fn_chat, NULL);
+								}
+							}
+						}
+						break;
+
+					/* ********** SCROLL SOURIS ************ */
+					case SDL_MOUSEWHEEL:
+						if (e.wheel.y > 0) // Scroll UP
+						{
+							if (pxBase == 64)
+							{
+								pxBase = 128;
+								if (verbose >= 1)
+									printf("\033[36;01m[GAME_WINDOW]\033[00m : Zoom In (Resolution : %dx%dpx)\n", pxBase, pxBase);
+								XPOS *= 2;
+								YPOS *= 2;
+							}
+						}
+						else
+						{ // Scroll DOWN
+							if (pxBase == 128)
+							{
+								pxBase = 64;
+								if (verbose >= 1)
+									printf("\033[36;01m[GAME_WINDOW]\033[00m : Zoom Out (Resolution : %dx%dpx)\n", pxBase, pxBase);
+								XPOS /= 2;
+								YPOS /= 2;
+							}
+						}
+						break;
+
+					/* ********** APPUI TOUCHE CLAVIER ************ */
+					case SDL_KEYDOWN:
+						switch (e.key.keysym.sym)
+						{
+						case SDLK_KP_PLUS: // "+" key
+							if (pxBase == 64)
+							{
+								pxBase = 128;
+								addLog("PX 128");
+								if (verbose >= 1)
+									printf("\033[36;01m[GAME_WINDOW]\033[00m : Zoom In (Resolution : %dx%dpx)\n", pxBase, pxBase);
+								XPOS *= 2;
+								YPOS *= 2;
+							}
+							break;
+						case SDLK_KP_MINUS: // "-" key
+							if (pxBase == 128)
+							{
+								pxBase = 64;
+								addLog("PX 64");
+								if (verbose >= 1)
+									printf("\033[36;01m[GAME_WINDOW]\033[00m : Zoom Out (Resolution : %dx%dpx)\n", pxBase, pxBase);
+								XPOS /= 2;
+								YPOS /= 2;
+							}
+							break;
+						case SDLK_BACKSPACE:
+							if (isChatActive == 1)
+							{
+								if (strlen(pseudoChat) > strlen(pseudoUser) + 3)
+								{
+									pseudoChat[strlen(pseudoChat) - 1] = '\0';
+								}
+							}
+							break;
+						case SDLK_RETURN:
+							if (isChatActive == 1)
+							{
+
+								nouveau_Msg(&chat, pseudoChat);
+								sprintf(pseudoChat, "%s : ", pseudoUser);
+								changesChat = 1;
+							}
+							break;
+						case SDLK_ESCAPE:
+							if (selected_ability != -1)
+								selected_ability = -1;
+							else
+							{
+								unselect();
+								unhover();
+							}
+							break;
+						/* ***** DEPLACEMENTS CAMERA (RACCOURCIS CLAVIER) ***** */
+						case SDLK_z: // "z" key
+							if (!isChatActive)
+								YPOS += (10 * (pxBase / 64));
+							break;
+						case SDLK_q: // "q" key
+							if (!isChatActive)
+								XPOS += (10 * (pxBase / 64));
+							break;
+						case SDLK_s: // "s" key
+							if (!isChatActive)
+								YPOS -= (10 * (pxBase / 64));
+							break;
+						case SDLK_d: // "d" key
+							if (!isChatActive)
+								XPOS -= (10 * (pxBase / 64));
+							break;
+						case SDLK_UP: // "ARROW UP" key
+							if (!isChatActive)
+								YPOS += (10 * (pxBase / 64));
+							break;
+						case SDLK_LEFT: // "ARROW LEFT" key
+							if (!isChatActive)
+								XPOS += (10 * (pxBase / 64));
+							break;
+						case SDLK_DOWN: // "ARROW DOWN" key
+							if (!isChatActive)
+								YPOS -= (10 * (pxBase / 64));
+							break;
+						case SDLK_RIGHT: // "ARROW RIGHT" key
+							if (!isChatActive)
+								XPOS -= (10 * (pxBase / 64));
+							break;
+						/* ***** SELECTION CAPACITES (RACCOURCIS CLAVIER) ***** */
+						default:
 							if (your_turn())
 							{
 								// Sélection des compétences
-								if (selected_ability != Last_Sacrifice)
+								if (selected_ability != Last_Sacrifice && tempEntity != NULL)
 								{
-									// Mouvement
-									if (e.motion.x >= 16 && e.motion.x <= 80)
+									if (is_ally(tempEntity))
 									{
-										if (!able_ability(tempEntity, Mvt, TRUE))
-											selected_ability = Mvt;
-										else Mix_PlayChannel(-1, nopeSound, 0);
-									}
-									// Compétence 1
-									else if (e.motion.x >= 96 && e.motion.x <= 160)
-									{
-										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id, TRUE))
-											selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
-									}
-									// Compétence 2
-									else if (e.motion.x >= 176 && e.motion.x <= 240)
-									{
-										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id, TRUE))
-											selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
-									}
-									// Compétence 3
-									else if (e.motion.x >= 256 && e.motion.x <= 320)
-									{
-										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id, TRUE))
-											selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
-									}
-									// Compétence 4
-									else if (e.motion.x >= 336 && e.motion.x <= 400)
-									{
-										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id, TRUE))
-											selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
-									}
-									// Tourner personnage vers la droite
-									else if (e.motion.x >= 416 && e.motion.x <= 480)
-									{
-										turnRight(tempEntity);
-									}
-									// Tourner personnage vers la gauche
-									else if (e.motion.x >= 496 && e.motion.x <= 560)
-									{
-										turnLeft(tempEntity);
+										// Mouvement
+										if (e.key.keysym.sym == SDLK_1)
+										{
+											if (!able_ability(tempEntity, Mvt, TRUE))
+												selected_ability = Mvt;
+											else Mix_PlayChannel(-1, nopeSound, 0);
+										}
+										// Compétence 1
+										else if (e.key.keysym.sym == SDLK_2)
+										{
+											if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id, TRUE))
+												selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+											else Mix_PlayChannel(-1, nopeSound, 0);
+										}
+										// Compétence 2
+										else if (e.key.keysym.sym == SDLK_3)
+										{
+											if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id, TRUE))
+												selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
+											else Mix_PlayChannel(-1, nopeSound, 0);
+										}
+										// Compétence 3
+										else if (e.key.keysym.sym == SDLK_4)
+										{
+											if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id, TRUE))
+												selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
+											else Mix_PlayChannel(-1, nopeSound, 0);
+										}
+										// Compétence 4
+										else if (e.key.keysym.sym == SDLK_5)
+										{
+											if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id, TRUE))
+												selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
+											else Mix_PlayChannel(-1, nopeSound, 0);
+										}
+										// Tourner personnage vers la droite
+										else if (e.key.keysym.sym == SDLK_6)
+										{
+											turnRight(tempEntity);
+										}
+										// Tourner personnage vers la gauche
+										else if (e.key.keysym.sym == SDLK_7)
+										{
+											turnLeft(tempEntity);
+										}
 									}
 									else
-										selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
+									{
+										Mix_PlayChannel(-1, nopeSound, 0);
+									}
 								}
 								else
-								// Sélection de l'allié à ressuciter grâce à Last Sacrifice
 								{
-									int nbDeadAllies = count_dead_allies(tempEntity);
-									action revive = {tempEntity->cha_id, {0, 0}, Last_Sacrifice};
-									Entity *deadAllies[nbDeadAllies];
-									get_dead_allies(tempEntity, deadAllies);
-
-									// Allié 1
-									if (e.motion.x >= 16 && e.motion.x <= 80 && nbDeadAllies == 1)
-									{
-										revive.c = deadAllies[0]->coords;
-										action_set(revive);
-									}
-									// Allié 2
-									else if (e.motion.x >= 96 && e.motion.x <= 160 && nbDeadAllies == 2)
-									{
-										revive.c = deadAllies[1]->coords;
-										action_set(revive);
-									}
-									// Allié 3
-									else if (e.motion.x >= 176 && e.motion.x <= 240 && nbDeadAllies == 3)
-									{
-										revive.c = deadAllies[2]->coords;
-										action_set(revive);
-									}
-									// Allié 4
-									else if (e.motion.x >= 256 && e.motion.x <= 320 && nbDeadAllies == 4)
-									{
-										revive.c = deadAllies[3]->coords;
-										action_set(revive);
-									}
-									// Allié 5
-									else if (e.motion.x >= 336 && e.motion.x <= 400 && nbDeadAllies == 5)
-									{
-										revive.c = deadAllies[4]->coords;
-										action_set(revive);
-									}
-									selected_ability = -1;
-									unselect();
-								}
-
-								// Exception Last Sacrifice
-								if (selected_ability == Last_Sacrifice && count_dead_allies(tempEntity) < 1)
-								{
-									selected_ability = -1;
-									addLog("No dead allies yet");
 									Mix_PlayChannel(-1, nopeSound, 0);
 								}
-
-								if (verbose >= 1)
-									printf("\033[36;01m[GAME_WINDOW]\033[00m : Selected ability : %d\n", selected_ability);
 							}
-							else
-							{
-								addLog("Not available during opponent's turn");
-								Mix_PlayChannel(-1, nopeSound, 0);
-							}
+							break;
 						}
-						else
-						{
-							selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
-						}
-					}
-					else
-					{
-						selected_ability = -1;
-						selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
-					}
+						break;
 
-					// Fin de tour
-					if (e.motion.x >= xWinSize - 280 && e.motion.x <= xWinSize - 24 && e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16 && your_turn())
-					{
+					/* ********** MOUVEMENTS SOURIS ************ */
+					case SDL_MOUSEMOTION:
+						hover_ability = -1;
 						hover_next_turn = FALSE;
-						set_endturn();
-					}
+						hover_tchat = 0;
+						mouse_position.x = e.motion.x;
+						mouse_position.y = e.motion.y;
 
-					if (e.motion.x >= xWinSize - 360 && e.motion.x <= xWinSize - 296 && e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16)
-					{
-						if (isChatActive == 1)
-						{
-							isChatActive = 0;
+						hoverTile(XPOS, YPOS, e.motion.x, e.motion.y);
 
-							addLog("Tchat desactive");
-							pthread_detach(thread_Chat);
-						}
-						else
+						// Hover skip turn button
+						if (e.motion.x >= xWinSize - 280 && e.motion.x <= xWinSize - 24 && e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16)
+							hover_next_turn = TRUE;
+
+						// Hover compétences et actions
+						tempEntity = getEntity(getSelectedPos());
+						if (tempEntity != NULL)
 						{
-							isChatActive = 1;
-							addLog("Tchat active");
-							if (nbPlayer > 0)
+							if (e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16)
 							{
-								pthread_create(&thread_Chat, NULL, fn_chat, NULL);
+								if (e.motion.x >= 16 && e.motion.x <= 80)
+									hover_ability = Mvt;
+								else if (e.motion.x >= 96 && e.motion.x <= 160)
+									hover_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
+								else if (e.motion.x >= 176 && e.motion.x <= 240)
+									hover_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
+								else if (e.motion.x >= 256 && e.motion.x <= 320)
+									hover_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
+								else if (e.motion.x >= 336 && e.motion.x <= 400)
+									hover_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
 							}
-						}
-					}
-					break;
-
-				/* ********** SCROLL SOURIS ************ */
-				case SDL_MOUSEWHEEL:
-					if (e.wheel.y > 0) // Scroll UP
-					{
-						if (pxBase == 64)
-						{
-							pxBase = 128;
-							if (verbose >= 1)
-								printf("\033[36;01m[GAME_WINDOW]\033[00m : Zoom In (Resolution : %dx%dpx)\n", pxBase, pxBase);
-							XPOS *= 2;
-							YPOS *= 2;
-						}
-					}
-					else
-					{ // Scroll DOWN
-						if (pxBase == 128)
-						{
-							pxBase = 64;
-							if (verbose >= 1)
-								printf("\033[36;01m[GAME_WINDOW]\033[00m : Zoom Out (Resolution : %dx%dpx)\n", pxBase, pxBase);
-							XPOS /= 2;
-							YPOS /= 2;
-						}
-					}
-					break;
-
-				/* ********** APPUI TOUCHE CLAVIER ************ */
-				case SDL_KEYDOWN:
-					switch (e.key.keysym.sym)
-					{
-					case SDLK_KP_PLUS: // "+" key
-						if (pxBase == 64)
-						{
-							pxBase = 128;
-							addLog("PX 128");
-							if (verbose >= 1)
-								printf("\033[36;01m[GAME_WINDOW]\033[00m : Zoom In (Resolution : %dx%dpx)\n", pxBase, pxBase);
-							XPOS *= 2;
-							YPOS *= 2;
-						}
-						break;
-					case SDLK_KP_MINUS: // "-" key
-						if (pxBase == 128)
-						{
-							pxBase = 64;
-							addLog("PX 64");
-							if (verbose >= 1)
-								printf("\033[36;01m[GAME_WINDOW]\033[00m : Zoom Out (Resolution : %dx%dpx)\n", pxBase, pxBase);
-							XPOS /= 2;
-							YPOS /= 2;
-						}
-						break;
-					case SDLK_BACKSPACE:
-						if (isChatActive == 1)
-						{
-							if (strlen(pseudoChat) > strlen(pseudoUser) + 3)
+							else if (e.motion.x >= 377 && e.motion.x <= 396 && e.motion.y >= 128 && e.motion.y <= 146)
 							{
-								pseudoChat[strlen(pseudoChat) - 1] = '\0';
-							}
-						}
-						break;
-					case SDLK_RETURN:
-						if (isChatActive == 1)
-						{
-
-							nouveau_Msg(&chat, pseudoChat);
-							sprintf(pseudoChat, "%s : ", pseudoUser);
-							changesChat = 1;
-						}
-						break;
-					case SDLK_ESCAPE:
-						if (selected_ability != -1)
-							selected_ability = -1;
-						else
-						{
-							unselect();
-							unhover();
-						}
-						break;
-					/* ***** DEPLACEMENTS CAMERA (RACCOURCIS CLAVIER) ***** */
-					case SDLK_z: // "z" key
-						if (!isChatActive)
-							YPOS += (10 * (pxBase / 64));
-						break;
-					case SDLK_q: // "q" key
-						if (!isChatActive)
-							XPOS += (10 * (pxBase / 64));
-						break;
-					case SDLK_s: // "s" key
-						if (!isChatActive)
-							YPOS -= (10 * (pxBase / 64));
-						break;
-					case SDLK_d: // "d" key
-						if (!isChatActive)
-							XPOS -= (10 * (pxBase / 64));
-						break;
-					case SDLK_UP: // "ARROW UP" key
-						if (!isChatActive)
-							YPOS += (10 * (pxBase / 64));
-						break;
-					case SDLK_LEFT: // "ARROW LEFT" key
-						if (!isChatActive)
-							XPOS += (10 * (pxBase / 64));
-						break;
-					case SDLK_DOWN: // "ARROW DOWN" key
-						if (!isChatActive)
-							YPOS -= (10 * (pxBase / 64));
-						break;
-					case SDLK_RIGHT: // "ARROW RIGHT" key
-						if (!isChatActive)
-							XPOS -= (10 * (pxBase / 64));
-						break;
-					/* ***** SELECTION CAPACITES (RACCOURCIS CLAVIER) ***** */
-					default:
-						if (your_turn())
-						{
-							// Sélection des compétences
-							if (selected_ability != Last_Sacrifice && tempEntity != NULL)
-							{
-								if (is_ally(tempEntity))
-								{
-									// Mouvement
-									if (e.key.keysym.sym == SDLK_1)
-									{
-										if (!able_ability(tempEntity, Mvt, TRUE))
-											selected_ability = Mvt;
-										else Mix_PlayChannel(-1, nopeSound, 0);
-									}
-									// Compétence 1
-									else if (e.key.keysym.sym == SDLK_2)
-									{
-										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id, TRUE))
-											selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
-									}
-									// Compétence 2
-									else if (e.key.keysym.sym == SDLK_3)
-									{
-										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id, TRUE))
-											selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
-									}
-									// Compétence 3
-									else if (e.key.keysym.sym == SDLK_4)
-									{
-										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id, TRUE))
-											selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
-									}
-									// Compétence 4
-									else if (e.key.keysym.sym == SDLK_5)
-									{
-										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id, TRUE))
-											selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
-									}
-									// Tourner personnage vers la droite
-									else if (e.key.keysym.sym == SDLK_6)
-									{
-										turnRight(tempEntity);
-									}
-									// Tourner personnage vers la gauche
-									else if (e.key.keysym.sym == SDLK_7)
-									{
-										turnLeft(tempEntity);
-									}
-								}
-								else
-								{
-									Mix_PlayChannel(-1, nopeSound, 0);
-								}
+								hover_passive_help = 1;
+								mouse_position.x = e.motion.x;
+								mouse_position.y = e.motion.y;
 							}
 							else
 							{
-								Mix_PlayChannel(-1, nopeSound, 0);
+								hover_passive_help = 0;
+							}
+						}
+
+						// Hover tchat button
+						if (e.motion.x >= xWinSize - 360 && e.motion.x <= xWinSize - 296 && e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16)
+						{
+							if (isChatActive == 1)
+							{
+								hover_tchat = 1;
+							}
+							else
+							{
+								hover_tchat = 2;
 							}
 						}
 						break;
-					}
-					break;
 
-				/* ********** MOUVEMENTS SOURIS ************ */
-				case SDL_MOUSEMOTION:
-					hover_ability = -1;
-					hover_next_turn = FALSE;
-					hover_tchat = 0;
-					mouse_position.x = e.motion.x;
-					mouse_position.y = e.motion.y;
-
-					hoverTile(XPOS, YPOS, e.motion.x, e.motion.y);
-
-					// Hover skip turn button
-					if (e.motion.x >= xWinSize - 280 && e.motion.x <= xWinSize - 24 && e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16)
-						hover_next_turn = TRUE;
-
-					// Hover compétences et actions
-					tempEntity = getEntity(getSelectedPos());
-					if (tempEntity != NULL)
-					{
-						if (e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16)
-						{
-							if (e.motion.x >= 16 && e.motion.x <= 80)
-								hover_ability = Mvt;
-							else if (e.motion.x >= 96 && e.motion.x <= 160)
-								hover_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
-							else if (e.motion.x >= 176 && e.motion.x <= 240)
-								hover_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
-							else if (e.motion.x >= 256 && e.motion.x <= 320)
-								hover_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
-							else if (e.motion.x >= 336 && e.motion.x <= 400)
-								hover_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-						}
-						else if (e.motion.x >= 377 && e.motion.x <= 396 && e.motion.y >= 128 && e.motion.y <= 146)
-						{
-							hover_passive_help = 1;
-							mouse_position.x = e.motion.x;
-							mouse_position.y = e.motion.y;
-						}
-						else
-						{
-							hover_passive_help = 0;
-						}
-					}
-
-					// Hover tchat button
-					if (e.motion.x >= xWinSize - 360 && e.motion.x <= xWinSize - 296 && e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16)
-					{
+					case SDL_TEXTINPUT:
 						if (isChatActive == 1)
 						{
-							hover_tchat = 1;
+							strcat(pseudoChat, e.text.text);
 						}
-						else
+						break;
+
+					case SDL_TEXTEDITING:
+						if (isChatActive == 1)
 						{
-							hover_tchat = 2;
+							compo = e.edit.text;
+							cursor = e.edit.start;
+							selection_len = e.edit.length;
 						}
+						break;
 					}
-					break;
+				}
 
-				case SDL_TEXTINPUT:
-					if (isChatActive == 1)
+				/* ********** MOUVEMENTS CAMERA ************ */
+				if (SDL_GetMouseFocus() == pWindow)
+				{
+					camMove = -1;
+					// Déplacement de la caméra grâce aux bords de l'écran
+					if (mouse_position.x <= xWinSize && mouse_position.x >= xWinSize - 20)
 					{
-						strcat(pseudoChat, e.text.text);
+						XPOS -= (camSpeed * (pxBase / 64));
+						camMove = E;
 					}
-					break;
+					if (mouse_position.x <= 20 && mouse_position.x >= 0)
+					{
+						XPOS += (camSpeed * (pxBase / 64));
+						camMove = W;
+					}
+					if (mouse_position.y <= yWinSize && mouse_position.y >= yWinSize - 20)
+					{
+						YPOS -= (camSpeed * (pxBase / 64));
+						camMove = S;
+					}
+					if (mouse_position.y <= 20 && mouse_position.y >= 0)
+					{
+						YPOS += (camSpeed * (pxBase / 64));
+						camMove = N;
+					}
+					// Vérification pour ne pas dépasser des "border" avec la caméra
+					if (XPOS > 500 * (pxBase / 64))
+						XPOS = 500 * (pxBase / 64);
+					if (XPOS < -1000 * (pxBase / 64))
+						XPOS = -1000 * (pxBase / 64);
+					if (YPOS > 300 * (pxBase / 64))
+						YPOS = 300 * (pxBase / 64);
+					if (YPOS < -500 * (pxBase / 64))
+						YPOS = -500 * (pxBase / 64);
 
-				case SDL_TEXTEDITING:
-					if (isChatActive == 1)
-					{
-						compo = e.edit.text;
-						cursor = e.edit.start;
-						selection_len = e.edit.length;
-					}
-					break;
+					displayMap(renderer, XPOS, YPOS);
 				}
 			}
-
-			/* ********** MOUVEMENTS CAMERA ************ */
-			if (SDL_GetMouseFocus() == pWindow)
-			{
-				camMove = -1;
-				// Déplacement de la caméra grâce aux bords de l'écran
-				if (mouse_position.x <= xWinSize && mouse_position.x >= xWinSize - 20)
-				{
-					XPOS -= (camSpeed * (pxBase / 64));
-					camMove = E;
-				}
-				if (mouse_position.x <= 20 && mouse_position.x >= 0)
-				{
-					XPOS += (camSpeed * (pxBase / 64));
-					camMove = W;
-				}
-				if (mouse_position.y <= yWinSize && mouse_position.y >= yWinSize - 20)
-				{
-					YPOS -= (camSpeed * (pxBase / 64));
-					camMove = S;
-				}
-				if (mouse_position.y <= 20 && mouse_position.y >= 0)
-				{
-					YPOS += (camSpeed * (pxBase / 64));
-					camMove = N;
-				}
-				// Vérification pour ne pas dépasser des "border" avec la caméra
-				if (XPOS > 500 * (pxBase / 64))
-					XPOS = 500 * (pxBase / 64);
-				if (XPOS < -1000 * (pxBase / 64))
-					XPOS = -1000 * (pxBase / 64);
-				if (YPOS > 300 * (pxBase / 64))
-					YPOS = 300 * (pxBase / 64);
-				if (YPOS < -500 * (pxBase / 64))
-					YPOS = -500 * (pxBase / 64);
-
-				while (applying_action);
-				displayMap(renderer, XPOS, YPOS);
-			}
-
+			set_main_loop(FALSE);
 			SDL_Delay(1000 / _FPS_);
 			//clearOldCache();
 		}
