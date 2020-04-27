@@ -247,7 +247,7 @@ err_t play_ability_animation(Ability ab, Coord pos)
     if (your_turn()) displayMap(renderer, XPOS, YPOS);
     if(verbose>=0)printf("1ST DISPLAYMAP OK\n");
 
-    Mix_PlayChannel(-1, animation.sound_effect, 0);
+    //Mix_PlayChannel(-1, animation.sound_effect, 0);
     if(verbose>=0)printf("SOUND OK\n");
 
     if(verbose>=0)printf("ABILITY HAS %d STEPS\n", nbSteps);
@@ -292,6 +292,6 @@ err_t play_ability_animation(Ability ab, Coord pos)
             if(verbose>=0)printf("STEP %d/%d completed\n", i+1, nbSteps);
         }
     }
-    
+
     return OK;
 }
