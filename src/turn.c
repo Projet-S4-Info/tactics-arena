@@ -1,7 +1,8 @@
-#include "struct.h"
-#include "init.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
+#include "struct.h"
+#include "init.h"
 #include "common.h"
 #include "passives.h"
 #include "gameplay.h"
@@ -19,12 +20,14 @@
 bool game_setup = FALSE;
 bool is_online = FALSE;
 bool turn_active = TRUE;
+bool applying_action = FALSE;
+bool loop_active = TRUE;
 action turn_over = {0,{0,0},0};
+
 
 Coord spawn_red[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
 Coord spawn_blue[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
 
-action a = {0,{0,0},0};
 
 err_t online_setup()
 {
@@ -267,25 +270,6 @@ bool play_check(Entity *e)
     return FALSE;
 }
 
-err_t ennemy_action()
-{
-    if(a.char_id!=0)
-    {
-        if(a.act == Mvt)
-        {
-            apply_movement(a);
-        }
-        else
-        {
-            apply_action(a);
-        }
-    }
-
-    a = turn_over;
-
-    return OK;
-}
-
 err_t action_set(action a)
 {
     if(verbose>=2)printf("Application de l'action...\n");
@@ -348,9 +332,20 @@ winId opposing_turn()
 
     while(received_action.char_id != 0)
     {
-        a = received_action;
-        while(a.char_id!=0);
-        rec_id_swap(recep(&a, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action));
+        applying_action = TRUE;
+        while(loop_active);
+
+        if(received_action.act == Mvt)
+        {
+            apply_movement(received_action);
+        }
+        else
+        {
+            apply_action(received_action);
+        }
+        applying_action = FALSE;
+
+        rec_id_swap(recep(&received_action, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action));
     }
 
     turn_end(Foes, stSent);

@@ -110,7 +110,7 @@ err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s
   int error;
   if(verbose>=2)printf("Envoi en Cours\n");
 
-  if(print!=NULL && verbose>= 2)
+  if(print!=NULL && verbose>= 0)
   {
     print(structure,"SENDING : ");
   }
@@ -119,7 +119,7 @@ err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s
   {
     bool received;
 
-    if(verbose>=2)printf("Awaiting Confirmation!\n");
+    if(verbose>=0)printf("Awaiting Confirmation!\n");
     recv(socket, &received, sizeof(bool), MSG_WAITALL);
 
     return OK;
@@ -147,7 +147,7 @@ void *recep(void *container, int size, int socket, err_t (*print)(void * s, char
   {
     received = TRUE;
 
-    if(print!=NULL && verbose>= 2)
+    if(print!=NULL && verbose>= 0)
     {
       print(container,"RECIEVED : ");
     }
@@ -159,7 +159,7 @@ void *recep(void *container, int size, int socket, err_t (*print)(void * s, char
     received = FALSE;
   }
 
-  if(verbose>=2)printf("Sending Confirmation\n");
+  if(verbose>=0)printf("Sending Confirmation\n");
   send(socket, &received, sizeof(bool), MSG_WAITALL);
 
   return container;
