@@ -292,6 +292,5 @@ err_t play_ability_animation(Ability ab, Coord pos)
             if(verbose>=0)printf("STEP %d/%d completed\n", i+1, nbSteps);
         }
     }
-
     return OK;
 }
