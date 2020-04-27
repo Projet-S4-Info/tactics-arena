@@ -110,7 +110,7 @@ err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s
   int error;
   if(verbose>=2)printf("Envoi en Cours\n");
 
-  if(print!=NULL && verbose>= 0)
+  if(print!=NULL && verbose>= 2)
   {
     print(structure,"SENDING : ");
   }
@@ -147,7 +147,7 @@ void *recep(void *container, int size, int socket, err_t (*print)(void * s, char
   {
     received = TRUE;
 
-    if(print!=NULL && verbose>= 0)
+    if(print!=NULL && verbose>= 2)
     {
       print(container,"RECIEVED : ");
     }

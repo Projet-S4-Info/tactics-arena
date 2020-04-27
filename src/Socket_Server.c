@@ -234,7 +234,7 @@ err_t startTCPSocketServ()
             }
             else
             {
-              if (verbose >= 0)
+              if (verbose >= 2)
                 printf("Pas de recep de status MAP \n");
             }
             if (verbose >= 1)

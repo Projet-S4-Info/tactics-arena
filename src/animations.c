@@ -246,25 +246,25 @@ err_t play_ability_animation(Ability ab, Coord pos)
         pos.x--;
         pos.y++;
     }
-    if (verbose >= 0)
+    if (verbose >= 2)
         printf("GROUND OK\n");
 
     displayMap(renderer, XPOS, YPOS);
     
-    if (verbose >= 0)
+    if (verbose >= 2)
         printf("1ST DISPLAYMAP OK\n");
 
     Mix_PlayChannel(-1, animation.sound_effect, 0);
 
-    if (verbose >= 0)
+    if (verbose >= 2)
         printf("SOUND OK\n");
 
-    if (verbose >= 0)
+    if (verbose >= 2)
         printf("ABILITY HAS %d STEPS\n", nbSteps);
 
     if (animation.aoe == TRUE)
     {
-        if (verbose >= 0)
+        if (verbose >= 2)
             printf("ABILITY HAS AOE ANIMATION\n");
         for (int i = 0; i < nbSteps; i++)
         {
@@ -289,13 +289,13 @@ err_t play_ability_animation(Ability ab, Coord pos)
             SDL_RenderPresent(renderer);
             SDL_Delay(animation.speed);
             displayMap(renderer, XPOS, YPOS);
-            if (verbose >= 0)
+            if (verbose >= 2)
                 printf("STEP %d/%d completed\n", i + 1, nbSteps);
         }
     }
     else
     {
-        if (verbose >= 0)
+        if (verbose >= 2)
             printf("ABILITY HAS SINGLE TARGET ANIMATION\n");
         for (int i = 0; i < nbSteps; i++)
         {
@@ -314,7 +314,7 @@ err_t play_ability_animation(Ability ab, Coord pos)
             SDL_RenderPresent(renderer);
             SDL_Delay(animation.speed);
             displayMap(renderer, XPOS, YPOS);
-            if (verbose >= 0)
+            if (verbose >= 2)
                 printf("STEP %d/%d completed\n", i + 1, nbSteps);
         }
     }
