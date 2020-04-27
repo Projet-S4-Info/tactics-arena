@@ -263,10 +263,10 @@ err_t play_ability_animation(Ability ab, Coord pos)
                 if (isWalkable(drawPos) && isInGrid(drawPos))
                 {
                     temp = to2D(drawPos);
-                    if (pxBase == 64)
+                    /*if (pxBase == 64)
                         displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
                     else
-                        displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
+                        displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);*/
                 }
             }
             SDL_RenderPresent(renderer);
@@ -281,10 +281,10 @@ err_t play_ability_animation(Ability ab, Coord pos)
         for (int i = 0; i < nbSteps; i++)
         {
             temp = to2D(pos);
-            if (pxBase == 64)
+            /*if (pxBase == 64)
                 displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
             else
-                displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
+                displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);*/
 
             SDL_RenderPresent(renderer);
             SDL_Delay(animation.speed);
