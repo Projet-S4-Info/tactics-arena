@@ -241,6 +241,11 @@ int createGameWindow(int x, int y)
 		playMenuMusic(3);
 		while (running)
 		{
+			if(!your_turn())
+			{
+				ennemy_action();
+			}
+
 			tempEntity = getEntity(getSelectedPos());
 			SDL_Event e;
 			while (SDL_PollEvent(&e))
@@ -720,10 +725,8 @@ int createGameWindow(int x, int y)
 				if (YPOS < -500 * (pxBase / 64))
 					YPOS = -500 * (pxBase / 64);
 
-				while (applying_action);
 				displayMap(renderer, XPOS, YPOS);
 			}
-
 			SDL_Delay(1000 / _FPS_);
 			//clearOldCache();
 		}

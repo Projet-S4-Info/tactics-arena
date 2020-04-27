@@ -363,7 +363,7 @@ int Volt_Switch_fn(Coord c, Entity * e, StateList * list)
         remove_mod(remove_from_list(t,Cripple,&s),t, TRUE);
     }
 
-    switchEntities(c,e->coords);
+    switchEntities(c, e->coords);
 
     return 0;
 }

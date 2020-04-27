@@ -16,6 +16,7 @@
 #include "display.h"
 #include "grid.h"
 #include "text.h"
+#include "print.h"
 
 
 /* =============== CONSTANTES =============== */
@@ -260,9 +261,21 @@ void switchEntities(Coord pos1, Coord pos2)
     Entity * temp = t1->entity;
     t1->entity = t2->entity;
     t2->entity = temp;
+
+    if(verbose>=0)
+    {
+        print_Coord(&(t1->entity->coords), "t1 : ");
+        print_Coord(&(t2->entity->coords), "t2 : ");
+    }
     
-    t2->entity->coords = pos1;
-    t1->entity->coords = pos2;
+    t2->entity->coords = pos2;
+    t1->entity->coords = pos1;
+
+    if(verbose>=0)
+    {
+        print_Coord(&(t1->entity->coords), "t1 : ");
+        print_Coord(&(t2->entity->coords), "t2 : ");
+    }
 
     setSelected(pos1);
 }
