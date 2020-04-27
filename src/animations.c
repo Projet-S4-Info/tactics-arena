@@ -233,11 +233,11 @@ bool isOnGround(abilityId id)
 err_t play_ability_animation(Ability ab, Coord pos)
 {
     Coord temp;
-    int nbSteps = getAnimSteps(ab.ab_id);
-    AnimTexture animation = getAnim(ab.ab_id);
+    int nbSteps = animTextures[ab.ab_id].nb_steps;
+    AnimTexture animation = animTextures[ab.ab_id];
 
 
-    if (!isOnGround(ab.ab_id))
+    if (animation.on_ground == 0)
     {
         pos.x--;
         pos.y++;
@@ -260,16 +260,14 @@ err_t play_ability_animation(Ability ab, Coord pos)
             for (int j = 0; j < ab.nb_coords; j++)
             {
                 Coord drawPos = add_coords(pos, *((*(ab.coord))+j));
-                if (isWalkable(drawPos) && isInGrid(drawPos))
-                {
+                /*if (isWalkable(drawPos) && isInGrid(drawPos))
+                {*/
                     temp = to2D(drawPos);
                     if (pxBase == 64)
-                        //displaySprite(renderer, getAnimTexture(ab.ab_id, i, FALSE), temp.x, temp.y);
                         displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
                     else
-                        //displaySprite(renderer, getAnimTexture(ab.ab_id, i, TRUE), temp.x, temp.y);
                         displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
-                }
+                //}
             }
             SDL_RenderPresent(renderer);
             SDL_Delay(animation.speed);
@@ -284,10 +282,8 @@ err_t play_ability_animation(Ability ab, Coord pos)
         {
             temp = to2D(pos);
             if (pxBase == 64)
-                //displaySprite(renderer, getAnimTexture(ab.ab_id, i, FALSE), temp.x, temp.y);
                 displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
             else
-                //displaySprite(renderer, getAnimTexture(ab.ab_id, i, TRUE), temp.x, temp.y);
                 displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
 
             SDL_RenderPresent(renderer);
@@ -297,6 +293,5 @@ err_t play_ability_animation(Ability ab, Coord pos)
         }
     }
 
-    if(verbose>=0)printf("REFRESH DISPLAY OK\n");
     return OK;
 }
