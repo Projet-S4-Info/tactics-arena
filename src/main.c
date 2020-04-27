@@ -151,7 +151,11 @@ int main(int argc, char * argv[])
         if(displayMenuMulti(1280,720)){
             createGameWindow(1920, 1080);
         }
+    }
 
+    else if( selection == 0){
+        printf("%s",error_message[destroy_game()]);
+        return 0;
     }
 
     printf("%s",error_message[destroy_game()]);

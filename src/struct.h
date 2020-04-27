@@ -164,7 +164,6 @@ typedef struct User{
 
 typedef struct{
     int tile_id;
-    int walkable;
 }MultiTile;
 
 typedef struct{
