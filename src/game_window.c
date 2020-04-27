@@ -153,7 +153,7 @@ int createGameWindow(int x, int y)
 		int start_seconds = SDL_GetTicks() / 1000;
 		int load_index = -1;
 		int loadingAnim = 0;
-		int loadingChar = 0;
+		int loadingChar = rand()%6;
 		int xCharPos;
 		while ((SDL_GetTicks() / 1000) - start_seconds < _TEXTURE_LOADING_TIME_)
 		{
