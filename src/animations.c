@@ -249,12 +249,13 @@ err_t play_ability_animation(Ability ab, Coord pos)
     if (verbose >= 0)
         printf("GROUND OK\n");
 
-    if (!is_online)
-        displayMap(renderer, XPOS, YPOS);
+    displayMap(renderer, XPOS, YPOS);
+    
     if (verbose >= 0)
         printf("1ST DISPLAYMAP OK\n");
 
     Mix_PlayChannel(-1, animation.sound_effect, 0);
+
     if (verbose >= 0)
         printf("SOUND OK\n");
 
@@ -285,12 +286,9 @@ err_t play_ability_animation(Ability ab, Coord pos)
                         displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
                 }
             }
-            if(verbose>=0)printf("DISPLAYING OF ALL SPRITES COMPLETE");
             SDL_RenderPresent(renderer);
             SDL_Delay(animation.speed);
-            if(verbose>=0)printf("RENDERING AND DELAY COMPLETE\n");
-            if (!is_online)
-                displayMap(renderer, XPOS, YPOS);
+            displayMap(renderer, XPOS, YPOS);
             if (verbose >= 0)
                 printf("STEP %d/%d completed\n", i + 1, nbSteps);
         }
@@ -306,20 +304,16 @@ err_t play_ability_animation(Ability ab, Coord pos)
                 printf("\033[31;01m[ANIMATIONS ERROR]\033[00m : La texture vaut NULL\n");
                 return POINTER_NULL;
             }
-            if(verbose>=0)printf("TO2D\n");
+
             temp = to2D(pos);
-            if(verbose>=0)printf("STARTING LOOP\n");
             if (pxBase == 64)
                 displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
             else
                 displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
 
-            if(verbose>=0)printf("DISPLAYING OF ALL SPRITES COMPLETE\n");
             SDL_RenderPresent(renderer);
             SDL_Delay(animation.speed);
-            if(verbose>=0)printf("RENDERING AND DELAY COMPLETE\n");
-            if (!is_online)
-                displayMap(renderer, XPOS, YPOS);
+            displayMap(renderer, XPOS, YPOS);
             if (verbose >= 0)
                 printf("STEP %d/%d completed\n", i + 1, nbSteps);
         }
