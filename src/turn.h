@@ -4,6 +4,7 @@
 
 extern bool is_online;
 extern bool game_setup;
+extern bool applying_action;
 
 err_t online_setup();
 bool your_turn();

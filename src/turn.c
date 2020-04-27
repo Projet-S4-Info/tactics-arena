@@ -19,6 +19,7 @@
 bool game_setup = FALSE;
 bool is_online = FALSE;
 bool turn_active = TRUE;
+bool applying_action = FALSE;
 action turn_over = {0,{0,0},0};
 
 Coord spawn_red[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
@@ -115,7 +116,7 @@ err_t apply_action(action a)
     selected_ability = -1;
     unhover();
 
-    play_ability_animation(active_ab, a.c);
+    printf("%s\n", error_message[play_ability_animation(active_ab, a.c)]);
     
     if(active_ab.fn_use!=ONLY)
     {
@@ -328,7 +329,7 @@ winId opposing_turn()
 
     while(a.char_id != 0)
     {
-
+        applying_action = TRUE;
         if(a.act == Mvt)
         {
             apply_movement(a);
@@ -337,7 +338,7 @@ winId opposing_turn()
         {
             apply_action(a);
         }
-        
+        applying_action = FALSE;
         rec_id_swap(recep(&a, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action));
     }
 

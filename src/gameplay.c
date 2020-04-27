@@ -133,12 +133,26 @@ Entity ** get_dead_allies(Entity *e, Entity * tab[])
 
 int get_cost(Entity *e, abilityId Id)
 {
-    return e->cha_class->cla_abilities[Id%NUM_AB].ab_cost;
+    if(Id!=Mvt)
+    {
+        return e->cha_class->cla_abilities[Id%NUM_AB].ab_cost;
+    }
+    else
+    {
+        return 1;
+    }
 }
 
 int get_cooldown(Entity * e, abilityId Id)
 {
-    return e->ab_cooldown[Id%NUM_AB];
+    if(Id!=Mvt)
+    {
+        return e->ab_cooldown[Id%NUM_AB];
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 char * get_name(Entity * e, abilityId ab_id)
@@ -168,12 +182,12 @@ char * get_desc(Entity * e, abilityId ab_id)
 
 castabilityId able_ability(Entity *e, abilityId ab_id, bool show_logs)
 {
-    if(e->act_points < e->cha_class->cla_abilities[ab_id%NUM_AB].ab_cost)
+    if(e->act_points < get_cost(e, ab_id))
     {
         if(show_logs)addLog("Not enough action points for that");
         return Locked_c;
     }
-    else if(e->ab_cooldown[ab_id%NUM_AB]!=0)
+    else if(get_cooldown(e, ab_id)!=0)
     {
         if(show_logs)
         {
@@ -218,7 +232,6 @@ bool is_ally(Entity *e)
 
 bool same_team(Entity *a, Entity *b)
 {
-
     if(a->cha_id<0&&b->cha_id<0)
     {
         if(verbose>=3)printf("Same Team Exit 1\n");

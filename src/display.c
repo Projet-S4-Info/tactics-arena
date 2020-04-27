@@ -32,7 +32,7 @@
 #define _NB_MAX_LOGS_ 11					// Define how many logs the screen can display (-1)
 #define _MAX_SIZE_LOGS_ STR_LONG			// Max length of a log message
 #define _LOG_DURATION_ 20					// Duration a log is displayed (in seconds)
-#define _NB_TEXT_CACHE_ 100
+#define _NB_TEXT_CACHE_ 1000
 
 
 /* =============== VARIABLES ================ */
