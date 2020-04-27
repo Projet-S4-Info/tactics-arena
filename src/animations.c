@@ -31,7 +31,7 @@
 
 /* =============== FONCTIONS DE GESTION DES TEXTURES D'ANIMATIONS =============== */
 
-err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, bool aoe, bool on_ground, int speed, char * sound_effect)
+err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, bool aoe, bool on_ground, int speed, char *sound_effect)
 // Pre-load animation textures for future loading
 {
     int index = 0;
@@ -39,10 +39,7 @@ err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, b
     char tempSmall[STR_LONG];
     char tempBig[STR_LONG];
 
-    while (animTextures[index].spritesSmall[0] != NULL)
-    {
-        index++;
-    }
+    index = id;
 
     if (verbose == 3)
         printf("\033[36;01m[ANIMATIONS]\033[00m : Ajout de la texture [%s] à l'id %d\n", name, index);
@@ -57,16 +54,24 @@ err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, b
     {
         sprintf(tempSmall, "../inc/sprites/attacks/sprite_indiv/64_64/%s%d.png", name, i);
         sprintf(tempBig, "../inc/sprites/attacks/sprite_indiv/128_128/%s%d.png", name, i);
-        if (verbose == 3)
+        if (verbose >= 3)
             printf("\033[36;01m[ANIMATIONS]\033[00m : Chargement de la texture : %s\n", tempSmall);
         animTextures[index].spritesSmall[tabIndex] = loadTexture(renderer, loadImage(tempSmall));
-        /*if (verbose == 2) printf("\033[36;01m[ANIMATIONS]\033[00m : Ajout de la texture [%s] à l'id %d\n", name, index);
-        animTextures[index].spritesBig[tabIndex] = loadTexture(renderer, loadImage(tempBig));*/
+        if (verbose >= 3)
+            printf("\033[36;01m[ANIMATIONS]\033[00m : Ajout de la texture [%s] à l'id %d\n", name, index);
+        //animTextures[index].spritesBig[tabIndex] = loadTexture(renderer, loadImage(tempBig));
+        animTextures[index].spritesBig[tabIndex] = NULL;
         tabIndex++;
     }
 
+    while (tabIndex < _NB_MAX_ANIM_)
+    {
+        animTextures[index].spritesSmall[tabIndex] = NULL;
+        animTextures[index].spritesBig[tabIndex++] = NULL;
+    }
+
     if (verbose == 3)
-            printf("\033[36;01m[ANIMATIONS]\033[00m : Chargement du fichier son : %s\n", sound_effect);
+        printf("\033[36;01m[ANIMATIONS]\033[00m : Chargement du fichier son : %s\n", sound_effect);
     animTextures[index].sound_effect = Mix_LoadWAV(sound_effect);
 
     return OK;
@@ -236,30 +241,41 @@ err_t play_ability_animation(Ability ab, Coord pos)
     int nbSteps = animTextures[ab.ab_id].nb_steps;
     AnimTexture animation = animTextures[ab.ab_id];
 
-
     if (animation.on_ground == 0)
     {
         pos.x--;
         pos.y++;
     }
-    if(verbose>=0)printf("GROUND OK\n");
+    if (verbose >= 0)
+        printf("GROUND OK\n");
 
-    if (!is_online) displayMap(renderer, XPOS, YPOS);
-    if(verbose>=0)printf("1ST DISPLAYMAP OK\n");
+    if (!is_online)
+        displayMap(renderer, XPOS, YPOS);
+    if (verbose >= 0)
+        printf("1ST DISPLAYMAP OK\n");
 
     Mix_PlayChannel(-1, animation.sound_effect, 0);
-    if(verbose>=0)printf("SOUND OK\n");
+    if (verbose >= 0)
+        printf("SOUND OK\n");
 
-    if(verbose>=0)printf("ABILITY HAS %d STEPS\n", nbSteps);
+    if (verbose >= 0)
+        printf("ABILITY HAS %d STEPS\n", nbSteps);
 
     if (animation.aoe == TRUE)
     {
-        if(verbose>=0)printf("ABILITY HAS AOE ANIMATION\n");
+        if (verbose >= 0)
+            printf("ABILITY HAS AOE ANIMATION\n");
         for (int i = 0; i < nbSteps; i++)
         {
+            if (animation.spritesSmall[i] == NULL)
+            {
+                printf("\033[31;01m[ANIMATIONS ERROR]\033[00m : La texture vaut NULL\n");
+                return POINTER_NULL;
+            }
+
             for (int j = 0; j < ab.nb_coords; j++)
             {
-                Coord drawPos = add_coords(pos, *((*(ab.coord))+j));
+                Coord drawPos = add_coords(pos, *((*(ab.coord)) + j));
                 if (isWalkable(drawPos) && isInGrid(drawPos))
                 {
                     temp = to2D(drawPos);
@@ -271,15 +287,24 @@ err_t play_ability_animation(Ability ab, Coord pos)
             }
             SDL_RenderPresent(renderer);
             SDL_Delay(animation.speed);
-            if (!is_online) displayMap(renderer, XPOS, YPOS);
-            if(verbose>=0)printf("STEP %d/%d completed\n", i+1, nbSteps);
+            if (!is_online)
+                displayMap(renderer, XPOS, YPOS);
+            if (verbose >= 0)
+                printf("STEP %d/%d completed\n", i + 1, nbSteps);
         }
     }
     else
     {
-        if(verbose>=0)printf("ABILITY HAS SINGLE TARGET ANIMATION\n");
+        if (verbose >= 0)
+            printf("ABILITY HAS SINGLE TARGET ANIMATION\n");
         for (int i = 0; i < nbSteps; i++)
         {
+            if (animation.spritesSmall[i] == NULL)
+            {
+                printf("\033[31;01m[ANIMATIONS ERROR]\033[00m : La texture vaut NULL\n");
+                return POINTER_NULL;
+            }
+            
             temp = to2D(pos);
             if (pxBase == 64)
                 displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
@@ -288,8 +313,10 @@ err_t play_ability_animation(Ability ab, Coord pos)
 
             SDL_RenderPresent(renderer);
             SDL_Delay(animation.speed);
-            if (!is_online) displayMap(renderer, XPOS, YPOS);
-            if(verbose>=0)printf("STEP %d/%d completed\n", i+1, nbSteps);
+            if (!is_online)
+                displayMap(renderer, XPOS, YPOS);
+            if (verbose >= 0)
+                printf("STEP %d/%d completed\n", i + 1, nbSteps);
         }
     }
     return OK;

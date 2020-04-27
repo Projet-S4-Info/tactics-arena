@@ -115,7 +115,7 @@ err_t apply_action(action a)
     selected_ability = -1;
     unhover();
 
-    play_ability_animation(active_ab, a.c);
+    printf("%s\n", error_message[play_ability_animation(active_ab, a.c)]);
     
     if(active_ab.fn_use!=ONLY)
     {
