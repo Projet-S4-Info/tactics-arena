@@ -390,6 +390,13 @@ void dispJoinMenu(SDL_Renderer *renderer, int x, int y)
 	}
 	/*-----------------------------------------*/
 
+	if(serverStatus == 2){
+		displayText(renderer, 605, 540, 55, "Vous êtes connecté !", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
+	}else if(isIPValid == 1 && serverStatus == -2){
+		displayText(renderer, 550, 650, 25, "Impossible de se connecter", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
+		displayText(renderer, 550, 678, 25, "Veuillez relancer le menu multi-joueur", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
+	}
+
 	if (music_Multi_playing){
 		displaySprite(renderer, music_on_Multi, x-175, y-200);
 	}else {
@@ -609,7 +616,6 @@ int displayMenuMulti(int x, int y)
 						else if (u.motion.x >= 608 && u.motion.x <= 721 && u.motion.y >= 550 && u.motion.y <= 590 && isJoinMenu == 1 && isIPValid == 1 && isPseudoValid == 1 && isInfoJoinSet == 0){
 							isInfoJoinSet = 1;
 							pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);
-							serverStatus = 1;
 							while(serverStatus != 3){
 								if(verbose >= 2)printf("Waiting Sattus to be 1\n");
 								sleep(2);

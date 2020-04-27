@@ -126,6 +126,8 @@ err_t startTCPSocketCli(int socketCli)
       {
         if (verbose >= 1)
           printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
+        
+        serverStatus = 1;
         socketConnected = sock;
         if (verbose >= 1)
           printf("\nVous vous appelez : %s", pseudoUser);
@@ -163,6 +165,7 @@ err_t startTCPSocketCli(int socketCli)
       else
       {
         printf("Impossble de se connecter au serveur... :( \n");
+        serverStatus = -2;
         return CLI_ERROR;
       }
     }
