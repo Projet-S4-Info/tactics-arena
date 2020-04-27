@@ -153,6 +153,11 @@ int main(int argc, char * argv[])
         }
     }
 
+    else if( selection == 0){
+        printf("%s",error_message[destroy_game()]);
+        return 0;
+    }
+
     printf("%s",error_message[destroy_game()]);
 
     //getchar();  // Wait for the user to press a key to end the program

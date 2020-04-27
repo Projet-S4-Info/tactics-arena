@@ -473,17 +473,7 @@ int displayMenuMulti(int x, int y)
 			SDL_Event u;
 			while (SDL_PollEvent(&u))
 			{
-				if (isHostMenu == 1 || isJoinMenu == 1)
-				{
-					if (isJoinMenu == 1)
-					{
-						dispJoinMenu(renderer, x, y);
-					}
-					else
-					{
-						dispHostMenu(renderer, x, y, indexMapMulti);
-					}
-				}
+
 				switch (u.type)
 				{
 				case SDL_QUIT:
@@ -667,6 +657,14 @@ int displayMenuMulti(int x, int y)
 					// Nouveau boutton "QUIT"
 					else if (u.motion.x >= 1000 && u.motion.x <= 1190 && u.motion.y >= 627 && u.motion.y <= 680)
 					{
+						if (isHostMenu == 1)
+						{
+							isHostMenu = 0;
+						}
+						if(isJoinMenu == 1){
+							isJoinMenu = 0;
+						}
+
 						closeWindow(pWindow);
 						freeMultiMenuTextures();
 						system("./TacticsArena");
@@ -801,6 +799,17 @@ int displayMenuMulti(int x, int y)
 				return 1;
 			}
 
+			if (isHostMenu == 1 || isJoinMenu == 1)
+			{
+				if (isJoinMenu == 1)
+				{
+					dispJoinMenu(renderer, x, y);
+				}
+				else
+				{
+					dispHostMenu(renderer, x, y, indexMapMulti);
+				}
+			}
 			SDL_Delay(16);
 			SDL_RenderPresent(renderer);
 		}
