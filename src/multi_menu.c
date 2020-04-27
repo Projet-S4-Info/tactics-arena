@@ -765,7 +765,7 @@ int displayMenuMulti(int x, int y)
 					printf("Waiting status to be 3 \n");
 				}
 
-				if (verbose >= 0)
+				if (verbose >= 3)
 					printf("Server status = %d \n", serverStatus);
 
 				if (serverStatus >= 1)
@@ -775,7 +775,7 @@ int displayMenuMulti(int x, int y)
 				else if (serverStatus == -2)
 				{
 					displayText(renderer, 460, 630, 40, "Impossible de se connecter", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
-					displayText(renderer, 460, 673, 40, "Veuillez relancer le menu multi-joueur", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
+					displayText(renderer, 430, 673, 40, "Veuillez relancer le menu multi-joueur", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
 				}
 			}
 			else if (serverStatus == 3 && isJoinMenu == 1)
@@ -792,7 +792,7 @@ int displayMenuMulti(int x, int y)
 					printf("Waiting status to be 2 \n");
 				}
 			}
-			else if (serverStatus != 2 && isHostMenu == 1)
+			else if (serverStatus == 2 && isHostMenu == 1)
 			{
 
 				closeWindow(pWindow);
