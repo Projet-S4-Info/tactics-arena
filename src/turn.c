@@ -19,24 +19,17 @@
 bool game_setup = FALSE;
 bool is_online = FALSE;
 bool turn_active = TRUE;
-bool applying_action = FALSE;
-bool main_loop_active = TRUE;
 action turn_over = {0,{0,0},0};
 
 Coord spawn_red[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
 Coord spawn_blue[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
 
+action a = {0,{0,0},0};
 
 err_t online_setup()
 {
     is_online = TRUE;
     turn_active = FALSE;
-    return OK;
-}
-
-err_t set_main_loop(bool value)
-{
-    main_loop_active = value;
     return OK;
 }
 
@@ -274,6 +267,25 @@ bool play_check(Entity *e)
     return FALSE;
 }
 
+err_t ennemy_action()
+{
+    if(a.char_id!=0)
+    {
+        if(a.act == Mvt)
+        {
+            apply_movement(a);
+        }
+        else
+        {
+            apply_action(a);
+        }
+    }
+
+    a = turn_over;
+
+    return OK;
+}
+
 err_t action_set(action a)
 {
     if(verbose>=2)printf("Application de l'action...\n");
@@ -330,25 +342,14 @@ winId opposing_turn()
     turn_start(Foes);
     if(verbose>=2)printf("Turn start done for Foes\n");
     
-    action a;
+    action received_action;
 
-    rec_id_swap(recep(&a, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action));
+    rec_id_swap(recep(&received_action, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action));
 
-    while(a.char_id != 0)
+    while(received_action.char_id != 0)
     {
-        applying_action = TRUE;
-        
-        while(main_loop_active);
-
-        if(a.act == Mvt)
-        {
-            apply_movement(a);
-        }
-        else
-        {
-            apply_action(a);
-        }
-        applying_action = FALSE;
+        a = received_action;
+        while(received_action.char_id!=0);
         rec_id_swap(recep(&a, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action));
     }
 
