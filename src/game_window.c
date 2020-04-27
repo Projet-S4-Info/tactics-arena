@@ -720,7 +720,7 @@ int createGameWindow(int x, int y)
 				if (YPOS < -500 * (pxBase / 64))
 					YPOS = -500 * (pxBase / 64);
 
-				while (apply_action);
+				while (applying_action);
 				displayMap(renderer, XPOS, YPOS);
 			}
 
