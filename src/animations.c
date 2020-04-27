@@ -244,7 +244,7 @@ err_t play_ability_animation(Ability ab, Coord pos)
     }
     if(verbose>=0)printf("GROUND OK\n");
 
-    if (your_turn()) displayMap(renderer, XPOS, YPOS);
+    if (!is_online) displayMap(renderer, XPOS, YPOS);
     if(verbose>=0)printf("1ST DISPLAYMAP OK\n");
 
     Mix_PlayChannel(-1, animation.sound_effect, 0);
@@ -260,18 +260,18 @@ err_t play_ability_animation(Ability ab, Coord pos)
             for (int j = 0; j < ab.nb_coords; j++)
             {
                 Coord drawPos = add_coords(pos, *((*(ab.coord))+j));
-                /*if (isWalkable(drawPos) && isInGrid(drawPos))
-                {*/
+                if (isWalkable(drawPos) && isInGrid(drawPos))
+                {
                     temp = to2D(drawPos);
                     if (pxBase == 64)
                         displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
                     else
                         displaySprite(renderer, animTextures[ab.ab_id].spritesSmall[i], temp.x, temp.y);
-                //}
+                }
             }
             SDL_RenderPresent(renderer);
             SDL_Delay(animation.speed);
-            if (your_turn()) displayMap(renderer, XPOS, YPOS);
+            if (!is_online) displayMap(renderer, XPOS, YPOS);
             if(verbose>=0)printf("STEP %d/%d completed\n", i+1, nbSteps);
         }
     }
@@ -288,7 +288,7 @@ err_t play_ability_animation(Ability ab, Coord pos)
 
             SDL_RenderPresent(renderer);
             SDL_Delay(animation.speed);
-            if (your_turn()) displayMap(renderer, XPOS, YPOS);
+            if (!is_online) displayMap(renderer, XPOS, YPOS);
             if(verbose>=0)printf("STEP %d/%d completed\n", i+1, nbSteps);
         }
     }

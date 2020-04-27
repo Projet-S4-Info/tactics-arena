@@ -323,14 +323,21 @@ int hoverTile(int xpos, int ypos, int mx, int my)
 	{
 		Coord center = {xIndex, yIndex};
 		tempEntity = getEntity(getSelectedPos());
-		if (tempEntity->cha_class->cla_abilities[selected_ability % NUM_AB].nb_coords > 1 && isInRange(borderTab, center))
+		if (selected_ability != Mvt)
 		{
-			for (int i = 0; i < tempEntity->cha_class->cla_abilities[selected_ability % NUM_AB].nb_coords; i++)
+			if (tempEntity->cha_class->cla_abilities[selected_ability % NUM_AB].nb_coords > 1 && isInRange(borderTab, center))
 			{
-				Coord highlight = add_coords(center, *((*(tempEntity->cha_class->cla_abilities[selected_ability % NUM_AB].coord)) + i));
-				if (isInGrid(highlight))
-					setHovered(highlight);
+				for (int i = 0; i < tempEntity->cha_class->cla_abilities[selected_ability % NUM_AB].nb_coords; i++)
+				{
+					Coord highlight = add_coords(center, *((*(tempEntity->cha_class->cla_abilities[selected_ability % NUM_AB].coord)) + i));
+					if (isInGrid(highlight))
+						setHovered(highlight);
+				}
 			}
+		}
+		else
+		{
+			setHovered(center);
 		}
 	}
 
