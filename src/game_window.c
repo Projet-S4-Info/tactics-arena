@@ -151,7 +151,6 @@ int createGameWindow(int x, int y)
 
 		// Textures loading screen
 		int start_seconds = SDL_GetTicks() / 1000;
-		int load_index = -1;
 		int loadingAnim = 0;
 		int loadingChar = rand()%6;
 		int xCharPos;
@@ -606,10 +605,13 @@ int createGameWindow(int x, int y)
 								}
 								else
 								{
-									Mix_PlayChannel(-1, nopeSound, 0);
+									if (!isChatActive) Mix_PlayChannel(-1, nopeSound, 0);
 								}
 							}
-							break;
+							else
+							{
+								if (!isChatActive) Mix_PlayChannel(-1, nopeSound, 0);
+							}
 						}
 						break;
 
