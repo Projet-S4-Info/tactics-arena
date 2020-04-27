@@ -774,8 +774,8 @@ int displayMenuMulti(int x, int y)
 				}
 				else if (serverStatus == -2)
 				{
-					displayText(renderer, 460, 630, 40, "Impossible de se connecter", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
-					displayText(renderer, 430, 673, 40, "Veuillez relancer le menu multi-joueur", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
+					displayText(renderer, 450, 630, 40, "Impossible de se connecter", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
+					displayText(renderer, 360, 673, 40, "Veuillez relancer le menu multi-joueur", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
 				}
 			}
 			else if (serverStatus == 3 && isJoinMenu == 1)
