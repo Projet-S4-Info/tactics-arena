@@ -232,7 +232,7 @@ bool isOnGround(abilityId id)
 
 err_t play_ability_animation(Ability ab, Coord pos)
 {
-    Coord temp;
+    Coord temp = {0,0};
     int nbSteps = animTextures[ab.ab_id].nb_steps;
     AnimTexture animation = animTextures[ab.ab_id];
 
