@@ -216,7 +216,7 @@ int loadMapTextures(SDL_Renderer *renderer)
 	addTextureToTable(textures,
 					  loadTexture(renderer, loadImage("../inc/img/interface/locked_turn_end.png")),
 					  NULL,
-					  "locked_turn_end");
+					  "locked_end_turn");
 
 	// Loading tchat button
 	addTextureToTable(textures,
