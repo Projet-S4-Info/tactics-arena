@@ -617,12 +617,6 @@ int displayInterface(SDL_Renderer *renderer)
 	chatMsg.w = chatScreen.w;
 	chatMsg.h = 20;
 
-	SDL_Rect idCard;
-	idCard.x = 10;
-	idCard.y = 10;
-	idCard.w = 400;
-	idCard.h = 180;
-
 	SDL_Rect portrait;
 	portrait.w = 64;
 	portrait.h = 100;
@@ -650,9 +644,6 @@ int displayInterface(SDL_Renderer *renderer)
 
 		// Display the ID card of the selected entity
 		displaySprite(renderer, getTexture(textures, "id_card"), 10, 10);
-		//SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		//SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
-		//SDL_RenderFillRect(renderer, &idCard);
 		displayText(renderer, 382, 156, 18, "?", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 		displaySprite(renderer, getCharFrontTexture(tempEntity->cha_class->cla_name), 51, 62);
 		displayText(renderer, 170, 45, 20, tempEntity->cha_name, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
@@ -720,7 +711,10 @@ int displayInterface(SDL_Renderer *renderer)
 		portrait.x = xPort;
 		portrait.y = 10;
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, 90, 90, 90, SDL_ALPHA_OPAQUE/2);
+		if (tempEntity != NULL && Allies[i].cha_name == tempEntity->cha_name)
+			SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE/2);
+		else
+			SDL_SetRenderDrawColor(renderer, 90, 90, 90, SDL_ALPHA_OPAQUE/2);
 		SDL_RenderFillRect(renderer, &portrait);
 		displaySprite(renderer, getCharFrontTexture(Allies[i].cha_class->cla_name), xPort, 18);
 		sprintf(actPts, "%d", Allies[i].act_points);
