@@ -314,8 +314,7 @@ err_t opponent_action()
     {
         apply_action(a);
     }
-
-    a = turn_over;
+    
     opponent_set = FALSE;
     
     if(verbose>=0)printf("Leaving opponent_action\n");
