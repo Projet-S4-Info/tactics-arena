@@ -531,6 +531,9 @@ char *clearStr(char *str)
 	return str;
 }
 
+
+
+
 err_t displayChat(SDL_Renderer *renderer, int chatX, int chatY)
 {
 	char temp[33];
@@ -598,6 +601,10 @@ int displayInterface(SDL_Renderer *renderer)
 	chatMsg.w = chatScreen.w;
 	chatMsg.h = 20;
 
+	SDL_Rect portrait;
+	portrait.w = 64;
+	portrait.h = 100;
+
 	if (tempEntity != NULL)
 	{
 		if (is_ally(tempEntity))
@@ -646,7 +653,39 @@ int displayInterface(SDL_Renderer *renderer)
 			sprintf(passive, "Passive : %s", tempEntity->cha_class->Passive.name);
 			displayText(renderer, mouse_position.x + 20, mouse_position.y + 20, 20, passive, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
 			displayText(renderer, mouse_position.x + 20, mouse_position.y + 40, 20, tempEntity->cha_class->Passive.desc, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
+			Coord center = getSelectedPos();
+			if (tempEntity->cha_class->cla_id == Ranger)
+			{
+				for (int i = 0; i < get_range(tempEntity, Bolt); i++)
+				{
+					Coord highlight = add_coords(center, *((*(tempEntity->cha_class->cla_abilities[Bolt % NUM_AB].coord)) + i));
+					if (isInGrid(highlight))
+						setHovered(highlight);
+				}
+			}
 		}
+	}
+
+	// List of characters
+	int xPort;
+	char actPts[STR_SHORT];
+	for (int i=0; i < _NB_CLASSES_; i++)
+	{
+		xPort = xWinSize-((i+1)*64-8);
+		portrait.x = xPort;
+		portrait.y = 0;
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
+		SDL_RenderFillRect(renderer, &portrait);
+		displaySprite(renderer, getCharFrontTexture(Allies[i].cha_class->cla_name), xPort, 8);
+		sprintf(actPts, "%d", Allies[i].act_points);
+		if (Allies[i].act_points >= 3)
+			displayText(renderer, xPort+20, 80, 20, actPts, "../inc/font/Pixels.ttf", 48, 129, 162, FALSE);
+		else if (Allies[i].act_points == 0)
+			displayText(renderer, xPort+20, 80, 20, actPts, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+		else
+			displayText(renderer, xPort+20, 80, 20, actPts, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+		displaySprite(renderer, getTexture(cSprites, "star_icon"), xPort+30, 80);
 	}
 
 	// Logs
