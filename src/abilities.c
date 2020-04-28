@@ -481,7 +481,7 @@ int Life_Transfer_fn(Coord c, Entity * e, StateList * list)
     int h = f->cha_class->basic_stats[pv] - f->stats[pv];
     f->stats[pv] = 20;
 
-    Status s = {h,mv,3};
+    Status s = {-h, mv,3};
 
     apply_stat_change(s,t,list, TRUE);
     return 0;
