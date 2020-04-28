@@ -314,7 +314,7 @@ err_t opponent_action()
     {
         apply_action(a);
     }
-    
+
     opponent_set = FALSE;
     
     if(verbose>=0)printf("Leaving opponent_action\n");
@@ -384,9 +384,9 @@ winId opposing_turn()
 
     while(received_action.char_id != 0)
     {
-        while(opponent_set); 
         a = received_action;
         opponent_set = TRUE;
+        while(opponent_set); 
         rec_id_swap(recep(&received_action, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action));
     }
 
