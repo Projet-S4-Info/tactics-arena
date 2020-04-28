@@ -242,6 +242,7 @@ int createGameWindow(int x, int y)
 		{
 			tempEntity = getEntity(getSelectedPos());
 			SDL_Event e;
+			printf("Début des listeners...\n");
 			while (SDL_PollEvent(&e))
 			{
 				switch (e.type)
@@ -728,8 +729,10 @@ int createGameWindow(int x, int y)
 				opponent_action();
 			}
 
+			printf("Affichage de la map...\n");
 			displayMap(renderer, XPOS, YPOS);
-				
+			printf("Affichage OK\n");
+			printf("Delay.....\n");	
 			SDL_Delay(1000 / _FPS_);
 			//clearOldCache();
 		}
