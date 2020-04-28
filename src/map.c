@@ -812,11 +812,13 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 	SDL_SetRenderDrawColor(renderer, 173, 216, 230, 255);
 	SDL_RenderClear(renderer);
 
+	printf("GetBorder...\n");
 	if (selected_ability != -1)
 	{
 		get_border(getEntity(getSelectedPos())->cha_id, selected_ability, borderTab, rangeTab);
 	}
-
+	printf("GetBorder OK...\n");
+	printf("Début affichage map...\n");
 	for (int i = 0; i < _X_SIZE_; i++)
 	{
 		for (int j = (_Y_SIZE_ - 1); j >= 0; j--)
@@ -945,8 +947,11 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 			}
 		}
 	}
+	printf("Affichage OK...\n");
 
+	printf("Affichage interface...\n");
 	displayInterface(renderer);
+	printf("Interface OK...\n");
 
 	/* -- DEBUG Affichage des coordonnées d'affichage de la map
 	char str[12];
@@ -954,7 +959,9 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 	displayText(renderer, 20, 20, 20, str, "../inc/font/Pixels.ttf", 255, 255, 255);
 	// -- DEBUG --*/
 
+	printf("Rendering...\n");
 	SDL_RenderPresent(renderer);
+	printf("Rendering OK...\n");
 
 	return 1;
 }
