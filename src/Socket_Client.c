@@ -136,8 +136,9 @@ err_t startTCPSocketCli(int socketCli)
         if (verbose >= 1)
           printf("socketConnectedCli = %d\n", socketConnected);
 
-        serverStatus = 1;
+        
         sendStruct((void *)&infoMoi, sizeof(infoMoi), socketConnected, NULL);
+        serverStatus = 1;
         if (verbose >= 1)
           printf("Conexion établie sans soucis fermeture de la fonction... \n");
 
