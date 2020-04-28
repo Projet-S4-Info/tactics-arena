@@ -146,7 +146,7 @@ err_t startTCPSocketCli(int socketCli)
           if (verbose >= 2)
             printf("Map Name : %s \n", startGameCli.mapNameGame);
           
-          if(verbose>=0)displayMapMulti(startGameCli.multiMap[0]);
+          if(verbose>=2)displayMapMulti(startGameCli.multiMap[0]);
           startGameCli.isServerStartGame = 2;
         }
         else
