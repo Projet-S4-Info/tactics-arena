@@ -243,7 +243,8 @@ int createGameWindow(int x, int y)
 			if(opponent_set)
 			{
 				opponent_action();
-			}	
+			}
+				
 			tempEntity = getEntity(getSelectedPos());
 			SDL_Event e;
 			while (SDL_PollEvent(&e))
