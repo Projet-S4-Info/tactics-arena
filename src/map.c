@@ -477,12 +477,12 @@ int displayAbilities(SDL_Renderer *renderer)
 		}
 		else
 		{
-			if (moveable == Locked_c)
-				displaySprite(renderer, getTexture(textures, "locked_attack"), 16, yWinSize - 80);
+			if (moveable == Crippled_c)
+				displaySprite(renderer, getTexture(textures, "crippled_attack"), 16, yWinSize - 80);
 			else if (moveable == Frozen_c)
 				displaySprite(renderer, getTexture(textures, "frozen_attack"), 16, yWinSize - 80);
-			else if (moveable == Crippled_c)
-				displaySprite(renderer, getTexture(textures, "crippled_attack"), 16, yWinSize - 80);
+			else if (moveable == Locked_c)
+				displaySprite(renderer, getTexture(textures, "locked_attack"), 16, yWinSize - 80);
 				
 			displayText(renderer, 21, yWinSize - 80 + 5, 20, "1", "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
 		}
@@ -504,12 +504,12 @@ int displayAbilities(SDL_Renderer *renderer)
 			}
 			else
 			{
-				if (castable == Locked_c)
-					displaySprite(renderer, getTexture(textures, "locked_attack"), 16 + (i + 1) * 80, yWinSize - 80);
+				if (castable == Crippled_c)
+					displaySprite(renderer, getTexture(textures, "crippled_attack"), 16 + (i + 1) * 80, yWinSize - 80);
 				else if (castable == Frozen_c)
 					displaySprite(renderer, getTexture(textures, "frozen_attack"), 16 + (i + 1) * 80, yWinSize - 80);
-				else if (castable == Crippled_c)
-					displaySprite(renderer, getTexture(textures, "crippled_attack"), 16 + (i + 1) * 80, yWinSize - 80);
+				else if (castable == Locked_c)
+					displaySprite(renderer, getTexture(textures, "locked_attack"), 16 + (i + 1) * 80, yWinSize - 80);
 
 				displayText(renderer, 16 + (i + 1) * 80 + 5, yWinSize - 80 + 5, 20, abCost, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
 				if (cd != 0)
