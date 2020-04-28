@@ -256,5 +256,6 @@ err_t total_move(Entity * e, Coord tabcoord[])
 
     e->idAnim = 0;
 
+    if(verbose>=0)printf("Leaving Total-Move\n");
     return OK;
 }

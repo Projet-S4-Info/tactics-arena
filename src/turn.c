@@ -79,6 +79,7 @@ err_t apply_movement(action a)
 
     e->coords = a.c;
     e->act_points--;
+    if(verbose>=0)printf("Leaving apply_movement\n");
     return OK;
 }
 
@@ -315,6 +316,8 @@ err_t opponent_action()
     }
 
     a = turn_over;
+    
+    if(verbose>=0)printf("Leaving opponent_action\n");
     return OK;
 }
 
