@@ -261,7 +261,9 @@ int createGameWindow(int x, int y)
 					case SDL_WINDOWEVENT_HIDDEN:
 					case SDL_WINDOWEVENT_SHOWN:
 
+						printf("WindowSize...\n");
 						SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
+						printf("WindowSize OK...\n");
 
 						break;
 					}
@@ -273,6 +275,7 @@ int createGameWindow(int x, int y)
 					if (verbose >= 2)
 						printf("X: %d | Y: %d\n", e.motion.x, e.motion.y); // Debug console pos x & y on term
 
+					printf("MouseButton down...\n");
 					// Compétences et actions
 					if (tempEntity != NULL && is_ally(tempEntity))
 					{
@@ -400,6 +403,7 @@ int createGameWindow(int x, int y)
 						selected_ability = -1;
 						selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 					}
+					printf("MouseButton OK...\n");
 
 					// Fin de tour
 					if (e.motion.x >= xWinSize - 280 && e.motion.x <= xWinSize - 24 && e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16 && your_turn())
@@ -408,6 +412,7 @@ int createGameWindow(int x, int y)
 						set_endturn();
 					}
 
+					printf("Tchat...\n");
 					if (e.motion.x >= xWinSize - 360 && e.motion.x <= xWinSize - 296 && e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16)
 					{
 						if (isChatActive == 1)
@@ -427,10 +432,12 @@ int createGameWindow(int x, int y)
 							}
 						}
 					}
+					printf("Tchat OK...\n");
 					break;
 
 				/* ********** SCROLL SOURIS ************ */
 				case SDL_MOUSEWHEEL:
+				printf("MouseWheel...\n");
 					if (e.wheel.y > 0) // Scroll UP
 					{
 						if (pxBase == 64)
@@ -453,10 +460,12 @@ int createGameWindow(int x, int y)
 							YPOS /= 2;
 						}
 					}
+					printf("MouseWheel OK...\n");
 					break;
 
 				/* ********** APPUI TOUCHE CLAVIER ************ */
 				case SDL_KEYDOWN:
+				printf("KeyDown...\n");
 					switch (e.key.keysym.sym)
 					{
 					case SDLK_KP_PLUS: // "+" key
@@ -507,6 +516,7 @@ int createGameWindow(int x, int y)
 							unselect();
 							unhover();
 						}
+						printf("KeyDown OK...\n");
 						break;
 					/* ***** DEPLACEMENTS CAMERA (RACCOURCIS CLAVIER) ***** */
 					case SDLK_z: // "z" key
@@ -543,6 +553,7 @@ int createGameWindow(int x, int y)
 						break;
 					/* ***** SELECTION CAPACITES (RACCOURCIS CLAVIER) ***** */
 					default:
+					printf("Default key...\n");
 						if (your_turn())
 						{
 							// Sélection des compétences
@@ -611,6 +622,7 @@ int createGameWindow(int x, int y)
 							if (!isChatActive) Mix_PlayChannel(-1, nopeSound, 0);
 						}
 					}
+					printf("Default key OK...\n");
 					break;
 
 				/* ********** MOUVEMENTS SOURIS ************ */
@@ -687,8 +699,10 @@ int createGameWindow(int x, int y)
 					break;
 				}
 			}
+			printf("Listeners OK\n");
 
 			/* ********** MOUVEMENTS CAMERA ************ */
+			printf("Check mouse pos...\n");
 			if (SDL_GetMouseFocus() == pWindow)
 			{
 				camMove = -1;
@@ -723,6 +737,7 @@ int createGameWindow(int x, int y)
 				if (YPOS < -500 * (pxBase / 64))
 					YPOS = -500 * (pxBase / 64);
 			}
+			printf("MousePos OK...\n");
 
 			if(opponent_set)
 			{
