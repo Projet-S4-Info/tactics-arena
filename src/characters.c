@@ -190,10 +190,30 @@ int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
                         loadTexture(renderer, loadImage("../inc/img/icons/mv_icon_32.png")),
                         "mv_icon");
 
-    nbSprites = addTextureToTable(  cSprites,
+    addTextureToTable(  cSprites,
                         loadTexture(renderer, loadImage("../inc/img/icons/star_icon_16.png")),
                         loadTexture(renderer, loadImage("../inc/img/icons/star_icon_32.png")),
                         "star_icon");
+
+    addTextureToTable(  cSprites,
+                        loadTexture(renderer, loadImage("../inc/img/icons/atk_icon_16.png")),
+                        loadTexture(renderer, loadImage("../inc/img/icons/atk_icon_32.png")),
+                        "atk_icon");
+
+    addTextureToTable(  cSprites,
+                        loadTexture(renderer, loadImage("../inc/img/icons/magic_icon_16.png")),
+                        loadTexture(renderer, loadImage("../inc/img/icons/magic_icon_32.png")),
+                        "magic_icon");
+
+    addTextureToTable(  cSprites,
+                        loadTexture(renderer, loadImage("../inc/img/icons/ra_16.png")),
+                        loadTexture(renderer, loadImage("../inc/img/icons/ra_32.png")),
+                        "ra_icon");
+
+    nbSprites = addTextureToTable(  cSprites,
+                        loadTexture(renderer, loadImage("../inc/img/icons/rm_16.png")),
+                        loadTexture(renderer, loadImage("../inc/img/icons/rm_32.png")),
+                        "rm_icon");
 
     addCharacterTexture(renderer, "angel");
     addCharacterTexture(renderer, "berserker");

@@ -34,7 +34,7 @@
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
 #define _FPS_ 60 					// Define at which frequency the game have to refresh
-#define _TEXTURE_LOADING_TIME_ 10	// Loading screen duration for textures (in seconds)
+#define _TEXTURE_LOADING_TIME_ 2	// Loading screen duration for textures (in seconds)
 
 /* =============== VARIABLES ================ */
 
@@ -646,7 +646,7 @@ int createGameWindow(int x, int y)
 								else if (e.motion.x >= 336 && e.motion.x <= 400)
 									hover_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
 							}
-							else if (e.motion.x >= 377 && e.motion.x <= 396 && e.motion.y >= 128 && e.motion.y <= 146)
+							else if (e.motion.x >= 377 && e.motion.x <= 396 && e.motion.y >= 156 && e.motion.y <= 174)
 							{
 								hover_passive_help = 1;
 								mouse_position.x = e.motion.x;

@@ -232,7 +232,7 @@ int loadMapTextures(SDL_Renderer *renderer)
 
 	// Loading ID card texture
 	index = addTextureToTable(textures,
-							  loadTexture(renderer, loadImage("../inc/img/interface/id_card.png")),
+							  loadTexture(renderer, loadImage("../inc/img/interface/id_card_2.png")),
 							  NULL,
 							  "id_card");
 
@@ -579,9 +579,13 @@ int displayInterface(SDL_Renderer *renderer)
 {
 	Entity *tempEntity = getEntity(getSelectedPos());
 	char passive[100];
-	char pv_text[2];
-	char pa_text[2];
-	char pm_text[2];
+	char pv_text[STR_SHORT];
+	char pa_text[STR_SHORT];
+	char pm_text[STR_SHORT];
+	char atk_text[STR_SHORT];
+	char magic_text[STR_SHORT];
+	char ra_text[STR_SHORT];
+	char rm_text[STR_SHORT];
 
 	SDL_Rect chatScreen;
 	chatScreen.x = xWinSize - 300;
@@ -628,8 +632,8 @@ int displayInterface(SDL_Renderer *renderer)
 
 		// Display the ID card of the selected entity
 		displaySprite(renderer, getTexture(textures, "id_card"), 10, 10);
-		displayText(renderer, 382, 128, 18, "?", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
-		displaySprite(renderer, getCharFrontTexture(tempEntity->cha_class->cla_name), 51, 52);
+		displayText(renderer, 382, 156, 18, "?", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+		displaySprite(renderer, getCharFrontTexture(tempEntity->cha_class->cla_name), 51, 62);
 		displayText(renderer, 170, 45, 20, tempEntity->cha_name, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- entity health
@@ -646,6 +650,26 @@ int displayInterface(SDL_Renderer *renderer)
 		displaySprite(renderer, getBigTexture(cSprites, "mv_icon"), 250, 102);
 		sprintf(pm_text, "%d", tempEntity->stats[mv]);
 		displayText(renderer, 287, 106, 30, pm_text, "../inc/font/Pixels.ttf", 52, 169, 43, FALSE);
+
+		// -- attack stat
+		displaySprite(renderer, getBigTexture(cSprites, "atk_icon"), 25, 142);
+		sprintf(atk_text, "%d", tempEntity->stats[atk]);
+		displayText(renderer, 62, 146, 30, atk_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+
+		// -- magic stat
+		displaySprite(renderer, getBigTexture(cSprites, "magic_icon"), 110, 142);
+		sprintf(magic_text, "%d", tempEntity->stats[magic]);
+		displayText(renderer, 147, 146, 30, magic_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+
+		// -- physical resistance
+		displaySprite(renderer, getBigTexture(cSprites, "ra_icon"), 195, 142);
+		sprintf(ra_text, "%d", tempEntity->stats[res_physic]);
+		displayText(renderer, 232, 146, 30, ra_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+
+		// -- magic resistance
+		displaySprite(renderer, getBigTexture(cSprites, "rm_icon"), 280, 142);
+		sprintf(rm_text, "%d", tempEntity->stats[res_magic]);
+		displayText(renderer, 317, 146, 30, rm_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- passive description if hovering info icon
 		if (hover_passive_help == 1)
