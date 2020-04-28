@@ -33,7 +33,7 @@
 #define _NB_MAX_MAPS_ 50 			// Max number of maps being listed
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
-#define _FPS_ 60 					// Define at which frequency the game have to refresh
+#define _FPS_ 90 					// Define at which frequency the game have to refresh
 #define _TEXTURE_LOADING_TIME_ 2	// Loading screen duration for textures (in seconds)
 
 /* =============== VARIABLES ================ */

@@ -212,6 +212,12 @@ int loadMapTextures(SDL_Renderer *renderer)
 					  NULL,
 					  "end_turn_hover");
 
+	// Loading end of turn button (locked)
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/locked_turn_end.png")),
+					  NULL,
+					  "locked_turn_end");
+
 	// Loading tchat button
 	addTextureToTable(textures,
 					  loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_64.png")),
@@ -605,6 +611,12 @@ int displayInterface(SDL_Renderer *renderer)
 	chatMsg.w = chatScreen.w;
 	chatMsg.h = 20;
 
+	SDL_Rect idCard;
+	idCard.x = 10;
+	idCard.y = 10;
+	idCard.w = 400;
+	idCard.h = 180;
+
 	SDL_Rect portrait;
 	portrait.w = 64;
 	portrait.h = 100;
@@ -631,7 +643,10 @@ int displayInterface(SDL_Renderer *renderer)
 		}
 
 		// Display the ID card of the selected entity
-		displaySprite(renderer, getTexture(textures, "id_card"), 10, 10);
+		//displaySprite(renderer, getTexture(textures, "id_card"), 10, 10);
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
+		SDL_RenderFillRect(renderer, &idCard);
 		displayText(renderer, 382, 156, 18, "?", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 		displaySprite(renderer, getCharFrontTexture(tempEntity->cha_class->cla_name), 51, 62);
 		displayText(renderer, 170, 45, 20, tempEntity->cha_name, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
@@ -695,21 +710,21 @@ int displayInterface(SDL_Renderer *renderer)
 	char actPts[STR_SHORT];
 	for (int i=0; i < _NB_CLASSES_; i++)
 	{
-		xPort = xWinSize-((i+1)*64-8);
+		xPort = xWinSize-10-((i+1)*64);
 		portrait.x = xPort;
-		portrait.y = 0;
+		portrait.y = 10;
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
 		SDL_RenderFillRect(renderer, &portrait);
-		displaySprite(renderer, getCharFrontTexture(Allies[i].cha_class->cla_name), xPort, 8);
+		displaySprite(renderer, getCharFrontTexture(Allies[i].cha_class->cla_name), xPort, 18);
 		sprintf(actPts, "%d", Allies[i].act_points);
 		if (Allies[i].act_points >= 3)
-			displayText(renderer, xPort+20, 80, 20, actPts, "../inc/font/Pixels.ttf", 48, 129, 162, FALSE);
+			displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 48, 129, 162, FALSE);
 		else if (Allies[i].act_points == 0)
-			displayText(renderer, xPort+20, 80, 20, actPts, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+			displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
 		else
-			displayText(renderer, xPort+20, 80, 20, actPts, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
-		displaySprite(renderer, getTexture(cSprites, "star_icon"), xPort+30, 80);
+			displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+		displaySprite(renderer, getTexture(cSprites, "star_icon"), xPort+30, 90);
 	}
 
 	// Logs
@@ -723,15 +738,23 @@ int displayInterface(SDL_Renderer *renderer)
 	displayLog(renderer, logPos);
 
 	// Next turn button
-	if (hover_next_turn == TRUE)
+	if (your_turn())
 	{
-		displayText(renderer, xWinSize - 280, yWinSize - 110, 20, "Skip turn", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
-		displaySprite(renderer, getTexture(textures, "end_turn_hover"), xWinSize - 280, yWinSize - 80);
+		if (hover_next_turn == TRUE)
+		{
+			displayText(renderer, xWinSize - 280, yWinSize - 110, 20, "Skip turn", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+			displaySprite(renderer, getTexture(textures, "end_turn_hover"), xWinSize - 280, yWinSize - 80);
+		}
+		else
+		{
+			displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize - 280, yWinSize - 80);
+		}
 	}
 	else
 	{
-		displaySprite(renderer, getTexture(textures, "end_turn"), xWinSize - 280, yWinSize - 80);
+		displaySprite(renderer, getTexture(textures, "locked_end_turn"), xWinSize - 280, yWinSize - 80);
 	}
+	
 
 	// Tchat window
 	if (isChatActive)
