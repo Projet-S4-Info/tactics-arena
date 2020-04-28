@@ -756,6 +756,41 @@ int displayMenuMulti(int x, int y)
 					break;
 				}
 			}
+			
+			if (serverStatus == 3 && isJoinMenu == 1)
+			{
+				closeWindow(pWindow);
+				freeMultiMenuTextures();
+				stopMenuMusic(2);
+				return 1;
+			}
+			else if (serverStatus != 2 && isHostMenu == 1)
+			{
+				if (verbose >= 3)
+				{
+					printf("Waiting status to be 2 \n");
+				}
+			}
+			else if (serverStatus == 2 && isHostMenu == 1)
+			{
+				closeWindow(pWindow);
+				freeMultiMenuTextures();
+				stopMenuMusic(2);
+				return 1;
+			}
+
+			if (isHostMenu == 1 || isJoinMenu == 1)
+			{
+				if (isJoinMenu == 1)
+				{
+					dispJoinMenu(renderer, x, y);
+				}
+				else
+				{
+					dispHostMenu(renderer, x, y, indexMapMulti);
+				}
+			}
+
 			if (serverStatus != 3 && isJoinMenu == 1)
 			{
 				if (verbose >= 3)
@@ -776,40 +811,7 @@ int displayMenuMulti(int x, int y)
 					displayText(renderer, 360, 673, 40, "Veuillez relancer le menu multi-joueur", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
 				}
 			}
-			else if (serverStatus == 3 && isJoinMenu == 1)
-			{
-				closeWindow(pWindow);
-				freeMultiMenuTextures();
-				stopMenuMusic(2);
-				return 1;
-			}
-			else if (serverStatus != 2 && isHostMenu == 1)
-			{
-				if (verbose >= 3)
-				{
-					printf("Waiting status to be 2 \n");
-				}
-			}
-			else if (serverStatus == 2 && isHostMenu == 1)
-			{
 
-				closeWindow(pWindow);
-				freeMultiMenuTextures();
-				stopMenuMusic(2);
-				return 1;
-			}
-
-			if (isHostMenu == 1 || isJoinMenu == 1)
-			{
-				if (isJoinMenu == 1)
-				{
-					dispJoinMenu(renderer, x, y);
-				}
-				else
-				{
-					dispHostMenu(renderer, x, y, indexMapMulti);
-				}
-			}
 			SDL_Delay(16);
 			SDL_RenderPresent(renderer);
 		}
