@@ -716,7 +716,7 @@ int displayInterface(SDL_Renderer *renderer)
 	Coord logPos;
 	logPos.x = 20;
 	if (tempEntity != NULL)
-		logPos.y = 170;
+		logPos.y = 200;
 	else
 		logPos.y = 20;
 	removeOldLogs(SDL_GetTicks());
