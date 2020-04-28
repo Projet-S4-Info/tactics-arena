@@ -385,6 +385,7 @@ winId opposing_turn()
 
     while(received_action.char_id != 0)
     {
+        while(opponent_set); 
         a = received_action;
         opponent_set = TRUE;
         rec_id_swap(recep(&received_action, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action));
