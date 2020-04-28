@@ -236,6 +236,12 @@ int loadMapTextures(SDL_Renderer *renderer)
 					  NULL,
 					  "tchat_button_selected");
 
+	// Loading dead character texture
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/dead_64.png")),
+					  NULL,
+					  "dead_char");
+
 	// Loading ID card texture
 	index = addTextureToTable(textures,
 							  loadTexture(renderer, loadImage("../inc/img/interface/id_card_2.png")),
@@ -643,10 +649,10 @@ int displayInterface(SDL_Renderer *renderer)
 		}
 
 		// Display the ID card of the selected entity
-		//displaySprite(renderer, getTexture(textures, "id_card"), 10, 10);
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
-		SDL_RenderFillRect(renderer, &idCard);
+		displaySprite(renderer, getTexture(textures, "id_card"), 10, 10);
+		//SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+		//SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
+		//SDL_RenderFillRect(renderer, &idCard);
 		displayText(renderer, 382, 156, 18, "?", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 		displaySprite(renderer, getCharFrontTexture(tempEntity->cha_class->cla_name), 51, 62);
 		displayText(renderer, 170, 45, 20, tempEntity->cha_name, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
@@ -714,17 +720,25 @@ int displayInterface(SDL_Renderer *renderer)
 		portrait.x = xPort;
 		portrait.y = 10;
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
+		SDL_SetRenderDrawColor(renderer, 90, 90, 90, SDL_ALPHA_OPAQUE/2);
 		SDL_RenderFillRect(renderer, &portrait);
 		displaySprite(renderer, getCharFrontTexture(Allies[i].cha_class->cla_name), xPort, 18);
 		sprintf(actPts, "%d", Allies[i].act_points);
-		if (Allies[i].act_points >= 3)
-			displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 48, 129, 162, FALSE);
-		else if (Allies[i].act_points == 0)
-			displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+		if (Allies[i].active == Alive)
+		{
+			if (Allies[i].act_points >= 3)
+				displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 48, 129, 162, FALSE);
+			else if (Allies[i].act_points == 0)
+				displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+			else
+				displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+			displaySprite(renderer, getTexture(cSprites, "star_icon"), xPort+30, 90);
+		}
 		else
-			displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
-		displaySprite(renderer, getTexture(cSprites, "star_icon"), xPort+30, 90);
+		{
+			displaySprite(renderer, getTexture(textures, "dead_char"), portrait.x, portrait.y);
+		}
+		
 	}
 
 	// Logs
