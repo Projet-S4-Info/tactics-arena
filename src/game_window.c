@@ -724,9 +724,9 @@ int createGameWindow(int x, int y)
 						YPOS = 300 * (pxBase / 64);
 					if (YPOS < -500 * (pxBase / 64))
 						YPOS = -500 * (pxBase / 64);
-
 				}
 				displayMap(renderer, XPOS, YPOS);
+				
 			}
 			loop_active = FALSE;
 			SDL_Delay(1000 / _FPS_);

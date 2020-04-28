@@ -245,7 +245,7 @@ err_t total_move(Entity * e, Coord tabcoord[])
         setSelected(target);
         if(verbose>=2)printf("Completed\n");
         
-        if (your_turn()) displayMap(renderer, XPOS, YPOS);
+        displayMap(renderer, XPOS, YPOS);
 
         SDL_Delay(150);
 
