@@ -20,9 +20,10 @@
 bool game_setup = FALSE;
 bool is_online = FALSE;
 bool turn_active = TRUE;
-bool applying_action = FALSE;
-bool loop_active = TRUE;
+bool opponent_set = FALSE;
 action turn_over = {0,{0,0},0};
+
+action a;
 
 
 Coord spawn_red[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
@@ -302,6 +303,21 @@ bool play_check(Entity *e)
     return FALSE;
 }
 
+err_t opponent_action()
+{
+    if(a.act == Mvt)
+    {
+        apply_movement(a);
+    }
+    else
+    {
+        apply_action(a);
+    }
+
+    a = turn_over;
+    return OK;
+}
+
 err_t action_set(action a)
 {
     if(verbose>=2)printf("Application de l'action...\n");
@@ -329,12 +345,13 @@ err_t action_set(action a)
 
 winId local_turn()
 {   
-    if(verbose>=1)printf("It's your turn\n");
+    if(verbose>=1)printf("\n\nIt's your turn\n");
     addLog("It's your turn");
 
     turn_active = TRUE;
 
     turn_start(Allies);
+    if(verbose>=2)printf("Turn start done for Allies\n\n");
 
     winId game_end;
 
@@ -352,11 +369,11 @@ winId local_turn()
 
 winId opposing_turn()
 {
-    if(verbose>=1)printf("It's your opponent's turn\n");
+    if(verbose>=1)printf("\n\nIt's your opponent's turn\n");
     addLog("It's your opponent's turn");
 
     turn_start(Foes);
-    if(verbose>=2)printf("Turn start done for Foes\n");
+    if(verbose>=2)printf("Turn start done for Foes\n\n");
     
     action received_action;
 
@@ -364,19 +381,8 @@ winId opposing_turn()
 
     while(received_action.char_id != 0)
     {
-        applying_action = TRUE;
-        while(loop_active);
-
-        if(received_action.act == Mvt)
-        {
-            apply_movement(received_action);
-        }
-        else
-        {
-            apply_action(received_action);
-        }
-        applying_action = FALSE;
-
+        a = received_action;
+        opponent_set = TRUE;
         rec_id_swap(recep(&received_action, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action));
     }
 

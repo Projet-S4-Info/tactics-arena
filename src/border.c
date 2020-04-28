@@ -105,13 +105,13 @@ Coord * setActionBorder(Coord start, int range, Coord tab[])
         {
             goal = add_coords(start,max[i]);
 
-            if(verbose>=2)print_Coord(&goal, "Goal : ");
+            if(verbose>=3)print_Coord(&goal, "Goal : ");
 
             while(!same_coord(c = add_coords(active,add[i]), goal))
             {
                 norm = normalize(c);
 
-                if(verbose>=2)
+                if(verbose>=3)
                 {
                     print_Coord(&active, "Active : ");
                     print_Coord(&c, "c : ");
@@ -120,29 +120,29 @@ Coord * setActionBorder(Coord start, int range, Coord tab[])
                 
                 if(matrice[norm.x][norm.y])
                 {
-                    if(verbose>=2)printf("Adding\n");
+                    if(verbose>=3)printf("Adding\n");
                     tab[j++] = norm;
                     matrice[norm.x][norm.y] = FALSE;
                 }
                 else
                 {
-                    if(verbose>=2)printf("Not Adding\n");
+                    if(verbose>=3)printf("Not Adding\n");
                 }
                 active = c;
             }
 
 
             norm = normalize(c);
-            if(verbose>=2)print_Coord(&norm, "Norm : ");
+            if(verbose>=3)print_Coord(&norm, "Norm : ");
             if(matrice[norm.x][norm.y])
             {
-                if(verbose>=2)printf("Adding\n");
+                if(verbose>=3)printf("Adding\n");
                 tab[j++] = norm;
                 matrice[norm.x][norm.y] = FALSE;
             }
             else
             {
-                if(verbose>=2)printf("Not Adding\n");
+                if(verbose>=3)printf("Not Adding\n");
             }
             active = c;
         }
@@ -157,7 +157,7 @@ Coord * setActionBorder(Coord start, int range, Coord tab[])
     Coord r = {-99,-99};
     tab[j] = r;
 
-    if(verbose>=2)printf("Border Size : %d\n", j);
+    if(verbose>=3)printf("Border Size : %d\n", j);
 
     return (Coord *)tab;
 }
@@ -180,11 +180,11 @@ Coord * setActionZone(int range, Coord Border[], Coord Zone[])
                 if(isInRange(Border, c))
                 {
                     Zone[k++] = c;
-                    if(verbose>=2)printf("%d,%d is in range\n", c.x, c.y);
+                    if(verbose>=3)printf("%d,%d is in range\n", c.x, c.y);
                 }
                 else
                 {
-                    if(verbose>=2)printf("%d,%d is not in range\n", c.x, c.y);
+                    if(verbose>=3)printf("%d,%d is not in range\n", c.x, c.y);
                 }
             }
         }
@@ -198,7 +198,7 @@ Coord * setActionZone(int range, Coord Border[], Coord Zone[])
     Coord d = {-99,-99};
     Zone[k] = d;
 
-    if(verbose>=2)printf("Zone Size : %d\n", k);
+    if(verbose>=3)printf("Zone Size : %d\n", k);
 
     return (Coord *)Zone;
 }
@@ -233,7 +233,7 @@ Coord * setMovementBorder(int matrice[_X_SIZE_][_Y_SIZE_], Coord tab[])
     b.y = -99;
     tab[l] = b;
 
-    if(verbose>=2)printf("Border Size : %d\n", l);
+    if(verbose>=3)printf("Border Size : %d\n", l);
 
     return (Coord *)tab;
 }
@@ -259,7 +259,7 @@ Coord * setMovementZone(int matrice[_X_SIZE_][_Y_SIZE_], Coord tab[])
     c.y = -99;
     tab[k] = c;
 
-    if(verbose>=2)printf("Zone Size : %d\n", k);
+    if(verbose>=3)printf("Zone Size : %d\n", k);
 
     return (Coord *)tab;
 }
@@ -269,8 +269,8 @@ Coord * get_border(int cha_id, abilityId Id, Coord coorTab[], Coord zone[])
     Entity * e = e_from_id(cha_id);
     int matrice[_X_SIZE_][_Y_SIZE_];
 
-    if(verbose>=2)printf("Selected Entity : %s\n", e->cha_name);
-    if(verbose>=2)printf("Selected Entity pos : %d, %d\n", e->coords.x, e->coords.y);
+    if(verbose>=3)printf("Selected Entity : %s\n", e->cha_name);
+    if(verbose>=3)printf("Selected Entity pos : %d, %d\n", e->coords.x, e->coords.y);
 
     if(Id == Mvt)
     {

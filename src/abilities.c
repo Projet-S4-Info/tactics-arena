@@ -126,9 +126,10 @@ bool trap_check(Entity *e)
 
     Trap_t trap = Get_Trap(e->coords);
 
-    if(verbose>=2)
+    if(verbose>=2)printf("Trap Check\n");
+
+    if(verbose>=3)
     {
-        printf("Trap Check\n");
         printf("Trap Id = %d\n", trap.cha_id);
         printf("Trap Visibility : %d\n", trap.visible);
     }

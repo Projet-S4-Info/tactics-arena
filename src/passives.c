@@ -38,7 +38,7 @@ err_t activate_aura(Entity *e, StateList *list)
     char log[STR_LONG];
     sprintf(log, "%s's Aura was triggered", e->cha_name);
     addLog(log);
-    if(verbose>=1)printf("%s\n",log);
+    if(verbose>=1)printf("\n%s\n",log);
 
     /*selected_ability = -1;
     unhover();

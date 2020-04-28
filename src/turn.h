@@ -6,10 +6,13 @@ extern bool is_online;
 extern bool game_setup;
 extern bool applying_action;
 extern bool loop_active;
+extern bool opponent_set;
+extern action a;
 
 err_t online_setup();
 bool your_turn();
 err_t apply_action(action a);
+err_t opponent_action();
 err_t action_set(action a);
 err_t test_turn();
 err_t set_endturn();
