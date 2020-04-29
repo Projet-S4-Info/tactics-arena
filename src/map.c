@@ -562,7 +562,7 @@ int displayInterface(SDL_Renderer *renderer)
 	if (hover_tchat == 1 || hover_tchat == 2)
 		displaySprite(renderer, getTexture(textures, "tchat_button_hover"), xWinSize - 360, yWinSize - 80);
 	if (hover_tchat == 1)
-		displayText(renderer, xWinSize - 360, yWinSize - 110, 20, "Hide tchat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+		displayText(renderer, xWinSize - 360, yWinSize - 110, 20, "Hide chat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 	else if (hover_tchat == 2)
 		displayText(renderer, xWinSize - 360, yWinSize - 110, 20, "Display tchat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 	if (isChatActive)
