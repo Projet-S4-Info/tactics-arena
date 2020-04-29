@@ -33,7 +33,7 @@
 #define _NB_MAX_MAPS_ 50 			// Max number of maps being listed
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
-#define _FPS_ 90 					// Define at which frequency the game have to refresh
+#define _FPS_ 60 					// Define at which frequency the game have to refresh
 #define _TEXTURE_LOADING_TIME_ 10	// Loading screen duration for textures (in seconds)
 
 /* =============== VARIABLES ================ */
@@ -45,6 +45,7 @@ int YPOS = 50;				  // |
 int selected_ability = -1;	  // Selected ability
 int hover_ability = -1;		  // Hover ability button
 bool hover_next_turn = FALSE; // Hover skip turn button
+int hover_stats = 0;		  // Hover stats
 int hover_tchat = 0;		  // Hover tchat button
 int hover_passive_help = 0;	  // Hover passive help in ID card (with mouse position)
 int end_of_turn = 0;		  // Fin de tour
@@ -242,7 +243,6 @@ int createGameWindow(int x, int y)
 		{
 			tempEntity = getEntity(getSelectedPos());
 			SDL_Event e;
-			printf("Début des listeners...\n");
 			while (SDL_PollEvent(&e))
 			{
 				switch (e.type)
@@ -261,9 +261,7 @@ int createGameWindow(int x, int y)
 					case SDL_WINDOWEVENT_HIDDEN:
 					case SDL_WINDOWEVENT_SHOWN:
 
-						printf("WindowSize...\n");
 						SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
-						printf("WindowSize OK...\n");
 
 						break;
 					}
@@ -275,7 +273,6 @@ int createGameWindow(int x, int y)
 					if (verbose >= 2)
 						printf("X: %d | Y: %d\n", e.motion.x, e.motion.y); // Debug console pos x & y on term
 
-					printf("MouseButton down...\n");
 					// Compétences et actions
 					if (tempEntity != NULL && is_ally(tempEntity))
 					{
@@ -403,7 +400,6 @@ int createGameWindow(int x, int y)
 						selected_ability = -1;
 						selectTile(XPOS, YPOS, e.motion.x, e.motion.y);
 					}
-					printf("MouseButton OK...\n");
 
 					// Fin de tour
 					if (e.motion.x >= xWinSize - 280 && e.motion.x <= xWinSize - 24 && e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16 && your_turn())
@@ -412,7 +408,6 @@ int createGameWindow(int x, int y)
 						set_endturn();
 					}
 
-					printf("Tchat...\n");
 					if (e.motion.x >= xWinSize - 360 && e.motion.x <= xWinSize - 296 && e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16)
 					{
 						if (isChatActive == 1)
@@ -432,12 +427,10 @@ int createGameWindow(int x, int y)
 							}
 						}
 					}
-					printf("Tchat OK...\n");
 					break;
 
 				/* ********** SCROLL SOURIS ************ */
 				case SDL_MOUSEWHEEL:
-				printf("MouseWheel...\n");
 					if (e.wheel.y > 0) // Scroll UP
 					{
 						if (pxBase == 64)
@@ -460,12 +453,10 @@ int createGameWindow(int x, int y)
 							YPOS /= 2;
 						}
 					}
-					printf("MouseWheel OK...\n");
 					break;
 
 				/* ********** APPUI TOUCHE CLAVIER ************ */
 				case SDL_KEYDOWN:
-				printf("KeyDown...\n");
 					switch (e.key.keysym.sym)
 					{
 					case SDLK_KP_PLUS: // "+" key
@@ -516,7 +507,6 @@ int createGameWindow(int x, int y)
 							unselect();
 							unhover();
 						}
-						printf("KeyDown OK...\n");
 						break;
 					/* ***** DEPLACEMENTS CAMERA (RACCOURCIS CLAVIER) ***** */
 					case SDLK_z: // "z" key
@@ -553,7 +543,6 @@ int createGameWindow(int x, int y)
 						break;
 					/* ***** SELECTION CAPACITES (RACCOURCIS CLAVIER) ***** */
 					default:
-					printf("Default key...\n");
 						if (your_turn())
 						{
 							// Sélection des compétences
@@ -622,7 +611,6 @@ int createGameWindow(int x, int y)
 							if (!isChatActive) Mix_PlayChannel(-1, nopeSound, 0);
 						}
 					}
-					printf("Default key OK...\n");
 					break;
 
 				/* ********** MOUVEMENTS SOURIS ************ */
@@ -656,6 +644,24 @@ int createGameWindow(int x, int y)
 							else if (e.motion.x >= 336 && e.motion.x <= 400)
 								hover_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
 						}
+						// Hover stats
+						else if (e.motion.x >= 25 && e.motion.x < 110 && e.motion.y >= 142 && e.motion.y <= 174)
+						{
+							hover_stats = 1;
+						}
+						else if (e.motion.x >= 110 && e.motion.x < 195 && e.motion.y >= 142 && e.motion.y <= 174)
+						{
+							hover_stats = 2;
+						}
+						else if (e.motion.x >= 195 && e.motion.x < 280 && e.motion.y >= 142 && e.motion.y <= 174)
+						{
+							hover_stats = 3;
+						}
+						else if (e.motion.x >= 280 && e.motion.x < 365 && e.motion.y >= 142 && e.motion.y <= 174)
+						{
+							hover_stats = 4;
+						}
+						// Hover passive
 						else if (e.motion.x >= 377 && e.motion.x <= 396 && e.motion.y >= 156 && e.motion.y <= 174)
 						{
 							hover_passive_help = 1;
@@ -665,6 +671,7 @@ int createGameWindow(int x, int y)
 						else
 						{
 							hover_passive_help = 0;
+							hover_stats = 0;
 						}
 					}
 
@@ -699,10 +706,8 @@ int createGameWindow(int x, int y)
 					break;
 				}
 			}
-			printf("Listeners OK\n");
 
 			/* ********** MOUVEMENTS CAMERA ************ */
-			printf("Check mouse pos...\n");
 			if (SDL_GetMouseFocus() == pWindow)
 			{
 				camMove = -1;
@@ -737,17 +742,14 @@ int createGameWindow(int x, int y)
 				if (YPOS < -500 * (pxBase / 64))
 					YPOS = -500 * (pxBase / 64);
 			}
-			printf("MousePos OK...\n");
 
 			if(opponent_set)
 			{
 				opponent_action();
 			}
 
-			printf("Affichage de la map...\n");
 			displayMap(renderer, XPOS, YPOS);
-			printf("Affichage OK\n");
-			printf("Delay.....\n");	
+
 			SDL_Delay(1000 / _FPS_);
 			//clearOldCache();
 		}
