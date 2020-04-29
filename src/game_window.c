@@ -45,6 +45,7 @@ int YPOS = 50;				  // |
 int selected_ability = -1;	  // Selected ability
 int hover_ability = -1;		  // Hover ability button
 bool hover_next_turn = FALSE; // Hover skip turn button
+int hover_stats = 0;		  // Hover stats
 int hover_tchat = 0;		  // Hover tchat button
 int hover_passive_help = 0;	  // Hover passive help in ID card (with mouse position)
 int end_of_turn = 0;		  // Fin de tour
@@ -643,6 +644,24 @@ int createGameWindow(int x, int y)
 							else if (e.motion.x >= 336 && e.motion.x <= 400)
 								hover_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
 						}
+						// Hover stats
+						else if (e.motion.x >= 25 && e.motion.x < 110 && e.motion.y >= 142 && e.motion.y <= 174)
+						{
+							hover_stats = 1;
+						}
+						else if (e.motion.x >= 110 && e.motion.x < 195 && e.motion.y >= 142 && e.motion.y <= 174)
+						{
+							hover_stats = 2;
+						}
+						else if (e.motion.x >= 195 && e.motion.x < 280 && e.motion.y >= 142 && e.motion.y <= 174)
+						{
+							hover_stats = 3;
+						}
+						else if (e.motion.x >= 280 && e.motion.x < 365 && e.motion.y >= 142 && e.motion.y <= 174)
+						{
+							hover_stats = 4;
+						}
+						// Hover passive
 						else if (e.motion.x >= 377 && e.motion.x <= 396 && e.motion.y >= 156 && e.motion.y <= 174)
 						{
 							hover_passive_help = 1;
@@ -652,6 +671,7 @@ int createGameWindow(int x, int y)
 						else
 						{
 							hover_passive_help = 0;
+							hover_stats = 0;
 						}
 					}
 

@@ -402,6 +402,12 @@ int displayInterface(SDL_Renderer *renderer)
 	chatMsg.w = chatScreen.w;
 	chatMsg.h = 20;
 
+	SDL_Rect statDesc;
+	statDesc.x = 10;
+	statDesc.y = 200;
+	statDesc.w = 400;
+	statDesc.h = 52;
+
 	SDL_Rect portrait;
 	portrait.w = 64;
 	portrait.h = 100;
@@ -473,6 +479,29 @@ int displayInterface(SDL_Renderer *renderer)
 		sprintf(rm_text, "%d", tempEntity->stats[res_magic]);
 		displayText(renderer, 317, 146, 30, rm_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
+		// -- stats description if hovering stats icon
+		if (hover_stats != 0)
+		{
+			SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+			SDL_SetRenderDrawColor(renderer, 90, 90, 90, SDL_ALPHA_OPAQUE/2);
+			SDL_RenderFillRect(renderer, &statDesc);
+			switch (hover_stats)
+			{
+				case 1:
+					displayText(renderer, 15, 205, 15, "Attack : Increase physical damage", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				break;
+				case 2:
+					displayText(renderer, 15, 205, 15, "Magic : Increase magical damage", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				break;
+				case 3:
+					displayText(renderer, 15, 205, 15, "Armor : Decrease physical damage sustained", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				break;
+				case 4:
+					displayText(renderer, 15, 205, 15, "Magic Armor : Decrease physical damage sustained", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				break;
+			}
+		}
+
 		// -- passive description if hovering info icon
 		if (hover_passive_help == 1)
 		{
@@ -529,9 +558,16 @@ int displayInterface(SDL_Renderer *renderer)
 	Coord logPos;
 	logPos.x = 20;
 	if (tempEntity != NULL)
-		logPos.y = 200;
+	{
+		if (hover_stats == 0)
+			logPos.y = 200;
+		else
+			logPos.y = 260;
+	}
 	else
+	{
 		logPos.y = 20;
+	}
 	removeOldLogs(SDL_GetTicks());
 	displayLog(renderer, logPos);
 
