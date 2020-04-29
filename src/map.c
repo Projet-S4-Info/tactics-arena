@@ -37,7 +37,6 @@ Entity *selectedEntity;
 
 /* =============== FONCTIONS =============== */
 
-
 float crossProduct(Vector AB, Vector AC)
 // Renvoie le produit vectoriel
 {
@@ -267,7 +266,7 @@ int displayAbilities(SDL_Renderer *renderer)
 				displaySprite(renderer, getTexture(textures, "frozen_attack"), 16, yWinSize - 80);
 			else if (moveable == Locked_c)
 				displaySprite(renderer, getTexture(textures, "locked_attack"), 16, yWinSize - 80);
-				
+
 			displayText(renderer, 21, yWinSize - 80 + 5, 20, "1", "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
 		}
 		for (int i = 0; i < 4; i++)
@@ -326,9 +325,6 @@ char *clearStr(char *str)
 
 	return str;
 }
-
-
-
 
 err_t displayChat(SDL_Renderer *renderer, int chatX, int chatY)
 {
@@ -457,47 +453,72 @@ int displayInterface(SDL_Renderer *renderer)
 		// -- entity vision points
 		displaySprite(renderer, getBigTexture(cSprites, "vision_icon"), 315, 102);
 		sprintf(vis_text, "%d", tempEntity->stats[vis]);
-		displayText(renderer, 352, 106, 30, vis_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+		if (tempEntity->stats[vis] > tempEntity->cha_class->basic_stats[vis])
+			displayText(renderer, 352, 106, 30, vis_text, "../inc/font/Pixels.ttf", 0, 255, 0, FALSE);
+		else if (tempEntity->stats[vis] < tempEntity->cha_class->basic_stats[vis])
+			displayText(renderer, 352, 106, 30, vis_text, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+		else
+			displayText(renderer, 352, 106, 30, vis_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- attack stat
 		displaySprite(renderer, getBigTexture(cSprites, "atk_icon"), 25, 142);
 		sprintf(atk_text, "%d", tempEntity->stats[atk]);
-		displayText(renderer, 62, 146, 30, atk_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+		if (tempEntity->stats[atk] > tempEntity->cha_class->basic_stats[atk])
+			displayText(renderer, 62, 146, 30, atk_text, "../inc/font/Pixels.ttf", 0, 255, 0, FALSE);
+		else if (tempEntity->stats[atk] < tempEntity->cha_class->basic_stats[atk])
+			displayText(renderer, 62, 146, 30, atk_text, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+		else
+			displayText(renderer, 62, 146, 30, atk_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- magic stat
 		displaySprite(renderer, getBigTexture(cSprites, "magic_icon"), 110, 142);
 		sprintf(magic_text, "%d", tempEntity->stats[magic]);
-		displayText(renderer, 147, 146, 30, magic_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+		if (tempEntity->stats[magic] > tempEntity->cha_class->basic_stats[magic])
+			displayText(renderer, 147, 146, 30, magic_text, "../inc/font/Pixels.ttf", 0, 255, 0, FALSE);
+		else if (tempEntity->stats[magic] < tempEntity->cha_class->basic_stats[magic])
+			displayText(renderer, 147, 146, 30, magic_text, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+		else
+			displayText(renderer, 147, 146, 30, magic_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- physical resistance
 		displaySprite(renderer, getBigTexture(cSprites, "ra_icon"), 195, 142);
 		sprintf(ra_text, "%d", tempEntity->stats[res_physic]);
-		displayText(renderer, 232, 146, 30, ra_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+		if (tempEntity->stats[res_physic] > tempEntity->cha_class->basic_stats[res_physic])
+			displayText(renderer, 232, 146, 30, ra_text, "../inc/font/Pixels.ttf", 0, 255, 0, FALSE);
+		else if (tempEntity->stats[res_physic] < tempEntity->cha_class->basic_stats[res_physic])
+			displayText(renderer, 232, 146, 30, ra_text, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+		else
+			displayText(renderer, 232, 146, 30, ra_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- magic resistance
 		displaySprite(renderer, getBigTexture(cSprites, "rm_icon"), 280, 142);
 		sprintf(rm_text, "%d", tempEntity->stats[res_magic]);
-		displayText(renderer, 317, 146, 30, rm_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+		if (tempEntity->stats[res_magic] > tempEntity->cha_class->basic_stats[res_magic])
+			displayText(renderer, 317, 146, 30, rm_text, "../inc/font/Pixels.ttf", 0, 255, 0, FALSE);
+		else if (tempEntity->stats[res_magic] < tempEntity->cha_class->basic_stats[res_magic])
+			displayText(renderer, 317, 146, 30, rm_text, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+		else
+			displayText(renderer, 317, 146, 30, rm_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- stats description if hovering stats icon
 		if (hover_stats != 0)
 		{
 			SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-			SDL_SetRenderDrawColor(renderer, 90, 90, 90, SDL_ALPHA_OPAQUE/2);
+			SDL_SetRenderDrawColor(renderer, 90, 90, 90, SDL_ALPHA_OPAQUE / 2);
 			SDL_RenderFillRect(renderer, &statDesc);
 			switch (hover_stats)
 			{
-				case 1:
-					displayText(renderer, 15, 205, 15, "Attack : Increase physical damage", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+			case 1:
+				displayText(renderer, 15, 205, 15, "Attack : Increase physical damage", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 				break;
-				case 2:
-					displayText(renderer, 15, 205, 15, "Magic : Increase magical damage", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+			case 2:
+				displayText(renderer, 15, 205, 15, "Magic : Increase magical damage", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 				break;
-				case 3:
-					displayText(renderer, 15, 205, 15, "Armor : Decrease physical damage sustained", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+			case 3:
+				displayText(renderer, 15, 205, 15, "Armor : Decrease physical damage sustained", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 				break;
-				case 4:
-					displayText(renderer, 15, 205, 15, "Magic Armor : Decrease physical damage sustained", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+			case 4:
+				displayText(renderer, 15, 205, 15, "Magic Armor : Decrease physical damage sustained", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 				break;
 			}
 		}
@@ -524,34 +545,33 @@ int displayInterface(SDL_Renderer *renderer)
 	// List of characters
 	int xPort;
 	char actPts[STR_SHORT];
-	for (int i=0; i < _NB_CLASSES_; i++)
+	for (int i = 0; i < _NB_CLASSES_; i++)
 	{
-		xPort = xWinSize-10-((i+1)*64);
+		xPort = xWinSize - 10 - ((i + 1) * 64);
 		portrait.x = xPort;
 		portrait.y = 10;
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 		if (tempEntity != NULL && Allies[i].cha_name == tempEntity->cha_name)
-			SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE/2);
+			SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE / 2);
 		else
-			SDL_SetRenderDrawColor(renderer, 90, 90, 90, SDL_ALPHA_OPAQUE/2);
+			SDL_SetRenderDrawColor(renderer, 90, 90, 90, SDL_ALPHA_OPAQUE / 2);
 		SDL_RenderFillRect(renderer, &portrait);
 		displaySprite(renderer, getCharFrontTexture(Allies[i].cha_class->cla_name), xPort, 18);
 		sprintf(actPts, "%d", Allies[i].act_points);
 		if (Allies[i].active == Alive)
 		{
 			if (Allies[i].act_points >= 3)
-				displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 48, 129, 162, FALSE);
+				displayText(renderer, xPort + 20, 90, 20, actPts, "../inc/font/Pixels.ttf", 48, 129, 162, FALSE);
 			else if (Allies[i].act_points == 0)
-				displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+				displayText(renderer, xPort + 20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
 			else
-				displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
-			displaySprite(renderer, getTexture(cSprites, "star_icon"), xPort+30, 90);
+				displayText(renderer, xPort + 20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+			displaySprite(renderer, getTexture(cSprites, "star_icon"), xPort + 30, 90);
 		}
 		else
 		{
 			displaySprite(renderer, getTexture(textures, "dead_char"), portrait.x, portrait.y);
 		}
-		
 	}
 
 	// Logs
@@ -588,7 +608,6 @@ int displayInterface(SDL_Renderer *renderer)
 	{
 		displaySprite(renderer, getTexture(textures, "locked_end_turn"), xWinSize - 280, yWinSize - 80);
 	}
-	
 
 	// Tchat window
 	if (isChatActive)
