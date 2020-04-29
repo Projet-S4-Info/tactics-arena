@@ -14,7 +14,6 @@ extern Coord rangeTab[];
 extern Entity * selectedEntity;
 
 
-int loadMapTextures(SDL_Renderer * renderer);
 float crossProduct(Vector AB, Vector AC);
 int displayAbilities(SDL_Renderer * renderer);
 int displayInterface(SDL_Renderer * renderer);

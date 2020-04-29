@@ -58,4 +58,10 @@ SDL_Surface * loadImage(char * img);
 // Crée une texture à partir d'une surface
 SDL_Texture * loadTexture(SDL_Renderer * renderer, SDL_Surface * surface);
 
+// Précharge les sprites utilisées lors de l'affichage de la map
+int loadMapTextures(SDL_Renderer * renderer);
+
+// Précharge les sprites utilisées pour les personnages et leurs stats
+int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites);
+
 #endif
