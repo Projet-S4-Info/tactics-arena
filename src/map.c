@@ -379,6 +379,10 @@ int displayInterface(SDL_Renderer *renderer)
 	char magic_text[STR_SHORT];
 	char ra_text[STR_SHORT];
 	char rm_text[STR_SHORT];
+	char duration[STR_SHORT];
+	int xBuff;
+	int yBuff;
+	List_Elem *mod;
 
 	SDL_Rect chatScreen;
 	chatScreen.x = xWinSize - 300;
@@ -402,7 +406,11 @@ int displayInterface(SDL_Renderer *renderer)
 	statDesc.x = 10;
 	statDesc.y = 200;
 	statDesc.w = 400;
-	statDesc.h = 52;
+	statDesc.h = 25;
+
+	SDL_Rect buffIcon;
+	buffIcon.w = 32;
+	buffIcon.h = 32;
 
 	SDL_Rect portrait;
 	portrait.w = 64;
@@ -523,6 +531,87 @@ int displayInterface(SDL_Renderer *renderer)
 			}
 		}
 
+		// Stat buff and debuff
+		xBuff = 420;
+		yBuff = 10;
+		StateList *temp;
+		for (int i = 0; i < 2; i++)
+		{
+			if (i == 0) temp = stReceived;
+			else 		temp = stSent;
+			start_list(temp);
+			mod = list_search(temp, tempEntity, -1);
+			while (mod != NULL)
+			{
+				buffIcon.x = xBuff;
+				buffIcon.y = yBuff;
+				SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+				SDL_SetRenderDrawColor(renderer, 90, 90, 90, SDL_ALPHA_OPAQUE / 2);
+				SDL_RenderFillRect(renderer, &buffIcon);
+				if (mod->value->value != 0)
+				{
+					if (mod->value->value > 0)
+					{
+						switch (mod->value->stat)
+						{
+							case atk:
+								displaySprite(renderer, getBigTexture(cSprites, "atk_up"), xBuff, yBuff);
+								break;
+							case magic:
+								displaySprite(renderer, getBigTexture(cSprites, "magic_up"), xBuff, yBuff);
+								break;
+							case res_physic:
+								displaySprite(renderer, getBigTexture(cSprites, "ra_up"), xBuff, yBuff);
+								break;
+							case res_magic:
+								displaySprite(renderer, getBigTexture(cSprites, "rm_up"), xBuff, yBuff);
+								break;
+							case vis:
+								displaySprite(renderer, getBigTexture(cSprites, "vis_up"), xBuff, yBuff);
+								break;
+							case mv:
+								displaySprite(renderer, getBigTexture(cSprites, "speed_up"), xBuff, yBuff);
+								break;
+						}
+					}
+					else if (mod->value->value < 0)
+					{
+						switch (mod->value->stat)
+						{
+							case atk:
+								displaySprite(renderer, getBigTexture(cSprites, "atk_down"), xBuff, yBuff);
+								break;
+							case magic:
+								displaySprite(renderer, getBigTexture(cSprites, "magic_down"), xBuff, yBuff);
+								break;
+							case res_physic:
+								displaySprite(renderer, getBigTexture(cSprites, "ra_down"), xBuff, yBuff);
+								break;
+							case res_magic:
+								displaySprite(renderer, getBigTexture(cSprites, "rm_down"), xBuff, yBuff);
+								break;
+							case vis:
+								displaySprite(renderer, getBigTexture(cSprites, "vis_down"), xBuff, yBuff);
+								break;
+							case mv:
+								displaySprite(renderer, getBigTexture(cSprites, "speed_down"), xBuff, yBuff);
+								break;
+						}
+					}
+				}
+				sprintf(duration, "%d", mod->value->duration);
+				displayText(renderer, xBuff, yBuff, 15, duration, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+				yBuff += 32;
+				if (yBuff > 138)
+				{
+					yBuff = 10;
+					xBuff += 32;
+				}
+				list_next(temp);
+				mod = list_search(temp, tempEntity, -1);
+			}
+		}
+
 		// -- passive description if hovering info icon
 		if (hover_passive_help == 1)
 		{
@@ -582,7 +671,7 @@ int displayInterface(SDL_Renderer *renderer)
 		if (hover_stats == 0)
 			logPos.y = 200;
 		else
-			logPos.y = 260;
+			logPos.y = 233;
 	}
 	else
 	{
