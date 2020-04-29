@@ -429,7 +429,7 @@ Status * remove_from_list(Entity * e, statusId status, Status *s)
     char log[STR_LONG];
     if(verbose>=2)
     {
-        sprintf(log,"Renewing %s's ",e->cha_name);
+        sprintf(log,"Removing %s's ",e->cha_name);
         print_statusId(status, log);
     }
 
@@ -455,7 +455,7 @@ Status * remove_from_list(Entity * e, statusId status, Status *s)
 
     if(verbose>=2)
     {
-        sprintf(log,"Finished renewing %s's ",e->cha_name);
+        sprintf(log,"Finished removing %s's ",e->cha_name);
         print_statusId(status, log);
     }
 
@@ -668,7 +668,7 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id, boo
 
     else if(s.stat==Burning && target->status_effect[Freezing])
     {
-        remove_mod(remove_from_list(target, Freezing, &renew),target, FALSE);
+        remove_from_list(target, Freezing, &renew);
         if(verbose>=1)printf("Attempting to burn %s has thawed him out!\n", target->cha_name);
         sprintf(log, "Attempting to burn %s has thawed him out", target->cha_name);
         if(show_log)addLog(log);
@@ -696,7 +696,6 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id, boo
         target->status_effect[s.stat] = 1;
         sprintf(log, "%s is %s", target->cha_name, statusName[s.stat]);
     }
-
 
     if(s.duration!=0)
     {
