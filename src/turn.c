@@ -194,6 +194,10 @@ err_t turn_start(Entity *e)
             if(verbose>=1)printf("%s is Paralyzed\n", (e+i)->cha_name);
             (e+i)->act_points = 1;
         }
+        else if((e+i)->status_effect[Blessed])
+        {
+            (e+i)->act_points = 6;
+        }
         else
         {
             (e+i)->act_points = 3;
