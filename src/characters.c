@@ -210,10 +210,20 @@ int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
                         loadTexture(renderer, loadImage("../inc/img/icons/ra_32.png")),
                         "ra_icon");
 
-    nbSprites = addTextureToTable(  cSprites,
+    addTextureToTable(  cSprites,
                         loadTexture(renderer, loadImage("../inc/img/icons/rm_16.png")),
                         loadTexture(renderer, loadImage("../inc/img/icons/rm_32.png")),
                         "rm_icon");
+
+    addTextureToTable(  cSprites,
+                        loadTexture(renderer, loadImage("../inc/img/status/16_16/onlyspeed16.png")),
+                        loadTexture(renderer, loadImage("../inc/img/status/32_32/onlyspeed32.png")),
+                        "speed_icon");
+
+    nbSprites = addTextureToTable(  cSprites,
+                        loadTexture(renderer, loadImage("../inc/img/status/16_16/onlyvision16.png")),
+                        loadTexture(renderer, loadImage("../inc/img/status/32_32/onlyvision32.png")),
+                        "vision_icon");
 
     addCharacterTexture(renderer, "angel");
     addCharacterTexture(renderer, "berserker");

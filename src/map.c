@@ -594,6 +594,7 @@ int displayInterface(SDL_Renderer *renderer)
 	char pv_text[STR_SHORT];
 	char pa_text[STR_SHORT];
 	char pm_text[STR_SHORT];
+	char vis_text[STR_SHORT];
 	char atk_text[STR_SHORT];
 	char magic_text[STR_SHORT];
 	char ra_text[STR_SHORT];
@@ -659,9 +660,14 @@ int displayInterface(SDL_Renderer *renderer)
 		displayText(renderer, 202, 106, 30, pa_text, "../inc/font/Pixels.ttf", 49, 174, 196, FALSE);
 
 		// -- entity mouvement points
-		displaySprite(renderer, getBigTexture(cSprites, "mv_icon"), 250, 102);
+		displaySprite(renderer, getBigTexture(cSprites, "speed_icon"), 240, 102);
 		sprintf(pm_text, "%d", tempEntity->stats[mv]);
-		displayText(renderer, 287, 106, 30, pm_text, "../inc/font/Pixels.ttf", 52, 169, 43, FALSE);
+		displayText(renderer, 277, 106, 30, pm_text, "../inc/font/Pixels.ttf", 52, 169, 43, FALSE);
+
+		// -- entity vision points
+		displaySprite(renderer, getBigTexture(cSprites, "vision_icon"), 315, 102);
+		sprintf(vis_text, "%d", tempEntity->stats[vis]);
+		displayText(renderer, 352, 106, 30, vis_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- attack stat
 		displaySprite(renderer, getBigTexture(cSprites, "atk_icon"), 25, 142);
@@ -812,13 +818,11 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 	SDL_SetRenderDrawColor(renderer, 173, 216, 230, 255);
 	SDL_RenderClear(renderer);
 
-	printf("GetBorder...\n");
 	if (selected_ability != -1)
 	{
 		get_border(getEntity(getSelectedPos())->cha_id, selected_ability, borderTab, rangeTab);
 	}
-	printf("GetBorder OK...\n");
-	printf("Début affichage map...\n");
+
 	for (int i = 0; i < _X_SIZE_; i++)
 	{
 		for (int j = (_Y_SIZE_ - 1); j >= 0; j--)
@@ -947,11 +951,8 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 			}
 		}
 	}
-	printf("Affichage OK...\n");
 
-	printf("Affichage interface...\n");
 	displayInterface(renderer);
-	printf("Interface OK...\n");
 
 	/* -- DEBUG Affichage des coordonnées d'affichage de la map
 	char str[12];
@@ -959,9 +960,7 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 	displayText(renderer, 20, 20, 20, str, "../inc/font/Pixels.ttf", 255, 255, 255);
 	// -- DEBUG --*/
 
-	printf("Rendering...\n");
 	SDL_RenderPresent(renderer);
-	printf("Rendering OK...\n");
 
 	return 1;
 }
