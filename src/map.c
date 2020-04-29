@@ -531,6 +531,26 @@ int displayInterface(SDL_Renderer *renderer)
 			}
 		}
 
+		if (hover_passive_help == 1)
+		{
+			sprintf(passive, "Passive : %s", tempEntity->cha_class->Passive.name);
+			displayText(renderer, mouse_position.x + 20, mouse_position.y + 20, 20, passive, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
+			displayText(renderer, mouse_position.x + 20, mouse_position.y + 40, 20, tempEntity->cha_class->Passive.desc, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
+			if (tempEntity->cha_class->cla_id == Angel)
+			{
+				Coord center = getSelectedPos();
+				if (Aura_ab.nb_coords > 1)
+				{
+					for (int i = 0; i < Aura_ab.nb_coords; i++)
+					{
+						Coord highlight = add_coords(center, *((*(Aura_ab.coord)) + i));
+						if (isInGrid(highlight))
+							setHovered(highlight);
+					}
+				}
+			}
+		}
+
 		// Stat buff and debuff
 		xBuff = 420;
 		yBuff = 10;
@@ -609,24 +629,6 @@ int displayInterface(SDL_Renderer *renderer)
 				}
 				list_next(temp);
 				mod = list_search(temp, tempEntity, -1);
-			}
-		}
-
-		// -- passive description if hovering info icon
-		if (hover_passive_help == 1)
-		{
-			sprintf(passive, "Passive : %s", tempEntity->cha_class->Passive.name);
-			displayText(renderer, mouse_position.x + 20, mouse_position.y + 20, 20, passive, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
-			displayText(renderer, mouse_position.x + 20, mouse_position.y + 40, 20, tempEntity->cha_class->Passive.desc, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
-			Coord center = getSelectedPos();
-			if (tempEntity->cha_class->cla_id == Ranger)
-			{
-				for (int i = 0; i < get_range(tempEntity, Bolt); i++)
-				{
-					Coord highlight = add_coords(center, *((*(tempEntity->cha_class->cla_abilities[Bolt % NUM_AB].coord)) + i));
-					if (isInGrid(highlight))
-						setHovered(highlight);
-				}
 			}
 		}
 	}
@@ -741,6 +743,8 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 // Display the map
 {
 	Coord blockPos;
+	Coord rangerBorderTab[MAXRANGE];
+	Coord rangerRangeTab[_X_SIZE_ * _Y_SIZE_];
 
 	/* Le fond de la fenêtre sera blanc */
 	SDL_SetRenderDrawColor(renderer, 173, 216, 230, 255);
@@ -749,6 +753,13 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 	if (selected_ability != -1)
 	{
 		get_border(getEntity(getSelectedPos())->cha_id, selected_ability, borderTab, rangeTab);
+	}
+	if (hover_passive_help)
+	{
+		if (getEntity(getSelectedPos())->cha_class->cla_id == Ranger)
+		{
+			get_border(getEntity(getSelectedPos())->cha_id, Bolt, rangerBorderTab, rangerRangeTab);
+		}
 	}
 
 	for (int i = 0; i < _X_SIZE_; i++)
@@ -805,6 +816,23 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 								displaySprite(renderer, getTexture(textures, "ability_range"), blockPos.x, blockPos.y);
 							else
 								displaySprite(renderer, getBigTexture(textures, "ability_range"), blockPos.x, blockPos.y);
+						}
+					}
+				}
+
+				// Passive description if hovering info icon
+				if (hover_passive_help == 1)
+				{
+					if (tempEntity->cha_class->cla_id == Ranger)
+					{
+						drawPos.x = i;
+						drawPos.y = j;
+						if (isInCoordTab(rangerRangeTab, drawPos) || isInCoordTab(rangerBorderTab, drawPos))
+						{
+							if (pxBase == 64)
+								displaySprite(renderer, getTexture(textures, "selection_hover"), blockPos.x, blockPos.y);
+							else
+								displaySprite(renderer, getBigTexture(textures, "selection_hover"), blockPos.x, blockPos.y);
 						}
 					}
 				}
