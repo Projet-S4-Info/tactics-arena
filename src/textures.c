@@ -523,6 +523,12 @@ int loadMapTextures(SDL_Renderer *renderer)
 					  NULL,
 					  "dead_char");
 
+	// Loading detained char texture
+	addTextureToTable(textures,
+					  loadTexture(renderer, loadImage("../inc/img/interface/detained_64.png")),
+					  NULL,
+					  "detained_char");
+
 	// Loading ID card texture
 	index = addTextureToTable(textures,
 							  loadTexture(renderer, loadImage("../inc/img/interface/id_card_2.png")),

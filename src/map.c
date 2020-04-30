@@ -651,15 +651,22 @@ int displayInterface(SDL_Renderer *renderer)
 		sprintf(actPts, "%d", Allies[i].act_points);
 		if (Allies[i].active == Alive)
 		{
-			if (Allies[i].act_points >= 3)
-				displayText(renderer, xPort + 20, 90, 20, actPts, "../inc/font/Pixels.ttf", 48, 129, 162, FALSE);
-			else if (Allies[i].act_points == 0)
-				displayText(renderer, xPort + 20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+			if (Allies[i].status_effect[Detained])
+			{
+				displaySprite(renderer, getTexture(textures, "detained_char"), portrait.x, portrait.y);
+			}
 			else
-				displayText(renderer, xPort + 20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
-			displaySprite(renderer, getTexture(cSprites, "star_icon"), xPort + 30, 90);
+			{
+				if (Allies[i].act_points >= 3)
+					displayText(renderer, xPort + 20, 90, 20, actPts, "../inc/font/Pixels.ttf", 48, 129, 162, FALSE);
+				else if (Allies[i].act_points == 0)
+					displayText(renderer, xPort + 20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+				else
+					displayText(renderer, xPort + 20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+				displaySprite(renderer, getTexture(cSprites, "star_icon"), xPort + 30, 90);
+			}
 		}
-		else
+		else 
 		{
 			displaySprite(renderer, getTexture(textures, "dead_char"), portrait.x, portrait.y);
 		}
