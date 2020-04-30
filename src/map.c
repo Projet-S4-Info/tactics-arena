@@ -576,91 +576,88 @@ int displayInterface(SDL_Renderer *renderer)
 				SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 				SDL_SetRenderDrawColor(renderer, 90, 90, 90, SDL_ALPHA_OPAQUE / 2);
 				SDL_RenderFillRect(renderer, &buffIcon);
-				if (mod->value->value != 0)
+				// Buffs
+				if (mod->value->value > 0)
 				{
-					// Buffs
-					if (mod->value->value > 0)
+					switch (mod->value->stat)
 					{
-						switch (mod->value->stat)
-						{
-							case atk:
-								displaySprite(renderer, getBigTexture(cSprites, "atk_up"), xBuff, yBuff);
-								break;
-							case magic:
-								displaySprite(renderer, getBigTexture(cSprites, "magic_up"), xBuff, yBuff);
-								break;
-							case res_physic:
-								displaySprite(renderer, getBigTexture(cSprites, "ra_up"), xBuff, yBuff);
-								break;
-							case res_magic:
-								displaySprite(renderer, getBigTexture(cSprites, "rm_up"), xBuff, yBuff);
-								break;
-							case vis:
-								displaySprite(renderer, getBigTexture(cSprites, "vis_up"), xBuff, yBuff);
-								break;
-							case mv:
-								displaySprite(renderer, getBigTexture(cSprites, "speed_up"), xBuff, yBuff);
-								break;
-						}
+						case atk:
+							displaySprite(renderer, getBigTexture(cSprites, "atk_up"), xBuff, yBuff);
+							break;
+						case magic:
+							displaySprite(renderer, getBigTexture(cSprites, "magic_up"), xBuff, yBuff);
+							break;
+						case res_physic:
+							displaySprite(renderer, getBigTexture(cSprites, "ra_up"), xBuff, yBuff);
+							break;
+						case res_magic:
+							displaySprite(renderer, getBigTexture(cSprites, "rm_up"), xBuff, yBuff);
+							break;
+						case vis:
+							displaySprite(renderer, getBigTexture(cSprites, "vis_up"), xBuff, yBuff);
+							break;
+						case mv:
+							displaySprite(renderer, getBigTexture(cSprites, "speed_up"), xBuff, yBuff);
+							break;
 					}
-					// Debuffs
-					else if (mod->value->value < 0)
+				}
+				// Debuffs
+				else if (mod->value->value < 0)
+				{
+					switch (mod->value->stat)
 					{
-						switch (mod->value->stat)
-						{
-							case atk:
-								displaySprite(renderer, getBigTexture(cSprites, "atk_down"), xBuff, yBuff);
-								break;
-							case magic:
-								displaySprite(renderer, getBigTexture(cSprites, "magic_down"), xBuff, yBuff);
-								break;
-							case res_physic:
-								displaySprite(renderer, getBigTexture(cSprites, "ra_down"), xBuff, yBuff);
-								break;
-							case res_magic:
-								displaySprite(renderer, getBigTexture(cSprites, "rm_down"), xBuff, yBuff);
-								break;
-							case vis:
-								displaySprite(renderer, getBigTexture(cSprites, "vis_down"), xBuff, yBuff);
-								break;
-							case mv:
-								displaySprite(renderer, getBigTexture(cSprites, "speed_down"), xBuff, yBuff);
-								break;
-						}
+						case atk:
+							displaySprite(renderer, getBigTexture(cSprites, "atk_down"), xBuff, yBuff);
+							break;
+						case magic:
+							displaySprite(renderer, getBigTexture(cSprites, "magic_down"), xBuff, yBuff);
+							break;
+						case res_physic:
+							displaySprite(renderer, getBigTexture(cSprites, "ra_down"), xBuff, yBuff);
+							break;
+						case res_magic:
+							displaySprite(renderer, getBigTexture(cSprites, "rm_down"), xBuff, yBuff);
+							break;
+						case vis:
+							displaySprite(renderer, getBigTexture(cSprites, "vis_down"), xBuff, yBuff);
+							break;
+						case mv:
+							displaySprite(renderer, getBigTexture(cSprites, "speed_down"), xBuff, yBuff);
+							break;
 					}
-					// Status
-					else
+				}
+				// Status
+				else
+				{
+					switch (mod->value->stat)
 					{
-						switch (mod->value->stat)
-						{
-							case Detained:
-								displaySprite(renderer, getBigTexture(cSprites, "jailed"), xBuff, yBuff);
-								break;
-							case Freezing:
-								displaySprite(renderer, getBigTexture(cSprites, "frozen"), xBuff, yBuff);
-								break;
-							case Provoked:
-								displaySprite(renderer, getBigTexture(cSprites, "provoke"), xBuff, yBuff);
-								break;
-							case Burning:
-								displaySprite(renderer, getBigTexture(cSprites, "burning"), xBuff, yBuff);
-								break;
-							case Paralyzed:
-								displaySprite(renderer, getBigTexture(cSprites, "paralyzed"), xBuff, yBuff);
-								break;
-							case Blessed:
-								displaySprite(renderer, getBigTexture(cSprites, "blessed"), xBuff, yBuff);
-								break;
-							case Piercing:
-								displaySprite(renderer, getBigTexture(cSprites, "piercing"), xBuff, yBuff);
-								break;
-							case Guarding:
-								displaySprite(renderer, getBigTexture(cSprites, "guarding"), xBuff, yBuff);
-								break;
-							case Summoned:
-								displaySprite(renderer, getBigTexture(cSprites, "summoned"), xBuff, yBuff);
-								break;
-						}
+						case Blessed:
+							displaySprite(renderer, getBigTexture(cSprites, "blessed"), xBuff, yBuff);
+							break;
+						case Detained:
+							displaySprite(renderer, getBigTexture(cSprites, "jailed"), xBuff, yBuff);
+							break;
+						case Freezing:
+							displaySprite(renderer, getBigTexture(cSprites, "frozen"), xBuff, yBuff);
+							break;
+						case Provoked:
+							displaySprite(renderer, getBigTexture(cSprites, "provoke"), xBuff, yBuff);
+							break;
+						case Burning:
+							displaySprite(renderer, getBigTexture(cSprites, "burning"), xBuff, yBuff);
+							break;
+						case Paralyzed:
+							displaySprite(renderer, getBigTexture(cSprites, "paralyzed"), xBuff, yBuff);
+							break;
+						case Piercing:
+							displaySprite(renderer, getBigTexture(cSprites, "piercing"), xBuff, yBuff);
+							break;
+						case Guarding:
+							displaySprite(renderer, getBigTexture(cSprites, "guarding"), xBuff, yBuff);
+							break;
+						case Summoned:
+							displaySprite(renderer, getBigTexture(cSprites, "summoned"), xBuff, yBuff);
+							break;
 					}
 				}
 				sprintf(duration, "%d", mod->value->duration);
