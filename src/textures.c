@@ -300,47 +300,47 @@ int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
                         "vis_down");
 
 	addTextureToTable(  cSprites,
-                        loadTexture(renderer, loadImage("../inc/img/status/16_16/freezed16.png")),
+                        NULL,//loadTexture(renderer, loadImage("../inc/img/status/16_16/freezed16.png")),
                         loadTexture(renderer, loadImage("../inc/img/status/32_32/freezed32.png")),
                         "frozen");
 
 	addTextureToTable(  cSprites,
-                        loadTexture(renderer, loadImage("../inc/img/status/16_16/blessed16.png")),
+                        NULL,//loadTexture(renderer, loadImage("../inc/img/status/16_16/blessed16.png")),
                         loadTexture(renderer, loadImage("../inc/img/status/32_32/blessed32.png")),
                         "blessed");
 
 	addTextureToTable(  cSprites,
-                        loadTexture(renderer, loadImage("../inc/img/status/16_16/burned16.png")),
+                        NULL,//loadTexture(renderer, loadImage("../inc/img/status/16_16/burned16.png")),
                         loadTexture(renderer, loadImage("../inc/img/status/32_32/burned32.png")),
                         "burning");
 
 	addTextureToTable(  cSprites,
-                        loadTexture(renderer, loadImage("../inc/img/status/16_16/crippled16.png")),
+                        NULL,//loadTexture(renderer, loadImage("../inc/img/status/16_16/crippled16.png")),
                         loadTexture(renderer, loadImage("../inc/img/status/32_32/crippled32.png")),
                         "crippled");
 				
 	addTextureToTable(  cSprites,
-                        loadTexture(renderer, loadImage("../inc/img/status/16_16/guarding16.png")),
+                        NULL,//loadTexture(renderer, loadImage("../inc/img/status/16_16/guarding16.png")),
                         loadTexture(renderer, loadImage("../inc/img/status/32_32/guarding32.png")),
                         "guarding");
 
 	addTextureToTable(  cSprites,
-                        loadTexture(renderer, loadImage("../inc/img/status/16_16/jailed16.png")),
+                        NULL,//loadTexture(renderer, loadImage("../inc/img/status/16_16/jailed16.png")),
                         loadTexture(renderer, loadImage("../inc/img/status/32_32/jailed32.png")),
                         "jailed");
 			
 	addTextureToTable(  cSprites,
-                        loadTexture(renderer, loadImage("../inc/img/status/16_16/paralyzed16.png")),
+                        NULL,//loadTexture(renderer, loadImage("../inc/img/status/16_16/paralyzed16.png")),
                         loadTexture(renderer, loadImage("../inc/img/status/32_32/paralyzed32.png")),
                         "paralyzed");
 
 	addTextureToTable(  cSprites,
-                        loadTexture(renderer, loadImage("../inc/img/status/16_16/piercing16.png")),
+                        NULL,//loadTexture(renderer, loadImage("../inc/img/status/16_16/piercing16.png")),
                         loadTexture(renderer, loadImage("../inc/img/status/32_32/piercing32.png")),
                         "piercing");
 
 	addTextureToTable(  cSprites,
-                        loadTexture(renderer, loadImage("../inc/img/status/16_16/summoned16.png")),
+                        NULL,//loadTexture(renderer, loadImage("../inc/img/status/16_16/summoned16.png")),
                         loadTexture(renderer, loadImage("../inc/img/status/32_32/summoned32.png")),
                         "summoned");
 

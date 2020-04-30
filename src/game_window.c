@@ -34,7 +34,7 @@
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
 #define _FPS_ 60 					// Define at which frequency the game have to refresh
-#define _TEXTURE_LOADING_TIME_ 10	// Loading screen duration for textures (in seconds)
+#define _TEXTURE_LOADING_TIME_ 4	// Loading screen duration for textures (in seconds)
 
 /* =============== VARIABLES ================ */
 
@@ -145,16 +145,23 @@ int createGameWindow(int x, int y)
 	{
 		SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 
-		// Chargement des textures
-		loadMapTextures(renderer);
-		loadSprites(renderer, cSprites);
-		loadAnimationTextures();
-
 		// Textures loading screen
 		int start_seconds = SDL_GetTicks() / 1000;
 		int loadingAnim = 0;
 		int loadingChar = rand()%6;
 		int xCharPos;
+		SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
+		SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
+		SDL_RenderClear(renderer);
+		displayText(renderer, 200, yWinSize / 2 + 120, 40, "Chargement des textures du jeu...", "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+		displayText(renderer, 200, yWinSize / 2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, FALSE);
+		SDL_RenderPresent(renderer);
+
+		// Chargement des textures
+		loadMapTextures(renderer);
+		loadSprites(renderer, cSprites);
+		loadAnimationTextures();
+
 		while ((SDL_GetTicks() / 1000) - start_seconds < _TEXTURE_LOADING_TIME_)
 		{
 			xCharPos = xWinSize-(loadingAnim*20);

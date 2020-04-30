@@ -1,3 +1,11 @@
+/**
+ * \file map.c
+ * \brief Map related functions
+ * \details Contains all functions required for map and interface
+ * \author Thibault DOUCET
+ * \version 0.9.9
+ * \date 30/04/2020
+ */
 
 /* =============== DEPENDENCES =============== */
 
