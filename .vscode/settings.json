@@ -14,6 +14,7 @@
         "init.h": "c",
         "grid.h": "c",
         "servfcnt.h": "c",
-        "characters.h": "c"
+        "characters.h": "c",
+        "functional": "c"
     }
 }
