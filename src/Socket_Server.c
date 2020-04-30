@@ -266,7 +266,7 @@ err_t startTCPSocketServ()
       return SERV_ERROR;
     }
   }
-  //loadMap(matrix, startGame.mapNameGame);
-  loadMap(matrix, "map_ice_island");
+  loadMap(matrix, startGame.mapNameGame);
+  //loadMap(matrix, "map_ice_island");
   return OK;
 }

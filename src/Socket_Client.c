@@ -182,7 +182,7 @@ err_t startTCPSocketCli(int socketCli)
     printf("\nImpossible de créer une socket :( \n");
     return CLI_ERROR;
   }
-  //loadMap(matrix,startGameCli.mapNameGame);
-  loadMap(matrix, "map_ice_island");
+  loadMap(matrix,startGameCli.mapNameGame);
+  //loadMap(matrix, "map_ice_island");
   return OK;
 }
