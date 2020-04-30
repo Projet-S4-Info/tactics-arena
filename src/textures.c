@@ -33,6 +33,7 @@ AnimTexture animTextures[NB_AB+1];
 
 
 int pxBase = 64;							// Resolution of a bloc texture (can be 64 or 128)
+int nbSprites = 0;
 
 
 /* =============== FONCTIONS =============== */
@@ -82,7 +83,7 @@ int addTextureToTable(TabTexture * texturesTable, SDL_Texture * texture, SDL_Tex
 {
 	int index = 0;
 
-	while (texturesTable[index].texture != NULL)
+	while (texturesTable[index].texture_name != NULL)
 	{
 		index++;
 	}
@@ -103,7 +104,7 @@ SDL_Texture * getTexture(TabTexture * textures, const char * texture_name)
 {
 	int index = 0;
 
-	while (textures[index].texture != NULL)
+	while (textures[index].texture_name != NULL)
 	{
 		index++;
 	}
@@ -116,6 +117,7 @@ SDL_Texture * getTexture(TabTexture * textures, const char * texture_name)
 		}
 	}
 
+	printf("\033[31;01m[TEXTURES ERROR]\033[00m : Aucune texture trouvée pour '%s' (64x64)\n", texture_name);
 	exit(EXIT_FAILURE);
 }
 
@@ -126,7 +128,7 @@ SDL_Texture * getBigTexture(TabTexture * textures, const char * texture_name)
 {
 	int index = 0;
 
-	while (textures[index].texture != NULL)
+	while (textures[index].texture_name != NULL)
 	{
 		index++;
 	}
@@ -139,6 +141,7 @@ SDL_Texture * getBigTexture(TabTexture * textures, const char * texture_name)
 		}
 	}
 
+	printf("\033[31;01m[TEXTURES ERROR]\033[00m : Aucune texture trouvée pour '%s' (128x128)\n", texture_name);
 	exit(EXIT_FAILURE);
 }
 
