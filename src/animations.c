@@ -54,8 +54,11 @@ err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, b
     {
         sprintf(tempSmall, "../inc/sprites/attacks/sprite_indiv/64_64/%s%d.png", name, i);
         sprintf(tempBig, "../inc/sprites/attacks/sprite_indiv/128_128/%s%d.png", name, i);
+
         if (verbose >= 3)
             printf("\033[36;01m[ANIMATIONS]\033[00m : Chargement de la texture : %s\n", tempSmall);
+
+        // Exception for Eruption and Icy Winds sprites (if optimized they're displayed as white squares)
         if (!strcmp(name, "mage/explosion") || !strcmp(name, "mage/baseice"))
         {
             animTextures[index].spritesSmall[tabIndex] = loadTexture(renderer, loadImage(tempSmall));
@@ -64,9 +67,11 @@ err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, b
         {
             animTextures[index].spritesSmall[tabIndex] = loadTexture(renderer, loadOptImage(tempSmall));
         }
+
         if (verbose >= 3)
             printf("\033[36;01m[ANIMATIONS]\033[00m : Ajout de la texture [%s] à l'id %d\n", name, index);
         //animTextures[index].spritesBig[tabIndex] = loadTexture(renderer, loadOptImage(tempBig));
+        
         animTextures[index].spritesBig[tabIndex] = NULL;
         tabIndex++;
     }

@@ -424,6 +424,11 @@ int displayInterface(SDL_Renderer *renderer)
 	portrait.w = 64;
 	portrait.h = 100;
 
+	char cdText[STR_LONG];
+	char damageText[STR_LONG];
+	char descText[STR_LONG];
+	int yDesc = 110;
+
 	if (tempEntity != NULL)
 	{
 		if (is_ally(tempEntity))
@@ -432,15 +437,59 @@ int displayInterface(SDL_Renderer *renderer)
 
 			if (selected_ability != -1)
 			{
-				sprintf(selectedAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, selected_ability)), get_desc(tempEntity, selected_ability));
-				displayText(renderer, 16, yWinSize - 110, 20, selectedAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+				if (ab_from_id(selected_ability, tempEntity)->ab_cooldown != 0)
+				{
+					sprintf(cdText, "Cooldown : %d turn(s)", ab_from_id(selected_ability, tempEntity)->ab_cooldown);
+					displayText(renderer, 16, yWinSize - yDesc, 20, cdText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+					yDesc += 20;
+				}
+				if (ab_from_id(selected_ability, tempEntity)->damage != NULL)
+				{
+					if ((*(ab_from_id(hover_ability, tempEntity)->damage))->type == atk)
+					{
+						sprintf(damageText, "Base damage : %.0f (Physic)", (*(ab_from_id(hover_ability, tempEntity)->damage))->multiplier * tempEntity->stats[atk]);
+						displayText(renderer, 16, yWinSize - yDesc, 20, damageText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+					}
+					else if ((*(ab_from_id(hover_ability, tempEntity)->damage))->type == magic)
+					{
+						sprintf(damageText, "Base damage : %.0f (Magic)", (*(ab_from_id(hover_ability, tempEntity)->damage))->multiplier * tempEntity->stats[magic]);
+						displayText(renderer, 16, yWinSize - yDesc, 20, damageText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+					}
+					yDesc += 20;
+				}
+				sprintf(descText, "%s", get_desc(tempEntity, selected_ability));
+				displayText(renderer, 16, yWinSize - yDesc, 20, descText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+				sprintf(selectedAbilityDesc, "%s", strToUpper(get_name(tempEntity, selected_ability)));
+				displayText(renderer, 16, yWinSize - (yDesc+20), 20, selectedAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 			}
 			else
 			{
 				if (hover_ability >= 0)
 				{
-					sprintf(hoverAbilityDesc, "%s : %s", strToUpper(get_name(tempEntity, hover_ability)), get_desc(tempEntity, hover_ability));
-					displayText(renderer, 16, yWinSize - 110, 20, hoverAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+					if (ab_from_id(hover_ability, tempEntity)->ab_cooldown != 0)
+					{
+						sprintf(cdText, "Cooldown : %d turn(s)", ab_from_id(hover_ability, tempEntity)->ab_cooldown);
+						displayText(renderer, 16, yWinSize - yDesc, 20, cdText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+						yDesc += 20;
+					}
+					if (ab_from_id(hover_ability, tempEntity)->damage != NULL)
+					{
+						if ((*(ab_from_id(hover_ability, tempEntity)->damage))->type == atk)
+						{
+							sprintf(damageText, "Base damage : %.0f (Physic)", (*(ab_from_id(hover_ability, tempEntity)->damage))->multiplier * tempEntity->stats[atk]);
+							displayText(renderer, 16, yWinSize - yDesc, 20, damageText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+						}
+						else if ((*(ab_from_id(hover_ability, tempEntity)->damage))->type == magic)
+						{
+							sprintf(damageText, "Base damage : %.0f (Magic)", (*(ab_from_id(hover_ability, tempEntity)->damage))->multiplier * tempEntity->stats[magic]);
+							displayText(renderer, 16, yWinSize - yDesc, 20, damageText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+						}
+						yDesc += 20;
+					}
+					sprintf(descText, "%s", get_desc(tempEntity, hover_ability));
+					displayText(renderer, 16, yWinSize - yDesc, 20, descText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+					sprintf(hoverAbilityDesc, "%s", strToUpper(get_name(tempEntity, hover_ability)));
+					displayText(renderer, 16, yWinSize - (yDesc+20), 20, hoverAbilityDesc, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 				}
 			}
 		}
@@ -464,7 +513,12 @@ int displayInterface(SDL_Renderer *renderer)
 		// -- entity mouvement points
 		displaySprite(renderer, getBigTexture(cSprites, "speed_icon"), 240, 102);
 		sprintf(pm_text, "%d", tempEntity->stats[mv]);
-		displayText(renderer, 277, 106, 30, pm_text, "../inc/font/Pixels.ttf", 52, 169, 43, FALSE);
+		if (tempEntity->stats[mv] > tempEntity->cha_class->basic_stats[mv])
+			displayText(renderer, 277, 106, 30, pm_text, "../inc/font/Pixels.ttf", 0, 255, 0, FALSE);
+		else if (tempEntity->stats[mv] < tempEntity->cha_class->basic_stats[mv])
+			displayText(renderer, 277, 106, 30, pm_text, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+		else
+			displayText(renderer, 277, 106, 30, pm_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- entity vision points
 		displaySprite(renderer, getBigTexture(cSprites, "vision_icon"), 315, 102);
@@ -535,6 +589,15 @@ int displayInterface(SDL_Renderer *renderer)
 				break;
 			case 4:
 				displayText(renderer, 15, 205, 15, "Magic Armor : Decrease physical damage sustained", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				break;
+			case 5:
+				displayText(renderer, 15, 205, 15, "Action points (AP) : Used to cast abilities", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				break;
+			case 6:
+				displayText(renderer, 15, 205, 15, "Mouvement points (MP) : Range where you can move", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				break;
+			case 7:
+				displayText(renderer, 15, 205, 15, "Vision : Increase the abilities' range", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 				break;
 			}
 		}

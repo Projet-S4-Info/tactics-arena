@@ -676,6 +676,18 @@ int createGameWindow(int x, int y)
 						{
 							hover_stats = 4;
 						}
+						else if (e.motion.x >= 165 && e.motion.x < 240 && e.motion.y >= 102 && e.motion.y <= 134)
+						{
+							hover_stats = 5;
+						}
+						else if (e.motion.x >= 240 && e.motion.x < 315 && e.motion.y >= 102 && e.motion.y <= 134)
+						{
+							hover_stats = 6;
+						}
+						else if (e.motion.x >= 315 && e.motion.x < 390 && e.motion.y >= 102 && e.motion.y <= 134)
+						{
+							hover_stats = 7;
+						}
 						// Hover passive
 						else if (e.motion.x >= 377 && e.motion.x <= 396 && e.motion.y >= 156 && e.motion.y <= 174)
 						{
