@@ -54,6 +54,7 @@ typedef struct {
     int char_id;
     Coord c;
     abilityId act; //Mvt if movement
+    chat_t comChat;
 } action;
 
 typedef struct

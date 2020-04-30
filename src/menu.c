@@ -216,6 +216,7 @@ int displayMenu(int x, int y)
 						{
 							closeWindow(pWindow);
 							freeMenuTextures();
+							serverStatus = 0;
 							return 4;
 						}
 

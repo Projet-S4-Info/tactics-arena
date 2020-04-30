@@ -83,9 +83,19 @@ static void *fn_server(void *p_data)
 
 	if (startTCPSocketServ() == OK)
 	{
-		printf("Fin de startTCPSocketServ \n");
+		if (verbose >= 1)
+			printf("Fin de startTCPSocketServ \n");
+		// sleep(2);
+		// if (verbose >= 0)
+		// 	printf("Début de setupChatServer \n");
+		// if (setupChatServer() == 0)
+		// {
+		// 	if (verbose >= 0)
+		// 		printf("Fin de setupChatServer \n");
+		// }
 		sleep(1);
-		printf("Début de init_server \n");
+		if (verbose >= 1)
+			printf("Début de init_server \n");
 		init_server();
 	}
 	return NULL;
@@ -96,9 +106,20 @@ static void *fn_client(void *p_data)
 {
 	if (startTCPSocketCli() == OK)
 	{
-		printf("Fin de startTCPSOcketClient \n");
+		if (verbose >= 1)
+			printf("Fin de startTCPSOcketClient \n");
+		// sleep(2);
+		// if (verbose >= 0)
+		// 	printf("Début de setupChatClient \n");
+
+		// if (setupChatClient() == 0)
+		// {
+		// 	if (verbose >= 0)
+		// 		printf("Fin de setupChatClient \n");
+		// }
 		sleep(1);
-		printf("Début d'init_client \n");
+		if (verbose >= 1)
+			printf("Début d'init_client \n");
 		init_client();
 	}
 	return NULL;
@@ -551,9 +572,9 @@ int displayMenuMulti(int x, int y)
 					}
 
 					//Input Host box
-					else if (u.motion.x >= 126 && u.motion.x <= 242 && u.motion.y >= 640 && u.motion.y <= 683 && isHostMenu == 1)
+					else if (u.motion.x >= 126 && u.motion.x <= 242 && u.motion.y >= 640 && u.motion.y <= 683 && isHostMenu == 1 && serverStatus == 0)
 					{
-
+						serverStatus = 1;
 						isPseudoValid = 1;
 						char pseuTemp[50];
 						strcpy(pseuTemp, pseudoSrv);
@@ -643,15 +664,16 @@ int displayMenuMulti(int x, int y)
 					}
 
 					// Info Join set
-					else if (u.motion.x >= 608 && u.motion.x <= 721 && u.motion.y >= 550 && u.motion.y <= 590 && isJoinMenu == 1 && isIPValid == 1 && isPseudoValid == 1)
+					else if (u.motion.x >= 608 && u.motion.x <= 721 && u.motion.y >= 550 && u.motion.y <= 590 && isJoinMenu == 1 && isIPValid == 1 && isPseudoValid == 1 && isInfoJoinSet == 0)
 					{
+						isInfoJoinSet = 1;
 						pthread_create(&threadCli.thread_client, NULL, fn_client, NULL);
 					}
 
 					// Start for host Btn after infoJoinSet
 					else if (u.motion.x >= 606 && u.motion.x <= 722 && u.motion.y >= 550 && u.motion.y <= 594 && isHostMenu == 1 && isClientCo == 1)
 					{
-						serverStatus = 1;
+						serverStatus = 2;
 					}
 
 					// Nouveau boutton "QUIT"
@@ -661,7 +683,8 @@ int displayMenuMulti(int x, int y)
 						{
 							isHostMenu = 0;
 						}
-						if(isJoinMenu == 1){
+						if (isJoinMenu == 1)
+						{
 							isJoinMenu = 0;
 						}
 
@@ -756,22 +779,22 @@ int displayMenuMulti(int x, int y)
 					break;
 				}
 			}
-			
-			if (serverStatus == 3 && isJoinMenu == 1)
+
+			if (serverStatus == 4 && isJoinMenu == 1)
 			{
 				closeWindow(pWindow);
 				freeMultiMenuTextures();
 				stopMenuMusic(2);
 				return 1;
 			}
-			else if (serverStatus != 2 && isHostMenu == 1)
+			else if (serverStatus != 3 && isHostMenu == 1)
 			{
 				if (verbose >= 3)
 				{
-					printf("Waiting status to be 2 \n");
+					printf("Waiting status to be 3 \n");
 				}
 			}
-			else if (serverStatus == 2 && isHostMenu == 1)
+			else if (serverStatus == 3 && isHostMenu == 1)
 			{
 				closeWindow(pWindow);
 				freeMultiMenuTextures();
@@ -791,17 +814,17 @@ int displayMenuMulti(int x, int y)
 				}
 			}
 
-			if (serverStatus != 3 && isJoinMenu == 1)
+			if (serverStatus != 4 && isJoinMenu == 1)
 			{
 				if (verbose >= 3)
 				{
-					printf("Waiting status to be 3 \n");
+					printf("Waiting status to be 4 \n");
 				}
 
 				if (verbose >= 3)
 					printf("Server status = %d \n", serverStatus);
 
-				if (serverStatus >= 1)
+				if (serverStatus >= 2)
 				{
 					displayText(renderer, 460, 630, 40, "Vous etes connecté !", "../inc/font/PixelOperator.ttf", 255, 255, 255, TRUE);
 				}
@@ -815,7 +838,6 @@ int displayMenuMulti(int x, int y)
 			SDL_Delay(16);
 			SDL_RenderPresent(renderer);
 		}
-
 		closeWindow(pWindow);
 		freeMultiMenuTextures();
 		SDL_StopTextInput();

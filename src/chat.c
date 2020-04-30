@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "struct.h"
 #include "servFcnt.h"
 
-chat_t chat;
 
-err_t init_chat(chat_t * c)
+err_t init_chat(chat_t *c)
 {
     c->index = -1;
     return OK;
@@ -17,12 +17,12 @@ bool chat_vide(chat_t *c)
     return c->index == -1;
 }
 
-bool increment(chat_t * c)
+bool increment(chat_t *c)
 {
-    c->index ++;
-    if(c->index>=_NB_MAX_CHAT_)
+    c->index++;
+    if (c->index >= _NB_MAX_CHAT_)
     {
-        c->index = _NB_MAX_CHAT_ -1;
+        c->index = _NB_MAX_CHAT_ - 1;
         return TRUE;
     }
     else
@@ -35,9 +35,9 @@ err_t decaler(chat_t *c)
 {
     int i;
 
-    for(i=0; i < _NB_MAX_CHAT_ - 1; i++)
+    for (i = 0; i < _NB_MAX_CHAT_ - 1; i++)
     {
-        strcpy(c->chatTab[i], c->chatTab[i+1]);
+        strcpy(c->chatTab[i], c->chatTab[i + 1]);
     }
 
     return OK;
@@ -45,8 +45,8 @@ err_t decaler(chat_t *c)
 
 err_t nouveau_Msg(chat_t *c, char msg[STR_LONG])
 {
-    
-    if(increment(c))
+
+    if (increment(c))
     {
         decaler(c);
     }
@@ -56,22 +56,38 @@ err_t nouveau_Msg(chat_t *c, char msg[STR_LONG])
     return OK;
 }
 
-void startChat(void * structure, int size, int socket){
-    while(1){
-        if(changesChat == 1){
-            if(sendStruct(structure, size, socket, NULL) == OK){
+void startChat(chat_t chat, int size, int socket)
+{
+    if (verbose >= 0)
+        printf("Début de start Chat \n");
 
-                changesChat = 0;
-            }else{
+    while (1)
+    {
+        if(verbose >= 0)printf("Dans le while threadchat \n");
+        if (changesChat == 1)
+        {
+            if (sendChat((void *)&chat, size, socket) == 1)
+            {
+                if(verbose >= 1)printf("Chat envoyé en vrai \n");
+            }
+            else
+            {
                 printf("Aucune structure envoyée depuis thread Chat \n");
             }
-        }else{
-            if(recepChat(structure,size,socket) == 1){
-                for(int i = 0; i < chat.index; i++){
-                }
-            }else{
-                if(verbose)printf("Aucune structure recue depuis threadChat \n");
+            changesChat = 0;
+        }
+        else
+        {
+            if (recepChat((void *)&chat,size , socket) != 1)
+            {
+                printf("Aucune structure recue depuis threadChat \n");
+            }
+            else
+            {
+                if (verbose >= 0)
+                    printf("Structure recue dans thread chat ! \n");
             }
         }
+        sleep(2);
     }
 }

@@ -104,7 +104,7 @@ err_t startTCPSocketCli(int socketCli)
 
     /*---------- Initialisation des structures pour les sockets ----*/
     SOCKADDR_IN sockIn;
-    SOCKET sock;
+    SOCKET sockCli;
     sockIn.sin_addr.s_addr = inet_addr(servIP);
     sockIn.sin_family = AF_INET;
     sockIn.sin_port = htons(PORT);
@@ -115,19 +115,19 @@ err_t startTCPSocketCli(int socketCli)
       printf("\nLancement de la création du client...\n");
 
     //-- Création de la socket (IPv4, TCP, 0)
-    sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock != INVALID_SOCKET)
+    sockCli = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockCli != INVALID_SOCKET)
     {
       if (verbose >= 1)
-        printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sock);
+        printf("\nLa socket numéro %d en mode TCP/IP est valide  !\n", sockCli);
 
       // -- Tentative de connection vers le serveur
-      if (connect(sock, (SOCKADDR *)&sockIn, sizeof(sockIn)) != SOCKET_ERROR)
+      if (connect(sockCli, (SOCKADDR *)&sockIn, sizeof(sockIn)) != SOCKET_ERROR)
       {
         if (verbose >= 1)
           printf("Connexion réussie à : %s sur le port : %d \n", inet_ntoa(sockIn.sin_addr), htons(sockIn.sin_port));
 
-        socketConnected = sock;
+        socketConnected = sockCli;
         if (verbose >= 1)
           printf("\nVous vous appelez : %s", pseudoUser);
         sprintf(infoMoi.pseudo, "%s", pseudoUser);
@@ -138,7 +138,7 @@ err_t startTCPSocketCli(int socketCli)
 
         
         sendStruct((void *)&infoMoi, sizeof(infoMoi), socketConnected, NULL);
-        serverStatus = 1;
+        serverStatus = 3;
         if (verbose >= 1)
           printf("Conexion établie sans soucis fermeture de la fonction... \n");
 
@@ -147,8 +147,8 @@ err_t startTCPSocketCli(int socketCli)
           if (verbose >= 2)
             printf("Map Name : %s \n", startGameCli.mapNameGame);
           
-          if(verbose>=0)displayMapMulti(startGameCli.multiMap[0]);
-          startGameCli.isServerStartGame = 2;
+          if(verbose>=3)displayMapMulti(startGameCli.multiMap[0]);
+          startGameCli.isServerStartGame = 3;
         }
         else
         {
@@ -157,7 +157,7 @@ err_t startTCPSocketCli(int socketCli)
 
         if (sendStruct(&startGameCli, sizeof(startGameCli), socketConnected, NULL) == OK)
         {
-          serverStatus = 3;
+          serverStatus = 4;
         }
         else
         {

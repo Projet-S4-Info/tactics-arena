@@ -201,13 +201,13 @@ err_t startTCPSocketServ()
               logFlag = 5;
             }
 
-            while (serverStatus != 1)
+            while (serverStatus != 2)
             {
               if (verbose >= 2)
                 printf("Waiting to start ... \n");
               sleep(2);
             }
-            startGame.isServerStartGame = 1;
+            startGame.isServerStartGame = 2;
             sprintf(startGame.mapNameGame, "%s", mapMultiSelected);
 
             loadMap(gridTemp[0],mapMultiSelected);

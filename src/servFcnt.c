@@ -56,6 +56,7 @@ char monIP[85];
 
 int nbPlayer = 0;
 int socketConnected = 0;
+int socketConnectedChat = 0;
 int isAServer = 0;
 
 /**
@@ -165,22 +166,35 @@ void *recep(void *container, int size, int socket, err_t (*print)(void * s, char
   return container;
 }
 
-int recepChat(void *structure, int size, int socket)
+int recepChat(void * chat, int size, int socket)
 {
   if(verbose >= 0)printf("Dans recepChat \n");
   
   int flag = 0;
   while (flag != 3)
   {
-    if (recv(socket, structure, size, MSG_DONTWAIT) > -1)
+    if (recv(socket, chat, size, 0) != -1)
     {
       flag = 3;
       return 1;
     }else{
        flag++;
     }
-    flag++;
     sleep(1);
+  }
+  return 0;
+}
+
+int sendChat(void * chat, int size, int socket){
+  if(verbose >= 0)printf("Dans sendChat \n");
+  int errorSend;
+  errorSend = send(socket, chat, size, 0);
+
+  if(errorSend != -1){
+    if(verbose >= 0)printf("Chat envoyée ! \n");
+    return 1;
+  }else{
+    printf("Pas de chat envoyé \n");
   }
   return 0;
 }

@@ -66,11 +66,14 @@ char *compo;
 extern Sint32 cursor;
 extern Sint32 selection_len;
 
+
+chat_t chat;
+
 pthread_t thread_Chat;
 
 static void *fn_chat(void *p_data)
 {
-	startChat(&chat, sizeof(chat), socketConnected);
+	startChat(chat, sizeof(chat_t), socketConnected);
 	return NULL;
 }
 
@@ -137,9 +140,10 @@ int createGameWindow(int x, int y)
 
 	printf("%s", error_message[setRendererDriver(renderer)]);
 
+	init_chat(&chat);
+
 	// Launcher icon
 	SDL_SetWindowIcon(pWindow, loadImage("../inc/sprites/goliath/sprite_indiv/64_64/front/Sprite_frontview_64.png"));
-
 	if (pWindow)
 	{
 		SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
@@ -225,7 +229,7 @@ int createGameWindow(int x, int y)
 
 		Entity *tempEntity = NULL;
 
-		init_chat(&chat);
+
 
 		/*--------- to test -----------*/
 		char temp[50] = "THILOUROCIEN";
@@ -237,6 +241,10 @@ int createGameWindow(int x, int y)
 		sprintf(pseudoChat, "%s : ", pseudoUser);
 
 		int running = 1;
+		isChatActive = 0;
+		
+
+		
 		playMenuMusic(3);
 		while (running)
 		{
@@ -415,18 +423,15 @@ int createGameWindow(int x, int y)
 							if (isChatActive == 1)
 							{
 								isChatActive = 0;
-
 								addLog("Tchat desactive");
-								pthread_detach(thread_Chat);
+								pthread_cancel(thread_Chat);
 							}
-							else
+
+							else if(isChatActive == 0)
 							{
 								isChatActive = 1;
 								addLog("Tchat active");
-								if (nbPlayer > 0)
-								{
-									pthread_create(&thread_Chat, NULL, fn_chat, NULL);
-								}
+								pthread_create(&thread_Chat, NULL, fn_chat, NULL);
 							}
 						}
 						break;
