@@ -570,6 +570,7 @@ int displayInterface(SDL_Renderer *renderer)
 				SDL_RenderFillRect(renderer, &buffIcon);
 				if (mod->value->value != 0)
 				{
+					// Buffs
 					if (mod->value->value > 0)
 					{
 						switch (mod->value->stat)
@@ -594,6 +595,7 @@ int displayInterface(SDL_Renderer *renderer)
 								break;
 						}
 					}
+					// Debuffs
 					else if (mod->value->value < 0)
 					{
 						switch (mod->value->stat)
@@ -615,6 +617,40 @@ int displayInterface(SDL_Renderer *renderer)
 								break;
 							case mv:
 								displaySprite(renderer, getBigTexture(cSprites, "speed_down"), xBuff, yBuff);
+								break;
+						}
+					}
+					// Status
+					else
+					{
+						switch (mod->value->stat)
+						{
+							case Detained:
+								displaySprite(renderer, getBigTexture(cSprites, "jailed"), xBuff, yBuff);
+								break;
+							case Freezing:
+								displaySprite(renderer, getBigTexture(cSprites, "frozen"), xBuff, yBuff);
+								break;
+							case Provoked:
+								displaySprite(renderer, getBigTexture(cSprites, "provoke"), xBuff, yBuff);
+								break;
+							case Burning:
+								displaySprite(renderer, getBigTexture(cSprites, "burning"), xBuff, yBuff);
+								break;
+							case Paralyzed:
+								displaySprite(renderer, getBigTexture(cSprites, "paralyzed"), xBuff, yBuff);
+								break;
+							case Blessed:
+								displaySprite(renderer, getBigTexture(cSprites, "blessed"), xBuff, yBuff);
+								break;
+							case Piercing:
+								displaySprite(renderer, getBigTexture(cSprites, "piercing"), xBuff, yBuff);
+								break;
+							case Guarding:
+								displaySprite(renderer, getBigTexture(cSprites, "guarding"), xBuff, yBuff);
+								break;
+							case Summoned:
+								displaySprite(renderer, getBigTexture(cSprites, "summoned"), xBuff, yBuff);
 								break;
 						}
 					}
