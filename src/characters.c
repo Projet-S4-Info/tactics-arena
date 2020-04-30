@@ -53,7 +53,7 @@ int addCharacterTexture(SDL_Renderer *renderer, char * name)
 	charTextures[indexCharTable].texture_name = name;
     if(verbose == 3) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement de la texture : %s\n", strcat(path, "front/Sprite_frontview_64.png"));
     sprintf(path, "../inc/sprites/%s/sprite_indiv/64_64/", name);
-    charTextures[indexCharTable].front = loadTexture(renderer, loadImage(strcat(path, "front/Sprite_frontview_64.png")));
+    charTextures[indexCharTable].front = loadTexture(renderer, loadOptImage(strcat(path, "front/Sprite_frontview_64.png")));
 
     // Textures 64x64
     sprintf(path, "../inc/sprites/%s/sprite_indiv/64_64/", name);
@@ -68,7 +68,7 @@ int addCharacterTexture(SDL_Renderer *renderer, char * name)
         {
             sprintf(temp, "%s%s/Sprite_%s%d.png", path, dirFolder, dirFolder, animIndex);
             if(verbose == 3) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement de la texture : %s\n", temp);
-            charTextures[indexCharTable].textures[dirIndex][animIndex-1] = loadTexture(renderer, loadImage(temp));
+            charTextures[indexCharTable].textures[dirIndex][animIndex-1] = loadTexture(renderer, loadOptImage(temp));
         }
     }
 
@@ -85,7 +85,7 @@ int addCharacterTexture(SDL_Renderer *renderer, char * name)
         {
             sprintf(temp, "%s%s/Sprite_%s%d.png", path, dirFolder, dirFolder, animIndex);
             if(verbose == 3) printf("\033[36;01m[CHARACTERS]\033[00m : Chargement de la texture : %s\n", temp);
-            charTextures[indexCharTable].textures[dirIndex][animIndex-128] = loadTexture(renderer, loadImage(temp));
+            charTextures[indexCharTable].textures[dirIndex][animIndex-128] = loadTexture(renderer, loadOptImage(temp));
         }
     }
 

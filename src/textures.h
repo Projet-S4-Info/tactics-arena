@@ -52,7 +52,10 @@ SDL_Texture * getTexture(TabTexture * textures, const char * texture_name);
 // Récupère la texture (128x128) en fonction de son nom
 SDL_Texture * getBigTexture(TabTexture * textures, const char * texture_name);
 
-// Crée une surface à partir d'une image
+// Crée une surface à partir d'une image (avec optimisation)
+SDL_Surface * loadOptImage(char * img);
+
+// Crée une surface à partir d'une image (sans optimisation)
 SDL_Surface * loadImage(char * img);
 
 // Crée une texture à partir d'une surface

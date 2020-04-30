@@ -47,55 +47,55 @@ int loadEditorTextures(SDL_Renderer * renderer, TabTexture * textures)
 
 	// Loading interface texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/block_interface.png")),
+						loadTexture(renderer, loadOptImage("../inc/img/interface/block_interface.png")),
 						NULL,
 						"interface");
 
 	// Loading eraser texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/eraser_64.png")),
+						loadTexture(renderer, loadOptImage("../inc/img/interface/eraser_64.png")),
 						NULL,
 						"eraser");
 
 	// Loading selection hover texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/editor_selection.png")),
+						loadTexture(renderer, loadOptImage("../inc/img/interface/editor_selection.png")),
 						NULL,
 						"editor_selection");
 
 	// Loading green button texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/buttons/ok_button.png")),
+						loadTexture(renderer, loadOptImage("../inc/img/buttons/ok_button.png")),
 						NULL,
 						"ok_button");
 
 	// Loading orange button texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/buttons/load_button.png")),
+						loadTexture(renderer, loadOptImage("../inc/img/buttons/load_button.png")),
 						NULL,
 						"load_button");
 
 	// Loading red button texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/buttons/cancel_button.png")),
+						loadTexture(renderer, loadOptImage("../inc/img/buttons/cancel_button.png")),
 						NULL,
 						"cancel_button");
 
 	// Loading blue button texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/buttons/fill_button.png")),
+						loadTexture(renderer, loadOptImage("../inc/img/buttons/fill_button.png")),
 						NULL,
 						"fill_button");
 
 	// Loading blur effect texture
 	addTextureToTable(	textures,
-						loadTexture(renderer, loadImage("../inc/img/interface/blur.png")),
+						loadTexture(renderer, loadOptImage("../inc/img/interface/blur.png")),
 						NULL,
 						"blur");
 
 	// Loading save menu texture
 	index = addTextureToTable(	textures,
-								loadTexture(renderer, loadImage("../inc/img/interface/saveMenu.png")),
+								loadTexture(renderer, loadOptImage("../inc/img/interface/saveMenu.png")),
 								NULL,
 								"save_menu");
 
@@ -437,7 +437,7 @@ int createMapEditorWindow(int x, int y)
 	setRendererDriver(renderer);
 
 	// Launcher icon
-    SDL_SetWindowIcon(pWindow, loadImage("../inc/sprites/goliath/sprite_indiv/64_64/front/Sprite_frontview_64.png"));
+    SDL_SetWindowIcon(pWindow, loadOptImage("../inc/sprites/goliath/sprite_indiv/64_64/front/Sprite_frontview_64.png"));
 
 	if( pWindow )
 	{

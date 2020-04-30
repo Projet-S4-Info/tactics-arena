@@ -144,7 +144,7 @@ int createGameWindow(int x, int y)
 	init_chat(&chat);
 
 	// Launcher icon
-	SDL_SetWindowIcon(pWindow, loadImage("../inc/sprites/goliath/sprite_indiv/64_64/front/Sprite_frontview_64.png"));
+	SDL_SetWindowIcon(pWindow, loadOptImage("../inc/sprites/goliath/sprite_indiv/64_64/front/Sprite_frontview_64.png"));
 	if (pWindow)
 	{
 		SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);

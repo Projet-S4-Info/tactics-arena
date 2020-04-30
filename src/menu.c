@@ -51,25 +51,25 @@ void loadMenuTextures(SDL_Renderer *renderer)
 	if (verbose >= 1) printf("\033[36;01m[MENU]\033[00m : Chargement des textures du menu...\n");
 
 	// == Loading background ==
-	background = loadTexture(renderer, loadImage("../inc/img/wallpapers/menu2_720p.png"));
+	background = loadTexture(renderer, loadOptImage("../inc/img/wallpapers/menu2_720p.png"));
 
 	// == Loading start button ==
-	start_button = loadTexture(renderer, loadImage("../inc/img/buttons/start_button_256.png"));
+	start_button = loadTexture(renderer, loadOptImage("../inc/img/buttons/start_button_256.png"));
 
 	// == Loading quit button ==
-	quit_button = loadTexture(renderer, loadImage("../inc/img/buttons/quit_button_256.png"));
+	quit_button = loadTexture(renderer, loadOptImage("../inc/img/buttons/quit_button_256.png"));
 
 	// == Loading music ON switch ==
-	music_on = loadTexture(renderer, loadImage("../inc/img/icons/music_on.png"));
+	music_on = loadTexture(renderer, loadOptImage("../inc/img/icons/music_on.png"));
 
 	// == Loading music OFF switch ==
-	music_off = loadTexture(renderer, loadImage("../inc/img/icons/music_off.png"));
+	music_off = loadTexture(renderer, loadOptImage("../inc/img/icons/music_off.png"));
 
 	// == Loading map editor button ==
-	map_editor_button = loadTexture(renderer, loadImage("../inc/img/buttons/map_editor_button_256.png"));
+	map_editor_button = loadTexture(renderer, loadOptImage("../inc/img/buttons/map_editor_button_256.png"));
 	
 	// == Loading Multi switch ==
-	multi_button = loadTexture(renderer, loadImage("../inc/img/buttons/multi_button_256.png"));
+	multi_button = loadTexture(renderer, loadOptImage("../inc/img/buttons/multi_button_256.png"));
 }
 
 void freeMenuTextures()
@@ -158,7 +158,7 @@ int displayMenu(int x, int y)
 	setRendererDriver(renderer);
 
 	// Launcher icon
-    SDL_SetWindowIcon(pWindow, loadImage("../inc/sprites/goliath/sprite_indiv/64_64/front/Sprite_frontview_64.png"));
+    SDL_SetWindowIcon(pWindow, loadOptImage("../inc/sprites/goliath/sprite_indiv/64_64/front/Sprite_frontview_64.png"));
 
 	if( pWindow )
 	{
