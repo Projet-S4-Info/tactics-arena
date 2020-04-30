@@ -132,25 +132,25 @@ void loadMultiMenuTextures(SDL_Renderer *renderer)
 		printf("Chargement des textures du menu...\n");
 
 	// == Loading background ==
-	background_Multi = loadTexture(renderer, loadImage("../inc/img/wallpapers/menu2_720p.png"));
+	background_Multi = loadTexture(renderer, loadOptImage("../inc/img/wallpapers/menu2_720p.png"));
 
 	// == Loading quit button ==
-	quit_button_Multi = loadTexture(renderer, loadImage("../inc/img/buttons/quit_button_256.png"));
+	quit_button_Multi = loadTexture(renderer, loadOptImage("../inc/img/buttons/quit_button_256.png"));
 
 	// == Loading music ON switch ==
-	music_on_Multi = loadTexture(renderer, loadImage("../inc/img/icons/music_on.png"));
+	music_on_Multi = loadTexture(renderer, loadOptImage("../inc/img/icons/music_on.png"));
 
 	// == Loading music OFF switch ==
-	music_off_Multi = loadTexture(renderer, loadImage("../inc/img/icons/music_off.png"));
+	music_off_Multi = loadTexture(renderer, loadOptImage("../inc/img/icons/music_off.png"));
 
 	// == Loading Host switch ==
-	host_button = loadTexture(renderer, loadImage("../inc/img/buttons/host_btn_256.png"));
+	host_button = loadTexture(renderer, loadOptImage("../inc/img/buttons/host_btn_256.png"));
 
 	// == Loading Join switch ==
-	join_button = loadTexture(renderer, loadImage("../inc/img/buttons/join_btn_256.png"));
+	join_button = loadTexture(renderer, loadOptImage("../inc/img/buttons/join_btn_256.png"));
 
 	// == ok switch ==
-	ok_button_Multi = loadTexture(renderer, loadImage("../inc/img/buttons/Okey_button.png"));
+	ok_button_Multi = loadTexture(renderer, loadOptImage("../inc/img/buttons/Okey_button.png"));
 }
 
 void freeMultiMenuTextures()
@@ -482,7 +482,7 @@ int displayMenuMulti(int x, int y)
 	setRendererDriver(renderer);
 
 	// Launcher icon
-	SDL_SetWindowIcon(pWindow, loadImage("../inc/sprites/goliath/sprite_indiv/64_64/front/Sprite_frontview_64.png"));
+	SDL_SetWindowIcon(pWindow, loadOptImage("../inc/sprites/goliath/sprite_indiv/64_64/front/Sprite_frontview_64.png"));
 
 	if (pWindow)
 	{

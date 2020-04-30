@@ -56,10 +56,17 @@ err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, b
         sprintf(tempBig, "../inc/sprites/attacks/sprite_indiv/128_128/%s%d.png", name, i);
         if (verbose >= 3)
             printf("\033[36;01m[ANIMATIONS]\033[00m : Chargement de la texture : %s\n", tempSmall);
-        animTextures[index].spritesSmall[tabIndex] = loadTexture(renderer, loadImage(tempSmall));
+        if (!strcmp(name, "mage/explosion") || !strcmp(name, "mage/baseice"))
+        {
+            animTextures[index].spritesSmall[tabIndex] = loadTexture(renderer, loadImage(tempSmall));
+        }
+        else
+        {
+            animTextures[index].spritesSmall[tabIndex] = loadTexture(renderer, loadOptImage(tempSmall));
+        }
         if (verbose >= 3)
             printf("\033[36;01m[ANIMATIONS]\033[00m : Ajout de la texture [%s] à l'id %d\n", name, index);
-        //animTextures[index].spritesBig[tabIndex] = loadTexture(renderer, loadImage(tempBig));
+        //animTextures[index].spritesBig[tabIndex] = loadTexture(renderer, loadOptImage(tempBig));
         animTextures[index].spritesBig[tabIndex] = NULL;
         tabIndex++;
     }
@@ -183,9 +190,9 @@ err_t loadAnimationTextures()
     addAnimTexture(Fireball, "mage/basefire", 64, 72, FALSE, FALSE, 40, "../inc/sound_effects/abilities/Fireball.wav");
     addAnimTexture(FlameCharge, "mage/engulf", 64, 73, TRUE, FALSE, 40, "../inc/sound_effects/abilities/Flame_Charge.wav");
     addAnimTexture(Flare, "mage/flare", 64, 71, FALSE, FALSE, 40, "../inc/sound_effects/abilities/Flare.wav");
-    addAnimTexture(Eruption, "mage/explosion", 64, 72, TRUE, FALSE, 100, "../inc/sound_effects/abilities/Eruption.wav");
+    addAnimTexture(Eruption, "mage/explosion", 67, 72, TRUE, FALSE, 100, "../inc/sound_effects/abilities/Eruption.wav");
     // --- ice
-    addAnimTexture(Icy_Winds, "mage/baseice", 64, 74, FALSE, FALSE, 20, "../inc/sound_effects/abilities/Icy_Wind.wav");
+    addAnimTexture(Icy_Winds, "mage/baseice", 67, 74, FALSE, FALSE, 40, "../inc/sound_effects/abilities/Icy_Wind.wav");
     addAnimTexture(Freeze, "mage/freeze", 64, 74, FALSE, FALSE, 20, "../inc/sound_effects/abilities/Freeze.wav");
     addAnimTexture(Frozen_Armor, "mage/icearmor", 64, 70, FALSE, FALSE, 40, "../inc/sound_effects/abilities/Frost_Armor.wav");
     addAnimTexture(Blizzard, "mage/blizzard", 1, 10, TRUE, FALSE, 20, "../inc/sound_effects/abilities/Blizzard.wav");
