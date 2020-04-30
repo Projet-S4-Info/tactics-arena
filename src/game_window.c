@@ -761,6 +761,9 @@ int createGameWindow(int x, int y)
 			//clearOldCache();
 		}
 		closeWindow(pWindow);
+		freeTextures(textures);
+		freeTextures(cSprites);
+		exit(EXIT_SUCCESS);
 	}
 	else
 	{

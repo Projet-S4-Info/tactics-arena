@@ -250,8 +250,8 @@ err_t displayText(SDL_Renderer *renderer, int x, int y, int size, char *content,
         SDL_SetRenderDrawColor(renderer, r, g, b, 255);
         SDL_RenderCopy(renderer, text_tex, NULL, &txtDestRect);
 
-        //SDL_FreeSurface(text);
         TTF_CloseFont(police);
+        if (caching == FALSE) SDL_FreeSurface(text);
         SDL_DestroyTexture(text_tex);
     }
 
