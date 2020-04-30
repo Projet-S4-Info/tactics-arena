@@ -167,6 +167,8 @@ void *recep(void *container, int size, int socket, err_t (*print)(void * s, char
 
 int recepChat(void *structure, int size, int socket)
 {
+  if(verbose >= 0)printf("Dans recepChat \n");
+  
   int flag = 0;
   while (flag != 3)
   {
@@ -174,6 +176,8 @@ int recepChat(void *structure, int size, int socket)
     {
       flag = 3;
       return 1;
+    }else{
+       flag++;
     }
     flag++;
     sleep(1);
