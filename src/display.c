@@ -84,6 +84,9 @@ err_t displaySprite(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y)
 // Display a sprite on the window
 {
 	SDL_Rect imgDestRect;
+
+	if (texture == NULL)
+		printf("\033[31;01m[DISPLAY ERROR]\033[00m : Aucune texture à afficher\n");
 	
 	imgDestRect.x = x;
 	imgDestRect.y = y;

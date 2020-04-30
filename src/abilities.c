@@ -126,9 +126,10 @@ bool trap_check(Entity *e)
 
     Trap_t trap = Get_Trap(e->coords);
 
-    if(verbose>=2)
+    if(verbose>=2)printf("Trap Check\n");
+
+    if(verbose>=3)
     {
-        printf("Trap Check\n");
         printf("Trap Id = %d\n", trap.cha_id);
         printf("Trap Visibility : %d\n", trap.visible);
     }
@@ -203,36 +204,20 @@ int Banner_fn(Coord c, Entity * e, StateList * list)
 
 int mage_switch(Coord c, Entity * e, StateList * list)
 {
-    int i = rand()%2;
-
-    if((Ability*)mage_ab+(i*NUM_AB) != e->cha_class->cla_abilities)
+    if(e->cha_id>0)
     {
-        e->cha_class->cla_abilities = (Ability*)mage_ab+(i*NUM_AB);
-    }
-    else
-    {
-        e->cha_class->cla_abilities = (Ability*)mage_ab+(2*NUM_AB);
-    }
+        int i = rand()%2;
 
+        if((Ability*)mage_ab+(i*NUM_AB) != e->cha_class->cla_abilities)
+        {
+            e->cha_class->cla_abilities = (Ability*)mage_ab+(i*NUM_AB);
+        }
+        else
+        {
+            e->cha_class->cla_abilities = (Ability*)mage_ab+(2*NUM_AB);
+        }
+    }
     return 0;
-}
-
-err_t update_mage(Entity *e, abilityId Id)
-{
-    if(Id<=Eruption)
-    {
-        e->cha_class->cla_abilities = (Ability *)&mage_ab[0];
-    }
-    else if(Id<=Blizzard)
-    {
-        e->cha_class->cla_abilities = (Ability *)&mage_ab[1];
-    }
-    else
-    {
-        e->cha_class->cla_abilities = (Ability *)&mage_ab[2];
-    }
-
-    return OK;
 }
 
 int FlameCharge_fn(Coord c, Entity * e, StateList * list)

@@ -109,7 +109,7 @@ err_t init_berserker(Class * c)
     {
         Berserker,
         "Berserker",
-        {20,8,10,8,0,10,10},
+        {20,8,10,10,0,12,12},
         {"Bloodlust","Killing two ennemies in the same turn refills action points and doubles mp and atk stats for one turn."},
         ab
     };

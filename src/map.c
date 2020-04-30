@@ -1,3 +1,11 @@
+/**
+ * \file map.c
+ * \brief Map related functions
+ * \details Contains all functions required for map and interface
+ * \author Thibault DOUCET
+ * \version 0.9.9
+ * \date 30/04/2020
+ */
 
 /* =============== DEPENDENCES =============== */
 
@@ -36,217 +44,6 @@ Coord drawPos = {-1, -1};
 Entity *selectedEntity;
 
 /* =============== FONCTIONS =============== */
-
-int loadMapTextures(SDL_Renderer *renderer)
-// Load all the map related textures
-{
-	int index;
-
-	if (verbose >= 1)
-		printf("[GRAPHICS] Effacement des textures pré-existantes...\n");
-
-	freeTextures(textures);
-
-	if (verbose >= 1)
-		printf("[GRAPHICS] Chargement des textures du jeu...\n");
-
-	// Loading blank pattern textures
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/blocks/blank_64.png")),
-					  loadTexture(renderer, loadImage("../inc/img/blocks/blank_128.png")),
-					  "blank");
-
-	// Loading non-selected pattern textures
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/blocks/block_64.png")),
-					  loadTexture(renderer, loadImage("../inc/img/blocks/block_128.png")),
-					  "block");
-
-	// Loading blue selected pattern textures
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/blocks/block_blue_64.png")),
-					  loadTexture(renderer, loadImage("../inc/img/blocks/block_blue_128.png")),
-					  "blue_selected");
-
-	// Loading red selected pattern textures
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/blocks/block_red_64.png")),
-					  loadTexture(renderer, loadImage("../inc/img/blocks/block_red_128.png")),
-					  "red_selected");
-
-	// Loading water block textures
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/blocks/water_64.png")),
-					  loadTexture(renderer, loadImage("../inc/img/blocks/water_128.png")),
-					  "water");
-
-	// Loading sand block textures
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/blocks/sand_64.png")),
-					  loadTexture(renderer, loadImage("../inc/img/blocks/sand_128.png")),
-					  "sand");
-
-	// Loading ice block textures
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/blocks/ice_64.png")),
-					  loadTexture(renderer, loadImage("../inc/img/blocks/ice_128.png")),
-					  "ice");
-
-	// Loading snow block textures
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_64.png")),
-					  loadTexture(renderer, loadImage("../inc/img/blocks/block_snow_128.png")),
-					  "snow");
-
-	// Loading trap textures
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/sprites/traps/Beartrap64.png")),
-					  loadTexture(renderer, loadImage("../inc/sprites/traps/Beartrap128.png")),
-					  "trap");
-
-	// Loading selection textures
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/selection_64.png")),
-					  loadTexture(renderer, loadImage("../inc/img/interface/selection_128.png")),
-					  "selection");
-
-	// Loading selection hover textures
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/hover_64.png")),
-					  loadTexture(renderer, loadImage("../inc/img/interface/hover_128.png")),
-					  "selection_hover");
-
-	// Loading ability range textures
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/ability_range_64.png")),
-					  loadTexture(renderer, loadImage("../inc/img/interface/ability_range_128.png")),
-					  "ability_range");
-
-	// Loading arrow right texture
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/icons/arrow_right_64.png")),
-					  NULL,
-					  "arrow_right");
-
-	// Loading arrow left texture
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/icons/arrow_left_64.png")),
-					  NULL,
-					  "arrow_left");
-
-	// Loading arrow up texture
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/icons/arrow_up_64.png")),
-					  NULL,
-					  "arrow_up");
-
-	// Loading arrow down texture
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/icons/arrow_down_64.png")),
-					  NULL,
-					  "arrow_down");
-
-	// Red team texture
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/red_team_64.png")),
-					  loadTexture(renderer, loadImage("../inc/img/interface/red_team_128.png")),
-					  "red_team");
-
-	// Blue team texture
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/blue_team_64.png")),
-					  loadTexture(renderer, loadImage("../inc/img/interface/blue_team_128.png")),
-					  "blue_team");
-
-	// Loading attack logo
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/attack_logo_64.png")),
-					  NULL,
-					  "attack");
-
-	// Loading locked attack logo
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/locked_attack_logo_64.png")),
-					  NULL,
-					  "locked_attack");
-
-	// Loading frozen attack logo
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/frozen_attack_logo_64.png")),
-					  NULL,
-					  "frozen_attack");
-
-	// Loading crippled attack logo
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/crippled_attack_logo_64.png")),
-					  NULL,
-					  "crippled_attack");
-
-	// Loading move logo
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/move_logo_64.png")),
-					  NULL,
-					  "move");
-
-	// Clockwise turn icon
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/clockwise_icon_64.png")),
-					  NULL,
-					  "turn_right");
-
-	// Anti-clockwise turn icon
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/anti_clockwise_icon_64.png")),
-					  NULL,
-					  "turn_left");
-
-	// Loading end of turn button
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/turn_end_grey.png")),
-					  NULL,
-					  "end_turn");
-
-	// Loading end of turn button (hover)
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/turn_end_hover.png")),
-					  NULL,
-					  "end_turn_hover");
-
-	// Loading end of turn button (locked)
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/locked_turn_end.png")),
-					  NULL,
-					  "locked_end_turn");
-
-	// Loading tchat button
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_64.png")),
-					  NULL,
-					  "tchat_button");
-
-	// Loading tchat button (hover)
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_hover_64.png")),
-					  NULL,
-					  "tchat_button_hover");
-
-	// Loading tchat  (selected)
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadImage("../inc/img/interface/tchat_icon_selected_64.png")),
-					  NULL,
-					  "tchat_button_selected");
-
-	// Loading ID card texture
-	index = addTextureToTable(textures,
-							  loadTexture(renderer, loadImage("../inc/img/interface/id_card_2.png")),
-							  NULL,
-							  "id_card");
-
-	if (verbose >= 1)
-		printf("[GRAPHICS] %d texture(s) chargée(s) !\n", index + 1);
-
-	return index + 1;
-}
 
 float crossProduct(Vector AB, Vector AC)
 // Renvoie le produit vectoriel
@@ -471,13 +268,13 @@ int displayAbilities(SDL_Renderer *renderer)
 		}
 		else
 		{
-			if (moveable == Locked_c)
-				displaySprite(renderer, getTexture(textures, "locked_attack"), 16, yWinSize - 80);
+			if (moveable == Crippled_c)
+				displaySprite(renderer, getTexture(textures, "crippled_attack"), 16, yWinSize - 80);
 			else if (moveable == Frozen_c)
 				displaySprite(renderer, getTexture(textures, "frozen_attack"), 16, yWinSize - 80);
-			else if (moveable == Crippled_c)
-				displaySprite(renderer, getTexture(textures, "crippled_attack"), 16, yWinSize - 80);
-				
+			else if (moveable == Locked_c)
+				displaySprite(renderer, getTexture(textures, "locked_attack"), 16, yWinSize - 80);
+
 			displayText(renderer, 21, yWinSize - 80 + 5, 20, "1", "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
 		}
 		for (int i = 0; i < 4; i++)
@@ -498,12 +295,12 @@ int displayAbilities(SDL_Renderer *renderer)
 			}
 			else
 			{
-				if (castable == Locked_c)
-					displaySprite(renderer, getTexture(textures, "locked_attack"), 16 + (i + 1) * 80, yWinSize - 80);
+				if (castable == Crippled_c)
+					displaySprite(renderer, getTexture(textures, "crippled_attack"), 16 + (i + 1) * 80, yWinSize - 80);
 				else if (castable == Frozen_c)
 					displaySprite(renderer, getTexture(textures, "frozen_attack"), 16 + (i + 1) * 80, yWinSize - 80);
-				else if (castable == Crippled_c)
-					displaySprite(renderer, getTexture(textures, "crippled_attack"), 16 + (i + 1) * 80, yWinSize - 80);
+				else if (castable == Locked_c)
+					displaySprite(renderer, getTexture(textures, "locked_attack"), 16 + (i + 1) * 80, yWinSize - 80);
 
 				displayText(renderer, 16 + (i + 1) * 80 + 5, yWinSize - 80 + 5, 20, abCost, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
 				if (cd != 0)
@@ -536,9 +333,6 @@ char *clearStr(char *str)
 
 	return str;
 }
-
-
-
 
 err_t displayChat(SDL_Renderer *renderer, int chatX, int chatY)
 {
@@ -588,10 +382,15 @@ int displayInterface(SDL_Renderer *renderer)
 	char pv_text[STR_SHORT];
 	char pa_text[STR_SHORT];
 	char pm_text[STR_SHORT];
+	char vis_text[STR_SHORT];
 	char atk_text[STR_SHORT];
 	char magic_text[STR_SHORT];
 	char ra_text[STR_SHORT];
 	char rm_text[STR_SHORT];
+	char duration[STR_SHORT];
+	int xBuff;
+	int yBuff;
+	List_Elem *mod;
 
 	SDL_Rect chatScreen;
 	chatScreen.x = xWinSize - 300;
@@ -611,11 +410,15 @@ int displayInterface(SDL_Renderer *renderer)
 	chatMsg.w = chatScreen.w;
 	chatMsg.h = 20;
 
-	SDL_Rect idCard;
-	idCard.x = 10;
-	idCard.y = 10;
-	idCard.w = 400;
-	idCard.h = 180;
+	SDL_Rect statDesc;
+	statDesc.x = 10;
+	statDesc.y = 200;
+	statDesc.w = 400;
+	statDesc.h = 25;
+
+	SDL_Rect buffIcon;
+	buffIcon.w = 32;
+	buffIcon.h = 32;
 
 	SDL_Rect portrait;
 	portrait.w = 64;
@@ -643,13 +446,10 @@ int displayInterface(SDL_Renderer *renderer)
 		}
 
 		// Display the ID card of the selected entity
-		//displaySprite(renderer, getTexture(textures, "id_card"), 10, 10);
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
-		SDL_RenderFillRect(renderer, &idCard);
+		displaySprite(renderer, getTexture(textures, "id_card"), 10, 10);
 		displayText(renderer, 382, 156, 18, "?", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 		displaySprite(renderer, getCharFrontTexture(tempEntity->cha_class->cla_name), 51, 62);
-		displayText(renderer, 170, 45, 20, tempEntity->cha_name, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+		displayText(renderer, 170, 40, 20, tempEntity->cha_name, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- entity health
 		displaySprite(renderer, getBigTexture(cSprites, "heart_icon"), 170, 70);
@@ -662,45 +462,217 @@ int displayInterface(SDL_Renderer *renderer)
 		displayText(renderer, 202, 106, 30, pa_text, "../inc/font/Pixels.ttf", 49, 174, 196, FALSE);
 
 		// -- entity mouvement points
-		displaySprite(renderer, getBigTexture(cSprites, "mv_icon"), 250, 102);
+		displaySprite(renderer, getBigTexture(cSprites, "speed_icon"), 240, 102);
 		sprintf(pm_text, "%d", tempEntity->stats[mv]);
-		displayText(renderer, 287, 106, 30, pm_text, "../inc/font/Pixels.ttf", 52, 169, 43, FALSE);
+		displayText(renderer, 277, 106, 30, pm_text, "../inc/font/Pixels.ttf", 52, 169, 43, FALSE);
+
+		// -- entity vision points
+		displaySprite(renderer, getBigTexture(cSprites, "vision_icon"), 315, 102);
+		sprintf(vis_text, "%d", tempEntity->stats[vis]);
+		if (tempEntity->stats[vis] > tempEntity->cha_class->basic_stats[vis])
+			displayText(renderer, 352, 106, 30, vis_text, "../inc/font/Pixels.ttf", 0, 255, 0, FALSE);
+		else if (tempEntity->stats[vis] < tempEntity->cha_class->basic_stats[vis])
+			displayText(renderer, 352, 106, 30, vis_text, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+		else
+			displayText(renderer, 352, 106, 30, vis_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- attack stat
 		displaySprite(renderer, getBigTexture(cSprites, "atk_icon"), 25, 142);
 		sprintf(atk_text, "%d", tempEntity->stats[atk]);
-		displayText(renderer, 62, 146, 30, atk_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+		if (tempEntity->stats[atk] > tempEntity->cha_class->basic_stats[atk])
+			displayText(renderer, 62, 146, 30, atk_text, "../inc/font/Pixels.ttf", 0, 255, 0, FALSE);
+		else if (tempEntity->stats[atk] < tempEntity->cha_class->basic_stats[atk])
+			displayText(renderer, 62, 146, 30, atk_text, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+		else
+			displayText(renderer, 62, 146, 30, atk_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- magic stat
 		displaySprite(renderer, getBigTexture(cSprites, "magic_icon"), 110, 142);
 		sprintf(magic_text, "%d", tempEntity->stats[magic]);
-		displayText(renderer, 147, 146, 30, magic_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+		if (tempEntity->stats[magic] > tempEntity->cha_class->basic_stats[magic])
+			displayText(renderer, 147, 146, 30, magic_text, "../inc/font/Pixels.ttf", 0, 255, 0, FALSE);
+		else if (tempEntity->stats[magic] < tempEntity->cha_class->basic_stats[magic])
+			displayText(renderer, 147, 146, 30, magic_text, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+		else
+			displayText(renderer, 147, 146, 30, magic_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- physical resistance
 		displaySprite(renderer, getBigTexture(cSprites, "ra_icon"), 195, 142);
 		sprintf(ra_text, "%d", tempEntity->stats[res_physic]);
-		displayText(renderer, 232, 146, 30, ra_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+		if (tempEntity->stats[res_physic] > tempEntity->cha_class->basic_stats[res_physic])
+			displayText(renderer, 232, 146, 30, ra_text, "../inc/font/Pixels.ttf", 0, 255, 0, FALSE);
+		else if (tempEntity->stats[res_physic] < tempEntity->cha_class->basic_stats[res_physic])
+			displayText(renderer, 232, 146, 30, ra_text, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+		else
+			displayText(renderer, 232, 146, 30, ra_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
 		// -- magic resistance
 		displaySprite(renderer, getBigTexture(cSprites, "rm_icon"), 280, 142);
 		sprintf(rm_text, "%d", tempEntity->stats[res_magic]);
-		displayText(renderer, 317, 146, 30, rm_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+		if (tempEntity->stats[res_magic] > tempEntity->cha_class->basic_stats[res_magic])
+			displayText(renderer, 317, 146, 30, rm_text, "../inc/font/Pixels.ttf", 0, 255, 0, FALSE);
+		else if (tempEntity->stats[res_magic] < tempEntity->cha_class->basic_stats[res_magic])
+			displayText(renderer, 317, 146, 30, rm_text, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+		else
+			displayText(renderer, 317, 146, 30, rm_text, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 
-		// -- passive description if hovering info icon
+		// -- stats description if hovering stats icon
+		if (hover_stats != 0)
+		{
+			SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+			SDL_SetRenderDrawColor(renderer, 90, 90, 90, SDL_ALPHA_OPAQUE / 2);
+			SDL_RenderFillRect(renderer, &statDesc);
+			switch (hover_stats)
+			{
+			case 1:
+				displayText(renderer, 15, 205, 15, "Attack : Increase physical damage", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				break;
+			case 2:
+				displayText(renderer, 15, 205, 15, "Magic : Increase magical damage", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				break;
+			case 3:
+				displayText(renderer, 15, 205, 15, "Armor : Decrease physical damage sustained", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				break;
+			case 4:
+				displayText(renderer, 15, 205, 15, "Magic Armor : Decrease physical damage sustained", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				break;
+			}
+		}
+
 		if (hover_passive_help == 1)
 		{
 			sprintf(passive, "Passive : %s", tempEntity->cha_class->Passive.name);
 			displayText(renderer, mouse_position.x + 20, mouse_position.y + 20, 20, passive, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
 			displayText(renderer, mouse_position.x + 20, mouse_position.y + 40, 20, tempEntity->cha_class->Passive.desc, "../inc/font/Pixels.ttf", 238, 165, 53, TRUE);
-			Coord center = getSelectedPos();
-			if (tempEntity->cha_class->cla_id == Ranger)
+			if (tempEntity->cha_class->cla_id == Angel)
 			{
-				for (int i = 0; i < get_range(tempEntity, Bolt); i++)
+				Coord center = getSelectedPos();
+				if (Aura_ab.nb_coords > 1)
 				{
-					Coord highlight = add_coords(center, *((*(tempEntity->cha_class->cla_abilities[Bolt % NUM_AB].coord)) + i));
-					if (isInGrid(highlight))
-						setHovered(highlight);
+					for (int i = 0; i < Aura_ab.nb_coords; i++)
+					{
+						Coord highlight = add_coords(center, *((*(Aura_ab.coord)) + i));
+						if (isInGrid(highlight))
+							setHovered(highlight);
+					}
 				}
+			}
+		}
+
+		// Stat buff and debuff
+		xBuff = 420;
+		yBuff = 10;
+		StateList *temp;
+		for (int i = 0; i < 2; i++)
+		{
+			if (i == 0) temp = stReceived;
+			else 		temp = stSent;
+			start_list(temp);
+			mod = list_search(temp, tempEntity, -1);
+			while (mod != NULL)
+			{
+				buffIcon.x = xBuff;
+				buffIcon.y = yBuff;
+				SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+				SDL_SetRenderDrawColor(renderer, 90, 90, 90, SDL_ALPHA_OPAQUE / 2);
+				SDL_RenderFillRect(renderer, &buffIcon);
+				if (mod->value->value != 0)
+				{
+					// Buffs
+					if (mod->value->value > 0)
+					{
+						switch (mod->value->stat)
+						{
+							case atk:
+								displaySprite(renderer, getBigTexture(cSprites, "atk_up"), xBuff, yBuff);
+								break;
+							case magic:
+								displaySprite(renderer, getBigTexture(cSprites, "magic_up"), xBuff, yBuff);
+								break;
+							case res_physic:
+								displaySprite(renderer, getBigTexture(cSprites, "ra_up"), xBuff, yBuff);
+								break;
+							case res_magic:
+								displaySprite(renderer, getBigTexture(cSprites, "rm_up"), xBuff, yBuff);
+								break;
+							case vis:
+								displaySprite(renderer, getBigTexture(cSprites, "vis_up"), xBuff, yBuff);
+								break;
+							case mv:
+								displaySprite(renderer, getBigTexture(cSprites, "speed_up"), xBuff, yBuff);
+								break;
+						}
+					}
+					// Debuffs
+					else if (mod->value->value < 0)
+					{
+						switch (mod->value->stat)
+						{
+							case atk:
+								displaySprite(renderer, getBigTexture(cSprites, "atk_down"), xBuff, yBuff);
+								break;
+							case magic:
+								displaySprite(renderer, getBigTexture(cSprites, "magic_down"), xBuff, yBuff);
+								break;
+							case res_physic:
+								displaySprite(renderer, getBigTexture(cSprites, "ra_down"), xBuff, yBuff);
+								break;
+							case res_magic:
+								displaySprite(renderer, getBigTexture(cSprites, "rm_down"), xBuff, yBuff);
+								break;
+							case vis:
+								displaySprite(renderer, getBigTexture(cSprites, "vis_down"), xBuff, yBuff);
+								break;
+							case mv:
+								displaySprite(renderer, getBigTexture(cSprites, "speed_down"), xBuff, yBuff);
+								break;
+						}
+					}
+					// Status
+					else
+					{
+						switch (mod->value->stat)
+						{
+							case Detained:
+								displaySprite(renderer, getBigTexture(cSprites, "jailed"), xBuff, yBuff);
+								break;
+							case Freezing:
+								displaySprite(renderer, getBigTexture(cSprites, "frozen"), xBuff, yBuff);
+								break;
+							case Provoked:
+								displaySprite(renderer, getBigTexture(cSprites, "provoke"), xBuff, yBuff);
+								break;
+							case Burning:
+								displaySprite(renderer, getBigTexture(cSprites, "burning"), xBuff, yBuff);
+								break;
+							case Paralyzed:
+								displaySprite(renderer, getBigTexture(cSprites, "paralyzed"), xBuff, yBuff);
+								break;
+							case Blessed:
+								displaySprite(renderer, getBigTexture(cSprites, "blessed"), xBuff, yBuff);
+								break;
+							case Piercing:
+								displaySprite(renderer, getBigTexture(cSprites, "piercing"), xBuff, yBuff);
+								break;
+							case Guarding:
+								displaySprite(renderer, getBigTexture(cSprites, "guarding"), xBuff, yBuff);
+								break;
+							case Summoned:
+								displaySprite(renderer, getBigTexture(cSprites, "summoned"), xBuff, yBuff);
+								break;
+						}
+					}
+				}
+				sprintf(duration, "%d", mod->value->duration);
+				displayText(renderer, xBuff, yBuff, 15, duration, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+				yBuff += 32;
+				if (yBuff > 138)
+				{
+					yBuff = 10;
+					xBuff += 32;
+				}
+				list_next(temp);
+				mod = list_search(temp, tempEntity, -1);
 			}
 		}
 	}
@@ -708,32 +680,56 @@ int displayInterface(SDL_Renderer *renderer)
 	// List of characters
 	int xPort;
 	char actPts[STR_SHORT];
-	for (int i=0; i < _NB_CLASSES_; i++)
+	for (int i = 0; i < _NB_CLASSES_; i++)
 	{
-		xPort = xWinSize-10-((i+1)*64);
+		xPort = xWinSize - 10 - ((i + 1) * 64);
 		portrait.x = xPort;
 		portrait.y = 10;
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
+		if (tempEntity != NULL && Allies[i].cha_name == tempEntity->cha_name)
+			SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE / 2);
+		else
+			SDL_SetRenderDrawColor(renderer, 90, 90, 90, SDL_ALPHA_OPAQUE / 2);
 		SDL_RenderFillRect(renderer, &portrait);
 		displaySprite(renderer, getCharFrontTexture(Allies[i].cha_class->cla_name), xPort, 18);
 		sprintf(actPts, "%d", Allies[i].act_points);
-		if (Allies[i].act_points >= 3)
-			displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 48, 129, 162, FALSE);
-		else if (Allies[i].act_points == 0)
-			displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
-		else
-			displayText(renderer, xPort+20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
-		displaySprite(renderer, getTexture(cSprites, "star_icon"), xPort+30, 90);
+		if (Allies[i].active == Alive)
+		{
+			if (Allies[i].status_effect[Detained])
+			{
+				displaySprite(renderer, getTexture(textures, "detained_char"), portrait.x, portrait.y);
+			}
+			else
+			{
+				if (Allies[i].act_points >= 3)
+					displayText(renderer, xPort + 20, 90, 20, actPts, "../inc/font/Pixels.ttf", 48, 129, 162, FALSE);
+				else if (Allies[i].act_points == 0)
+					displayText(renderer, xPort + 20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 0, 0, FALSE);
+				else
+					displayText(renderer, xPort + 20, 90, 20, actPts, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
+				displaySprite(renderer, getTexture(cSprites, "star_icon"), xPort + 30, 90);
+			}
+		}
+		else 
+		{
+			displaySprite(renderer, getTexture(textures, "dead_char"), portrait.x, portrait.y);
+		}
 	}
 
 	// Logs
 	Coord logPos;
 	logPos.x = 20;
 	if (tempEntity != NULL)
-		logPos.y = 200;
+	{
+		if (hover_stats == 0)
+			logPos.y = 200;
+		else
+			logPos.y = 233;
+	}
 	else
+	{
 		logPos.y = 20;
+	}
 	removeOldLogs(SDL_GetTicks());
 	displayLog(renderer, logPos);
 
@@ -754,7 +750,6 @@ int displayInterface(SDL_Renderer *renderer)
 	{
 		displaySprite(renderer, getTexture(textures, "locked_end_turn"), xWinSize - 280, yWinSize - 80);
 	}
-	
 
 	// Tchat window
 	if (isChatActive)
@@ -764,7 +759,7 @@ int displayInterface(SDL_Renderer *renderer)
 	if (hover_tchat == 1 || hover_tchat == 2)
 		displaySprite(renderer, getTexture(textures, "tchat_button_hover"), xWinSize - 360, yWinSize - 80);
 	if (hover_tchat == 1)
-		displayText(renderer, xWinSize - 360, yWinSize - 110, 20, "Hide tchat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+		displayText(renderer, xWinSize - 360, yWinSize - 110, 20, "Hide chat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 	else if (hover_tchat == 2)
 		displayText(renderer, xWinSize - 360, yWinSize - 110, 20, "Display tchat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 	if (isChatActive)
@@ -799,6 +794,8 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 // Display the map
 {
 	Coord blockPos;
+	Coord rangerBorderTab[MAXRANGE];
+	Coord rangerRangeTab[_X_SIZE_ * _Y_SIZE_];
 
 	/* Le fond de la fenêtre sera blanc */
 	SDL_SetRenderDrawColor(renderer, 173, 216, 230, 255);
@@ -807,6 +804,13 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 	if (selected_ability != -1)
 	{
 		get_border(getEntity(getSelectedPos())->cha_id, selected_ability, borderTab, rangeTab);
+	}
+	if (hover_passive_help)
+	{
+		if (getEntity(getSelectedPos())->cha_class->cla_id == Ranger)
+		{
+			get_border(getEntity(getSelectedPos())->cha_id, Bolt, rangerBorderTab, rangerRangeTab);
+		}
 	}
 
 	for (int i = 0; i < _X_SIZE_; i++)
@@ -863,6 +867,23 @@ int displayMap(SDL_Renderer *renderer, int x, int y)
 								displaySprite(renderer, getTexture(textures, "ability_range"), blockPos.x, blockPos.y);
 							else
 								displaySprite(renderer, getBigTexture(textures, "ability_range"), blockPos.x, blockPos.y);
+						}
+					}
+				}
+
+				// Passive description if hovering info icon
+				if (hover_passive_help == 1)
+				{
+					if (tempEntity->cha_class->cla_id == Ranger)
+					{
+						drawPos.x = i;
+						drawPos.y = j;
+						if (isInCoordTab(rangerRangeTab, drawPos) || isInCoordTab(rangerBorderTab, drawPos))
+						{
+							if (pxBase == 64)
+								displaySprite(renderer, getTexture(textures, "selection_hover"), blockPos.x, blockPos.y);
+							else
+								displaySprite(renderer, getBigTexture(textures, "selection_hover"), blockPos.x, blockPos.y);
 						}
 					}
 				}

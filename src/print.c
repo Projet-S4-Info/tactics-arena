@@ -255,3 +255,21 @@ err_t print_grid(Coord tab[])
 
     return OK;
 }
+
+err_t print_mage_passive(Entity *e)
+{
+    if(e->cha_class->cla_abilities == (Ability *)&mage_ab[0])
+    {
+        printf("%s : Fire\n", e->cha_name);
+    }
+    else if(e->cha_class->cla_abilities == (Ability *)&mage_ab[1])
+    {
+        printf("%s : Ice\n", e->cha_name);
+    }
+    else
+    {
+        printf("%s : Electricity\n", e->cha_name);
+    }
+
+    return OK;
+}

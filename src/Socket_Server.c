@@ -213,7 +213,7 @@ err_t startTCPSocketServ()
             loadMap(gridTemp[0],mapMultiSelected);
 
             setupMultiMap(startGame.multiMap[0], gridTemp[0]);
-            if(verbose>=0)displayMapMulti(startGame.multiMap[0]);
+            if(verbose>=2)displayMapMulti(startGame.multiMap[0]);
 
             if (sendStruct((void *)&startGame, sizeof(startGame), socketConnected, NULL) != OK)
             {

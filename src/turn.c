@@ -20,14 +20,28 @@
 bool game_setup = FALSE;
 bool is_online = FALSE;
 bool turn_active = TRUE;
-bool applying_action = FALSE;
-bool loop_active = TRUE;
+bool opponent_set = FALSE;
 action turn_over = {0,{0,0},0};
+
+action a;
 
 
 Coord spawn_red[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
 Coord spawn_blue[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
 
+bool coin_flip()
+{
+    bool coin = rand()%2;
+    sendStruct(&coin, sizeof(bool), socketConnected, (err_t (*)(void*,char*))print_int);
+    return coin;
+}
+
+bool coin_receive()
+{
+    bool coin;
+    recep(&coin, sizeof(bool), socketConnected, (err_t (*)(void*,char*))print_int);
+    return !coin;
+}
 
 err_t online_setup()
 {
@@ -65,6 +79,7 @@ err_t apply_movement(action a)
 
     e->coords = a.c;
     e->act_points--;
+    if(verbose>=0)printf("Leaving apply_movement\n");
     return OK;
 }
 
@@ -77,6 +92,8 @@ err_t apply_action(action a)
 
     char log[STR_LONG];
 
+    
+
     if(a.char_id<0)
     {
         active_ent = &Foes[(a.char_id*-1)-1];
@@ -87,13 +104,29 @@ err_t apply_action(action a)
         active_ent = &Allies[a.char_id-1];
         list = stSent;
     }
-    
-    if(active_ent->cha_class->cla_id == Mage)
-    {
-        update_mage(active_ent, a.act);
-    }
 
-    active_ab = active_ent->cha_class->cla_abilities[a.act%NUM_AB];
+    if(active_ent->cha_id == -(Mage+1))
+    {
+        int i;
+        if(a.act<=Eruption)
+        {
+            i = 0;
+        }
+        else if(a.act<=Blizzard)
+        {
+            i = 1;
+        }
+        else
+        {
+            i=2;
+        }
+
+        active_ab = mage_ab[i][a.act%NUM_AB];
+    }
+    else
+    {
+        active_ab = active_ent->cha_class->cla_abilities[a.act%NUM_AB];
+    }
 
     if(verbose>=1)printf("\n\n%s has chosen to %s at the following coordinates : %d,%d\n", active_ent->cha_name, active_ab.eng.name, a.c.x, a.c.y);
 
@@ -132,6 +165,7 @@ err_t apply_action(action a)
         if(verbose>=2)printf("Function use : AFTER/ONLY\n");
         death_count += active_ab.function(a.c, active_ent, list);
     }
+
 
     if(abs(active_ent->cha_id)-1==Berserker && Bloodlust_counter!=-1)
     {
@@ -270,6 +304,23 @@ bool play_check(Entity *e)
     return FALSE;
 }
 
+err_t opponent_action()
+{
+    if(a.act == Mvt)
+    {
+        apply_movement(a);
+    }
+    else
+    {
+        apply_action(a);
+    }
+
+    opponent_set = FALSE;
+    
+    if(verbose>=0)printf("Leaving opponent_action\n");
+    return OK;
+}
+
 err_t action_set(action a)
 {
     if(verbose>=2)printf("Application de l'action...\n");
@@ -297,12 +348,13 @@ err_t action_set(action a)
 
 winId local_turn()
 {   
-    if(verbose>=1)printf("It's your turn\n");
+    if(verbose>=1)printf("\n\nIt's your turn\n");
     addLog("It's your turn");
 
     turn_active = TRUE;
 
     turn_start(Allies);
+    if(verbose>=2)printf("Turn start done for Allies\n\n");
 
     winId game_end;
 
@@ -320,11 +372,11 @@ winId local_turn()
 
 winId opposing_turn()
 {
-    if(verbose>=1)printf("It's your opponent's turn\n");
+    if(verbose>=1)printf("\n\nIt's your opponent's turn\n");
     addLog("It's your opponent's turn");
 
     turn_start(Foes);
-    if(verbose>=2)printf("Turn start done for Foes\n");
+    if(verbose>=2)printf("Turn start done for Foes\n\n");
     
     action received_action;
 
@@ -332,19 +384,9 @@ winId opposing_turn()
 
     while(received_action.char_id != 0)
     {
-        applying_action = TRUE;
-        while(loop_active);
-
-        if(received_action.act == Mvt)
-        {
-            apply_movement(received_action);
-        }
-        else
-        {
-            apply_action(received_action);
-        }
-        applying_action = FALSE;
-
+        a = received_action;
+        opponent_set = TRUE;
+        while(opponent_set); 
         rec_id_swap(recep(&received_action, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action));
     }
 
@@ -383,7 +425,15 @@ winId init_client()
         if(verbose >= 1)printf("Init Allies client OK \n");
     }
 
-    return game_loop(opposing_turn,local_turn);
+    if(coin_receive())
+    {
+        return game_loop(local_turn,opposing_turn);
+    }
+    else
+    {
+        return game_loop(opposing_turn,local_turn);
+    }
+    
 }
 
 winId init_server()
@@ -394,6 +444,14 @@ winId init_server()
     if (init_Entity(Foes, spawn_red, S, "Ennemy", -1) == OK){
         if(verbose >= 1)printf("Init Foes est fait pour serveur \n");
     }
-    
-    return game_loop(local_turn,opposing_turn);
+
+    if(coin_flip())
+    {
+        return game_loop(local_turn,opposing_turn);
+    }
+    else
+    {
+        return game_loop(opposing_turn,local_turn);
+    }
+
 }

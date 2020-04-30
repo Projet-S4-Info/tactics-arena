@@ -19,5 +19,6 @@ err_t print_Modifier_list(Modifier **m, int nb, char tab[STR_SHORT]);
 err_t print_Ability(Ability *a, char tab[STR_SHORT]);
 err_t print_StateList(StateList * list, char tab[STR_SHORT]);
 err_t print_grid(Coord tab[]);
+err_t print_mage_passive(Entity *e);
 
 #endif

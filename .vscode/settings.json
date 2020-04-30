@@ -15,6 +15,10 @@
         "grid.h": "c",
         "servfcnt.h": "c",
         "characters.h": "c",
+<<<<<<< HEAD
         "in.h": "c"
+=======
+        "functional": "c"
+>>>>>>> aec6a6a04eda6b7437427cb6cbc17d2f66909ae6
     }
 }

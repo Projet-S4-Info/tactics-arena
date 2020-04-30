@@ -183,6 +183,19 @@ SDL_Surface * getTextCache(char *content, int size, char *police, SDL_Color colo
 
 
 
+err_t freeTextCache()
+// Clear the entire cache
+{
+    for (int i = 0; i < text_cache_size; i++)
+    {
+        SDL_FreeSurface(text_cache[i].surface);
+    }
+
+    return OK;
+}
+
+
+
 err_t displayText(SDL_Renderer *renderer, int x, int y, int size, char *content, char *text_police, int r, int g, int b, bool caching)
 // Displays text on the window
 {
@@ -250,8 +263,8 @@ err_t displayText(SDL_Renderer *renderer, int x, int y, int size, char *content,
         SDL_SetRenderDrawColor(renderer, r, g, b, 255);
         SDL_RenderCopy(renderer, text_tex, NULL, &txtDestRect);
 
-        //SDL_FreeSurface(text);
         TTF_CloseFont(police);
+        if (caching == FALSE) SDL_FreeSurface(text);
         SDL_DestroyTexture(text_tex);
     }
 
