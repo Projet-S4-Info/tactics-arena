@@ -216,12 +216,12 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
 {
     d = malloc(sizeof(Damage));
     if(d==NULL) return POINTER_NULL;
-    Damage l = {1.3,magic};
+    Damage l = {1.4,magic};
     *d = l;
 
     u = malloc(sizeof(Damage));
     if(u==NULL) return POINTER_NULL;
-    Damage r = {1.5,magic};
+    Damage r = {1.2,magic};
     *u = r;
 
     red = malloc(sizeof(Damage));
@@ -241,12 +241,12 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
 
     ice1= malloc(sizeof(Modifier));
     if(ice1==NULL) return POINTER_NULL;
-    Modifier ie1 = {{0,Freezing,3},0.3,FOES};
+    Modifier ie1 = {{0,Freezing,2},0.3,FOES};
     *ice1 = ie1;
 
     ice2= malloc(sizeof(Modifier));
     if(ice2==NULL) return POINTER_NULL;
-    Modifier ie2 = {{0,Freezing,3},1,FOES};
+    Modifier ie2 = {{0,Freezing,2},1,FOES};
     *ice2 = ie2;
 
     ice3= malloc(sizeof(Modifier)*2);
@@ -300,7 +300,7 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
     movesets[0][1] = abtemp2;
     Ability abtemp3 = {Flare,2,3,5,ANY_TILE,NULL,103,&aoe103,0,NULL,ONLY,Flare_fn,{"Flare","Increases all allies' vision and their mp for two turns, will spot traps in the chosen area."}};
     movesets[0][2] = abtemp3;
-    Ability abtemp4 = {Eruption,3,5,12,ANY_TILE,&u,75,&aoe75,1,&fire2,NONE,NULL,{"Eruption","Deal massive damage in a zone and burn all entities."}};
+    Ability abtemp4 = {Eruption,3,5,12,ANY_TILE,&d,75,&aoe75,1,&fire2,NONE,NULL,{"Eruption","Deal massive damage in a zone and burn all entities."}};
     movesets[0][3] = abtemp4;
 
     Ability abtemp11 = {Icy_Winds,1,0,8,ANY_TILE,&one_m,1,&one_c,1,&ice1,AFTER,mage_switch,{"Icy Winds","Deals damage and has a chance to freeze target."}};
@@ -309,7 +309,7 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
     movesets[1][1] = abtemp12;
     Ability abtemp13 = {Frozen_Armor,2,3,6,ALLIES,NULL,1,&one_c,2,&armor,NONE,NULL,{"Frozen Armor","Increase ally physical and magic resistances."}};
     movesets[1][2] = abtemp13;
-    Ability abtemp14 = {Blizzard,3,5,12,ANY_TILE,&d,75,&aoe75,2,&ice3,DURING,Blizzard_fn,{"Blizzard","Deal damage in a zone and highly reduce ennemy vision for a turn, has a chance to freeze ennemies. Water tiles in the are will also freeze."}};
+    Ability abtemp14 = {Blizzard,3,5,12,ANY_TILE,&u,75,&aoe75,2,&ice3,DURING,Blizzard_fn,{"Blizzard","Deal damage in a zone and highly reduce ennemy vision for a turn, has a chance to freeze ennemies. Water tiles in the are will also freeze."}};
     movesets[1][3] = abtemp14;
 
     Ability abtemp21 = {Shock,1,0,8,ANY_TILE,&d,1,&one_c,0,NULL,AFTER,mage_switch,{"Shock","Zap an ennemy."}};
@@ -326,7 +326,7 @@ err_t init_mage(Class * c, Ability movesets[3][NUM_AB])
     {
         Mage,
         "Mage",
-        {20,7,10,0,10,8,12},
+        {20,7,10,0,10,8,11},
         {"Elementalist","After every use of a basic attack, change element (Fire, Ice, Electricity)."},
         NULL
     };
@@ -342,7 +342,7 @@ err_t init_valkyrie(Class * c)
 {
     para= malloc(sizeof(Modifier));
     if(para==NULL) return POINTER_NULL;
-    Modifier p = {{0,Paralyzed,2},0.4,FOES};
+    Modifier p = {{0,Paralyzed,2},0.3,FOES};
     *para = p;
 
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
@@ -362,7 +362,7 @@ err_t init_valkyrie(Class * c)
     {
         Valkyrie,
         "Valkyrie",
-        {20,10,10,10,6,10,10},
+        {20,10,10,10,6,10,8},
         {"Precision","Damaging an ennemy has a chance to paralyze them."},
         ab
     };

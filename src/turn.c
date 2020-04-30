@@ -16,6 +16,7 @@
 #include "abilities.h"
 #include "print.h"
 #include "animations.h"
+#include "../SDL2/include/SDL2/SDL.h"
 
 bool game_setup = FALSE;
 bool is_online = FALSE;
@@ -60,6 +61,8 @@ err_t endgame_message(winId Id)
     {
         addLog("YOU HAVE LOST!");
     }
+
+    SDL_Delay(2000);
 
     return OK;
 }
@@ -284,16 +287,13 @@ err_t set_endturn()
     return OK;
 }
 
-bool play_check(Entity *e)
+bool play_check()
 {
     selected_ability = -1;
 
-    Entity * all;
-    get_team(e, &all, TRUE);
-    int i;
-    for(i=0; i<NUM_CLASS; i++)
+    for(int i=0; i<NUM_CLASS; i++)
     {
-        if(all[i].act_points>0)
+        if(Allies[i].act_points>0 || Allies[i].status_effect[Freezing]!=1 || Allies[i].status_effect[Detained]!=1)
         {
             return TRUE;
         }
@@ -339,7 +339,7 @@ err_t action_set(action a)
         apply_action(a);
     }
 
-    play_check(&Allies[a.char_id-1]);
+    play_check();
 
     if(verbose>=2)printf("Action appliquee...\n");
 
@@ -355,6 +355,7 @@ winId local_turn()
 
     turn_start(Allies);
     if(verbose>=2)printf("Turn start done for Allies\n\n");
+    play_check();
 
     winId game_end;
 

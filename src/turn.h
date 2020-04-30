@@ -16,7 +16,7 @@ err_t opponent_action();
 err_t action_set(action a);
 err_t test_turn();
 err_t set_endturn();
-bool play_check(Entity *E);
+bool play_check();
 winId game_loop(err_t (*turn1)(void), err_t (*turn2)(void));
 winId init_client();
 winId init_server();
