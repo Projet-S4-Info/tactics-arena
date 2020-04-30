@@ -66,7 +66,7 @@ void startChat(chat_t chat, int size, int socket)
         if(verbose >= 0)printf("Dans le while threadchat \n");
         if (changesChat == 1)
         {
-            if (sendChat((void *)&chat, size, socket) == 1)
+            if (sendStruct((void *)&chat, size, socket, NULL) == 1)
             {
                 if(verbose >= 1)printf("Chat envoyé en vrai \n");
             }
@@ -78,7 +78,7 @@ void startChat(chat_t chat, int size, int socket)
         }
         else
         {
-            if (recepChat((void *)&chat,size , socket) != 1)
+            if (recep((void *)&chat,size , socket, NULL) != NULL)
             {
                 printf("Aucune structure recue depuis threadChat \n");
             }
