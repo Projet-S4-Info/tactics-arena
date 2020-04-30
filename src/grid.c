@@ -189,7 +189,10 @@ void freezeWater(Coord pos)
     }
     else
     {
-        (*(matrix+pos.x*_X_SIZE_+pos.y)).tile_id = SNOW;
+        if ((*(matrix+pos.x*_X_SIZE_+pos.y)).tile_id != BLANK)
+        {
+            (*(matrix+pos.x*_X_SIZE_+pos.y)).tile_id = SNOW;
+        }
     }
 }
 

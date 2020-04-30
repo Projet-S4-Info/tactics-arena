@@ -277,7 +277,7 @@ err_t play_ability_animation(Ability ab, Coord pos)
             for (int j = 0; j < ab.nb_coords; j++)
             {
                 Coord drawPos = add_coords(pos, *((*(ab.coord)) + j));
-                if (isWalkable(drawPos) && isInGrid(drawPos))
+                if (isInGrid(drawPos))
                 {
                     temp = to2D(drawPos);
                     if (pxBase == 64)
