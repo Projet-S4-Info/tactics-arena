@@ -437,13 +437,13 @@ int displayInterface(SDL_Renderer *renderer)
 
 			if (selected_ability != -1)
 			{
-				if (ab_from_id(selected_ability, tempEntity)->ab_cooldown != 0)
+				if (ab_from_id(selected_ability, tempEntity)->ab_cooldown != 0 && selected_ability != Mvt)
 				{
 					sprintf(cdText, "Cooldown : %d turn(s)", ab_from_id(selected_ability, tempEntity)->ab_cooldown);
 					displayText(renderer, 16, yWinSize - yDesc, 20, cdText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 					yDesc += 20;
 				}
-				if (ab_from_id(selected_ability, tempEntity)->damage != NULL)
+				if (ab_from_id(selected_ability, tempEntity)->damage != NULL && selected_ability != Mvt)
 				{
 					if ((*(ab_from_id(hover_ability, tempEntity)->damage))->type == atk)
 					{
@@ -466,13 +466,13 @@ int displayInterface(SDL_Renderer *renderer)
 			{
 				if (hover_ability >= 0)
 				{
-					if (ab_from_id(hover_ability, tempEntity)->ab_cooldown != 0)
+					if (ab_from_id(hover_ability, tempEntity)->ab_cooldown != 0 && hover_ability != Mvt)
 					{
 						sprintf(cdText, "Cooldown : %d turn(s)", ab_from_id(hover_ability, tempEntity)->ab_cooldown);
 						displayText(renderer, 16, yWinSize - yDesc, 20, cdText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 						yDesc += 20;
 					}
-					if (ab_from_id(hover_ability, tempEntity)->damage != NULL)
+					if (ab_from_id(hover_ability, tempEntity)->damage != NULL && hover_ability != Mvt)
 					{
 						if ((*(ab_from_id(hover_ability, tempEntity)->damage))->type == atk)
 						{
