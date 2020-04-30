@@ -668,7 +668,7 @@ err_t apply_status(Status s, Entity *target, StateList *list, int caster_id, boo
 
     else if(s.stat==Burning && target->status_effect[Freezing])
     {
-        remove_mod(remove_from_list(target, Freezing, &renew), target, FALSE);
+        remove_mod(remove_from_list(target, Freezing, &renew), target, TRUE);
         if(verbose>=1)printf("Attempting to burn %s has thawed him out!\n", target->cha_name);
         sprintf(log, "Attempting to burn %s has thawed him out", target->cha_name);
         if(show_log)addLog(log);
