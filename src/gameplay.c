@@ -429,33 +429,33 @@ Status * remove_from_list(Entity * e, statusId status, Status *s)
     char log[STR_LONG];
     if(verbose>=2)
     {
-        sprintf(log,"Removing %s's ",e->cha_name);
+        sprintf(log,"Removing from list %s's ",e->cha_name);
         print_statusId(status, log);
     }
 
     List_Elem * v;
 
     start_list(stReceived);
-    v = list_search(stReceived,e,-status);
+    v = list_search(stReceived,e, status);
     if(v!=NULL)
     {   
-        s = v->value;
+        *s = *(v->value);
         list_remove(stReceived);
     }
     else
     {
         start_list(stSent);
-        v = list_search(stSent,e,-status);
+        v = list_search(stSent,e, status);
         if(v!=NULL)
         {
-            s = v->value;
+            *s = *(v->value);
             list_remove(stSent);
         }
     }
 
     if(verbose>=2)
     {
-        sprintf(log,"Finished removing %s's ",e->cha_name);
+        sprintf(log,"Finished removing from list %s's ",e->cha_name);
         print_statusId(status, log);
     }
 
