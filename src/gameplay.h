@@ -4,6 +4,7 @@
 
 err_t rec_id_swap(action * a);
 Entity * e_from_id(int Id);
+Ability * ab_from_id(abilityId Id, Entity *e);
 err_t get_team(Entity *e, Entity **all, bool same);
 winId game_over();
 int get_range(Entity *e, abilityId ab);

@@ -32,6 +32,11 @@ Entity * e_from_id(int Id)
     }
 }
 
+Ability * ab_from_id(abilityId Id, Entity *e)
+{
+    return &(e->cha_class->cla_abilities[Id%NUM_AB]);
+}
+
 err_t get_team(Entity *e, Entity **all, bool same)
 {
     if(same)
