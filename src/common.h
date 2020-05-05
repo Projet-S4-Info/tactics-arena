@@ -8,6 +8,9 @@
 #define taille 30
 #define _NB_MAX_CHAT_ 10
 #define _NB_MAX_ANIM_ 13
+#define _X_SIZE_ 30
+#define _Y_SIZE_ 30
+#define NUMBER_OF_MUS 2
 
 typedef enum error_type {OK, POINTER_NULL, SDL_ERROR, COORD_OUT_OF_BOUND, STR_TOO_LONG, INIT_COORD_ERR, CLI_ERROR, SERV_ERROR, SEND_ERROR, ALREADY_IN_CACHE} err_t;
 
