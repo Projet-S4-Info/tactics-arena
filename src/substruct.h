@@ -1,7 +1,9 @@
 #ifndef substruct_h
 #define substruct_h
 /** \file substruct.h
- * \brief Defining of fundamental structures and enumerations.
+ * \brief Defining fundamental structures and enumerations.
+ * 
+ * Use of substruct to limit clogging up struct.h and to define fundamental structures in a different file.
  */
 #include "common.h"
 
@@ -116,37 +118,50 @@ struct entity_t;
 
 /*Entity Sub Structures*/
 
+/** \struct lang
+ * \brief Language structure that indicates name and description of a certain object.
+ */
 typedef struct
 {
-    char name[STR_SHORT];
-    char desc[STR_LONG];
+    char name[STR_SHORT];   //!< Object Name.
+    char desc[STR_LONG];    //!< Object Description.
 }lang;
 
+/** \struct Damage
+ * \brief Damage structure indicating a spell's damage information.
+ */
 typedef struct
 {
-    float multiplier;
-    statId type;
+    float multiplier;   //!< Damage multiplier to be used with caster's specified stat type to find gross damage.
+    statId type;        //!< Indicates if the damage uses the caster's atk stat or his magic stat.
 } Damage;
 
+/** \struct Status
+ * \brief Structure representing stat modifier or status effect information (used to keep track of buffs and debuffs).
+ */
 typedef struct
 {
-    int value;  //IF value is equal to 0 then it is a status effect, otherwise it is a stat modifier
-    int stat;
-    int duration; //IF duration is equal to zero then it is a permanent change
+    int value;      //!< Indicates the value of the stat change, if equal to 0 then it is a status effect instead.
+    int stat;       //!< Indicates the stat changed(statId), or if value equals 0, indicates the status effect(statusId).
+    int duration;   //!< Indicates the duration of the modifier, if equal to 0 then it is a permanent modifier.
 } Status;
 
+/** \struct Modifier
+ * \brief Structure representing a stat modifier or status effect information to determine if it will land.
+ */
 typedef struct
 {
-    Status effect;
-    float chance;
-    targetType t;
+    Status effect;  //!< A Status structure, containing relevant information as to what the modifier itself is.
+    float chance;   //!< The chance the modifier has of landing.
+    targetType t;   //!< If the modifier can land on allies, foes, or both.
 }Modifier;
 
 //STRINGS OF ENUMERATIONS FOR PRINTING PURPOSES
-extern char statName[NUM_STATS][STR_SHORT];
-extern char IdNames[Mvt+1][STR_SHORT];
-extern char statusName[NUM_STATUS][STR_SHORT];
-extern char targetNames[5][STR_SHORT];
-extern char fnNames[5][STR_SHORT];
+
+extern char statName[NUM_STATS][STR_SHORT];     //!< extern string database containing string version of stat names
+extern char IdNames[Mvt+1][STR_SHORT];          //!< extern string database containing string version of ability names
+extern char statusName[NUM_STATUS][STR_SHORT];  //!< extern string database containing string version of status effect names
+extern char targetNames[5][STR_SHORT];          //!< extern string database containing string version of the target type enumeration
+extern char fnNames[5][STR_SHORT];              //!< extern string database containing string version of the function use enumeration
 
 #endif

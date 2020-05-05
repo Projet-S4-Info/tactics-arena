@@ -1,34 +1,56 @@
 #ifndef common_h
 #define common_h
+/** \file common.h
+ * \brief Defining macros and other global variables common to the whole project
+ */
 
-#define STR_SHORT 50
-#define STR_LONG 256
-#define NUM_ERROR 10
-#define MAXRANGE 256
-#define taille 30
-#define _NB_MAX_CHAT_ 10
-#define _NB_MAX_ANIM_ 13
-#define _X_SIZE_ 30
-#define _Y_SIZE_ 30
-#define NUMBER_OF_MUS 2
+#define STR_SHORT 50        //!< Defines a length to use for short string arrays
+#define STR_LONG 256        //!< Defines a length to use for long string arrays
+#define NUM_ERROR 10        //!< Indicates the number of custom error messages created
+#define MAXRANGE 256        //!< Indicates the Max Range of an ability, usefull when creating an array to store individual coordinates encompassed by the range
+#define _NB_MAX_CHAT_ 10    //!< Indicates the max number of chat messages shown at the same time
+#define _NB_MAX_ANIM_ 13    //!< Indicates the max number of animation frames an ability can have
+#define _X_SIZE_ 30         //!< Indicates the max horizontal size of the gameboard
+#define _Y_SIZE_ 30         //!< Indicates the max vertical size of the gameboard
+#define NUMBER_OF_MUS 2     //!< Indicates the number of music tracks available in game
 
-typedef enum error_type {OK, POINTER_NULL, SDL_ERROR, COORD_OUT_OF_BOUND, STR_TOO_LONG, INIT_COORD_ERR, CLI_ERROR, SERV_ERROR, SEND_ERROR, ALREADY_IN_CACHE} err_t;
+/** \enum err_t
+ * \brief Labeling custom error types.
+ * 
+ * To be used with string database error_message which contains custom error message for all custom error types
+ */
+typedef enum 
+{
+    OK/**<No error message*/, POINTER_NULL/**<Pointer is Null*/, SDL_ERROR/**<SDL error*/, 
+    COORD_OUT_OF_BOUND/**<Coordinates out of limits*/, STR_TOO_LONG/**<String too long*/, 
+    INIT_COORD_ERR/**<Ability coordinates were not initialised correctly*/, 
+    CLI_ERROR/**<Client not initialised  correctly*/, SERV_ERROR/**<Server not initialised correctly*/,
+    SEND_ERROR/**<Structure not sent correctly*/, ALREADY_IN_CACHE/**<Text already in cache, cannot add it twice*/
+} err_t;
 
-typedef enum {FALSE, TRUE} bool;
+/** \enum bool
+ * \brief Boolean Enumeration
+ */
+typedef enum {FALSE/**<0*/, TRUE/**<1*/} bool;
 
-extern int verbose;
+extern int verbose; //!< Global variable used to print messages depending on the level put in program parametres. 0 is saved only for debugging.
 
-extern int isChatActive;
-extern int isAServer;
-extern int serverStatus;
-extern int changesChat;
-extern int nbPlayer;
+extern int isChatActive;    //!<
+extern int isAServer;       //!<
+extern int serverStatus;    //!<
+extern int changesChat;     //!<
+extern int nbPlayer;        //!<
 
-extern char error_message[NUM_ERROR][STR_LONG];
+extern char error_message[NUM_ERROR][STR_LONG]; //!< String database containing custom error messages to be used with err_t enumeration
 
-extern char pseudoUser[50];
-extern char mapMultiSelected[50];
+extern char pseudoUser[50];         //!<
+extern char mapMultiSelected[50];   //!<
 
+/** \fn strToUpper
+ * \brief Transforms a string to all upper characters
+ * \param chaine The string to be transformed
+ * \return the transformed string
+ */
 char * strToUpper(char *chaine);
 
 #endif
