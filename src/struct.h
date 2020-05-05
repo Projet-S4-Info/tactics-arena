@@ -69,63 +69,66 @@ typedef struct{
 /* ENTITY STRUCTURES */
 
 /** \struct action
- * \brief
+ * \brief Structure representing necessary information for the communication of actions done, wether between functions, threads, or players.
  */
 typedef struct {
-    int char_id; //!<
-    Coord c; //!<
-    abilityId act; //Mvt if movement
+    int char_id;    //!< Character Id of the caster/user.
+    Coord c;        //!< Coordinate where the action was used.
+    abilityId act;  //!< Id of the action/ability cast (use %NUM_AB to find number local to selected Entity).
 } action;
 
 /** \struct Ability
- * \brief
+ * \brief Structure representing a castable ability.
  */
 typedef struct
 {
-    abilityId ab_id; //!<
-    int ab_cost; //!<
-    int ab_cooldown; //!<
-    int range; //If zero then self cast
-    targetType target; //!<
-    Damage ** damage; //!<
-    int nb_coords; //!<
-    Coord ** coord; //!<
-    int nb_mods; //!<
-    Modifier ** mods; //!<
-    fnid fn_use; //!<
-    int (*function)(Coord, struct entity_t *, StateList *); //!<
-    lang eng; //!<
+    abilityId ab_id;                                        //!< Ability Id.
+    int ab_cost;                                            //!< Ability cost in action points (act_points).
+    int ab_cooldown;                                        //!< Ability Cooldown.
+    int range;                                              //!< Ability Range, used alongside caster's vision to determine appliable range.
+    targetType target;                                      //!< Indicates which tiles can be targeted by this ability.
+    Damage ** damage;                                       //!< A double pointer to this ability's damage structure.
+    int nb_coords;                                          //!< Ability zone size, number of coordinates where ability will be applied, used to navigate through coord.
+    Coord ** coord;                                         //!< A double pointer to this ability's list of coordinates which indicate it's zone.
+    int nb_mods;                                            //!< Ability's number of modifiers, used to navigate through mods.
+    Modifier ** mods;                                       //!< A double pointer to this ability's list of applicable modifiers.
+    fnid fn_use;                                            //!< Indicates when to use special ability function method.
+    int (*function)(Coord, struct entity_t *, StateList *); //!< Method that allows special behavior to happen during casting of ability. NULL if none is required.
+    lang eng;                                               //!< Name and Desription of Ability in English.
 } Ability;
 
 /** \struct Class
- * \brief
+ * \brief Structure representing the classes of the characters.
  */
 typedef struct
 {
-    classId cla_id; //!<
-    char cla_name[STR_SHORT]; //!<
-    int basic_stats[NUM_STATS]; //!<
-    lang Passive; //!<
-    Ability * cla_abilities; //!<
+    classId cla_id;                 //!< Class Id.
+    char cla_name[STR_SHORT];       //!< Class Name.
+    int basic_stats[NUM_STATS];     //!< Class' basic stats arranged in an array respecting the order of statId.
+    lang Passive;                   //!< Name and Description of that class' passive ability.
+    Ability * cla_abilities;        //!< Pointer to class' abilities.
 } Class;
 
-/** \struct Entity
- * \brief Structure representing
+/** \struct entity_t
+ * \brief  Defined as Entity. Structure representing the characters played by the player and his opponent.
  */
 typedef struct entity_t
 {
-    int cha_id; //!<
-    char cha_name[STR_SHORT]; //!<
-    Class * cha_class; //!<
-    lifeId active; //!<
-    Coord coords; //!<
-    Direction direction; //!<
-    int idAnim; //!<
-    int act_points; //!<
-    int stats[NUM_STATS]; //!<
-    int status_effect[NUM_STATUS]; //!<
-    int ab_cooldown[NUM_AB]; //!<
+    int cha_id;                         //!< Character Id, positive if ally, negative if ennemy, is equal to classId + 1.
+    char cha_name[STR_SHORT];           //!< Character Name.
+    Class * cha_class;                  //!< Pointer to Character Class.
+    lifeId active;                      //!< Boolean indicating if the character is alive or dead.
+    Coord coords;                       //!< Coord indicating character's current position on the gameboard.
+    Direction direction;                //!< Indicates direction character is facing.
+    int idAnim;                         //!< Indicates animation stage.
+    int act_points;                     //!< Number of action points (3 normally, 1 if paralyzed).
+    int stats[NUM_STATS];               //!< Character Stats arranged in an array respecting the order of statId.
+    int status_effect[NUM_STATUS];      //!< Array indicating current status_effects of character, respecting the order of statusId.
+    int ab_cooldown[NUM_AB];            //!< Array indicating current ability cooldowns respecting the order of abilityId.
 } Entity;
+/** \typedef Entity
+ * \brief Structure representing the characters played by the player and his opponent.
+ */
 
 /*ABILITY STRUCTURES*/
 
@@ -134,8 +137,8 @@ typedef struct entity_t
  */
 typedef struct
 {
-    int cha_id; //!< Trap Id. Is equal to zero if there is no trap, is positive if friendly trap, is negative if ennemy trap. Name of variable is cha_id for use in functions that compare Entity's teams.
-    bool visible; //!< Visibility of the trap (is visible if same team or if flare found it).
+    int cha_id;     //!< Trap Id. Is equal to zero if there is no trap, is positive if friendly trap, is negative if ennemy trap. Name of variable is cha_id for use in functions that compare Entity's teams.
+    bool visible;   //!< Visibility of the trap (is visible if same team or if flare found it).
 } Trap_t;
 
 /* TERRAIN STRUCTURES */
@@ -205,13 +208,16 @@ typedef struct
 
 /* COMMUNICATION STRUCTURES */
 
-/** \struct t_user
+/** \struct User
  * \brief
  */
 typedef struct User{
   int id; //!<
   char pseudo[64]; //!<
 } t_user;
+/** \typedef t_user
+ * \brief
+ */
 
 /** \struct MultiTile
  * \brief
