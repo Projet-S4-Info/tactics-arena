@@ -1,26 +1,16 @@
 
-/* =============== DEPENDANCES =============== */
+/** \file common.c
+ * \brief Miscellaneous functions
+ * \author Thibault DOUCET
+ */
 
+/* =============== DEPENDANCES =============== */
 
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
 
-
-/* =============== CONSTANTES =============== */
-
-
-
-
-
-/* =============== VARIABLES =============== */
-
-
-
-
-
 /* =============== FONCTIONS =============== */
-
 
 char * strToUpper(char *chaine)
 {

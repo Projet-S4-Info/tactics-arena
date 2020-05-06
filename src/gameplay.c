@@ -11,7 +11,12 @@
 #include "turn.h"
 #include "servFcnt.h"
 
-#define DEF_MULT 15
+/** \file gameplay.c
+ * \brief Many Miscellaneous Functions related to gameplay
+ * \author Robin BUTEL
+ */
+
+#define DEF_MULT 15 //!< Defining the defense multiplier for balancing purposes
 
 err_t rec_id_swap(action * a)
 {
