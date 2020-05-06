@@ -29,7 +29,7 @@ typedef struct {
 
 /** \fn init_list(StateList ** list)
  * \brief Initialises a list
- * \details Allocates dyanmically space for the flag and sets both pointers on it, as well as sets the flag's next and precedent pointers to it
+ * \details Allocates dyanmically space for the list, the flag and sets the current element onto it, as well as sets the flag's next and precedent pointers to itself
  * \param list pointer to the list to initialise
  * \return err_t POINTER_NULL if malloc fails, otherwise err_t OK
  */
@@ -90,14 +90,37 @@ List_Elem * list_change(StateList * list, int d);
 err_t list_remove(StateList * list);
 
 /** \fn list_add(StateList * list, Status v, struct entity_t * entity)
- * \brief Removes the current element from the list
- * \details frees all dynamically allocated pointers and sets their values to NULL to avoid any double frees
- * \param list The list to remove from
+ * \brief Adds a new element to the list
+ * \details allocates dyanmically a new List_Elem as well as a Status 
+ * \param list The list to add to
  * \return err_t OK
  */
 err_t list_add(StateList * list, Status v, struct entity_t * entity);
-List_Elem * list_search(StateList * list, struct entity_t * entity, statusId status); //Set status to -1 for any status
+
+/** \fn list_search(StateList * list, struct entity_t * entity, statusId status)
+ * \brief Search a list for a certain element
+ * \details Searches a list starting from the current element and returns the first element that fits the search parametres (at least one parametre has to be specified)
+ * \param list The list to search
+ * \param entity A search parametre, the entity affected by the mod, can be NULL to specify no specific entity
+ * \param status A search parametre, the status effect, can be -1 to specify no specific status effect
+ * \exception standard_out:NO_SEARCH_PARAMETRES Neither of the search parametres were specified
+ * \return a pointer to the current element if one is found, else NULL
+ */
+List_Elem * list_search(StateList * list, struct entity_t *entity, statusId status); //Set status to -1 for any status
+
+/** \fn list_check(StateList * list)
+ * \brief Checks if the current element is a buff or a debuff
+ * \param list The list to check
+ * \return TRUE if buff, FALSE if debuff
+ */
 bool list_check(StateList * list);
+
+/** \fn list_destroy(StateList * list)
+ * \brief Destroys a list
+ * \details frees all dynamically allocated pointers and sets their values to NULL to avoid any double frees
+ * \param list pointer to the list to destroy
+ * \return err_t OK
+ */
 err_t list_destroy(StateList * list);
 
 
