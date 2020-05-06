@@ -3,11 +3,11 @@
 #include "struct.h"
 #include "grid.h"
 
-/** \file closest_free_tile(Coord c)
+/** \file deplacement.h
  * \brief Countains all fonctions needed to move a character
  */
 
-/** \fn closest_free_tile
+/** \fn closest_free_tile(Coord c)
  * \brief Indicates the closest and walkable cell to the coordinate
  * \param c Actual coordinate
  * \return The closest and walkable coordinate
