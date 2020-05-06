@@ -18,7 +18,7 @@
  * \file deplacement.c
  * \brief Mouvement program for TacticsArena
  * \details Contains pathfinding and movement fonctions
- * \author Louis LAFAY & Robin BUTEL
+ * \author Louis LAFAY, Robin BUTEL, Thibault DOUCET
  * \version 0.0.1
  * \date 20/04/2020
  */

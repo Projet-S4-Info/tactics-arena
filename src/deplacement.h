@@ -16,8 +16,8 @@ Coord closest_free_tile(Coord c);
 
 
 /** \fn fill_tiles
- * \brief Fill in the matrix that indicates the number of cells between the baseline coordinate and the current one
- * \param c Baseline coordinate
+ * \brief Fill in the matrix that indicates the number of cells between the starting coordinate and the current one
+ * \param c Starting coordinate
  * \param matrice The matrix that will contain the number of boxes
  * \param max The max distance possible for the character to move
  * \return The filled matrix

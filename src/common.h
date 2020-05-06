@@ -2,6 +2,7 @@
 #define common_h
 /** \file common.h
  * \brief Defining macros and other global variables common to the whole project
+ * \author Robin BUTEL, Lucien CHAUVIN, Thibault DOUCET
  */
 
 #define STR_SHORT 50        //!< Defines a length to use for short string arrays
@@ -46,7 +47,7 @@ extern char error_message[NUM_ERROR][STR_LONG]; //!< String database containing 
 extern char pseudoUser[50];         //!<
 extern char mapMultiSelected[50];   //!<
 
-/** \fn strToUpper
+/** \fn strToUpper(char *chaine)
  * \brief Transforms a string to all upper characters
  * \param chaine The string to be transformed
  * \return the transformed string

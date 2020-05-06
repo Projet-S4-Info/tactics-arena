@@ -18,17 +18,22 @@
 #include "animations.h"
 #include "../SDL2/include/SDL2/SDL.h"
 
+/** \file turn.c
+ * \brief Main functions relevant to players' turns
+ * \author Robin BUTEL
+ */
+
 bool game_setup = FALSE;
 bool is_online = FALSE;
-bool turn_active = TRUE;
+bool turn_active = TRUE; //!< TRUE if local player's turn, used to for showing certain things as well as allowing selection of abilities
 bool opponent_set = FALSE;
-action turn_over = {0,{0,0},0};
+action turn_over = {0,{0,0},0}; //!< Blank action structure to indicate end of turn when sent to opponent
 
-action a;
+action a_global;
 
 
-Coord spawn_red[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}};
-Coord spawn_blue[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}};
+Coord spawn_red[NUM_CLASS] = {{0,0},{1,3},{3,1},{1,7},{4,4},{7,1}}; //!< Spawn coordinates for the client's characters
+Coord spawn_blue[NUM_CLASS] = {{29,29},{26,28},{28,26},{22,28},{25,25},{28,22}}; //!< Spawn coordinates for the host's characters
 
 bool coin_flip()
 {
@@ -215,7 +220,7 @@ err_t turn_start(Entity *e)
     return OK;
 }
 
-err_t turn_end(Entity *e, StateList * list)
+err_t turn_end(Entity *e, StateList *list)
 {
     if(verbose>=1)printf("Ending Turn\n");
     int i,j;
@@ -306,13 +311,13 @@ bool play_check()
 
 err_t opponent_action()
 {
-    if(a.act == Mvt)
+    if(a_global.act == Mvt)
     {
-        apply_movement(a);
+        apply_movement(a_global);
     }
     else
     {
-        apply_action(a);
+        apply_action(a_global);
     }
 
     opponent_set = FALSE;
@@ -385,7 +390,7 @@ winId opposing_turn()
 
     while(received_action.char_id != 0)
     {
-        a = received_action;
+        a_global = received_action;
         opponent_set = TRUE;
         while(opponent_set); 
         rec_id_swap(recep(&received_action, sizeof(action), socketConnected, (err_t (*)(void*,char*))print_action));

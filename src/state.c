@@ -2,6 +2,12 @@
 #include "state.h"
 #include "print.h"
 
+/** \file state.c
+ * \brief Primitive functions for the Statelist system
+ * \author Robin BUTEL
+ * \details All functions used to navigate the buff/debuff list system made using pointers
+ */
+
 err_t init_list(StateList ** list)
 {
     *list = malloc(sizeof(StateList));

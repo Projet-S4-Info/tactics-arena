@@ -2,8 +2,8 @@
 #define stringdb_h
 /** \file stringdb.h
  * \brief Defining multiple string databases for printing usages
- * 
- * Allows the use of enumerations to quickly have access to a printable string version of their none numerical "value" by storing them in arrays.
+ * \author Robin BUTEL
+ * \details Allows the use of enumerations to quickly have access to a printable string version of their none numerical "value" by storing them in arrays.
  */
 
 #include "substruct.h"
