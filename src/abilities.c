@@ -9,6 +9,12 @@
 #include "border.h"
 #include "print.h"
 
+/** \file abilities.c
+ * \brief Ability method functions
+ * \details Contains all ability methode functions as well as small other functions relative purely to abilities
+ * \author Robin BUTEL
+ */
+
 int Killing_Blow_fn(Coord c, Entity * e, StateList * list)
 {
     Status v = {3,atk,0};
@@ -492,7 +498,7 @@ int Gates_of_Valhalla_fn(Coord c, Entity * e, StateList * list)
     return 0;
 }
 
-int Last_Sacrfice_fn(Coord c, Entity * e, StateList * list)
+int Last_Sacrifice_fn(Coord c, Entity * e, StateList * list)
 {
 
     new_death(e);
