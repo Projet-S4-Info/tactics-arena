@@ -2,7 +2,7 @@
 #define file_coord_h
 #include "struct.h"
 
-/** \file deplacement.h
+/** \file file_coord.h
  * \brief Countains all fonctions needed to manage a file
  */
 
