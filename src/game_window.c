@@ -255,7 +255,7 @@ int createGameWindow(int x, int y)
 
 		
 		playMenuMusic(3);
-		while (running)
+		while (running && !game_over_global)
 		{
 			tempEntity = getEntity(getSelectedPos());
 			SDL_Event e;
@@ -787,6 +787,7 @@ int createGameWindow(int x, int y)
 		freeTextures(textures);
 		freeTextures(cSprites);
 		freeTextCache();
+		displayEndWindow(game_over_global);
 		exit(EXIT_SUCCESS);
 	}
 	else

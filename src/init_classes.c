@@ -348,7 +348,7 @@ err_t init_valkyrie(Class * c)
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
-    Ability abtemp1 = {Thrust,1,0,1,ANY_TILE,&one_a,1,&one_c,1,&para,AFTER,Thrust_fn,{"Thrust","Thrust your spear forward."}};
+    Ability abtemp1 = {Thrust,1,0,1,ANY_TILE,&one_a,1,&one_c,1,&para,AFTER,Thrust_fn,{"Thrust","Thrust your spear forward, dealing damage to the tile selected adn the tile behind it."}};
     *ab = abtemp1;
     Ability abtemp2 = {Odins_Eyes,2,2,8,ANY_TILE,&one_m,51,&aoe51,1,&para,NONE,NULL,{"Odin's Eyes","Call forth a swarm of crows to deal magic damage to an area."}};
     *(ab+1) = abtemp2;

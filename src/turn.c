@@ -27,6 +27,7 @@ bool game_setup = FALSE;
 bool is_online = FALSE;
 bool turn_active = TRUE; //!< TRUE if local player's turn, used to for showing certain things as well as allowing selection of abilities
 bool opponent_set = FALSE;
+winId game_over_global = ONGOING;
 action turn_over = {0,{0,0},0}; //!< Blank action structure to indicate end of turn when sent to opponent
 
 action a_global;
@@ -417,7 +418,7 @@ winId game_loop(winId (*turn1)(void), winId (*turn2)(void))
     }
 
     endgame_message(game_end);
-
+    game_over_global = game_end;
     return game_end;
 }
 
