@@ -202,6 +202,7 @@ int displayMenu(int x, int y)
 						if (e.motion.x >= 0 && e.motion.x < 569 && e.motion.y >= 394 && e.motion.y <= 443)
 						{
 							closeWindow(pWindow);
+							freeAllTextures();
 							displayEndWindow(WIN);
 						}
 

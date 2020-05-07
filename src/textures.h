@@ -35,6 +35,15 @@ extern CharTexture charTextures[_NB_CLASSES_];
 extern AnimTexture animTextures[NB_AB];
 
 
+/* =============== VARIABLES =============== */
+
+
+bool textures_loaded;
+bool cSprites_loaded;
+bool charTextures_loaded;
+bool animTextures_loaded;
+
+
 /* =============== FONCTIONS =============== */
 
 // Optimise les surfaces lors du chargement des images
@@ -42,6 +51,9 @@ SDL_Surface *optimize(SDL_Surface *surf);
 
 // Détruit l'ensemble d'un dictionnaire de textures
 void freeTextures(TabTexture * textures);
+
+// Détruit l'ensemble de tous les dictionnaires de textures
+err_t freeAllTextures();
 
 // Ajoute deux textures (64x64 et 128x128) au tableau de dictionnaire en paramètre et lui attribue un nom
 int addTextureToTable(TabTexture * texturesTable, SDL_Texture * texture, SDL_Texture * big_texture, char * texture_name);

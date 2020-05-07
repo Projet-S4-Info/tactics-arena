@@ -163,9 +163,9 @@ int createGameWindow(int x, int y)
 		SDL_RenderPresent(renderer);
 
 		// Chargement des textures
-		loadMapTextures(renderer);
-		loadSprites(renderer, cSprites);
-		loadAnimationTextures();
+		if (textures_loaded == FALSE) loadMapTextures(renderer);
+		if (cSprites_loaded == FALSE) loadSprites(renderer, cSprites);
+		if (animTextures_loaded == FALSE) loadAnimationTextures();
 
 		while ((SDL_GetTicks() / 1000) - start_seconds < _TEXTURE_LOADING_TIME_)
 		{
@@ -781,7 +781,6 @@ int createGameWindow(int x, int y)
 			displayMap(renderer, XPOS, YPOS);
 
 			SDL_Delay(1000 / _FPS_);
-			//clearOldCache();
 		}
 		closeWindow(pWindow);
 		freeTextures(textures);

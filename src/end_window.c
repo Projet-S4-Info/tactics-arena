@@ -147,7 +147,8 @@ err_t displayEndWindow(winId win)
 						if (e.motion.x >= 585 && e.motion.x <= 705 && e.motion.y >= 577 && e.motion.y <= 623)
 						{
 							closeWindow(pWindow);
-							system("./TacticsArena");
+                            freeAllTextures();
+							system("./TacticsArena -4");
 						}
 
 					break;
