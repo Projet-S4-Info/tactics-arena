@@ -251,10 +251,51 @@ bool apply_check(Modifier * mod, Entity * target);
  */
 bool apply_damage(Damage * d, Entity * caster, Entity * target, bool show_log);
 
+
+/** \fn apply_status(Status s, Entity *target, StateList *list, int caster_id, bool show_log)
+ * \brief Applies a status effect to an entity
+ * \details Takes a status effect in the form of a Status structure and translates it's effects onto a given entity
+ * \param s The status to apply
+ * \param target The target entity
+ * \param list The active list (if local turn the stSent, if not then stReceived)
+ * \param caster_id The id of the caster (in case the status is provocation)
+ * \param show_log set to TRUE if logs should be sent ot the player, FALSE if not
+ * \return what list_add(err_t POINTER_NULL or err_t NULL) returns if status is applied and is not permanent, else err_t OK
+ */
 err_t apply_status(Status s, Entity *target, StateList *list, int caster_id, bool show_log);
+
+/** \fn apply_stat_change(Status s, Entity * target, StateList * list, bool show_log)
+ * \brief Applies a stat change to an entity
+ * \details Takes a stat change in the form if a Status structure and applies these changes onto a given entity
+ * \param s The stat change to apply
+ * \param target The target entity
+ * \param list The active list (if local turn stSent, if not stReceived)
+ * \param show_log set to TRUE if logs should be sent ot the player, FALSE if not
+ * \return what list_add(err_t POINTER_NULL or err_t NULL) returns if status is applied and is not permanent, else err_t OK
+ */
 err_t apply_stat_change(Status s, Entity * target, StateList * list, bool show_log);
+
+/** \fn apply_mod(Modifier m, Entity * target, StateList * list, int caster_id)
+ * \brief Calls necessary functions to apply a modifier
+ * \details A hub function that determines wether the effect to apply is a status effect or s stat change, then calls the correct function accordingly
+ * \param m The modifier to apply
+ * \param target Th target entity
+ * \param list The active list (if local turn stSent, if not stReceived)
+ * \param caster_id The id of the caster (in case the status is provocation)
+ * \return err_t OK
+ */
 err_t apply_mod(Modifier m, Entity * target, StateList * list, int caster_id);
 
+
+/** \fn apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord starting_point)
+ * \brief Main ability function that applies damage and mods
+ * \details Loop function that goes over all affected coordinates of an ability 
+ * \param active_ab The cast ability
+ * \param active_ent The caster of the ability
+ * \param list The active list (if local turn stSent, if not stReceived)
+ * \param starting_point The coordinates at which the ability was cast
+ * \return err_t OK
+ */
 int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord starting_point);
 
 #endif
