@@ -17,7 +17,6 @@
 #include "multi_menu.h"
 #include "servFcnt.h"
 #include "common.h"
-#include "chat.h"
 #include "text.h"
 #include "turn.h"
 
@@ -85,14 +84,6 @@ static void *fn_server(void *p_data)
 	{
 		if (verbose >= 1)
 			printf("Fin de startTCPSocketServ \n");
-		// sleep(2);
-		// if (verbose >= 0)
-		// 	printf("Début de setupChatServer \n");
-		// if (setupChatServer() == 0)
-		// {
-		// 	if (verbose >= 0)
-		// 		printf("Fin de setupChatServer \n");
-		// }
 		sleep(1);
 		if (verbose >= 1)
 			printf("Début de init_server \n");
@@ -108,15 +99,6 @@ static void *fn_client(void *p_data)
 	{
 		if (verbose >= 1)
 			printf("Fin de startTCPSOcketClient \n");
-		// sleep(2);
-		// if (verbose >= 0)
-		// 	printf("Début de setupChatClient \n");
-
-		// if (setupChatClient() == 0)
-		// {
-		// 	if (verbose >= 0)
-		// 		printf("Fin de setupChatClient \n");
-		// }
 		sleep(1);
 		if (verbose >= 1)
 			printf("Début d'init_client \n");

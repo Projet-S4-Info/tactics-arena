@@ -22,7 +22,6 @@
 #include "textures.h"
 #include "turn.h"
 #include "gameplay.h"
-#include "chat.h"
 #include "print.h"
 #include "servFcnt.h"
 #include "text.h"
@@ -31,11 +30,11 @@
 
 /* =============== CONSTANTES ================ */
 
-#define _NB_MAX_MAPS_ 50 			// Max number of maps being listed
+#define _NB_MAX_MAPS_ 50 // Max number of maps being listed
 #define _X_SIZE_ 30
 #define _Y_SIZE_ 30
-#define _FPS_ 60 					// Define at which frequency the game have to refresh
-#define _TEXTURE_LOADING_TIME_ 4	// Loading screen duration for textures (in seconds)
+#define _FPS_ 60				 // Define at which frequency the game have to refresh
+#define _TEXTURE_LOADING_TIME_ 4 // Loading screen duration for textures (in seconds)
 
 /* =============== VARIABLES ================ */
 
@@ -47,37 +46,14 @@ int selected_ability = -1;	  // Selected ability
 int hover_ability = -1;		  // Hover ability button
 bool hover_next_turn = FALSE; // Hover skip turn button
 int hover_stats = 0;		  // Hover stats
-int hover_tchat = 0;		  // Hover tchat button
 int hover_passive_help = 0;	  // Hover passive help in ID card (with mouse position)
 int end_of_turn = 0;		  // Fin de tour
-int isChatActive = 0;		  // Chat button
 char onLoadingScreen[_NB_CLASSES_][STR_SHORT] = {"Goliath", "Valkyrie", "Angel", "Ranger", "Mage", "Berserker"};
 Direction camMove = -1;
 int *exitThread;
 
 int xWinSize, yWinSize; // x and y sizes of the window
 Coord mouse_position;
-
-/* =============== TCHAT ================ */
-
-char pseudoChat[STR_SHORT] = "Chat : ";
-int changesChat = 0;
-
-char *compo;
-
-extern Sint32 cursor;
-extern Sint32 selection_len;
-
-
-chat_t chat;
-
-pthread_t thread_Chat;
-
-static void *fn_chat(void *p_data)
-{
-	startChat(chat, sizeof(chat_t), socketConnected);
-	return NULL;
-}
 
 /* =============== FONCTIONS ================ */
 
@@ -119,30 +95,28 @@ int createGameWindow(int x, int y)
 	}
 
 	/* *************** INITIALISATION AUDIO *************** */
-    if (verbose >= 2)
-        printf("\033[36;01m[AUDIO]\033[00m : Audio driver: %s\n", SDL_GetCurrentAudioDriver());
+	if (verbose >= 2)
+		printf("\033[36;01m[AUDIO]\033[00m : Audio driver: %s\n", SDL_GetCurrentAudioDriver());
 
-    int i, count = SDL_GetNumAudioDevices(0);
+	int i, count = SDL_GetNumAudioDevices(0);
 
-    /*-- Boucle debug audio --*/
-    for (i = 0; i < count; ++i)
-    {
-        if (verbose >= 2)
-            printf("\033[36;01m[AUDIO]\033[00m : Audio device %d: %s\n", i, SDL_GetAudioDeviceName(i, 0));
-    }
+	/*-- Boucle debug audio --*/
+	for (i = 0; i < count; ++i)
+	{
+		if (verbose >= 2)
+			printf("\033[36;01m[AUDIO]\033[00m : Audio device %d: %s\n", i, SDL_GetAudioDeviceName(i, 0));
+	}
 
-    /* On ouvre le device audio */
-    if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1)
-    {
-        printf("\033[31;01m[AUDIO ERROR]\033[00m : %s\n", Mix_GetError());
-    }
+	/* On ouvre le device audio */
+	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1)
+	{
+		printf("\033[31;01m[AUDIO ERROR]\033[00m : %s\n", Mix_GetError());
+	}
 
 	Mix_Chunk *nopeSound = Mix_LoadWAV("../inc/sound_effects/cant_click.wav");
 	/* ************************************************* */
 
 	printf("%s", error_message[setRendererDriver(renderer)]);
-
-	init_chat(&chat);
 
 	// Launcher icon
 	SDL_SetWindowIcon(pWindow, loadOptImage("../inc/sprites/goliath/sprite_indiv/64_64/front/Sprite_frontview_64.png"));
@@ -153,7 +127,7 @@ int createGameWindow(int x, int y)
 		// Textures loading screen
 		int start_seconds = SDL_GetTicks() / 1000;
 		int loadingAnim = 0;
-		int loadingChar = rand()%6;
+		int loadingChar = rand() % 6;
 		int xCharPos;
 		SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 		SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
@@ -163,25 +137,29 @@ int createGameWindow(int x, int y)
 		SDL_RenderPresent(renderer);
 
 		// Chargement des textures
-		if (textures_loaded == FALSE) loadMapTextures(renderer);
-		if (cSprites_loaded == FALSE) loadSprites(renderer, cSprites);
-		if (animTextures_loaded == FALSE) loadAnimationTextures();
+		if (textures_loaded == FALSE)
+			loadMapTextures(renderer);
+		if (cSprites_loaded == FALSE)
+			loadSprites(renderer, cSprites);
+		if (animTextures_loaded == FALSE)
+			loadAnimationTextures();
 
 		while ((SDL_GetTicks() / 1000) - start_seconds < _TEXTURE_LOADING_TIME_)
 		{
-			xCharPos = xWinSize-(loadingAnim*20);
-			if (xCharPos < -100) 
+			xCharPos = xWinSize - (loadingAnim * 20);
+			if (xCharPos < -100)
 			{
 				loadingAnim = 0;
 				loadingChar++;
-				if (loadingChar > 5) loadingChar = 0;
+				if (loadingChar > 5)
+					loadingChar = 0;
 			}
 			SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 			SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
 			SDL_RenderClear(renderer);
 			displayText(renderer, 200, yWinSize / 2 + 120, 40, "Chargement des textures du jeu...", "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 			displayText(renderer, 200, yWinSize / 2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, FALSE);
-			displaySprite(renderer, getBigCharTexture(onLoadingScreen[loadingChar], W, loadingAnim%6), xCharPos, yWinSize-112);
+			displaySprite(renderer, getBigCharTexture(onLoadingScreen[loadingChar], W, loadingAnim % 6), xCharPos, yWinSize - 112);
 			SDL_RenderPresent(renderer);
 			loadingAnim++;
 			SDL_Delay(100);
@@ -194,19 +172,20 @@ int createGameWindow(int x, int y)
 			loadingChar = 0;
 			while (!game_setup)
 			{
-				xCharPos = xWinSize-(loadingAnim*20);
-				if (xCharPos < -100) 
+				xCharPos = xWinSize - (loadingAnim * 20);
+				if (xCharPos < -100)
 				{
 					loadingAnim = 0;
 					loadingChar++;
-					if (loadingChar > 5) loadingChar = 0;
+					if (loadingChar > 5)
+						loadingChar = 0;
 				}
 				SDL_GetWindowSize(pWindow, &xWinSize, &yWinSize);
 				SDL_SetRenderDrawColor(renderer, 21, 126, 172, 255);
 				SDL_RenderClear(renderer);
 				displayText(renderer, 200, yWinSize / 2 + 120, 40, "Communication des informations avec le serveur...", "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 				displayText(renderer, 200, yWinSize / 2, 100, "Tactics Arena", "../inc/font/Blox2.ttf", 255, 255, 255, FALSE);
-				displaySprite(renderer, getBigCharTexture(onLoadingScreen[0], W, loadingAnim%6), xCharPos, yWinSize-112);
+				displaySprite(renderer, getBigCharTexture(onLoadingScreen[0], W, loadingAnim % 6), xCharPos, yWinSize - 112);
 				SDL_RenderPresent(renderer);
 				loadingAnim++;
 				SDL_Delay(100);
@@ -238,22 +217,8 @@ int createGameWindow(int x, int y)
 
 		Entity *tempEntity = NULL;
 
-
-
-		/*--------- to test -----------*/
-		char temp[50] = "THILOUROCIEN";
-		/*-----------------------------*/
-		if (nbPlayer == 0)
-		{
-			sprintf(pseudoUser, "%s", temp);
-		}
-		sprintf(pseudoChat, "%s : ", pseudoUser);
-
 		int running = 1;
-		isChatActive = 0;
-		
 
-		
 		playMenuMusic(3);
 		while (running && !game_over_global)
 		{
@@ -306,35 +271,40 @@ int createGameWindow(int x, int y)
 									{
 										if (!able_ability(tempEntity, Mvt, TRUE))
 											selected_ability = Mvt;
-										else Mix_PlayChannel(-1, nopeSound, 0);
+										else
+											Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 1
 									else if (e.motion.x >= 96 && e.motion.x <= 160)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
+										else
+											Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 2
 									else if (e.motion.x >= 176 && e.motion.x <= 240)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
+										else
+											Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 3
 									else if (e.motion.x >= 256 && e.motion.x <= 320)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
+										else
+											Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 4
 									else if (e.motion.x >= 336 && e.motion.x <= 400)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
+										else
+											Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Tourner personnage vers la droite
 									else if (e.motion.x >= 416 && e.motion.x <= 480)
@@ -425,26 +395,6 @@ int createGameWindow(int x, int y)
 						hover_next_turn = FALSE;
 						set_endturn();
 					}
-
-					if (e.motion.x >= xWinSize - 360 && e.motion.x <= xWinSize - 296 && e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16)
-					{
-						if (isChatActive == 1)
-						{
-							if (isChatActive == 1)
-							{
-								isChatActive = 0;
-								addLog("Tchat desactive");
-								pthread_cancel(thread_Chat);
-							}
-
-							else if(isChatActive == 0)
-							{
-								isChatActive = 1;
-								addLog("Tchat active");
-								pthread_create(&thread_Chat, NULL, fn_chat, NULL);
-							}
-						}
-					}
 					break;
 
 				/* ********** SCROLL SOURIS ************ */
@@ -499,24 +449,6 @@ int createGameWindow(int x, int y)
 							YPOS /= 2;
 						}
 						break;
-					case SDLK_BACKSPACE:
-						if (isChatActive == 1)
-						{
-							if (strlen(pseudoChat) > strlen(pseudoUser) + 3)
-							{
-								pseudoChat[strlen(pseudoChat) - 1] = '\0';
-							}
-						}
-						break;
-					case SDLK_RETURN:
-						if (isChatActive == 1)
-						{
-
-							nouveau_Msg(&chat, pseudoChat);
-							sprintf(pseudoChat, "%s : ", pseudoUser);
-							changesChat = 1;
-						}
-						break;
 					case SDLK_ESCAPE:
 						if (selected_ability != -1)
 							selected_ability = -1;
@@ -528,36 +460,35 @@ int createGameWindow(int x, int y)
 						break;
 					/* ***** DEPLACEMENTS CAMERA (RACCOURCIS CLAVIER) ***** */
 					case SDLK_z: // "z" key
-						if (!isChatActive)
-							YPOS += (10 * (pxBase / 64));
+						YPOS += (10 * (pxBase / 64));
 						break;
 					case SDLK_q: // "q" key
-						if (!isChatActive)
-							XPOS += (10 * (pxBase / 64));
+
+						XPOS += (10 * (pxBase / 64));
 						break;
 					case SDLK_s: // "s" key
-						if (!isChatActive)
-							YPOS -= (10 * (pxBase / 64));
+
+						YPOS -= (10 * (pxBase / 64));
 						break;
 					case SDLK_d: // "d" key
-						if (!isChatActive)
-							XPOS -= (10 * (pxBase / 64));
+
+						XPOS -= (10 * (pxBase / 64));
 						break;
 					case SDLK_UP: // "ARROW UP" key
-						if (!isChatActive)
-							YPOS += (10 * (pxBase / 64));
+
+						YPOS += (10 * (pxBase / 64));
 						break;
 					case SDLK_LEFT: // "ARROW LEFT" key
-						if (!isChatActive)
-							XPOS += (10 * (pxBase / 64));
+
+						XPOS += (10 * (pxBase / 64));
 						break;
 					case SDLK_DOWN: // "ARROW DOWN" key
-						if (!isChatActive)
-							YPOS -= (10 * (pxBase / 64));
+
+						YPOS -= (10 * (pxBase / 64));
 						break;
 					case SDLK_RIGHT: // "ARROW RIGHT" key
-						if (!isChatActive)
-							XPOS -= (10 * (pxBase / 64));
+
+						XPOS -= (10 * (pxBase / 64));
 						break;
 					/* ***** SELECTION CAPACITES (RACCOURCIS CLAVIER) ***** */
 					default:
@@ -573,35 +504,40 @@ int createGameWindow(int x, int y)
 									{
 										if (!able_ability(tempEntity, Mvt, TRUE))
 											selected_ability = Mvt;
-										else Mix_PlayChannel(-1, nopeSound, 0);
+										else
+											Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 1
 									else if (e.key.keysym.sym == SDLK_2)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[0].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[0].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
+										else
+											Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 2
 									else if (e.key.keysym.sym == SDLK_3)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[1].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[1].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
+										else
+											Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 3
 									else if (e.key.keysym.sym == SDLK_4)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[2].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[2].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
+										else
+											Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Compétence 4
 									else if (e.key.keysym.sym == SDLK_5)
 									{
 										if (!able_ability(tempEntity, tempEntity->cha_class->cla_abilities[3].ab_id, TRUE))
 											selected_ability = tempEntity->cha_class->cla_abilities[3].ab_id;
-										else Mix_PlayChannel(-1, nopeSound, 0);
+										else
+											Mix_PlayChannel(-1, nopeSound, 0);
 									}
 									// Tourner personnage vers la droite
 									else if (e.key.keysym.sym == SDLK_6)
@@ -621,12 +557,14 @@ int createGameWindow(int x, int y)
 							}
 							else
 							{
-								if (!isChatActive) Mix_PlayChannel(-1, nopeSound, 0);
+
+								Mix_PlayChannel(-1, nopeSound, 0);
 							}
 						}
 						else
 						{
-							if (!isChatActive) Mix_PlayChannel(-1, nopeSound, 0);
+
+							Mix_PlayChannel(-1, nopeSound, 0);
 						}
 					}
 					break;
@@ -635,7 +573,6 @@ int createGameWindow(int x, int y)
 				case SDL_MOUSEMOTION:
 					hover_ability = -1;
 					hover_next_turn = FALSE;
-					hover_tchat = 0;
 					mouse_position.x = e.motion.x;
 					mouse_position.y = e.motion.y;
 
@@ -704,35 +641,6 @@ int createGameWindow(int x, int y)
 							hover_stats = 0;
 						}
 					}
-
-					// Hover tchat button
-					if (e.motion.x >= xWinSize - 360 && e.motion.x <= xWinSize - 296 && e.motion.y >= yWinSize - 80 && e.motion.y <= yWinSize - 16)
-					{
-						if (isChatActive == 1)
-						{
-							hover_tchat = 1;
-						}
-						else
-						{
-							hover_tchat = 2;
-						}
-					}
-					break;
-
-				case SDL_TEXTINPUT:
-					if (isChatActive == 1)
-					{
-						strcat(pseudoChat, e.text.text);
-					}
-					break;
-
-				case SDL_TEXTEDITING:
-					if (isChatActive == 1)
-					{
-						compo = e.edit.text;
-						cursor = e.edit.start;
-						selection_len = e.edit.length;
-					}
 					break;
 				}
 			}
@@ -773,7 +681,7 @@ int createGameWindow(int x, int y)
 					YPOS = -500 * (pxBase / 64);
 			}
 
-			if(opponent_set)
+			if (opponent_set)
 			{
 				opponent_action();
 			}

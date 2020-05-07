@@ -334,45 +334,6 @@ char *clearStr(char *str)
 	return str;
 }
 
-err_t displayChat(SDL_Renderer *renderer, int chatX, int chatY)
-{
-	char temp[33];
-	int j = 0;
-	if (chat.index > -1)
-	{
-		for (int i = 0; i <= chat.index; i++)
-		{
-			if (strlen(chat.chatTab[i]) > 33)
-			{
-				int k;
-				for (k = 0; k < (strlen(chat.chatTab[i])); k += 33)
-				{
-					strcpy(temp, clearStr(temp));
-					for (int p = k; p < 33 + k && p < (strlen(chat.chatTab[i])); p++)
-					{
-						int len = strlen(temp);
-						temp[len] = chat.chatTab[i][p];
-						temp[len + 1] = '\0';
-						if (verbose >= 2)
-							printf("%s", temp);
-					}
-					if (verbose >= 2)
-						printf("\n");
-					displayText(renderer, chatX, chatY + (j * 15), 15, temp, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
-					j++;
-				}
-			}
-			else
-			{
-				displayText(renderer, chatX, chatY + (j * 15), 15, chat.chatTab[i], "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
-				if (verbose >= 2)
-					printf("%s \n", chat.chatTab[i]);
-				j++;
-			}
-		}
-	}
-	return OK;
-}
 
 int displayInterface(SDL_Renderer *renderer)
 // Display the UI
@@ -391,24 +352,6 @@ int displayInterface(SDL_Renderer *renderer)
 	int xBuff;
 	int yBuff;
 	List_Elem *mod;
-
-	SDL_Rect chatScreen;
-	chatScreen.x = xWinSize - 300;
-	chatScreen.y = yWinSize - 460;
-	chatScreen.w = 275;
-	chatScreen.h = 310;
-
-	SDL_Rect chatBox;
-	chatBox.x = chatScreen.x - 5;
-	chatBox.y = chatScreen.y - 35;
-	chatBox.w = chatScreen.w + 10;
-	chatBox.h = 375;
-
-	SDL_Rect chatMsg;
-	chatMsg.x = chatScreen.x;
-	chatMsg.y = chatScreen.y + chatScreen.h + 2;
-	chatMsg.w = chatScreen.w;
-	chatMsg.h = 20;
 
 	SDL_Rect statDesc;
 	statDesc.x = 10;
@@ -814,42 +757,6 @@ int displayInterface(SDL_Renderer *renderer)
 		displaySprite(renderer, getTexture(textures, "locked_end_turn"), xWinSize - 280, yWinSize - 80);
 	}
 
-	// Tchat window
-	if (isChatActive)
-		displaySprite(renderer, getTexture(textures, "tchat_button_selected"), xWinSize - 360, yWinSize - 80);
-	else
-		displaySprite(renderer, getTexture(textures, "tchat_button"), xWinSize - 360, yWinSize - 80);
-	if (hover_tchat == 1 || hover_tchat == 2)
-		displaySprite(renderer, getTexture(textures, "tchat_button_hover"), xWinSize - 360, yWinSize - 80);
-	if (hover_tchat == 1)
-		displayText(renderer, xWinSize - 360, yWinSize - 110, 20, "Hide chat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
-	else if (hover_tchat == 2)
-		displayText(renderer, xWinSize - 360, yWinSize - 110, 20, "Display tchat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
-	if (isChatActive)
-	{
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, 153, 153, 153, 185);
-		SDL_RenderFillRect(renderer, &chatBox);
-
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
-		SDL_RenderFillRect(renderer, &chatScreen);
-		displayText(renderer, chatBox.x + (chatBox.w / 2) - 10, chatBox.y + 5, 25, "Chat", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
-
-		displayChat(renderer, chatScreen.x + 2, chatScreen.y + 2);
-
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
-		SDL_SetRenderDrawColor(renderer, 85, 34, 0, 255);
-		SDL_RenderFillRect(renderer, &chatMsg);
-		if (strlen(pseudoChat) > 33)
-		{
-			displayText(renderer, chatMsg.x + 2, chatMsg.y + 2, 15, pseudoChat + (strlen(pseudoChat) - 33), "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
-		}
-		else
-		{
-			displayText(renderer, chatMsg.x + 2, chatMsg.y + 2, 15, pseudoChat, "../inc/font/PixelOperator.ttf", 255, 255, 255, FALSE);
-		}
-	}
 	return 0;
 }
 

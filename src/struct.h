@@ -52,14 +52,6 @@ typedef struct
     Uint32 time; //!<
 } Log;
 
-/** \struct chat_t
- * \brief
- */
-typedef struct{
-    char chatTab[_NB_MAX_CHAT_][STR_LONG]; //!<
-    int index; //!<
-}chat_t;
-
 /** \struct music_t
  * \brief
  */

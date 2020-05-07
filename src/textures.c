@@ -637,24 +637,6 @@ int loadMapTextures(SDL_Renderer *renderer)
 					  NULL,
 					  "locked_end_turn");
 
-	// Loading tchat button
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadOptImage("../inc/img/interface/tchat_icon_64.png")),
-					  NULL,
-					  "tchat_button");
-
-	// Loading tchat button (hover)
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadOptImage("../inc/img/interface/tchat_icon_hover_64.png")),
-					  NULL,
-					  "tchat_button_hover");
-
-	// Loading tchat  (selected)
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadOptImage("../inc/img/interface/tchat_icon_selected_64.png")),
-					  NULL,
-					  "tchat_button_selected");
-
 	// Loading dead character texture
 	addTextureToTable(textures,
 					  loadTexture(renderer, loadOptImage("../inc/img/interface/dead_64.png")),
