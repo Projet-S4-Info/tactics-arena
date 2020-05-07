@@ -231,6 +231,8 @@ err_t loadAnimationTextures()
     addAnimTexture(Gods_Blessing, "angel/oberon", 64, 69, FALSE, FALSE, 100, "../inc/sound_effects/abilities/God's_Blessing.wav");
     addAnimTexture(Aura, "angel/heal_aura", 64, 68, FALSE, FALSE, 100, "../inc/sound_effects/abilities/Aura.wav");
 
+    animTextures_loaded = TRUE;
+
     return OK;
 }
 

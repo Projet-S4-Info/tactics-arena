@@ -4,6 +4,7 @@
 #include "struct.h"
 
 extern CharTexture charTextures[];
+extern int indexCharTable;
 
 int addCharacterTexture(SDL_Renderer *renderer, char * name);
 SDL_Texture * getCharTexture(char *name, Direction direction, int indexAnim);

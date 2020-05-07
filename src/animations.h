@@ -16,12 +16,6 @@
 #include "struct.h"
 
 
-/* =============== CONSTANTES =============== */
-
-
-
-
-
 /* =============== VARIABLES =============== */
 
 /** \fn addAnimTexture(abilityId id, char *name, int start_index, int end_index, bool aoe, bool on_ground, int speed)
