@@ -407,9 +407,9 @@ int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
 
             selected_ability = -1;
             unhover();
-            printf("%s\n", error_message[play_ability_animation(e->cha_class->cla_abilities[Lightning_Chain%NUM_AB], target->coords)]);
+            printf("%s\n", error_message[play_ability_animation(mage_ab[2][Lightning_Chain%NUM_AB], target->coords)]);
 
-            apply_damage(*(e->cha_class->cla_abilities[Lightning_Chain%NUM_AB].damage), e, target, TRUE);
+            apply_damage(*(mage_ab[2][Lightning_Chain%NUM_AB].damage), e, target, TRUE);
             ct = target->coords;
             closest.x = -99;
             target = NULL;
