@@ -43,7 +43,7 @@ bool file_vide(File *f);
 /** \fn enfiler(File *file, Coord nvNombre)
  * \brief Adds the queue value
  * \param file The file
- * \param nvNombre Worth what we put in file
+ * \param nvNombre Value that we put in file
  */
 void enfiler(File *file, Coord nvNombre);
 
