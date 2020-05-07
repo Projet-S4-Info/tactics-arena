@@ -11,6 +11,10 @@
 #include "audio.h"
 #include "struct.h"
 
+/** \file game_window.h
+ * \brief Game window method functions
+ * \author Thibault DOUCET
+ */
 
 /* =============== VARIABLES =============== */
 
@@ -30,11 +34,13 @@ extern Direction camMove;
 extern TTF_Font *policePixels;
 
 
-
 /* =============== FONCTIONS =============== */
 
-
+/** \fn createGameWindow(int x, int y)
+ * \brief Create the window where the game is played
+ * \details This function manages the different events of the window
+ * \return int
+ */
 int createGameWindow(int x, int y);
-int displayMenu(int x, int y);
 
 #endif

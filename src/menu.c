@@ -247,6 +247,7 @@ int displayMenu(int x, int y)
 						{
 							closeWindow(pWindow);
 							freeMenuTextures();
+							freeAllTextures();
 							exit(EXIT_SUCCESS);
 						}
 					break;
