@@ -40,11 +40,10 @@ err_t activate_aura(Entity *e, StateList *list)
     addLog(log);
     if(verbose>=1)printf("\n%s\n",log);
 
-    /*selected_ability = -1;
+    selected_ability = -1;
     unhover();
 
-    if (isLoaded(Aura))
-        play_ability_animation(Aura_ab, e->coords);*/
+    play_ability_animation(Aura_ab, e->coords);
 
     apply_to(Aura_ab, e, list, e->coords);
 

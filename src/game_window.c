@@ -28,6 +28,12 @@
 #include "animations.h"
 #include "end_window.h"
 
+/** \file game_window.c
+ * \brief Game window method functions
+ * \details Contains all the events of the game window
+ * \author Thibault DOUCET
+ */
+
 /* =============== CONSTANTES ================ */
 
 #define _NB_MAX_MAPS_ 50 // Max number of maps being listed
