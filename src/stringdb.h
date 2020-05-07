@@ -1,5 +1,11 @@
 #ifndef stringdb_h
 #define stringdb_h
+/** \file stringdb.h
+ * \brief Defining multiple string databases for printing usages
+ * \author Robin BUTEL
+ * \details Allows the use of enumerations to quickly have access to a printable string version of their none numerical "value" by storing them in arrays.
+ */
+
 #include "substruct.h"
 
 char error_message[NUM_ERROR][STR_LONG] = {"", 

@@ -2,6 +2,12 @@
 #include "state.h"
 #include "print.h"
 
+/** \file state.c
+ * \brief Primitive functions for the Statelist system
+ * \author Robin BUTEL
+ * \details All functions used to navigate the buff/debuff list system made using pointers
+ */
+
 err_t init_list(StateList ** list)
 {
     *list = malloc(sizeof(StateList));
@@ -105,14 +111,22 @@ List_Elem * list_search(StateList * list, struct entity_t * entity, statusId sta
 {
     if(entity == NULL)
     {
-        while(!out_of_list(list))
+        if(status!=-1)
         {
-            if(list->ec->value->value == 0 && list->ec->value->stat == status)
+            while(!out_of_list(list))
             {
-                return list->ec;
+                if(list->ec->value->value == 0 && list->ec->value->stat == status)
+                {
+                    return list->ec;
+                }
+                list_next(list);
             }
-            list_next(list);
         }
+        else
+        {
+            printf("NO_SEARCH_PARAMETRES\n");
+        }
+
     }
     else if(status == -1)
     {

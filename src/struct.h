@@ -1,7 +1,9 @@
 #ifndef struct_h
 #define struct_h
 /** \file struct.h
- * \brief Defining of major structures.
+ * \brief Defining major structures.
+ * \author Robin BUTEL, Thibault DOUCET, Lucien CHAUVIN
+ * \details Code used to define major structures seperated into multiple categories : BASIC, ENTITY, ABILITY, TERRAIN, TEXTURE and COMMUNICATION.
  */
 
 #include "../SDL2/include/SDL2/SDL.h"
@@ -24,6 +26,7 @@ typedef struct
 
 /** \struct Vector
  * \brief Structure representing a vector.
+ * \details Is the same as Coord but wtih floats instead of ints.
  */
 typedef struct
 {
@@ -134,6 +137,7 @@ typedef struct entity_t
 
 /** \struct Trap_t
  * \brief Structure representing the existence of a Trap.
+ * \details Each tile of the gameboard will have a Trap_t structure.
  */
 typedef struct
 {

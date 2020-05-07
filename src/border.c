@@ -6,6 +6,12 @@
 #include "print.h"
 #include "init.h"
 
+/** \file border.c
+ * \brief Functions related to zones and borders
+ * \details contains functions for verifying if an ability is casted in the correct zone as well as the creation of such zones and their borders
+ * \author Robin BUTEL, Louis LAFAY, Lucien CHAUVIN
+ */
+
 bool isInRange(Coord coorTab[], Coord target)
 {
     int linesCrossed = 0;
