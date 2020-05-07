@@ -12,6 +12,7 @@ extern bool game_setup;         //!< TRUE if game is setting up, used to communi
 extern bool applying_action;    //!< TRUE if an action is being applied not in the main thread, used to communicate to the communication loop to tell it not to override current action
 extern bool loop_active;        //!< TRUE if the main loop is running, used to communicate with the communication thread wether an action can be applied
 extern bool opponent_set;       //!< TRUE if an action was received from the opponent, used to communicate with the main loop to apply this action
+extern winId game_over_global;  //!< Gloabl winId variable to keep track of game state in between threads
 extern action a_global;         //!< Global action variable where received action is kept to communicate it between threads
 
 /** \fn coin_flip() 
