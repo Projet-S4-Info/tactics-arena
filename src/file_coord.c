@@ -3,6 +3,15 @@
 #include "file_coord.h"
 #include "struct.h"
 
+/**
+ * \file file_coord.c
+ * \brief file program for deplacement files 
+ * \details Contains all the file's primitives
+ * \author Louis LAFAY
+ * \version 0.0.1
+ * \date 18/04/2020
+ */
+
 File *initialiser()
 {
     File *f = malloc(sizeof(*f));

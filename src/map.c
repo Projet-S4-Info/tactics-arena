@@ -428,6 +428,7 @@ int displayInterface(SDL_Renderer *renderer)
 	char damageText[STR_LONG];
 	char descText[STR_LONG];
 	int yDesc = 110;
+	Ability * temp_ab = NULL;
 
 	if (tempEntity != NULL)
 	{
@@ -437,22 +438,23 @@ int displayInterface(SDL_Renderer *renderer)
 
 			if (selected_ability != -1)
 			{
-				if (ab_from_id(selected_ability, tempEntity)->ab_cooldown != 0 && selected_ability != Mvt)
+				temp_ab = ab_from_id(selected_ability, tempEntity);
+				if (temp_ab->ab_cooldown != 0 && selected_ability != Mvt)
 				{
-					sprintf(cdText, "Cooldown : %d turn(s)", ab_from_id(selected_ability, tempEntity)->ab_cooldown);
+					sprintf(cdText, "Cooldown : %d turn(s)", temp_ab->ab_cooldown);
 					displayText(renderer, 16, yWinSize - yDesc, 20, cdText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 					yDesc += 20;
 				}
-				if (ab_from_id(selected_ability, tempEntity)->damage != NULL && selected_ability != Mvt)
+				if (temp_ab->damage != NULL && selected_ability != Mvt)
 				{
-					if ((*(ab_from_id(hover_ability, tempEntity)->damage))->type == atk)
+					if ((*(temp_ab->damage))->type == atk)
 					{
-						sprintf(damageText, "Base damage : %.0f (Physic)", (*(ab_from_id(hover_ability, tempEntity)->damage))->multiplier * tempEntity->stats[atk]);
+						sprintf(damageText, "Base damage : %.0f (Physic)", (*(temp_ab->damage))->multiplier * tempEntity->stats[atk]);
 						displayText(renderer, 16, yWinSize - yDesc, 20, damageText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 					}
-					else if ((*(ab_from_id(hover_ability, tempEntity)->damage))->type == magic)
+					else if ((*(temp_ab->damage))->type == magic)
 					{
-						sprintf(damageText, "Base damage : %.0f (Magic)", (*(ab_from_id(hover_ability, tempEntity)->damage))->multiplier * tempEntity->stats[magic]);
+						sprintf(damageText, "Base damage : %.0f (Magic)", (*(temp_ab->damage))->multiplier * tempEntity->stats[magic]);
 						displayText(renderer, 16, yWinSize - yDesc, 20, damageText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 					}
 					yDesc += 20;
@@ -466,22 +468,23 @@ int displayInterface(SDL_Renderer *renderer)
 			{
 				if (hover_ability >= 0)
 				{
-					if (ab_from_id(hover_ability, tempEntity)->ab_cooldown != 0 && hover_ability != Mvt)
+					temp_ab = ab_from_id(hover_ability, tempEntity);
+					if (temp_ab->ab_cooldown != 0 && hover_ability != Mvt)
 					{
-						sprintf(cdText, "Cooldown : %d turn(s)", ab_from_id(hover_ability, tempEntity)->ab_cooldown);
+						sprintf(cdText, "Cooldown : %d turn(s)", temp_ab->ab_cooldown);
 						displayText(renderer, 16, yWinSize - yDesc, 20, cdText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 						yDesc += 20;
 					}
-					if (ab_from_id(hover_ability, tempEntity)->damage != NULL && hover_ability != Mvt)
+					if (temp_ab->damage != NULL && hover_ability != Mvt)
 					{
-						if ((*(ab_from_id(hover_ability, tempEntity)->damage))->type == atk)
+						if ((*(temp_ab->damage))->type == atk)
 						{
-							sprintf(damageText, "Base damage : %.0f (Physic)", (*(ab_from_id(hover_ability, tempEntity)->damage))->multiplier * tempEntity->stats[atk]);
+							sprintf(damageText, "Base damage : %.0f (Physic)", (*(temp_ab->damage))->multiplier * tempEntity->stats[atk]);
 							displayText(renderer, 16, yWinSize - yDesc, 20, damageText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 						}
-						else if ((*(ab_from_id(hover_ability, tempEntity)->damage))->type == magic)
+						else if ((*(temp_ab->damage))->type == magic)
 						{
-							sprintf(damageText, "Base damage : %.0f (Magic)", (*(ab_from_id(hover_ability, tempEntity)->damage))->multiplier * tempEntity->stats[magic]);
+							sprintf(damageText, "Base damage : %.0f (Magic)", (*(temp_ab->damage))->multiplier * tempEntity->stats[magic]);
 							displayText(renderer, 16, yWinSize - yDesc, 20, damageText, "../inc/font/Pixels.ttf", 255, 255, 255, FALSE);
 						}
 						yDesc += 20;
@@ -585,10 +588,10 @@ int displayInterface(SDL_Renderer *renderer)
 				displayText(renderer, 15, 205, 15, "Magic : Increase magical damage", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 				break;
 			case 3:
-				displayText(renderer, 15, 205, 15, "Armor : Decrease physical damage sustained", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				displayText(renderer, 15, 205, 15, "Armor : Reduce physical damage sustained", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 				break;
 			case 4:
-				displayText(renderer, 15, 205, 15, "Magic Armor : Decrease physical damage sustained", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
+				displayText(renderer, 15, 205, 15, "Magic Armor : Reduce magical damage sustained", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);
 				break;
 			case 5:
 				displayText(renderer, 15, 205, 15, "Action points (AP) : Used to cast abilities", "../inc/font/Pixels.ttf", 255, 255, 255, TRUE);

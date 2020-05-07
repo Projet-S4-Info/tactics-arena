@@ -27,6 +27,7 @@
 #include "servFcnt.h"
 #include "text.h"
 #include "animations.h"
+#include "end_window.h"
 
 /* =============== CONSTANTES ================ */
 
@@ -265,6 +266,8 @@ int createGameWindow(int x, int y)
 
 				case SDL_QUIT:
 					running = 0;
+					closeWindow(pWindow);
+					displayEndWindow(LOSE);
 					break;
 
 				case SDL_WINDOWEVENT:
