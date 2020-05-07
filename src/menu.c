@@ -14,6 +14,7 @@
 #include "textures.h"
 #include "test.h"
 #include "text.h"
+#include "end_window.h"
 
 #ifdef _WIN32
 #  include <windows.h>
@@ -200,7 +201,8 @@ int displayMenu(int x, int y)
 						// Bouton test
 						if (e.motion.x >= 0 && e.motion.x < 569 && e.motion.y >= 394 && e.motion.y <= 443)
 						{
-							test();
+							closeWindow(pWindow);
+							displayEndWindow(WIN);
 						}
 
 						// Bouton "Map editor"
@@ -242,7 +244,7 @@ int displayMenu(int x, int y)
 						{
 							closeWindow(pWindow);
 							freeMenuTextures();
-							return 0;
+							exit(EXIT_SUCCESS);
 						}
 					break;
 				}
