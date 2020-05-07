@@ -71,7 +71,7 @@ Entity ** get_dead_allies(Entity *e, Entity * tab[]);
 /** \fn get_cost(Entity *e, abilityId Id)
  * \brief get the cost of an ability
  * \param e The Entity who has this ability
- * \param id The abilityId of the selected ability
+ * \param Id The abilityId of the selected ability
  * \return the cost
  */
 int get_cost(Entity *e, abilityId Id);
@@ -79,7 +79,7 @@ int get_cost(Entity *e, abilityId Id);
 /** \fn get_cooldown(Entity *e, abilityId Id)
  * \brief get the cooldown of an ability
  * \param e The Entity who has this ability
- * \param id The abilityId of the selected ability
+ * \param Id The abilityId of the selected ability
  * \return the cooldown
  */
 int get_cooldown(Entity * e, abilityId Id);
@@ -208,7 +208,6 @@ err_t remove_mod(Status * stat, Entity * e, bool show_log);
  * \details uses the list_search function to find a ceratin element a to remove it from both lists
  * \param e The targeted entity
  * \param status the mod to remove
- * \param show_log set to TRUE if logs should be sent ot the player, FALSE if not
  * \param s A status pointer to store the status removed from the list so that it may be removed from the entity
  * \return A pointer to the status removed (s)
  */

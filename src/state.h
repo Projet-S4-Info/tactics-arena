@@ -93,6 +93,8 @@ err_t list_remove(StateList * list);
  * \brief Adds a new element to the list
  * \details allocates dyanmically a new List_Elem as well as a Status 
  * \param list The list to add to
+ * \param v The status to add
+ * \param entity The targeted entity
  * \return err_t OK
  */
 err_t list_add(StateList * list, Status v, struct entity_t * entity);

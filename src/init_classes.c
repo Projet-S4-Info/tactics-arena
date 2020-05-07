@@ -2,8 +2,12 @@
 #include <string.h>
 #include "abilities.h"
 #include "print.h"
-
 #include "pointers.h"
+
+/** \file init_classes.c
+ * \brief Functions related to the intialisation and destruction of class information
+ * \author Robin BUTEL
+ */
 
 err_t init_aoe()
 {
@@ -394,7 +398,7 @@ err_t init_angel(Class * c, Ability *pass)
     Ability * ab=malloc(sizeof(Ability)*NUM_AB);
     if(ab==NULL) return POINTER_NULL;
 
-    Ability abtemp1 = {Condemn,1,0,6,FOES,&one_m,1,&one_c,0,NULL,NONE,NULL,{"Condemn","Deal magic damage to an ennemy."}};
+    Ability abtemp1 = {Condemn,1,0,6,BOTH,&one_m,1,&one_c,1,&heal,NONE,NULL,{"Condemn","Deal magic damage to an ennemy or heal an ally"}};
     *ab = abtemp1;
     Ability abtemp2 = {Holy_Storm,2,3,8,ANY_TILE,&one_m,51,&aoe51,1,&heal,NONE,NULL,{"Holy Storm","Deal magic damage to ennemies in an area and heal all allies in the area."}};
     *(ab+1) = abtemp2;

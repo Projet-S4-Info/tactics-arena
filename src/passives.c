@@ -7,6 +7,11 @@
 #include "game_window.h"
 #include "animations.h"
 
+/** \file passives.c
+ * \brief Contains functions in relation to passive abilities
+ * \author Robin BUTEL
+ */
+
 int Bloodlust_counter = 0;
 bool Sentinel_counter = TRUE;
 
