@@ -22,18 +22,13 @@ extern int YPOS;
 extern int selected_ability;
 extern int hover_ability;
 extern bool hover_next_turn;
-extern int hover_tchat;
 extern int hover_stats;
 extern int hover_passive_help;
 extern Coord mouse_position;
 extern char description[100];
-extern int isChatActive;
-extern int chatTabIndex;
 extern Direction camMove;
 extern TTF_Font *policePixels;
 
-extern char pseudoChat[STR_SHORT];
-extern chat_t chat;
 
 
 /* =============== FONCTIONS =============== */

@@ -54,4 +54,4 @@ sudo make install
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${pwd}/SDL2/lib
 
-echo -e "\e[31m\e[5mWarning ! \e[0mYou need to execute \e[93mpulseaudio -D\e[0m to get some sound"
+echo "\e[31m\e[5mWarning ! \e[0mYou need to execute \e[93mpulseaudio -D\e[0m to get some sound"

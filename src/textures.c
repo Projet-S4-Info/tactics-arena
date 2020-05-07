@@ -35,6 +35,11 @@ AnimTexture animTextures[NB_AB+1];
 int pxBase = 64;							// Resolution of a bloc texture (can be 64 or 128)
 int nbSprites = 0;
 
+bool textures_loaded = FALSE;
+bool cSprites_loaded = FALSE;
+bool charTextures_loaded = FALSE;
+bool animTextures_loaded = FALSE;
+
 
 /* =============== FONCTIONS =============== */
 
@@ -58,7 +63,7 @@ SDL_Surface *optimize(SDL_Surface *surf)
 void freeTextures(TabTexture * textures)
 // Free all the textures in the given textures table
 {
-	int nbTextures = sizeof(textures) / sizeof(SDL_Texture*);
+	int nbTextures = sizeof(textures) / sizeof(textures[0]);
 
 	for (int i=0; i < nbTextures; i++)
 	{
@@ -74,6 +79,66 @@ void freeTextures(TabTexture * textures)
 			textures[i].big_texture = NULL;
 		}
 	}
+}
+
+err_t freeAllTextures()
+{
+	int charTextures_size = sizeof(charTextures) / sizeof(charTextures[0]);
+	int animTextures_size = sizeof(textures) / sizeof(animTextures[0]);
+
+	// Removes loaded general textures
+	freeTextures(textures);
+
+	// Removes loaded characters info and icons textures
+	freeTextures(cSprites);
+
+	// Removes loaded characters textures
+	for (int i=0; i < charTextures_size; i++)
+	{
+		if (charTextures[i].front != NULL)
+		{
+			SDL_DestroyTexture(charTextures[i].front);
+			charTextures[i].front = NULL;
+		}
+		for (int j=0; j < 8; j++)
+		{
+			for (int k=0; k < 6; k++)
+			{
+				if (charTextures[i].textures[j][k] != NULL)
+				{
+					SDL_DestroyTexture(charTextures[i].textures[j][k]);
+					charTextures[i].textures[j][k] = NULL;
+				}
+			}
+		}
+	}
+
+	// Removes loaded characters textures
+	for (int i=0; i < animTextures_size; i++)
+	{
+		for (int j=0; j < 13; j++)
+		{
+			if (animTextures[i].spritesSmall[j] != NULL)
+			{
+				SDL_DestroyTexture(animTextures[i].spritesSmall[j]);
+				animTextures[i].spritesSmall[j] = NULL;
+			}
+			if (animTextures[i].spritesBig[j] != NULL)
+			{
+				SDL_DestroyTexture(animTextures[i].spritesBig[j]);
+				animTextures[i].spritesBig[j] = NULL;
+			}
+		}
+	}
+
+	textures_loaded = FALSE;
+	cSprites_loaded = FALSE;
+	charTextures_loaded = FALSE;
+	animTextures_loaded = FALSE;
+
+	indexCharTable = 0;
+
+	return OK;
 }
 
 
@@ -382,6 +447,10 @@ int loadSprites(SDL_Renderer * renderer, TabTexture * cSprites)
 
     if (verbose >= 1) printf("\033[36;01m[CHARACTERS]\033[00m : %d texture(s) d'icone(s) chargée(s) !\n", nbSprites+1);
     if (verbose >= 1) printf("\033[36;01m[CHARACTERS]\033[00m : %d texture(s) de personnage(s) chargée(s) !\n", nbChar+1);
+
+	cSprites_loaded = TRUE;
+	charTextures_loaded = TRUE;
+
     return nbSprites;
 }
 
@@ -568,24 +637,6 @@ int loadMapTextures(SDL_Renderer *renderer)
 					  NULL,
 					  "locked_end_turn");
 
-	// Loading tchat button
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadOptImage("../inc/img/interface/tchat_icon_64.png")),
-					  NULL,
-					  "tchat_button");
-
-	// Loading tchat button (hover)
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadOptImage("../inc/img/interface/tchat_icon_hover_64.png")),
-					  NULL,
-					  "tchat_button_hover");
-
-	// Loading tchat  (selected)
-	addTextureToTable(textures,
-					  loadTexture(renderer, loadOptImage("../inc/img/interface/tchat_icon_selected_64.png")),
-					  NULL,
-					  "tchat_button_selected");
-
 	// Loading dead character texture
 	addTextureToTable(textures,
 					  loadTexture(renderer, loadOptImage("../inc/img/interface/dead_64.png")),
@@ -606,6 +657,8 @@ int loadMapTextures(SDL_Renderer *renderer)
 
 	if (verbose >= 1)
 		printf("\033[36;01m[TEXTURES]\033[00m : %d texture(s) chargée(s) !\n", index + 1);
+
+	textures_loaded = TRUE;
 
 	return index + 1;
 }

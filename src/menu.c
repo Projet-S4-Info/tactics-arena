@@ -170,7 +170,9 @@ int displayMenu(int x, int y)
 			SDL_Event e;
 			while(SDL_PollEvent(&e)) {
 				switch(e.type) {
-					case SDL_QUIT: running = 0;
+					case SDL_QUIT: 
+						running = 0;
+						exit(EXIT_SUCCESS);
 					break;
 					case SDL_WINDOWEVENT:
 						switch(e.window.event){
@@ -202,6 +204,7 @@ int displayMenu(int x, int y)
 						if (e.motion.x >= 0 && e.motion.x < 569 && e.motion.y >= 394 && e.motion.y <= 443)
 						{
 							closeWindow(pWindow);
+							freeAllTextures();
 							displayEndWindow(WIN);
 						}
 

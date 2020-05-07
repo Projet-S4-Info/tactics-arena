@@ -9,7 +9,6 @@
 #define STR_LONG 256        //!< Defines a length to use for long string arrays
 #define NUM_ERROR 10        //!< Indicates the number of custom error messages created
 #define MAXRANGE 256        //!< Indicates the Max Range of an ability, usefull when creating an array to store individual coordinates encompassed by the range
-#define _NB_MAX_CHAT_ 10    //!< Indicates the max number of chat messages shown at the same time
 #define _NB_MAX_ANIM_ 13    //!< Indicates the max number of animation frames an ability can have
 #define _X_SIZE_ 30         //!< Indicates the max horizontal size of the gameboard
 #define _Y_SIZE_ 30         //!< Indicates the max vertical size of the gameboard
@@ -36,10 +35,8 @@ typedef enum {FALSE/**<0*/, TRUE/**<1*/} bool;
 
 extern int verbose; //!< Global variable used to print messages depending on the level put in program parametres. 0 is saved only for debugging.
 
-extern int isChatActive;    //!<
 extern int isAServer;       //!<
 extern int serverStatus;    //!<
-extern int changesChat;     //!<
 extern int nbPlayer;        //!<
 
 extern char error_message[NUM_ERROR][STR_LONG]; //!< String database containing custom error messages to be used with err_t enumeration
