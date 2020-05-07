@@ -170,7 +170,9 @@ int displayMenu(int x, int y)
 			SDL_Event e;
 			while(SDL_PollEvent(&e)) {
 				switch(e.type) {
-					case SDL_QUIT: running = 0;
+					case SDL_QUIT: 
+						running = 0;
+						exit(EXIT_SUCCESS);
 					break;
 					case SDL_WINDOWEVENT:
 						switch(e.window.event){
