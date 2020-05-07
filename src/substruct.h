@@ -2,7 +2,7 @@
 #define substruct_h
 /** \file substruct.h
  * \brief Defining fundamental structures and enumerations.
- * \author Robin BUTEL
+ * \author Robin BUTEL, Thibault DOUCET
  * \details Use of substruct to limit clogging up struct.h and to define fundamental structures in a different file.
  */
 #include "common.h"

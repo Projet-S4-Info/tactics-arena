@@ -3,6 +3,11 @@
 #include "grid.h"
 #include "init.h"
 
+/** \file print.c
+ * \brief Contains functions for printing various structures to standard output
+ * \author Robin BUTEL
+ */
+
 err_t print_class_name(classId Id, char tab[STR_SHORT])
 {
     printf("%sClass : %s\n", tab, classes[Id].cla_name);

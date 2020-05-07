@@ -8,6 +8,11 @@
 #include "servFcnt.h"
 #include "grid.h"
 
+/** \file init.c
+ * \brief Functions related to the intialisation and destruction of game information
+ * \author Robin BUTEL
+ */
+
 StateList *stSent = NULL;
 StateList *stReceived = NULL;
 Class classes[NUM_CLASS] = {};
