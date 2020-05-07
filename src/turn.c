@@ -139,6 +139,14 @@ err_t apply_action(action a)
 
     if(verbose>=1)printf("\n\n%s has chosen to %s at the following coordinates : %d,%d\n", active_ent->cha_name, active_ab.eng.name, a.c.x, a.c.y);
 
+    if(a.act!=FlameCharge)
+    {
+        selected_ability = -1;
+        unhover();
+
+        printf("%s\n", error_message[play_ability_animation(active_ab, a.c)]);
+    }
+
     sprintf(log, "%s cast %s", active_ent->cha_name, active_ab.eng.name);
     addLog(log);
 
@@ -157,11 +165,6 @@ err_t apply_action(action a)
     {
         if(verbose>=1)printf("%s is Blessed!\n", active_ent->cha_name);
     }
-
-    selected_ability = -1;
-    unhover();
-
-    printf("%s\n", error_message[play_ability_animation(active_ab, a.c)]);
     
     if(active_ab.fn_use!=ONLY)
     {
@@ -174,6 +177,7 @@ err_t apply_action(action a)
         if(verbose>=2)printf("Function use : AFTER/ONLY\n");
         death_count += active_ab.function(a.c, active_ent, list);
     }
+    
 
 
     if(abs(active_ent->cha_id)-1==Berserker && Bloodlust_counter!=-1)

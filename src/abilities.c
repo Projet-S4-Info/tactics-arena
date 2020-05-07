@@ -8,6 +8,7 @@
 #include "deplacement.h"
 #include "border.h"
 #include "print.h"
+#include "animations.h"
 
 /** \file abilities.c
  * \brief Ability method functions
@@ -282,6 +283,10 @@ int FlameCharge_fn(Coord c, Entity * e, StateList * list)
 
     Tile * t =getTile(e->coords);
     t->entity = NULL;
+    selected_ability = -1;
+    unhover();
+
+    printf("%s\n", error_message[play_ability_animation(F, e->coords)]);
     int n = apply_to(F,e,list,e->coords);
     t->entity = e;
     moveEntity(e->coords, c);
@@ -399,6 +404,10 @@ int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
             char log[STR_LONG];
             sprintf(log, "The lightning bounced to %s", e->cha_name);
             addLog(log);
+
+            selected_ability = -1;
+            unhover();
+            printf("%s\n", error_message[play_ability_animation(e->cha_class->cla_abilities[Lightning_Chain%NUM_AB], target->coords)]);
 
             apply_damage(*(e->cha_class->cla_abilities[Lightning_Chain%NUM_AB].damage), e, target, TRUE);
             ct = target->coords;
