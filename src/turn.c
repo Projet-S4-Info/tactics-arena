@@ -86,7 +86,6 @@ err_t apply_movement(action a)
 
     total_move(e, pathfinding((int(*)[_X_SIZE_])fill_tiles(e -> coords, matrice, e -> stats[mv]), tab, a.c ));
 
-    e->coords = a.c;
     e->act_points--;
     if(verbose>=0)printf("Leaving apply_movement\n");
     return OK;

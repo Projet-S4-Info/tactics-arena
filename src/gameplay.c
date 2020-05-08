@@ -831,7 +831,6 @@ int apply_to(Ability active_ab, Entity * active_ent, StateList * list, Coord sta
                             }
                             else
                             {
-                                //ANIMATE BLOCK
                                 char log[STR_LONG];
                                 sprintf(log, "%s blocked incoming damage", e->cha_name);
                                 addLog(log);
