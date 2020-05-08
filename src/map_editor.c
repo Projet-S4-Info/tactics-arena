@@ -294,6 +294,31 @@ void fillMap(Tile * grid, int block_id)
 	if (verbose >= 1) printf("\033[36;01m[MAP_EDITOR]\033[00m : Map remplie avec le bloc [%s] id %d\n", textures[block_id].texture_name, block_id);
 }
 
+Tile * build_map(MultiTile map[])
+// Turns a multitile matrix to a tile matrix
+{
+	Tile map_result[_X_SIZE_][_Y_SIZE_];
+	Trap_t temp_trap = {0, FALSE};
+
+	for (int i=0; i < _X_SIZE_; i++)
+	{
+		for (int j=0; j < _Y_SIZE_; i++)
+		{
+			map_result[i][j].tile_id = map[i*_X_SIZE_+j].tile_id;
+			map_result[i][j].trap = temp_trap;
+			map_result[i][j].hovered = 0;
+			map_result[i][j].selected = 0;
+			map_result[i][j].entity = NULL;
+			if (map_result[i][j].tile_id == WATER || map_result[i][j].tile_id == BLANK)
+				map_result[i][j].walkable = FALSE;
+			else
+				map_result[i][j].walkable = TRUE;
+		}
+	}
+
+	return &map_result[0][0];
+}
+
 int displayEditorMap(SDL_Renderer *renderer, int x, int y, int pxBase, int select, int xWinSize, int yWinSize)
 // Display the map
 {
