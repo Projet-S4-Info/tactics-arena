@@ -385,11 +385,11 @@ int Lightning_Chain_fn(Coord c, Entity * e, StateList * list)
                 if(closest.x == -99)
                 {
                     target = all+j;
-                    closest = compare_coords(c, target->coords);
+                    closest = compare_coords(ct, target->coords);
                 }
                 else
                 {
-                    ctemp = compare_coords(c, (all+j)->coords);
+                    ctemp = compare_coords(ct, (all+j)->coords);
                     if(closer_coords(ctemp, closest))
                     {
                         target = all+j;
