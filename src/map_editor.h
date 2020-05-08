@@ -13,5 +13,6 @@ int createMapEditorWindow(int x, int y);
 int saveMap(Tile * grid, const char * name);
 int loadMap(Tile * grid, const char * name);
 int displayLoadMenu(SDL_Renderer * renderer, char *mapList[], int xWinSize, int yWinSize, int index);
+Tile * build_map(MultiTile map[]);
 
 #endif
