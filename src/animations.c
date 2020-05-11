@@ -37,7 +37,6 @@
 
 /* =============== FONCTIONS DE GESTION DES TEXTURES D'ANIMATIONS =============== */
 
-/** \copydoc addAnimTexture */
 err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, bool aoe, bool on_ground, int speed, char *sound_effect)
 // Pre-load animation textures for future loading
 {
@@ -96,7 +95,6 @@ err_t addAnimTexture(abilityId id, char *name, int start_index, int end_index, b
     return OK;
 }
 
-/** \copydoc getAnimTexture */
 SDL_Texture *getAnimTexture(abilityId id, int index, bool big)
 // Returns the texture of a given animation
 {
@@ -123,7 +121,6 @@ SDL_Texture *getAnimTexture(abilityId id, int index, bool big)
     return result;
 }
 
-/** \copydoc getAnimSteps */
 int getAnimSteps(abilityId id)
 // Returns the number of sprites for the animation of the given ability id
 {
@@ -150,7 +147,6 @@ int getAnimSteps(abilityId id)
     return result;
 }
 
-/** \copydoc getAnim */
 AnimTexture getAnim(abilityId id)
 // Return the ability from an id
 {
@@ -179,7 +175,6 @@ AnimTexture getAnim(abilityId id)
     return result;
 }
 
-/** \copydoc loadAnimationTextures */
 err_t loadAnimationTextures()
 // Load all the animations relative textures
 {
@@ -236,7 +231,6 @@ err_t loadAnimationTextures()
     return OK;
 }
 
-/** \copydoc isLoaded */
 bool isLoaded(abilityId id)
 // Returns if the given ability has been loaded
 {
@@ -253,7 +247,6 @@ bool isLoaded(abilityId id)
     return result;
 }
 
-/** \copydoc isOnGround */
 bool isOnGround(abilityId id)
 // Returns if the animation have to be played on the ground or not
 {
@@ -262,7 +255,6 @@ bool isOnGround(abilityId id)
 
 /* =============== FONCTIONS D'AFFICHAGE DES ANIMATIONS =============== */
 
-/** \copydoc play_ability_animation */
 err_t play_ability_animation(Ability ab, Coord pos)
 {
     Coord temp;
