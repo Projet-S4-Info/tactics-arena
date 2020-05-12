@@ -31,6 +31,8 @@ err_t activate_bloodlust(Entity *e, StateList * list)
 
     e->stats[atk] *= 2;
 
+    e->act_points += 3;
+
     Status v = {e->stats[atk]/2,atk,1};
     
     Bloodlust_counter = -1;
