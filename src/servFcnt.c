@@ -55,13 +55,6 @@ char monIP[85];
 
 int nbPlayer = 0;
 int socketConnected = 0;
-int isAServer = 0;
-
-/**
- * \fn void getLocalIP(void)
- * \return void
- * \brief Function to get the local ip of the server
-*/
 
 void getLocalIP()
 {
@@ -98,12 +91,6 @@ void getLocalIP()
   }
 }
 
-/**
- * \fn err_t sendStruct(void * structure, int size, int socket)
- * \return err_t SEND_OK or SEND_ERROR
- * \brief Generic function to send a structur to a client or a server
-*/
-
 err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s, char tab[STR_SHORT]))
 {
   int error;
@@ -130,12 +117,6 @@ err_t sendStruct(void *structure, int size, int socket,  err_t (*print)(void * s
     return SEND_ERROR;
   }
 }
-
-/**
- * \fn err_t recep(void * container, int size, int socket)
- * \return err_t RECV_OK 
- * \brief Generic function to receive structures
-*/
 
 void *recep(void *container, int size, int socket, err_t (*print)(void * s, char tab[STR_SHORT]))
 {
@@ -165,7 +146,6 @@ void *recep(void *container, int size, int socket, err_t (*print)(void * s, char
 
   return container;
 }
-
 
 int setupMultiMap(MultiTile * mapMulti, Tile * mapLocal){
   for(int i = 0; i < _X_SIZE_ * _Y_SIZE_; i++){
