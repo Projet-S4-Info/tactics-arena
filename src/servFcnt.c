@@ -3,8 +3,6 @@
  * \brief All the function used by the server or the client
  * \details Contains all the function for server and client 
  * \author Lucien Chauvin
- * \version 0.1.0
- * \date 18/03/2020
 */
 
 #include <stdio.h>
@@ -23,7 +21,7 @@
 #include <winsock2.h>
 /*
   * Needed  non-existent type with winsock2
-  */
+*/
 typedef int socklen_t;
 /*
 * Else if program run on Linux
@@ -38,13 +36,13 @@ typedef int socklen_t;
   * Avoid differences to close a socket
   * between socket.h and winsock2.h
   * Adding missing definitions with socket.h
-  */
+*/
 #define closesocket(param) close(param)
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
 /*
   * Adding missing types with socket.h
-  */
+*/
 typedef int SOCKET;
 typedef struct sockaddr_in SOCKADDR_IN;
 typedef struct sockaddr SOCKADDR;

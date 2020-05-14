@@ -20,6 +20,11 @@
 #include "text.h"
 #include "turn.h"
 
+/** \file multi_menu.c
+ * \brief Menu for multiplayer mod
+ * \author Lucien CHAUVIN
+*/
+
 #define _NB_MAX_MAPS_ 20
 
 SDL_Texture *background_Multi = NULL,
@@ -609,11 +614,9 @@ int displayMenuMulti(int x, int y)
 						char pseuTemp[50];
 						strcpy(pseuTemp, pseudoJoin);
 
-						//printf("\npseudo temp : %s\n",pseuTemp);
 						for (int i = 0; i < (strlen(pseuTemp)); i++)
 						{
 							pseudoUser[i - 9] = pseuTemp[i];
-							//printf("\nps | i : %d | char %c \n", i, pseuTemp[i]);
 						}
 						if (verbose >= 1)
 							printf("\nTest User pseudo : %s\n", pseudoUser);

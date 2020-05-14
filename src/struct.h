@@ -205,16 +205,12 @@ typedef struct
 
 /* COMMUNICATION STRUCTURES */
 
-/** \struct User
- * \brief
+/** \struct t_user
+ * \brief Simple structure to get the name of the client
  */
 typedef struct User{
-  int id; //!<
-  char pseudo[64]; //!<
+  char pseudo[64]; //!< Name of the client connected to the server
 } t_user;
-/** \typedef t_user
- * \brief
- */
 
 /** \struct MultiTile
  * \brief Simplified version of Tile structure
@@ -225,12 +221,13 @@ typedef struct{
 }MultiTile;
 
 /** \struct ServerStatus_t
- * \brief
+ * \brief Structure to get status
+ * \details Used to get status of connection, get the name of the map selected by the host and giv the bases to create the map with Multitile
  */
 typedef struct{
-    int isServerStartGame; //!<
-    char mapNameGame[50]; //!<
-    MultiTile multiMap[_X_SIZE_][_Y_SIZE_]; //!<
+    int isServerStartGame; //!< Status of the server between -2 and 4
+    char mapNameGame[50]; //!< Name of the map selected by the host
+    MultiTile multiMap[_X_SIZE_][_Y_SIZE_]; //!< Array of Multitile to recreate the map client side
 }ServerStatus_t;
 
 #endif

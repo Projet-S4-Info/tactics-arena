@@ -35,14 +35,13 @@ typedef enum {FALSE/**<0*/, TRUE/**<1*/} bool;
 
 extern int verbose; //!< Global variable used to print messages depending on the level put in program parametres. 0 is saved only for debugging.
 
-extern int isAServer;       //!<
-extern int serverStatus;    //!<
-extern int nbPlayer;        //!<
+extern int serverStatus;    //!< Status of the server used in multi_menu 
+extern int nbPlayer;        //!< Number of players in game 
 
 extern char error_message[NUM_ERROR][STR_LONG]; //!< String database containing custom error messages to be used with err_t enumeration
 
-extern char pseudoUser[50];         //!<
-extern char mapMultiSelected[50];   //!<
+extern char pseudoUser[50];         //!< Name of the user used in multi_menu, socket_Client and socket_server
+extern char mapMultiSelected[50];   //!< Name of the map selected by the host used in multi_menu, socket_client and socket_server
 
 /** \fn strToUpper(char *chaine)
  * \brief Transforms a string to all upper characters

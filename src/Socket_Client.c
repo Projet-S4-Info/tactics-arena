@@ -3,8 +3,6 @@
  * \brief Client programm for Tactics Arena
  * \details Contains TCP Client function
  * \author Lucien Chauvin
- * \version 0.1.0
- * \date 18/03/2020
 */
 
 /* =============== DEPENDENCES =============== */
@@ -48,11 +46,6 @@ int socketCli = 0;
 
 /* =============== FONCTIONS =============== */
 
-/**
- * \fn err_t stopTCPSocketCli(int socket)
- * \return err_t CLI_OK
- * \brief Function to stop the Client connection (close sockets)
-*/
 
 err_t stopTCPSocketCli(int socketCli)
 {
@@ -89,7 +82,6 @@ err_t startTCPSocketCli(int socketCli)
   const char *servIP = malloc(sizeof(char) * 85);
 
   t_user infoMoi;
-  infoMoi.id = 111;
   sprintf(infoMoi.pseudo, "LucienCh2424");
 
   ServerStatus_t startGameCli;

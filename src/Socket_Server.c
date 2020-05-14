@@ -67,7 +67,7 @@ err_t stopTcpSocketServ(int socketConnected)
   closesocket(socketConnected);
   nbPlayer -= 1;
 
-// Commande pour fermer le firewall sur windows
+// Command to close Windows firewall 
 #ifdef _WIN32
   system("netsh advfirewall firewall delete rule name=\"Tactics\"");
 #endif
@@ -109,7 +109,6 @@ err_t startTCPSocketServ()
 #endif
 
   logFlag = 1;
-  isAServer = 1;
   nbPlayer += 1;
 
   SOCKADDR_IN serveurAddr = {0};
@@ -119,12 +118,12 @@ err_t startTCPSocketServ()
   socklen_t sizeofSocketConnected;
 
   t_user infoClient;
-  infoClient.id = 0;
   sprintf(infoClient.pseudo, "PasDeCli");
 
   ServerStatus_t startGame;
   startGame.isServerStartGame = 0;
   sprintf(startGame.mapNameGame, "0");
+  
   Tile gridTemp[_X_SIZE_][_Y_SIZE_];
 
   if (verbose >= 1)
@@ -194,7 +193,7 @@ err_t startTCPSocketServ()
             if (recep((void *)&infoClient, sizeof(infoClient), socketConnected, NULL) != NULL)
             {
               if (verbose >= 1)
-                printf("\nid client = %d | pseudo client = %s\n", infoClient.id, infoClient.pseudo);
+                printf("\nPseudo client = %s\n", infoClient.pseudo);
               sprintf(pseudoClient, "%s s'est connecté !", infoClient.pseudo);
               if (verbose >= 1)
                 printf("SocketServer pseudoCli : %s\n", pseudoClient);
