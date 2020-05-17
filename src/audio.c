@@ -15,7 +15,7 @@ pthread_t thread_music;
 
 static void *fn_gameMus(void *p_data)
 {
-    music_t musList[NUMBER_OF_MUS - 1];
+    music_t musList[NUMBER_OF_MUS];
     musList[0].musicName = "../inc/music/Fight_Music_Courage.wav";
     musList[0].startFade = 61000;
     musList[1].musicName = "../inc/music/Fight Music Vanquisher.wav";
